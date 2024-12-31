@@ -1,0 +1,53 @@
+.role {
+   
+
+    &__inner {
+        max-width: 480px;
+        width: 100%;
+        background-color: white;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+
+        h1{
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.6;
+        }
+
+        p{
+            color: #4B5563;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+    }
+
+    &__links {
+        display: flex;
+        flex-wrap: wrap;
+justify-content: center;
+        gap: 24px;
+        margin-bottom: 35px;
+
+        a {
+            width: 196px;
+            height: 152px;
+            border-radius: 11px;
+            border: 2px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 25px;
+            gap: 10px;
+            svg {
+        flex-shrink: 0;
+            }
+
+
+        }
+    }
+
+
+
+}
