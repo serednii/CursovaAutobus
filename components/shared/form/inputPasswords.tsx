@@ -4,10 +4,12 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { FaUnlockKeyhole } from "react-icons/fa6";
+import FormError from "./formError";
 
 interface FormValues {
   password: string;
   password_repeat: string;
+  one?: boolean;
 }
 
 interface Props {
@@ -15,89 +17,89 @@ interface Props {
   errors: FieldErrors<FormValues>;
   watch: UseFormWatch<FormValues>;
   className: string;
+  one?: boolean;
 }
 
-export default function InputPasswords({
+export default function InputPassword({
   register,
   errors,
   watch,
+  one = false,
   className,
 }: Props) {
+  const password = watch("password", "");
+  const password_repeat = watch("password_repeat", "");
+
+  console.log(password);
   const [toggle1, setToggle1] = useState(false);
   const [toggle2, setToggle2] = useState(false);
-
-  const password = watch("password", "");
-
   return (
     <div>
-      <div className={cn("mb-2", className)}>
+      <div className={cn("mb-4 relative", className)}>
         <label
           htmlFor="password"
           className="block text-sm font-medium text-gray-700"
         >
           Password
         </label>
-        <div className="relative">
-          <input
-            type={toggle1 ? "text" : "password"}
-            {...register("password", {
-              required: "You must specify a password",
-              minLength: {
-                value: 8,
-                message: "Password must have at least 8 characters",
-              },
-            })}
-            className="mt-1 w-full p-2 pl-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <div className="absolute inset-y-0 left-2 flex items-center">
-            <FaUnlockKeyhole  style={{ color: "gray" }}/>
-          </div>
+        <input
+          {...register("password", {
+            required: "You must specify a password",
+            minLength: {
+              value: 8,
+              message: "Password must have at least 8 characters",
+            },
+          })}
+          type={toggle1 ? "text" : "password"}
+          className="pr-8 mt-1 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
 
-          <div
-            className="absolute inset-y-0 right-2 flex items-center cursor-pointer"
-            onClick={() => setToggle1(!toggle1)}
-          >
-            {toggle1 ? <FaRegEye /> : <FaRegEyeSlash />}
-          </div>
+        {password === "" && (
+          <FaUnlockKeyhole
+            style={{ color: "gray" }}
+            className="absolute top-[37px] left-1"
+          />
+        )}
+        <div
+          className="absolute top-[37px] right-2 cursor-pointer"
+          onClick={() => setToggle1(!toggle1)}
+        >
+          {toggle1 ? <FaRegEye /> : <FaRegEyeSlash />}
         </div>
-        <div className="text-red-500">
-          {errors?.password && <p>{errors?.password?.message || "Error!"}</p>}
-        </div>
+        <FormError errors={errors} name="password" />
       </div>
 
-      <div className="mb-4">
-        <label
-          htmlFor="confirmPassword"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Confirm password
-        </label>
-        <div className="relative">
+      {!one && (
+        <div className="mb-4 relative">
+          <label
+            htmlFor="password_repeat"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Repeat Password
+          </label>
           <input
-            type={toggle2 ? "text" : "password"}
             {...register("password_repeat", {
               validate: (value: string) =>
                 value === password || "The passwords do not match",
             })}
-            className="mt-1 w-full p-2 pl-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type={toggle2 ? "text" : "password"}
+            className="pr-8 mt-1 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <div className="absolute inset-y-0 left-2 flex items-center">
-            <FaUnlockKeyhole  style={{ color: "gray" }}/>
-          </div>
-
+          {password_repeat === "" && (
+            <FaUnlockKeyhole
+              style={{ color: "grey" }}
+              className="absolute top-[37px] left-1"
+            />
+          )}
           <div
-            className="absolute inset-y-0 right-2 flex items-center cursor-pointer"
+            className="absolute top-[37px] right-2 cursor-pointer"
             onClick={() => setToggle2(!toggle2)}
           >
             {toggle2 ? <FaRegEye /> : <FaRegEyeSlash />}
           </div>
+          <FormError errors={errors} name="password_repeat" />
         </div>
-        <div className="text-red-500">
-          {errors?.password_repeat && (
-            <p>{errors?.password_repeat?.message || "Error!"}</p>
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

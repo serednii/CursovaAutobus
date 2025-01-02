@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
-import { FaPhoneAlt } from "react-icons/fa";
+import { FaIdCard } from "react-icons/fa6";
 import FormError from "./formError";
+
 interface FormValues {
-  phone: string;
+  license: string;
 }
 interface Props {
   register: UseFormRegister<FormValues>;
@@ -11,42 +12,43 @@ interface Props {
   watch: UseFormWatch<FormValues>;
   className?: string;
 }
-export default function InputPhone({
+export default function InputLicense({
   register,
   errors,
-  watch,
   className,
+  watch,
 }: Props) {
-  const phone = watch("phone", "");
-  const emptyPhone = phone === "" ? "pl-6" : "";
+  const license = watch("license", "");
 
   return (
     <div className={cn("mb-4 relative", className)}>
       <label
-        htmlFor="phone"
+        htmlFor="license"
         className="block text-sm font-medium text-gray-700"
       >
-        Phone Number
+        Driver's License Number
       </label>
       <input
-        {...register("phone", {
+        {...register("license", {
           required: "This field is required.",
-          pattern: {
-            value: /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/,
-            message: "Invalid phone number",
+          minLength: {
+            value: 5,
+            message: `Minimum 5 symbol license`,
           },
         })}
-        placeholder="+123456789"
-        type="tel"
-        className={`mt-1 w-full p-2 ${emptyPhone} border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        type="text"
+        className={` ${
+          license === "" ? "pl-6" : ""
+        }mt-1 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
       />
-      {phone === "" && (
-        <FaPhoneAlt
+      {license === "" && (
+        <FaIdCard
           style={{ color: "gray" }}
           className="absolute top-[37px] left-1 "
         />
       )}
-      <FormError errors={errors} name="phone" />
+
+      <FormError errors={errors} name="license" />
     </div>
   );
 }
