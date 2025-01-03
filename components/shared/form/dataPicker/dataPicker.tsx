@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { TextField, InputAdornment } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DatePicker from "react-datepicker";
+import "./style.scss";
+
 import {
   FieldErrors,
   UseFormRegister,
   Controller,
-  useForm,
+  Control,
 } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -20,7 +22,7 @@ interface Props {
   name: keyof FormValues;
   title: string;
   register: UseFormRegister<FormValues>;
-  control: any; // Передаємо control з useForm
+  control: Control<FormValues>; // Тип для control
   errors: FieldErrors<FormValues>;
   className?: string;
 }
@@ -36,49 +38,41 @@ const CustomDatePicker = ({
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   return (
-    <div className={className}>
+    <div className={className || "grow"}>
       <Controller
         name={name}
         control={control} // Використовуємо control
-        defaultValue={selectedDate}
         rules={{ required: `${title} is required` }}
-        render={({ field }: any) => (
+        render={({ field }) => (
           <DatePicker
-            className="w-[288px]"
+            className="w-[100%]"
             selected={field.value}
             onChange={(date: Date | null) => {
               setSelectedDate(date);
               field.onChange(date); // Передаємо значення в react-hook-form
             }}
-            placeholderText="MM/DD/YYYY HH:MM" // Placeholder для дати й часу
-            showTimeSelect // Включає вибір часу
-            timeFormat="HH:mm" // Формат часу
-            timeIntervals={15} // Інтервали часу (15 хвилин)
-            timeCaption="Time" // Підпис для вибору часу
-            dateFormat="MM/dd/yyyy h:mm aa" // Формат дати та часу
+            placeholderText="MM/DD/YYYY HH:MM"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="MM/dd/yyyy h:mm aa"
             customInput={
               <TextField
                 label={title}
                 {...field}
-                placeholder="MM/DD/YYYY HH:MM" // Додатковий placeholder
+                placeholder="MM/DD/YYYY HH:MM"
                 error={!!errors[name]}
                 helperText={errors[name]?.message}
                 InputProps={{
+                  style: { height: "42px" },
                   startAdornment: (
                     <InputAdornment position="start">
-                      <div
+                      <CalendarTodayIcon
                         style={{
-                          position: "absolute",
-                          left: "50%",
-                          transform: "translateX(-50%)",
+                          cursor: "pointer",
                         }}
-                      >
-                        <CalendarTodayIcon
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        />
-                      </div>
+                      />
                     </InputAdornment>
                   ),
                 }}

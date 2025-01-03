@@ -1,54 +1,54 @@
 "use client";
 
-import { Container } from "@/components/shared/container";
-import Link from "next/link";
-import { FaPlus } from "react-icons/fa6";
-import {
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  Button,
-  InputAdornment,
-} from "@mui/material";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import CustomDatePicker from "@/components/shared/form/dataPicker";
+import { useState } from "react";
+import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { Container } from "@/components/shared/container";
+
+import CustomDatePicker from "@/components/shared/form/dataPicker/dataPicker";
+import DynamicTextFields from "@/components/shared/form/dynamicTextFields";
+import MaterialUISelect from "@/components/shared/form/materialUISelect";
+import CheckboxOptions from "@/components/shared/form/checkboxOptions";
+import CustomTextField from "@/components/shared/form/customTextField";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Driver() {
+  const [selectedValue, setSelectedValue] = useState("");
+  console.log(selectedValue);
   const {
     register,
+    unregister,
     formState: { errors, isValid },
     handleSubmit,
     reset,
     watch,
     control,
-  } = useForm({ mode: "onChange" });
+  } = useForm<FormValues>({ mode: "onChange" });
 
   interface FormValues {
-    password: string;
-    password_repeat: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    license: string;
+    departureDate: Date;
+    arrivalDate: Date;
+    busStops: string[];
+    busNumber: string;
+    routePrice: string;
+    departureFrom: string;
+    arrivalTo: string;
   }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     alert("Form submitted with data: " + JSON.stringify(data));
-    reset();
+    // reset();
   };
 
   return (
     <Container>
-      <header className="flex justify-between items-center px-4">
+      <header className=" px-4 pt-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold">Route Management</h1>
           <p>Create and manage your bus routes</p>
         </div>
-        <div>
+        {/* <div>
           <Link
             href="/driver/route"
             className="bg-[#2563EB] flex items-center justify-center gap-2 rounded-lg w-[158px] h-[40px] text-white p-2 
@@ -56,26 +56,17 @@ export default function Driver() {
           >
             <FaPlus style={{ color: "white" }} /> Create Route
           </Link>
-        </div>
+        </div> */}
       </header>
 
       <main className="px-4 bg-[white] rounded-xl">
         {/* Форму тепер обгортаємо в onSubmit */}
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* TextField з react-hook-form */}
-          <TextField
-            {...register("firstName", { required: "First name is required" })}
-            className="mb-6"
-            label="First Name"
-            variant="outlined"
-            fullWidth
-            error={!!errors.firstName}
-            helperText={errors.firstName ? errors.firstName.message : ""}
-          />
 
           {/* Додавання CustomDatePicker */}
 
-          <div className="flex">
+          <div className="flex gap-5 mb-5">
             <CustomDatePicker
               title="Departure Date"
               name="departureDate"
@@ -91,22 +82,77 @@ export default function Driver() {
               control={control} // Передаємо control
             />
           </div>
+          <div className="flex gap-5  mb-5">
+            <CustomTextField
+              register={register}
+              errors={errors}
+              name={"departureFrom"}
+              title={"Departure From"}
+              className="grow"
+            />
+            <CustomTextField
+              register={register}
+              errors={errors}
+              name={"arrivalTo"}
+              title={"Arrival To"}
+              className="grow"
+            />
+          </div>
 
-          {/* Checkbox з react-hook-form */}
-          <FormControlLabel
-            control={<Checkbox {...register("checked")} color="primary" />}
-            label="Check this box"
+          <DynamicTextFields
+            unregister={unregister}
+            register={register}
+            errors={errors}
           />
 
-          {/* Кнопка submit */}
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
-          >
-            Submit
-          </Button>
+          <CustomTextField
+            register={register}
+            errors={errors}
+            name={"busNumber"}
+            title={"Bus Number"}
+            className="mb-5"
+          />
+
+          <div>
+            <h2>Bus Layout</h2>
+            <MaterialUISelect
+              register={register}
+              errors={errors}
+              selectedValue={selectedValue}
+              setSelectedValue={setSelectedValue}
+              className="mb-5"
+            />
+          </div>
+
+          <CustomTextField
+            register={register}
+            errors={errors}
+            name={"routePrice"}
+            title={"Route Price"}
+            className="mb-5"
+          />
+
+          <div className="flex justify-between items-center">
+            <div className="grow">
+              <Typography variant="h6" gutterBottom>
+                Additional options:
+              </Typography>
+              <CheckboxOptions register={register} errors={errors} />
+            </div>
+            <div className="flex justify-end items-center gap-5 grow">
+              <Button variant="contained" color="primary">
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
+              >
+                Create Route
+              </Button>
+            </div>
+          </div>
         </form>
       </main>
     </Container>
