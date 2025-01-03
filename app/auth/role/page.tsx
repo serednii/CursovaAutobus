@@ -26,7 +26,10 @@ export default function Role() {
             <p>I need a ride</p>
           </Link>
         </div>
-        <button> <RxCross2 style={{ display: "inline", marginBottom: "3px", marginRight: "10px" }} />Cancel</button>
+        <Link href="/auth/">
+        <RxCross2 style={{ display: "inline", marginBottom: "3px", marginRight: "10px" }} />Cancel
+          </Link>
+       
       </div>
     </Overlay>
 
