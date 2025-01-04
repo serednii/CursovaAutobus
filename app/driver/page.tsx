@@ -12,6 +12,7 @@ import CheckboxOptions from "@/components/shared/form/checkboxOptions";
 import CustomTextField from "@/components/shared/form/customTextField";
 
 import "react-datepicker/dist/react-datepicker.css";
+import LayoutBus from "@/components/ui/layoutBus/layuotBus";
 
 export default function Driver() {
   const [selectedValue, setSelectedValue] = useState("");
@@ -59,7 +60,7 @@ export default function Driver() {
         </div> */}
       </header>
 
-      <main className="px-4 bg-[white] rounded-xl">
+      <main className="px-4 bg-[white] rounded-xl ">
         {/* Форму тепер обгортаємо в onSubmit */}
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* TextField з react-hook-form */}
@@ -122,6 +123,8 @@ export default function Driver() {
               setSelectedValue={setSelectedValue}
               className="mb-5"
             />
+
+            <LayoutBus className="flex justify-center" />
           </div>
 
           <CustomTextField
@@ -155,6 +158,7 @@ export default function Driver() {
           </div>
         </form>
       </main>
+      <div className="footer"></div>
     </Container>
   );
 }
