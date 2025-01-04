@@ -11,19 +11,21 @@ interface FormValues {
 interface Props {
   register: UseFormRegister<FormValues>;
   errors: FieldErrors<FormValues>;
-  selectedValue: string;
-  setSelectedValue: (value: string) => void;
   className?: string;
+  passengersLength: number[];
+  setIndexSelectVariantBus: (value: number | null) => void;
+  IndexSelectVariantBus: number | null;
 }
 
 const MaterialUISelect = ({
-  selectedValue,
-  setSelectedValue,
   className,
   register,
+  passengersLength,
+  setIndexSelectVariantBus,
+  IndexSelectVariantBus,
 }: Props) => {
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedValue(event.target.value as string);
+    setIndexSelectVariantBus(event.target.value as number);
   };
 
   return (
@@ -35,16 +37,15 @@ const MaterialUISelect = ({
           required: "selectBusLayout is required",
         })}
         labelId="select-label"
-        value={selectedValue}
+        value={IndexSelectVariantBus ?? ""} // Перевірка на undefined
         onChange={handleChange}
         label="Select Bus Layout"
       >
-        <MenuItem value="" disabled>
-          <em>Choose an option</em>
-        </MenuItem>
-        <MenuItem value="bus1">Bus 1</MenuItem>
-        <MenuItem value="bus2">Bus 2</MenuItem>
-        <MenuItem value="bus3">Bus 3</MenuItem>
+        {passengersLength.map((e, index) => (
+          <MenuItem key={index} value={index}>
+            bus {index + 1} {e}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );

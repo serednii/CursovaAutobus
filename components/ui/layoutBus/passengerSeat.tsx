@@ -1,16 +1,8 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { use, useEffect, useState } from "react";
+import { params, SeatStatus } from "./type";
 
-type SeatStatus = "reserved" | "available" | "selected";
-type params = {
-  left?: number;
-  bottom?: number;
-  top?: number;
-  right?: number;
-  number: number;
-  busSeatStatus: SeatStatus;
-};
 interface Props {
   className?: string;
   params: params;
@@ -36,6 +28,7 @@ export default function PassengerSeat(props: Props) {
         typeof params[key] === "number" ? `${params[key]}px` : params[key];
     }
   });
+
   useEffect(() => {
     params.busSeatStatus = changeStatus;
     // console.log(params, dataPassenger);
@@ -49,7 +42,8 @@ export default function PassengerSeat(props: Props) {
     selected: "bg-blue-500",
   }[changeStatus];
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setChangeStatus((prevStatus: SeatStatus) => {
       if (user === "driver") {
         return prevStatus === "available" ? "reserved" : "available";

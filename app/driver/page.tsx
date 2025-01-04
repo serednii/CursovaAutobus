@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Container } from "@/components/shared/container";
@@ -13,10 +13,11 @@ import CustomTextField from "@/components/shared/form/customTextField";
 
 import "react-datepicker/dist/react-datepicker.css";
 import LayoutBus from "@/components/ui/layoutBus/layuotBus";
+import { layoutsData } from "@/components/ui/layoutBus/layoutData";
 
 export default function Driver() {
-  const [selectedValue, setSelectedValue] = useState("");
-  console.log(selectedValue);
+  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
+  console.log(indexSelectVariantBus);
   const {
     register,
     unregister,
@@ -41,6 +42,14 @@ export default function Driver() {
     alert("Form submitted with data: " + JSON.stringify(data));
     // reset();
   };
+  const layoutData = layoutsData[indexSelectVariantBus];
+
+  const passengersLength: number[] = useMemo(
+    () => layoutsData.map((e) => e.passengerLength),
+    [layoutsData.length]
+  );
+
+  console.log(layoutData);
 
   return (
     <Container>
@@ -117,14 +126,17 @@ export default function Driver() {
           <div>
             <h2>Bus Layout</h2>
             <MaterialUISelect
+              passengersLength={passengersLength}
+              setIndexSelectVariantBus={setIndexSelectVariantBus}
               register={register}
               errors={errors}
-              selectedValue={selectedValue}
-              setSelectedValue={setSelectedValue}
               className="mb-5"
             />
 
-            <LayoutBus className="flex justify-center" />
+            <LayoutBus
+              className="flex justify-center"
+              layoutData={layoutData}
+            />
           </div>
 
           <CustomTextField
