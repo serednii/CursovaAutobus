@@ -10,8 +10,10 @@ import { params, paramsSeat } from "./type";
 
 interface Props {
   className?: string;
-  layoutData: ILayoutData;
+  dataLayoutBus: ILayoutData;
+  setDataLayoutBus: (value: ILayoutData) => void;
 }
+
 const keys = [
   "passenger",
   "busWidth",
@@ -19,34 +21,30 @@ const keys = [
   "driverSeat",
   "stairs",
 ] as const;
-export default function LayoutBus({ className, layoutData }: Props) {
-  const [dataPassenger, setDataPassenger] = useState<params[]>([]);
-
-  console.log(dataPassenger);
-
-  useEffect(() => {
-    setDataPassenger(layoutData.passenger as params[]);
-  }, [layoutData]);
-
+export default function LayoutBus({
+  className,
+  dataLayoutBus,
+  setDataLayoutBus,
+}: Props) {
   const user: "driver" | "passenger" = "driver";
 
-  if (dataPassenger.length === 0) {
+  if (dataLayoutBus?.passenger.length === 0) {
     return null;
   }
 
   const keysDriverSeat = Object.keys(
-    layoutData.driverSeat
-  ) as (keyof typeof layoutData.driverSeat)[];
+    dataLayoutBus.driverSeat
+  ) as (keyof typeof dataLayoutBus.driverSeat)[];
 
   const keysStairs_0 = Object.keys(
-    layoutData.stairs[0]
-  ) as (keyof (typeof layoutData.stairs)[0])[];
+    dataLayoutBus.stairs[0]
+  ) as (keyof (typeof dataLayoutBus.stairs)[0])[];
 
   const keysStairs_1 =
-    layoutData.stairs.length === 2 &&
+    dataLayoutBus.stairs.length === 2 &&
     (Object.keys(
-      layoutData.stairs[1]
-    ) as (keyof (typeof layoutData.stairs)[1])[]);
+      dataLayoutBus.stairs[1]
+    ) as (keyof (typeof dataLayoutBus.stairs)[1])[]);
 
   type styleKey = ("left" | "bottom" | "right" | "top")[]; // Виправлений тип
 
@@ -63,15 +61,18 @@ export default function LayoutBus({ className, layoutData }: Props) {
     return styleDriverSeat;
   };
 
-  const styleDriverSeat = getKeysStyles(keysDriverSeat, layoutData.driverSeat);
-  const styleStairs_0 = getKeysStyles(keysStairs_0, layoutData.stairs[0]);
+  const styleDriverSeat = getKeysStyles(
+    keysDriverSeat,
+    dataLayoutBus.driverSeat
+  );
+  const styleStairs_0 = getKeysStyles(keysStairs_0, dataLayoutBus.stairs[0]);
   const styleStairs_1 =
-    (keysStairs_1 && getKeysStyles(keysStairs_1, layoutData.stairs[1])) || null;
+    (keysStairs_1 && getKeysStyles(keysStairs_1, dataLayoutBus.stairs[1])) ||
+    null;
 
-  console.log(styleDriverSeat, styleStairs_0, styleStairs_1);
   const styleBus = {
-    width: layoutData.busWidth,
-    height: layoutData.busHeight,
+    width: dataLayoutBus.busWidth,
+    height: dataLayoutBus.busHeight,
   };
 
   return (
@@ -91,15 +92,15 @@ export default function LayoutBus({ className, layoutData }: Props) {
             className="left-[50px] top-[0px]"
           />
         )}
-        {dataPassenger.map((item: params, index: number) => {
+        {dataLayoutBus?.passenger.map((item: params, index: number) => {
           // console.log(item);
           return (
             <div key={index}>
               <PassengerSeat
                 params={item}
                 user={user}
-                dataPassenger={dataPassenger}
-                setDataPassenger={setDataPassenger}
+                dataLayoutBus={dataLayoutBus}
+                setDataLayoutBus={setDataLayoutBus}
               />
             </div>
           );

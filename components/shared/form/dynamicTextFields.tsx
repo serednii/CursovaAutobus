@@ -26,7 +26,6 @@ const DynamicTextFields = ({ register, unregister, errors }: Props) => {
   const addStop = () => {
     setStops([...stops, ""]); // Додаємо новий порожній input
   };
-  console.log(stops);
 
   const changeStop = (index: number, value: string) => {
     console.log(index);

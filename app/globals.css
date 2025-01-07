@@ -26,3 +26,15 @@ body {
   padding: 0 15px;
   background-color: #FFFFFF;
 }
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login-form {
+  display: grid;
+  gap: 1rem;
+}

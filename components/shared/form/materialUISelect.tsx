@@ -13,7 +13,7 @@ interface Props {
   errors: FieldErrors<FormValues>;
   className?: string;
   passengersLength: number[];
-  setIndexSelectVariantBus: (value: number | null) => void;
+  handleChangeVariantBus: (value: number) => void;
   IndexSelectVariantBus: number | null;
 }
 
@@ -21,11 +21,11 @@ const MaterialUISelect = ({
   className,
   register,
   passengersLength,
-  setIndexSelectVariantBus,
+  handleChangeVariantBus,
   IndexSelectVariantBus,
 }: Props) => {
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setIndexSelectVariantBus(event.target.value as number);
+    handleChangeVariantBus(event.target.value as number);
   };
 
   return (

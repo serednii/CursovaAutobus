@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Container } from "@/components/shared/container";
@@ -14,10 +14,22 @@ import CustomTextField from "@/components/shared/form/customTextField";
 import "react-datepicker/dist/react-datepicker.css";
 import LayoutBus from "@/components/ui/layoutBus/layuotBus";
 import { layoutsData } from "@/components/ui/layoutBus/layoutData";
+import { ILayoutData } from "@/components/ui/layoutBus/interface";
+// import { useSession } from "next-auth/react";
+// import { redirect } from "next/dist/server/api-utils";
+// import { useRouter } from "next/navigation";
+
+interface FormValues {
+  departureDate: Date;
+  arrivalDate: Date;
+  busStops: string[];
+  busNumber: string;
+  routePrice: string;
+  departureFrom: string;
+  arrivalTo: string;
+}
 
 export default function Driver() {
-  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
-  console.log(indexSelectVariantBus);
   const {
     register,
     unregister,
@@ -28,28 +40,28 @@ export default function Driver() {
     control,
   } = useForm<FormValues>({ mode: "onChange" });
 
-  interface FormValues {
-    departureDate: Date;
-    arrivalDate: Date;
-    busStops: string[];
-    busNumber: string;
-    routePrice: string;
-    departureFrom: string;
-    arrivalTo: string;
-  }
+  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    alert("Form submitted with data: " + JSON.stringify(data));
-    // reset();
-  };
-  const layoutData = layoutsData[indexSelectVariantBus];
+  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData>(
+    layoutsData[indexSelectVariantBus]
+  );
 
   const passengersLength: number[] = useMemo(
     () => layoutsData.map((e) => e.passengerLength),
     [layoutsData.length]
   );
 
-  console.log(layoutData);
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    alert("Form submitted with data: " + JSON.stringify(data));
+    // reset();
+  };
+
+  console.log(indexSelectVariantBus, dataLayoutBus);
+
+  const handleChangeVariantBus = (number: number) => {
+    setIndexSelectVariantBus(number);
+    setDataLayoutBus(layoutsData[number]);
+  };
 
   return (
     <Container>
@@ -58,15 +70,6 @@ export default function Driver() {
           <h1 className="text-2xl font-bold">Route Management</h1>
           <p>Create and manage your bus routes</p>
         </div>
-        {/* <div>
-          <Link
-            href="/driver/route"
-            className="bg-[#2563EB] flex items-center justify-center gap-2 rounded-lg w-[158px] h-[40px] text-white p-2 
-                hover:bg-[#1E3A8A] hover:shadow-lg transition duration-300"
-          >
-            <FaPlus style={{ color: "white" }} /> Create Route
-          </Link>
-        </div> */}
       </header>
 
       <main className="px-4 bg-[white] rounded-xl ">
@@ -127,7 +130,7 @@ export default function Driver() {
             <h2>Bus Layout</h2>
             <MaterialUISelect
               passengersLength={passengersLength}
-              setIndexSelectVariantBus={setIndexSelectVariantBus}
+              handleChangeVariantBus={handleChangeVariantBus}
               register={register}
               errors={errors}
               className="mb-5"
@@ -135,10 +138,10 @@ export default function Driver() {
 
             <LayoutBus
               className="flex justify-center"
-              layoutData={layoutData}
+              dataLayoutBus={dataLayoutBus}
+              setDataLayoutBus={setDataLayoutBus}
             />
           </div>
-
           <CustomTextField
             register={register}
             errors={errors}

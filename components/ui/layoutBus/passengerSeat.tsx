@@ -1,18 +1,19 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { use, useEffect, useState } from "react";
+import { ILayoutData } from "./interface";
 import { params, SeatStatus } from "./type";
 
 interface Props {
   className?: string;
   params: params;
   user: "driver" | "passenger";
-  dataPassenger: params[];
-  setDataPassenger: (value: params[]) => void;
+  dataLayoutBus: ILayoutData;
+  setDataLayoutBus: (value: ILayoutData) => void;
 }
 
 export default function PassengerSeat(props: Props) {
-  const { className, params, user, dataPassenger, setDataPassenger } = props;
+  const { className, params, user, dataLayoutBus, setDataLayoutBus } = props;
   const { number, busSeatStatus } = params;
   const [changeStatus, setChangeStatus] = useState<SeatStatus>(
     () => busSeatStatus
@@ -32,7 +33,7 @@ export default function PassengerSeat(props: Props) {
   useEffect(() => {
     params.busSeatStatus = changeStatus;
     // console.log(params, dataPassenger);
-    setDataPassenger([...dataPassenger]);
+    setDataLayoutBus({ ...dataLayoutBus });
   }, [changeStatus]);
 
   // Змінюємо колір залежно від статусу місця
