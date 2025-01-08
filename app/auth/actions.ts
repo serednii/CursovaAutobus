@@ -4,13 +4,13 @@ import { createUser } from "./utils";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export default function useDriverAuth(reset: any) {
+export default function useDriverAuth(reset: any, role: string) {
   const router = useRouter();
   const onSubmit = async (data: SubmitHandler<FormValues>) => {
     delete data.password_repeat;
 
-    data.role = "driver";
-
+    data.role = role;
+    console.log(data);
     const result = await createUser(data);
 
     if (result.error) {

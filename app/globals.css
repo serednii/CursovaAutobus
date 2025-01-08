@@ -38,3 +38,8 @@ body {
   display: grid;
   gap: 1rem;
 }
+
+.active-link {
+  background-color: #2563EB !important;
+  color: #FFFFFF;
+}

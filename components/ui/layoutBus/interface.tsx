@@ -5,6 +5,7 @@ export interface ILayoutData {
   busWidth: string;
   busHeight: string;
   passenger: params[];
+  modelBus: string;
   driverSeat: {
     left?: string;
     bottom?: string;

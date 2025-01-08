@@ -16,7 +16,7 @@ export default function PassengerAuth() {
     reset,
     watch,
   } = useForm<FormValues>({ mode: "onChange" });
-  const { onSubmit } = useDriverAuth(reset);
+  const { onSubmit } = useDriverAuth(reset, "passenger");
 
   return (
     <Overlay className="driver justify-center items-center bg-[#CED4DA]">

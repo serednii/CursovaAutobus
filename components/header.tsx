@@ -1,79 +1,219 @@
-// import Image from "next/image";
+// // import Image from "next/image";
 
 "use client";
-// import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-// import { useRouter } from "next/router";
-// import { useEffect } from "react";
 
 export default function Header() {
-  // const { data: session, status } = useSession();
-  // const router = useRouter();
   const pathname = usePathname();
   const session = useSession();
+  // const { data: session, status } = useSession();
 
-  // useEffect(() => {
-  //   if (status === "unauthenticated") {
-  //     router.push("/auth/signIn");
-  //   }
-  // }, [status, router]);
+  if (session.status === "loading") return <p>Loading...</p>;
+  if (!session) return <p>No user is logged in</p>;
 
-  // if (status === "loading") {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (status === "unauthenticated") {
-  //   return null; // Не рендеримо нічого, поки не перенаправимо
-  // }
-
-  // console.log(session);
+  console.log(session);
   return (
-    <div className="flex gap-3 fixed bottom-[100px] left-10 z-10">
+    <div className="flex gap-3 fixed bottom-[100px] left-10 z-10 flex-wrap">
       <Link
-        className={pathname === "/auth" ? "text-[red]-400" : ""}
+        style={{
+          backgroundColor: "yellow",
+          padding: "5px",
+          borderRadius: "15px",
+        }}
+        className={pathname === "/auth" ? "active-link" : ""}
         href="/auth"
       >
         Auth
       </Link>
       <Link
-        className={pathname === "/auth/role" ? "text-[red]-400" : ""}
+        style={{
+          backgroundColor: "yellow",
+          padding: "5px",
+          borderRadius: "15px",
+        }}
+        className={pathname === "/auth/role" ? "active-link" : ""}
         href="/auth/role"
       >
         Auth Role
       </Link>
       <Link
-        className={pathname === "/auth/driver" ? "text-[red]-400" : ""}
+        style={{
+          backgroundColor: "yellow",
+          padding: "5px",
+          borderRadius: "15px",
+        }}
+        className={pathname === "/auth/driver" ? "active-link" : ""}
         href="/auth/driver"
       >
         Auth Driver
       </Link>
       <Link
-        className={pathname === "/auth/passenger" ? "text-[red]-400" : ""}
+        style={{
+          backgroundColor: "yellow",
+          padding: "5px",
+          borderRadius: "15px",
+        }}
+        className={pathname === "/auth/passenger" ? "active-link" : ""}
         href="/auth/passenger"
       >
         Auth Passenger
       </Link>
       <Link
-        className={pathname === "/driver" ? "text-[red]-400" : ""}
+        style={{
+          backgroundColor: "yellow",
+          padding: "5px",
+          borderRadius: "15px",
+        }}
+        className={pathname === "/driver" ? "active-link" : ""}
         href="/driver/"
       >
         Driver
       </Link>
       <Link
-        className={pathname === "/passenger" ? "text-[red]-400" : ""}
+        style={{
+          backgroundColor: "yellow",
+          padding: "5px",
+          borderRadius: "15px",
+        }}
+        className={pathname === "/passenger" ? "active-link" : ""}
         href="/passenger/"
       >
         Passenger
       </Link>
       {session?.data ? (
-        <Link href="#" onClick={() => signOut({ callbackUrl: "/" })}>
+        <Link
+          style={{
+            backgroundColor: "yellow",
+            padding: "5px",
+            borderRadius: "15px",
+          }}
+          href="#"
+          onClick={() => signOut({ callbackUrl: "/" })}
+        >
           Sign Out
         </Link>
       ) : (
-        <Link href="/auth/signin">SignIn</Link>
+        <Link
+          style={{
+            backgroundColor: "yellow",
+            padding: "5px",
+            borderRadius: "15px",
+          }}
+          href="/auth/signin"
+        >
+          SignIn
+        </Link>
       )}
+      <div>
+        <h1
+          style={{
+            backgroundColor: "yellow",
+            padding: "5px",
+            borderRadius: "15px",
+          }}
+        >
+          <div>
+            <h1>Welcome, {session?.data?.user?.firstName}!</h1>
+            <p>Email: {session?.data?.user?.email}</p>
+            <p>Role: {session?.data?.user?.role}</p>
+            <p>Phone: {session?.data?.user?.phone}</p>
+            <p>License: {session?.data?.user?.license}</p>
+            <p>isNewUser: {session?.data?.user?.isNewUser}</p>
+          </div>
+        </h1>
+        {/* {session?.user?.firstName && <img src={session.user.image} alt="" />} */}
+      </div>
     </div>
   );
 }
+
+// import Link from "next/link";
+// import { getServerSession } from "next-auth/next";
+// import { authConfig } from "@/configs/auth"; // Шлях до вашого файлу з конфігурацією NextAuth
+// import SignOutButton from "./shared/form/SignOutButton"; // Імпортуємо клієнтський компонент для виходу
+// import { usePathname } from "next/navigation";
+
+// export default async function Header() {
+//   const session = await getServerSession(authConfig); // Отримуємо сесію на сервері
+//   const pathname = usePathname();
+
+//   return (
+//     <div className="flex gap-3 fixed bottom-[100px] left-10 z-10 flex-wrap">
+//       <Link
+//         style={{
+//           backgroundColor: "yellow",
+//           padding: "5px",
+//           borderRadius: "15px",
+//         }}
+//         className={pathname === "/auth" ? "active-link" : ""}
+//         href="/auth"
+//       >
+//         Auth
+//       </Link>
+//       <Link
+//         style={{
+//           backgroundColor: "yellow",
+//           padding: "5px",
+//           borderRadius: "15px",
+//         }}
+//         className={pathname === "/auth/role" ? "active-link" : ""}
+//         href="/auth/role"
+//       >
+//         Auth Role
+//       </Link>
+//       <Link
+//         style={{
+//           backgroundColor: "yellow",
+//           padding: "5px",
+//           borderRadius: "15px",
+//         }}
+//         className={pathname === "/auth/driver" ? "active-link" : ""}
+//         href="/auth/driver"
+//       >
+//         Auth Driver
+//       </Link>
+//       <Link
+//         style={{
+//           backgroundColor: "yellow",
+//           padding: "5px",
+//           borderRadius: "15px",
+//         }}
+//         className={pathname === "/auth/passenger" ? "active-link" : ""}
+//         href="/auth/passenger"
+//       >
+//         Auth Passenger
+//       </Link>
+//       {session?.user ? (
+//         <SignOutButton /> // Використовуємо клієнтський компонент для виходу
+//       ) : (
+//         <Link
+//           style={{
+//             backgroundColor: "yellow",
+//             padding: "5px",
+//             borderRadius: "15px",
+//           }}
+//           href="/auth/signin"
+//         >
+//           SignIn
+//         </Link>
+//       )}
+//       {session?.user && (
+//         <div
+//           style={{
+//             backgroundColor: "yellow",
+//             padding: "5px",
+//             borderRadius: "15px",
+//           }}
+//         >
+//           <h1>Welcome, {session.user.firstName}!</h1>
+//           <p>Email: {session.user.email}</p>
+//           <p>Role: {session.user.role}</p>
+//           <p>Phone: {session.user.phone}</p>
+//           <p>License: {session.user.license}</p>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }

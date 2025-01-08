@@ -27,6 +27,11 @@ interface FormValues {
   routePrice: string;
   departureFrom: string;
   arrivalTo: string;
+  busSeats: any;
+  wifi: boolean;
+  coffeeTea: boolean;
+  powerOutlets: boolean;
+  restRoom: boolean;
 }
 
 export default function Driver() {
@@ -38,7 +43,15 @@ export default function Driver() {
     reset,
     watch,
     control,
-  } = useForm<FormValues>({ mode: "onChange" });
+  } = useForm<FormValues>({
+    mode: "onChange",
+    defaultValues: {
+      wifi: true, // Початкове значення для чекбокса
+      coffeeTea: true,
+      powerOutlets: true,
+      restRoom: true,
+    },
+  });
 
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
 
@@ -52,12 +65,19 @@ export default function Driver() {
   );
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    alert("Form submitted with data: " + JSON.stringify(data));
+    const busSeats = {
+      passengersLength: dataLayoutBus.passengerLength,
+      modelBus: dataLayoutBus.modelBus,
+      passenger: dataLayoutBus.passenger,
+    };
+    data.busSeats = busSeats;
+    console.log(data);
+    // alert("Form submitted with data: " + JSON.stringify(data));
     // reset();
   };
 
   console.log(indexSelectVariantBus, dataLayoutBus);
-
+  console.log(errors);
   const handleChangeVariantBus = (number: number) => {
     setIndexSelectVariantBus(number);
     setDataLayoutBus(layoutsData[number]);
@@ -155,7 +175,7 @@ export default function Driver() {
               <Typography variant="h6" gutterBottom>
                 Additional options:
               </Typography>
-              <CheckboxOptions register={register} errors={errors} />
+              <CheckboxOptions register={register} watch={watch} />
             </div>
             <div className="flex justify-end items-center gap-5 grow">
               <Button variant="contained" color="primary">
@@ -165,7 +185,7 @@ export default function Driver() {
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
+                // disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
               >
                 Create Route
               </Button>
@@ -177,3 +197,45 @@ export default function Driver() {
     </Container>
   );
 }
+
+// const RouteDriver = {
+//   driverId: 10,
+//   departureDate: "2025-01-10T08:00:00Z",
+//   arrivalDate: "2025-01-10T12:00:00Z",
+//   departureFrom: "New York",
+//   arrivalTo: "Washington, D.C.",
+//   busNumber: "NY-WDC-2025",
+//   routePrice: 50,
+//   notate: "This is a comfortable route.",
+//   wifi: true,
+//   coffee: true,
+//   power: true,
+//   restRoom: true,
+//   busSeats: {
+//     passengerLength: 19,
+//     modelBus: "Volvo 240",
+//     passenger: [
+//       { passenger: 1, number: 1, busSeatStatus: "reserved" },
+//       { passenger: 2, number: 5, busSeatStatus: "reserved" },
+//       { passenger: 5, number: 8, busSeatStatus: "reserved" },
+//       { passenger: 8, number: 11, busSeatStatus: "reserved" },
+//       { passenger: 10, number: 14, busSeatStatus: "reserved" },
+//       { passenger: 11, number: 2, busSeatStatus: "reserved" },
+//       { passenger: null, number: 6, busSeatStatus: "available" },
+//       { passenger: null, number: 9, busSeatStatus: "available" },
+//       { passenger: null, number: 12, busSeatStatus: "available" },
+//       { passenger: null, number: 15, busSeatStatus: "available" },
+//       { passenger: null, number: 3, busSeatStatus: "available" },
+//       { passenger: null, number: 7, busSeatStatus: "available" },
+//       { passenger: null, number: 10, busSeatStatus: "available" },
+//       { passenger: null, number: 13, busSeatStatus: "available" },
+//       { passenger: null, number: 16, busSeatStatus: "available" },
+//       { passenger: null, number: 4, busSeatStatus: "available" },
+//       { passenger: null, number: 19, busSeatStatus: "available" },
+//       { passenger: null, number: 18, busSeatStatus: "available" },
+//       { passenger: null, number: 17, busSeatStatus: "available" },
+//     ],
+//   },
+//   intermediateStops: ["Philadelphia", "Baltimore"],
+//   passengersListId: [1, 2, 80],
+// };

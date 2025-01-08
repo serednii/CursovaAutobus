@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from "@/node_modules/next/server";
 import { prisma } from "@/prisma/prisma-client";
+import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
-
-interface UserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  phone: string;
-  role: string;
-  license: string;
-}
 
 export async function GET() {
   const users = await prisma.user.findMany();
@@ -20,11 +11,11 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     // Очікуємо парсинг JSON
-    const data: UserData = await req.json();
-    console.log("Request data:", data);
+    const data: User = await req.json();
 
     // Перевірка на валідність даних
     const { firstName, lastName, email, password, phone, role, license } = data;
+    console.log("Request data:", data, license);
 
     if (!firstName || !email || !password) {
       return NextResponse.json(
@@ -45,7 +36,7 @@ export async function POST(req: NextRequest) {
         password: hashedPassword, // Збереження хешованого пароля
         phone: phone || "",
         role: role || "guest",
-        license: license || "",
+        license: license || "no license",
       },
     });
 

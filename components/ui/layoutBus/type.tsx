@@ -7,6 +7,7 @@ export type params = {
   right?: number;
   number: number;
   busSeatStatus: SeatStatus;
+  passenger: number | null;
 };
 
 export type paramsSeat = {

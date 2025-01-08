@@ -9,7 +9,7 @@ import { IoIosWifi } from "react-icons/io";
 import { CgCoffee } from "react-icons/cg";
 import { MdOutlinePower } from "react-icons/md";
 import { FaRestroom } from "react-icons/fa";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 
 interface FormValues {
   wifi: any;
@@ -20,11 +20,11 @@ interface FormValues {
 
 interface Props {
   register: UseFormRegister<FormValues>;
-  errors: FieldErrors<FormValues>;
+  watch: UseFormWatch<FormValues>;
   className?: string;
 }
 
-export default function CheckboxOptions({ register, errors }: Props) {
+export default function CheckboxOptions({ register, watch }: Props) {
   return (
     <div className="flex justify-between">
       <div>
@@ -32,6 +32,7 @@ export default function CheckboxOptions({ register, errors }: Props) {
           <FormControlLabel
             control={<Checkbox />}
             {...register("wifi")}
+            checked={watch("wifi") || false}
             label={
               <div style={{ display: "flex", alignItems: "center" }}>
                 <IoIosWifi style={{ marginRight: "8px", fontSize: "24px" }} />
@@ -42,6 +43,7 @@ export default function CheckboxOptions({ register, errors }: Props) {
           <FormControlLabel
             control={<Checkbox />}
             {...register("coffeeTea")}
+            checked={watch("coffeeTea") || false}
             label={
               <div style={{ display: "flex", alignItems: "center" }}>
                 <CgCoffee style={{ marginRight: "8px", fontSize: "24px" }} />
@@ -57,6 +59,7 @@ export default function CheckboxOptions({ register, errors }: Props) {
           <FormControlLabel
             control={<Checkbox />}
             {...register("powerOutlets")}
+            checked={watch("powerOutlets") || false}
             label={
               <div style={{ display: "flex", alignItems: "center" }}>
                 <MdOutlinePower
@@ -69,6 +72,7 @@ export default function CheckboxOptions({ register, errors }: Props) {
           <FormControlLabel
             control={<Checkbox />}
             {...register("restRoom")}
+            checked={watch("restRoom") || false}
             label={
               <div style={{ display: "flex", alignItems: "center" }}>
                 <FaRestroom style={{ marginRight: "8px", fontSize: "24px" }} />

@@ -73,6 +73,7 @@ export default function LayoutBus({
   const styleBus = {
     width: dataLayoutBus.busWidth,
     height: dataLayoutBus.busHeight,
+    scale: "0.8",
   };
 
   return (

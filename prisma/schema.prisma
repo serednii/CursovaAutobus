@@ -9,13 +9,50 @@ datasource db {
 }
 
 model User {
-    id Int @id @default(autoincrement())
-    firstName String
-    lastName String
-    email String @unique
-    phone String @unique
-    password String
-    role String
-    license String
+  id        Int             @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String          @unique
+  phone     String          @unique
+  password  String
+  role      String
+  license   String       
+  routes    RouteDriver[]   // Зв'язок з RouteDriver
+  orders    OrderedRoute[]  // Зв'язок із замовленими маршрутами
 }
+
+model RouteDriver {
+  id                Int            @id @default(autoincrement())
+  driverId          Int            // Поле для зберігання ID користувача (водія)
+  user              User           @relation(fields: [driverId], references: [id])
+  departureDate     DateTime       // Дата та час відправлення
+  arrivalDate       DateTime       // Дата та час прибуття
+  departureFrom     String         // Пункт відправлення
+  arrivalTo         String         // Пункт призначення
+  busNumber         String         // Номер автобуса
+  routePrice        Int            // Ціна маршруту
+  notate            String?        // Примітки (опціональне)
+  wifi              Boolean        @default(false) // Наявність WiFi
+  coffee            Boolean        @default(false) // Наявність кави
+  power             Boolean        @default(false) // Наявність розеток
+  restRoom          Boolean        @default(false) // Наявність туалету
+  busSeats          Json           // Інформація про місця в автобусі
+  intermediateStops String[]       // Масив проміжних зупинок
+  passengersListId  Int[]          // Масив ID користувачів (пасажирів)
+  orders            OrderedRoute[] // Зв'язок із замовленнями
+}
+
+model OrderedRoute {
+  id            Int          @id @default(autoincrement())
+  passengerId   Int          // Поле для зберігання ID пасажира
+  user          User         @relation(fields: [passengerId], references: [id]) // Зв'язок із User
+  routeDriverId Int          // Поле для зв’язку з RouteDriver
+  routeDriver   RouteDriver  @relation(fields: [routeDriverId], references: [id]) // Зв'язок із RouteDriver
+  orderDate     DateTime     @default(now()) // Дата замовлення
+  orderSeats    Int[]        // Замовлені місця
+}
+
+
+
+
 
