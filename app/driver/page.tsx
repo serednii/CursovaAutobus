@@ -12,27 +12,13 @@ import CheckboxOptions from "@/components/shared/form/checkboxOptions";
 import CustomTextField from "@/components/shared/form/customTextField";
 
 import "react-datepicker/dist/react-datepicker.css";
-import LayoutBus from "@/components/ui/layoutBus/layuotBus";
-import { layoutsData } from "@/components/ui/layoutBus/layoutData";
+import LayoutBus from "@/components/shared/layoutBus/layuotBus";
+import { layoutsData } from "@/components/shared/layoutBus/layoutData";
 import { ILayoutData } from "@/components/ui/layoutBus/interface";
+import { FormValues } from "@/types/form.types";
 // import { useSession } from "next-auth/react";
 // import { redirect } from "next/dist/server/api-utils";
 // import { useRouter } from "next/navigation";
-
-interface FormValues {
-  departureDate: Date;
-  arrivalDate: Date;
-  busStops: string[];
-  busNumber: string;
-  routePrice: string;
-  departureFrom: string;
-  arrivalTo: string;
-  busSeats: any;
-  wifi: boolean;
-  coffeeTea: boolean;
-  powerOutlets: boolean;
-  restRoom: boolean;
-}
 
 export default function Driver() {
   const {

@@ -1,8 +1,9 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { ILayoutData, params, SeatStatus } from "@/types/layoutbus.types";
 import { use, useEffect, useState } from "react";
-import { ILayoutData } from "./interface";
-import { params, SeatStatus } from "./type";
+// import { ILayoutData } from "./interface";
+// import { params, SeatStatus } from "./type";
 
 interface Props {
   className?: string;

@@ -1,13 +1,7 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { cn } from "@/lib/utils";
-
-interface FormValues {
-  departureFrom?: string;
-  arrivalTo?: string;
-  busNumber?: string;
-  routePrice?: string;
-}
+import { FormValues } from "@/types/form.types";
 
 interface Props {
   register: UseFormRegister<FormValues>;
@@ -17,10 +11,19 @@ interface Props {
   className?: string;
 }
 
-export default function CustomTextField({ register, errors, name, title, className }: Props) {
+export default function CustomTextField({
+  register,
+  errors,
+  name,
+  title,
+  className,
+}: Props) {
   return (
     <div className={cn("", className)}>
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-2">
+      <label
+        htmlFor={name}
+        className="block text-sm font-medium text-gray-700 mb-2"
+      >
         {title}
       </label>
       <TextField

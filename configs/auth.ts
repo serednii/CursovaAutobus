@@ -1,54 +1,3 @@
-// import type { AuthOptions } from "next-auth";
-// import GitHubProvider from "next-auth/providers/github";
-// import Credentials from "next-auth/providers/credentials";
-// import { prisma } from "@/prisma/prisma-client";
-
-// type User = {
-//   id: string;
-//   email: string;
-//   firstName: string;
-//   lastName: string;
-//   password: string;
-//   role: string;
-//   phone: string;
-//   license: string;
-// };
-
-// export const authConfig: AuthOptions = {
-//   providers: [
-//     GitHubProvider({
-//       clientId: process.env.GITHUB_CLIENT_ID!,
-//       clientSecret: process.env.GITHUB_SECRET!,
-//     }),
-//     Credentials({
-//       credentials: {
-//         email: { label: "email", type: "email", required: true },
-//         password: { label: "password", type: "password", required: true },
-//       },
-
-//       async authorize(credentials) {
-//         if (!credentials?.email || !credentials.password) return null;
-
-//         const user = await prisma.user.findUnique({
-//           where: { email: credentials.email },
-//         });
-
-//         console.log("***********************", user);
-
-//         if (user && user.password === credentials.password) {
-//           const { password, ...userWithoutPass } = user;
-//           return userWithoutPass as User;
-//         }
-
-//         return null;
-//       },
-//     }),
-//   ],
-
-//   pages: {
-//     signIn: "/auth/signin",
-//   },
-// };
 import type { AuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
@@ -80,9 +29,9 @@ export const authConfig: AuthOptions = {
         // Якщо користувач є в базі, додаємо його дані до профілю
         if (!user) {
           profile.isNewUser = true; // Помітити нового користувача
-          console.log("11111");
+          // console.log("11111");
         } else {
-          console.log("22222");
+          // console.log("22222");
           profile.id = user.id;
           profile.firstName = user.firstName;
           profile.lastName = user.lastName || "";
@@ -131,7 +80,7 @@ export const authConfig: AuthOptions = {
           isNewUser: null, // Не новий користувач
         };
 
-        console.log("userData === ", userData);
+        // console.log("userData === ", userData);
 
         return userData;
       },
@@ -145,8 +94,8 @@ export const authConfig: AuthOptions = {
 
   callbacks: {
     async session({ session, token }) {
-      console.log("session user ", session);
-      console.log("session token", token);
+      // console.log("session user ", session);
+      // console.log("session token", token);
 
       // Якщо користувач увійшов через GitHub
       if (token.github) {
@@ -168,28 +117,28 @@ export const authConfig: AuthOptions = {
         session.user.license = token.license as string;
         session.user.isNewUser = token.isNewUser as number | null | boolean;
       }
-      setTimeout(() => {
-        console.log("*********************");
-        console.log("*********************");
-        console.log("*********************");
-        console.log("*********************");
-        console.log("*********************");
-      }, 4000);
+      // setTimeout(() => {
+      //   console.log("*********************");
+      //   console.log("*********************");
+      //   console.log("*********************");
+      //   console.log("*********************");
+      //   console.log("*********************");
+      // }, 4000);
 
       return session;
     },
 
     async jwt({ token, user }) {
-      console.log("jwt user ", user);
-      console.log("jwt token", token);
+      // console.log("jwt user ", user);
+      // console.log("jwt token", token);
 
       if (user) {
         if (user.isNewUser) {
-          console.log("55555");
+          // console.log("55555");
           token.github = user; // Зберігаємо дані GitHub в токені
           token.isNewUser = true; // Якщо новий користувач через GitHub
         } else {
-          console.log("777777");
+          // console.log("777777");
           token.id = user.id;
           token.firstName = user.firstName;
           token.lastName = user.lastName;
@@ -200,7 +149,7 @@ export const authConfig: AuthOptions = {
         }
       } else if (!token.isNewUser) {
         token.isNewUser = false; // Якщо користувач увійшов через email та password
-        console.log("88888");
+        // console.log("88888");
       }
 
       return token;

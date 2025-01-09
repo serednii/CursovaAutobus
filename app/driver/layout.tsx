@@ -1,6 +1,6 @@
 // import type { Metadata } from "next";
 
-import HeaderDriver from "@/components/shared/driver/headerDriver";
+import HeaderUser from "@/components/shared/user/headerUser";
 
 export default function RootLayout({
   children,
@@ -9,7 +9,10 @@ export default function RootLayout({
 }>) {
   return (
     <div className="flex flex-col h-[100vh]">
-      <HeaderDriver className="h-[60px] flex items-center border-b-2 border-[#E5E7EB] " />
+      <HeaderUser
+        className="h-[60px] shrink-0 flex items-center border-b-2 border-[#E5E7EB] "
+        title="Driver's Dashboard"
+      />
       <div className="grow bg-[#F9FAFB]">{children}</div>
     </div>
   );

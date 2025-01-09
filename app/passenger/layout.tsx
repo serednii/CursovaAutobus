@@ -1,3 +1,4 @@
+import HeaderUser from "@/components/shared/user/headerUser";
 import HeaderPassenger from "@/components/shared/passenger/headerPassenger";
 
 export default function RootLayout({
@@ -7,7 +8,10 @@ export default function RootLayout({
 }>) {
   return (
     <div className="flex flex-col h-[100vh]">
-      <HeaderPassenger className="h-[60px] flex items-center border-t-1 border-[#E5E7EB] " />
+      <HeaderUser
+        className="h-[60px] shrink-0 flex items-center border-b-2 border-[#E5E7EB]"
+        title="Passenger's Dashboard"
+      />
       <div className="grow bg-[#F9FAFB]">{children}</div>
     </div>
   );

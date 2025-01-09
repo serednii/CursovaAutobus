@@ -8,10 +8,7 @@ import {
   UseFormRegister,
   UseFormUnregister,
 } from "react-hook-form";
-
-interface FormValues {
-  busStops: string[];
-}
+import { FormValues } from "@/types/form.types";
 
 interface Props {
   register: UseFormRegister<FormValues>;
@@ -33,6 +30,7 @@ const DynamicTextFields = ({ register, unregister, errors }: Props) => {
     updatedStops[index] = value; // Оновлюємо відповідне значення
     setStops(updatedStops);
   };
+
   const deleteStop = (event: React.MouseEvent<HTMLButtonElement>) => {
     const stopIndex = Number(event.currentTarget.getAttribute("data-id")); // Зчитуємо data-id
     unregister(`busStops.${stopIndex}`); // Видаляємо значення з react-hook-form

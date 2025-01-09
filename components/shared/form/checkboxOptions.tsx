@@ -9,14 +9,8 @@ import { IoIosWifi } from "react-icons/io";
 import { CgCoffee } from "react-icons/cg";
 import { MdOutlinePower } from "react-icons/md";
 import { FaRestroom } from "react-icons/fa";
-import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
-
-interface FormValues {
-  wifi: any;
-  coffeeTea: any;
-  powerOutlets: any;
-  restRoom: any;
-}
+import { UseFormRegister, UseFormWatch } from "react-hook-form";
+import { FormValues } from "@/types/form.types";
 
 interface Props {
   register: UseFormRegister<FormValues>;

@@ -12,11 +12,7 @@ import {
   Control,
 } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
-
-interface FormValues {
-  departureDate?: Date;
-  arrivalDate?: Date;
-}
+import { FormValues } from "@/types/form.types";
 
 interface Props {
   name: keyof FormValues;

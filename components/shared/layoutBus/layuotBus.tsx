@@ -6,7 +6,7 @@ import { ILayoutData } from "./interface";
 
 import PassengerSeat from "./passengerSeat";
 import Stairs from "./stairs";
-import { params, paramsSeat } from "./type";
+import { params } from "./type";
 
 interface Props {
   className?: string;
@@ -21,6 +21,7 @@ const keys = [
   "driverSeat",
   "stairs",
 ] as const;
+
 export default function LayoutBus({
   className,
   dataLayoutBus,
@@ -94,7 +95,6 @@ export default function LayoutBus({
           />
         )}
         {dataLayoutBus?.passenger.map((item: params, index: number) => {
-          // console.log(item);
           return (
             <div key={index}>
               <PassengerSeat

@@ -1,15 +1,18 @@
-import { getSession } from "next-auth/react";
+import { authConfig } from "@/configs/auth";
+import { getServerSession } from "next-auth/next";
 
 export default async function Home() {
-  const session = await getSession();
+  const session = await getServerSession(authConfig);
+
   console.log("session ---", session);
+
   if (!session) {
     return <p>User is not logged in</p>;
   }
 
   return (
-    <div className="">
-      <main className="">
+    <div>
+      <main>
         Welcome to NextJS world
         <div>
           <h1>Welcome, {session.user.firstName}!</h1>
@@ -17,7 +20,7 @@ export default async function Home() {
           <p>Role: {session.user.role}</p>
         </div>
       </main>
-      <footer className=""></footer>
+      <footer></footer>
     </div>
   );
 }

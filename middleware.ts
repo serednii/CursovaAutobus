@@ -9,6 +9,7 @@ import { NextResponse } from "next/server";
 
 export async function middleware(req: any) {
   const token = await getToken({ req });
+  console.log("token token token", token);
   const url = req.nextUrl.clone();
 
   // Якщо є токен (користувач залогінений)
