@@ -52,8 +52,8 @@ export default function CheckboxOptions({ register, watch }: Props) {
         <FormGroup>
           <FormControlLabel
             control={<Checkbox />}
-            {...register("powerOutlets")}
-            checked={watch("powerOutlets") || false}
+            {...register("power")}
+            checked={watch("power") || false}
             label={
               <div style={{ display: "flex", alignItems: "center" }}>
                 <MdOutlinePower

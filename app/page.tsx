@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth/next";
 export default async function Home() {
   const session = await getServerSession(authConfig);
 
-  console.log("session ---", session);
+  // console.log("session ---", session);
 
   if (!session) {
     return <p>User is not logged in</p>;

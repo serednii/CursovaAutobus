@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
       arrivalTo: string;
       busNumber: string;
       routePrice: number;
+      selectBusLayout: string;
       notate?: string;
       wifi?: boolean;
       coffee?: boolean;
@@ -37,6 +38,7 @@ export async function POST(req: NextRequest) {
       arrivalDate,
       departureFrom,
       arrivalTo,
+      selectBusLayout,
       busNumber,
       routePrice,
       busSeats,
@@ -49,6 +51,7 @@ export async function POST(req: NextRequest) {
       !arrivalDate ||
       !departureFrom ||
       !arrivalTo ||
+      !selectBusLayout ||
       !busNumber ||
       !routePrice ||
       !busSeats ||
@@ -70,6 +73,7 @@ export async function POST(req: NextRequest) {
         arrivalTo,
         busNumber,
         routePrice,
+        selectBusLayout,
         notate: data.notate || "",
         wifi: data.wifi || false,
         coffee: data.coffee || false,

@@ -12,7 +12,7 @@ type User = {
   role: string;
   phone: string;
   license: string;
-  isNewUser: number | null | boolean;
+  isNewUser: boolean;
 };
 
 export const authConfig: AuthOptions = {
@@ -77,7 +77,7 @@ export const authConfig: AuthOptions = {
           role: userWithoutPass.role,
           phone: userWithoutPass.phone,
           license: userWithoutPass.license || "no license",
-          isNewUser: null, // Не новий користувач
+          isNewUser: false, // Не новий користувач
         };
 
         // console.log("userData === ", userData);
@@ -99,7 +99,7 @@ export const authConfig: AuthOptions = {
 
       // Якщо користувач увійшов через GitHub
       if (token.github) {
-        session.user.isNewUser = token.isNewUser as number | null | boolean; // Додаємо до сесії
+        session.user.isNewUser = token.isNewUser as boolean; // Додаємо до сесії
         session.user.id = token.id as string;
         session.user.firstName = token.firstName as string;
         session.user.lastName = token.lastName as string;
@@ -115,7 +115,7 @@ export const authConfig: AuthOptions = {
         session.user.role = token.role as string;
         session.user.phone = token.phone as string;
         session.user.license = token.license as string;
-        session.user.isNewUser = token.isNewUser as number | null | boolean;
+        session.user.isNewUser = token.isNewUser as boolean;
       }
       // setTimeout(() => {
       //   console.log("*********************");

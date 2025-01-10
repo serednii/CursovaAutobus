@@ -28,7 +28,7 @@ const MaterialUISelect = ({
   handleChangeVariantBus,
   IndexSelectVariantBus,
 }: Props) => {
-  const [selectedValue, setSelectedValue] = useState<number | null>(
+  const [selectedValue, setSelectedValue] = useState<string | null>(
     IndexSelectVariantBus
   );
 
@@ -43,7 +43,7 @@ const MaterialUISelect = ({
       fullWidth
       variant="outlined"
       className={cn("", className)}
-      error={!!errors.selectBusLayout}
+      error={!!errors}
     >
       <InputLabel id="select-label">Select an Option</InputLabel>
       <Select
@@ -62,9 +62,7 @@ const MaterialUISelect = ({
           </MenuItem>
         ))}
       </Select>
-      {errors.selectBusLayout && (
-        <FormHelperText>{errors.selectBusLayout.message}</FormHelperText>
-      )}
+      {errors && <FormHelperText>{errors.root?.message}</FormHelperText>}
     </FormControl>
   );
 };

@@ -12,7 +12,7 @@ declare module "next-auth" {
       role: string;
       phone: string;
       license: string;
-      isNewUser: number | null | boolean;
+      isNewUser: boolean;
     };
   }
 
@@ -23,6 +23,6 @@ declare module "next-auth" {
     role: string;
     phone: string;
     license: string;
-    isNewUser: number | null | boolean;
+    isNewUser: boolean;
   }
 }

@@ -33,7 +33,7 @@ const DynamicTextFields = ({ register, unregister, errors }: Props) => {
 
   const deleteStop = (event: React.MouseEvent<HTMLButtonElement>) => {
     const stopIndex = Number(event.currentTarget.getAttribute("data-id")); // Зчитуємо data-id
-    unregister(`busStops.${stopIndex}`); // Видаляємо значення з react-hook-form
+    unregister(`intermediateStops.${stopIndex}`); // Видаляємо значення з react-hook-form
     setStops((prevStops) =>
       prevStops.filter((_, index) => index !== stopIndex)
     ); // Видаляємо stop за індексом
@@ -65,7 +65,7 @@ const DynamicTextFields = ({ register, unregister, errors }: Props) => {
               />
             </button>
             <TextField
-              {...register(`busStops.${index}`, {
+              {...register(`intermediateStops.${index}`, {
                 required: "This field is required",
               })}
               value={stops[index]} // Прив'язка до стану
@@ -73,8 +73,8 @@ const DynamicTextFields = ({ register, unregister, errors }: Props) => {
               label={`Stop ${index + 1}`}
               variant="outlined"
               fullWidth
-              error={!!errors.busStops?.[index]}
-              helperText={errors.busStops?.[index]?.message || ""}
+              error={!!errors.intermediateStops?.[index]}
+              helperText={errors.intermediateStops?.[index]?.message || ""}
               InputProps={{
                 style: { height: "42px", marginBottom: "15px" },
               }}

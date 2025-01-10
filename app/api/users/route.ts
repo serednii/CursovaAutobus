@@ -12,12 +12,12 @@ export async function POST(req: NextRequest) {
   try {
     // Очікуємо парсинг JSON
     const data: User = await req.json();
-
+    console.log("api/users", data);
     // Перевірка на валідність даних
     const { firstName, lastName, email, password, phone, role, license } = data;
-    console.log("Request data:", data, license);
+    console.log("Request data:", data);
 
-    if (!firstName || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !phone) {
       return NextResponse.json(
         { error: "Invalid data: all fields are required" },
         { status: 400 }
@@ -31,16 +31,16 @@ export async function POST(req: NextRequest) {
     const user = await prisma.user.create({
       data: {
         firstName,
-        lastName: lastName || "",
+        lastName,
         email,
         password: hashedPassword, // Збереження хешованого пароля
-        phone: phone || "",
+        phone: phone,
         role: role || "guest",
         license: license || "no license",
       },
     });
 
-    return NextResponse.json({ user }, { status: 201 });
+    return NextResponse.json({ user: "kjhijj" }, { status: 201 });
   } catch (error) {
     console.error("Error creating user:", error);
     return NextResponse.json(

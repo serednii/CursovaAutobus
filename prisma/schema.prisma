@@ -30,6 +30,7 @@ model RouteDriver {
   departureFrom     String         // Пункт відправлення
   arrivalTo         String         // Пункт призначення
   busNumber         String         // Номер автобуса
+  selectBusLayout   String         // Модель автобуса 
   routePrice        Int            // Ціна маршруту
   notate            String?        // Примітки (опціональне)
   wifi              Boolean        @default(false) // Наявність WiFi

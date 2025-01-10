@@ -1,5 +1,6 @@
 // import type { Metadata } from "next";
 
+import LinkDriver from "@/components/shared/driver/linkdriver";
 import HeaderUser from "@/components/shared/user/headerUser";
 
 export default function RootLayout({
@@ -11,8 +12,9 @@ export default function RootLayout({
     <div className="flex flex-col h-[100vh]">
       <HeaderUser
         className="h-[60px] shrink-0 flex items-center border-b-2 border-[#E5E7EB] "
-        title="Driver's Dashboard"
-      />
+        >
+        <LinkDriver/>
+        </HeaderUser>
       <div className="grow bg-[#F9FAFB]">{children}</div>
     </div>
   );

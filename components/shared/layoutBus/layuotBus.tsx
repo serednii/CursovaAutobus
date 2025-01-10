@@ -2,16 +2,18 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import DriverSeat from "./driverSeat";
-import { ILayoutData } from "./interface";
 
 import PassengerSeat from "./passengerSeat";
 import Stairs from "./stairs";
-import { params } from "./type";
+
+import { UserSession } from "../../../types/session.types";
+import { ILayoutData, params } from "@/types/layoutbus.types";
 
 interface Props {
   className?: string;
   dataLayoutBus: ILayoutData;
   setDataLayoutBus: (value: ILayoutData) => void;
+  sessionUser: UserSession | null;
 }
 
 const keys = [
@@ -26,6 +28,7 @@ export default function LayoutBus({
   className,
   dataLayoutBus,
   setDataLayoutBus,
+  sessionUser,
 }: Props) {
   const user: "driver" | "passenger" = "driver";
 
@@ -102,6 +105,7 @@ export default function LayoutBus({
                 user={user}
                 dataLayoutBus={dataLayoutBus}
                 setDataLayoutBus={setDataLayoutBus}
+                sessionUser={sessionUser}
               />
             </div>
           );
