@@ -27,7 +27,7 @@ export default function InputPassword({
   one = false,
   className,
 }: Props) {
-  const password = watch("password", "");
+  const password = watch("password", "зщуукшозцщушкопцщкпшцо");
   const password_repeat = watch("password_repeat", "");
 
   console.log(password);

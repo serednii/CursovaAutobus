@@ -97,7 +97,7 @@ export default function Driver() {
     data.busSeats = busSeats;
     data.passengersListId = [1, 2, 80];
     // data.driverId = Number(sessionUser?.id);
-    data.driverId =1;
+    data.driverId = 1;
 
     // delete data.selectBusLayout;
     // data.routePrice = data.routePrice;
@@ -156,6 +156,7 @@ export default function Driver() {
               name="arrivalDate"
               register={register}
               errors={errors}
+              watch={watch}
               control={control} // Передаємо control
             />
           </div>
