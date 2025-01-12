@@ -38,10 +38,36 @@ model RouteDriver {
   restRoom          Boolean             @default(false)
   passengerLength   Int                 // Кількість пасажирів
   modelBus          String              // Модель автобуса
-  intermediateStops String                // Проміжні зупинки як JSON
+  busSeats          BusSeat[]           // Зв'язок з місцями в автобусі
+  intermediateStops IntermediateStop[]  
+  passengers        Passenger[]         
   orders            OrderedRoute[]      
 }
 
+model BusSeat {
+  id            Int          @id @default(autoincrement())
+  seatNumber    Int          
+  busSeatStatus String     
+  routeId       Int          
+  passengerId   Int?         
+  route         RouteDriver  @relation(fields: [routeId], references: [id])  
+  passenger     Passenger?   @relation(fields: [passengerId], references: [id])
+}
+
+model Passenger {
+  id            Int          @id @default(autoincrement())
+  userId        Int          
+  routeId       Int          
+  route         RouteDriver  @relation(fields: [routeId], references: [id])
+  busSeats      BusSeat[]    // Зворотне відношення для місць в автобусі
+}
+
+model IntermediateStop {
+  id       Int    @id @default(autoincrement())
+  stopName String 
+  routeId  Int    
+  route    RouteDriver @relation(fields: [routeId], references: [id])
+}
 
 model OrderedRoute {
   id            Int          @id @default(autoincrement())

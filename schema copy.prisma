@@ -1,0 +1,185 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+//datasource db {
+//   provider  = "postgresql"
+//    url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+//    directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+//}
+
+//datasource db {
+//  provider = "sqlserver"  // Змінено на SQL Server
+//  url      = env("SQLSERVER_URL") // Ваше підключення до SQL Server, наприклад: "sqlserver://user:password@host:port/database"
+//}
+
+datasource  db {
+  provider  = "sqlite"
+  url       = env("DATABASE_URL")
+}
+model User {
+  id        Int             @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String          @unique
+  phone     String          @unique
+  password  String
+  role      String
+  license   String       
+  routes    RouteDriver[]   // Зв'язок з RouteDriver
+  orders    OrderedRoute[]  // Зв'язок із замовленими маршрутами
+}
+
+model RouteDriver {
+  id                Int                 @id @default(autoincrement())
+  driverId          Int                 // Поле для зберігання ID користувача (водія)
+  user              User                @relation(fields: [driverId], references: [id])
+  departureDate     DateTime            // Дата та час відправлення
+  arrivalDate       DateTime            // Дата та час прибуття
+  departureFrom     String              // Пункт відправлення
+  arrivalTo         String              // Пункт призначення
+  busNumber         String              // Номер автобуса
+  selectBusLayout   String              // Модель автобуса 
+  routePrice        Int                 // Ціна маршруту
+  notate            String?             // Примітки (опціональне)
+  wifi              Boolean             @default(false) // Наявність WiFi
+  coffee            Boolean             @default(false) // Наявність кави
+  power             Boolean             @default(false) // Наявність розеток
+  restRoom          Boolean             @default(false) // Наявність туалету
+  busSeats          Json                // Інформація про місця в автобусі
+  intermediateStops IntermediateStop[]  // Зв'язок з проміжними зупинками
+  passengers        Passenger[]         // Зв'язок з пасажирами
+  orders            OrderedRoute[]      // Зв'язок із замовленнями
+}
+
+model IntermediateStop {
+  id       Int    @id @default(autoincrement())
+  stopName String // Назва зупинки
+  routeId  Int    // Зв'язок з маршрутом
+  route    RouteDriver @relation(fields: [routeId], references: [id])
+}
+
+model Passenger {
+  id       Int    @id @default(autoincrement())
+  userId   Int    // ID користувача
+  routeId  Int    // Зв'язок з маршрутом
+  route    RouteDriver @relation(fields: [routeId], references: [id])
+}
+
+model OrderedRoute {
+  id            Int          @id @default(autoincrement())
+  passengerId   Int          // Поле для зберігання ID пасажира
+  user          User         @relation(fields: [passengerId], references: [id]) // Зв'язок із User
+  routeDriverId Int          // Поле для зв’язку з RouteDriver
+  routeDriver   RouteDriver  @relation(fields: [routeDriverId], references: [id]) // Зв'язок із RouteDriver
+  orderDate     DateTime     @default(now()) // Дата замовлення
+  orderSeats    OrderSeat[]  // Зв'язок з замовленими місцями
+}
+
+model OrderSeat {
+  id          Int          @id @default(autoincrement())
+  seatNumber  Int          // Номер замовленого місця
+  orderId     Int          // Зв'язок із замовленням
+  order       OrderedRoute @relation(fields: [orderId], references: [id])
+}
+
+model VariantBusSeats {
+  id       Int   @id @default(autoincrement())
+  busSeats Json  // Інформація про місця в автобусі
+}
+
+
+
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int             @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String          @unique
+  phone     String          @unique
+  password  String
+  role      String
+  license   String       
+  routes    RouteDriver[]   // Зв'язок з RouteDriver
+  orders    OrderedRoute[]  // Зв'язок із замовленими маршрутами
+}
+
+model RouteDriver {
+  id                Int                 @id @default(autoincrement())
+  driverId          Int                 
+  user              User                @relation(fields: [driverId], references: [id])
+  departureDate     DateTime            
+  arrivalDate       DateTime            
+  departureFrom     String              
+  arrivalTo         String              
+  busNumber         String              
+  selectBusLayout   String              
+  routePrice        Int                 
+  notate            String?             
+  wifi              Boolean             @default(false)
+  coffee            Boolean             @default(false)
+  power             Boolean             @default(false)
+  restRoom          Boolean             @default(false)
+  passengerLength   Int                 // Кількість пасажирів
+  modelBus          String              // Модель автобуса
+  busSeats          BusSeat[]           // Зв'язок з місцями в автобусі
+  intermediateStops IntermediateStop[]  
+  passengers        Passenger[]         
+  orders            OrderedRoute[]      
+}
+
+model BusSeat {
+  id          Int          @id @default(autoincrement())
+  seatNumber  Int          
+  busSeatStatus String     
+  routeId     Int          
+  passengerId Int?         
+  route       RouteDriver  @relation(fields: [routeId], references: [id])  
+  passenger   Passenger?   @relation(fields: [passengerId], references: [id])
+}
+
+model IntermediateStop {
+  id       Int    @id @default(autoincrement())
+  stopName String 
+  routeId  Int    
+  route    RouteDriver @relation(fields: [routeId], references: [id])
+}
+
+model Passenger {
+  id       Int    @id @default(autoincrement())
+  userId   Int    
+  routeId  Int    
+  route    RouteDriver @relation(fields: [routeId], references: [id])
+}
+
+model OrderedRoute {
+  id            Int          @id @default(autoincrement())
+  passengerId   Int          
+  user          User         @relation(fields: [passengerId], references: [id])
+  routeDriverId Int          
+  routeDriver   RouteDriver  @relation(fields: [routeDriverId], references: [id])
+  orderDate     DateTime     @default(now())
+  orderSeats    OrderSeat[]  
+}
+
+model OrderSeat {
+  id          Int          @id @default(autoincrement())
+  seatNumber  Int          
+  orderId     Int          
+  order       OrderedRoute @relation(fields: [orderId], references: [id])
+}
+
+model VariantBusSeats {
+  id       Int   @id @default(autoincrement())
+  busSeats Json  
+}

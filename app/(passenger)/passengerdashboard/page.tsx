@@ -45,7 +45,7 @@ const fetchRouterDriver = async (data: any): Promise<any> => {
   }
 };
 
-export default function Driver() {
+export default function CreateRouter() {
   const { data: session, status } = useSession();
   let sessionUser: UserSession | null = null;
 
@@ -144,28 +144,12 @@ export default function Driver() {
           {/* Додавання CustomDatePicker */}
 
           <div className="flex gap-5 mb-5">
-            <CustomDatePicker
-              title="Departure Date"
-              name="departureDate"
-              register={register}
-              errors={errors}
-              control={control} // Передаємо control
-            />
-            <CustomDatePicker
-              title="Arrival Date"
-              name="arrivalDate"
-              register={register}
-              errors={errors}
-              watch={watch}
-              control={control} // Передаємо control
-            />
-          </div>
-          <div className="flex gap-5  mb-5">
-            <CustomTextField
+          <CustomTextField
               register={register}
               errors={errors}
               name={"departureFrom"}
               title={"Departure From"}
+              
               className="grow"
             />
             <CustomTextField
@@ -175,47 +159,16 @@ export default function Driver() {
               title={"Arrival To"}
               className="grow"
             />
-          </div>
-
-          <DynamicTextFields
-            unregister={unregister}
-            register={register}
-            errors={errors}
-          />
-
-          <CustomTextField
-            register={register}
-            errors={errors}
-            name={"busNumber"}
-            title={"Bus Number"}
-            className="mb-5"
-          />
-
-          <div>
-            <h2>Bus Layout</h2>
-            <MaterialUISelect
-              passengersLength={passengersLength}
-              handleChangeVariantBus={handleChangeVariantBus}
+            <CustomDatePicker
+              title="Departure Date"
+              name="departureDate"
               register={register}
               errors={errors}
-              className="mb-5"
+              control={control} // Передаємо control
             />
-
-            <LayoutBus
-              sessionUser={sessionUser}
-              className="flex justify-center"
-              dataLayoutBus={dataLayoutBus}
-              setDataLayoutBus={setDataLayoutBus}
-            />
+           
           </div>
-          <CustomTextField
-            register={register}
-            errors={errors}
-            name={"routePrice"}
-            title={"Route Price"}
-            className="mb-5"
-          />
-
+  
           <div className="flex justify-between items-center">
             <div className="grow">
               <Typography variant="h6" gutterBottom>
@@ -223,65 +176,11 @@ export default function Driver() {
               </Typography>
               <CheckboxOptions register={register} watch={watch} />
             </div>
-            <div className="flex justify-end items-center gap-5 grow">
-              <Button variant="contained" color="primary">
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                // disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
-              >
-                Create Route
-              </Button>
-            </div>
           </div>
+
         </form>
       </main>
       <div className="footer"></div>
     </Container>
   );
 }
-
-// const RouteDriver = {
-//   driverId: 10,
-//   departureDate: "2025-01-10T08:00:00Z",
-//   arrivalDate: "2025-01-10T12:00:00Z",
-//   departureFrom: "New York",
-//   arrivalTo: "Washington, D.C.",
-//   busNumber: "NY-WDC-2025",
-//   routePrice: 50,
-//   notate: "This is a comfortable route.",
-//   wifi: true,
-//   coffee: true,
-//   power: true,
-//   restRoom: true,
-//   busSeats: {
-//     passengerLength: 19,
-//     modelBus: "Volvo 240",
-//     passenger: [
-//       { passenger: 1, number: 1, busSeatStatus: "reserved" },
-//       { passenger: 2, number: 5, busSeatStatus: "reserved" },
-//       { passenger: 5, number: 8, busSeatStatus: "reserved" },
-//       { passenger: 8, number: 11, busSeatStatus: "reserved" },
-//       { passenger: 10, number: 14, busSeatStatus: "reserved" },
-//       { passenger: 11, number: 2, busSeatStatus: "reserved" },
-//       { passenger: null, number: 6, busSeatStatus: "available" },
-//       { passenger: null, number: 9, busSeatStatus: "available" },
-//       { passenger: null, number: 12, busSeatStatus: "available" },
-//       { passenger: null, number: 15, busSeatStatus: "available" },
-//       { passenger: null, number: 3, busSeatStatus: "available" },
-//       { passenger: null, number: 7, busSeatStatus: "available" },
-//       { passenger: null, number: 10, busSeatStatus: "available" },
-//       { passenger: null, number: 13, busSeatStatus: "available" },
-//       { passenger: null, number: 16, busSeatStatus: "available" },
-//       { passenger: null, number: 4, busSeatStatus: "available" },
-//       { passenger: null, number: 19, busSeatStatus: "available" },
-//       { passenger: null, number: 18, busSeatStatus: "available" },
-//       { passenger: null, number: 17, busSeatStatus: "available" },
-//     ],
-//   },
-//   intermediateStops: ["Philadelphia", "Baltimore"],
-//   passengersListId: [1, 2, 80],
-// };

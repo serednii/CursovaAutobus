@@ -4,7 +4,10 @@ import { useState, useMemo } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Container } from "@/components/shared/container";
-
+import { IoIosWifi } from "react-icons/io";
+import { CgCoffee } from "react-icons/cg";
+import { MdOutlinePower } from "react-icons/md";
+import { FaRestroom } from "react-icons/fa";
 import CustomDatePicker from "@/components/shared/form/dataPicker/dataPicker";
 import DynamicTextFields from "@/components/shared/form/dynamicTextFields";
 import MaterialUISelect from "@/components/shared/form/materialUISelect";
@@ -20,6 +23,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
 import { SendRouteDriver } from "@/types/sendtrouterdriver.types";
 import { UserSession } from "@/types/session.types";
+import CheckboxOption from "@/components/shared/form/checkboxOption";
 
 const fetchRouterDriver = async (data: any): Promise<any> => {
   try {
@@ -45,7 +49,7 @@ const fetchRouterDriver = async (data: any): Promise<any> => {
   }
 };
 
-export default function Driver() {
+export default function CreateRouter() {
   const { data: session, status } = useSession();
   let sessionUser: UserSession | null = null;
 
@@ -93,14 +97,14 @@ export default function Driver() {
       modelBus: dataLayoutBus.modelBus,
       passenger: newFormatPassenger,
     };
-
+    data.coffee = data.coffeeTea
+    delete data.coffeeTea
     data.busSeats = busSeats;
     data.passengersListId = [1, 2, 80];
-    // data.driverId = Number(sessionUser?.id);
-    data.driverId =1;
+    data.driverId = Number(sessionUser?.id);
 
-    // delete data.selectBusLayout;
-    // data.routePrice = data.routePrice;
+   data.selectBusLayout = String(data.selectBusLayout);
+     data.routePrice = Number(data.routePrice);
 
     fetchRouterDriver(data)
       .then((response) => {
@@ -221,7 +225,11 @@ export default function Driver() {
               <Typography variant="h6" gutterBottom>
                 Additional options:
               </Typography>
-              <CheckboxOptions register={register} watch={watch} />
+              <CheckboxOption register={register} watch={watch} name="WiFi" title="Wi-Fi" IconComponent={<IoIosWifi style={{ marginRight: "8px", fontSize: "24px" }} />} />
+              <CheckboxOption register={register} watch={watch} name="restroom" title="Restroom" IconComponent={ <FaRestroom style={{ marginRight: "8px", fontSize: "24px" }} />} />
+              <CheckboxOption register={register} watch={watch} name="power" title="Power Outlets" IconComponent={<MdOutlinePower style={{ marginRight: "8px", fontSize: "24px" }}
+                              />}/>
+              <CheckboxOption register={register} watch={watch} name="coffeeTea" title="Coffee/Tea" IconComponent={<CgCoffee style={{ marginRight: "8px", fontSize: "24px" }} />} />
             </div>
             <div className="flex justify-end items-center gap-5 grow">
               <Button variant="contained" color="primary">
@@ -243,45 +251,3 @@ export default function Driver() {
     </Container>
   );
 }
-
-// const RouteDriver = {
-//   driverId: 10,
-//   departureDate: "2025-01-10T08:00:00Z",
-//   arrivalDate: "2025-01-10T12:00:00Z",
-//   departureFrom: "New York",
-//   arrivalTo: "Washington, D.C.",
-//   busNumber: "NY-WDC-2025",
-//   routePrice: 50,
-//   notate: "This is a comfortable route.",
-//   wifi: true,
-//   coffee: true,
-//   power: true,
-//   restRoom: true,
-//   busSeats: {
-//     passengerLength: 19,
-//     modelBus: "Volvo 240",
-//     passenger: [
-//       { passenger: 1, number: 1, busSeatStatus: "reserved" },
-//       { passenger: 2, number: 5, busSeatStatus: "reserved" },
-//       { passenger: 5, number: 8, busSeatStatus: "reserved" },
-//       { passenger: 8, number: 11, busSeatStatus: "reserved" },
-//       { passenger: 10, number: 14, busSeatStatus: "reserved" },
-//       { passenger: 11, number: 2, busSeatStatus: "reserved" },
-//       { passenger: null, number: 6, busSeatStatus: "available" },
-//       { passenger: null, number: 9, busSeatStatus: "available" },
-//       { passenger: null, number: 12, busSeatStatus: "available" },
-//       { passenger: null, number: 15, busSeatStatus: "available" },
-//       { passenger: null, number: 3, busSeatStatus: "available" },
-//       { passenger: null, number: 7, busSeatStatus: "available" },
-//       { passenger: null, number: 10, busSeatStatus: "available" },
-//       { passenger: null, number: 13, busSeatStatus: "available" },
-//       { passenger: null, number: 16, busSeatStatus: "available" },
-//       { passenger: null, number: 4, busSeatStatus: "available" },
-//       { passenger: null, number: 19, busSeatStatus: "available" },
-//       { passenger: null, number: 18, busSeatStatus: "available" },
-//       { passenger: null, number: 17, busSeatStatus: "available" },
-//     ],
-//   },
-//   intermediateStops: ["Philadelphia", "Baltimore"],
-//   passengersListId: [1, 2, 80],
-// };

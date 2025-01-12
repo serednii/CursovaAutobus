@@ -66,8 +66,8 @@ export default function Header() {
           padding: "5px",
           borderRadius: "15px",
         }}
-        className={pathname === "/driver" ? "active-link" : ""}
-        href="/driver/"
+        className={pathname === "/createroute" ? "active-link" : ""}
+        href="/createroute/"
       >
         Driver
       </Link>
@@ -77,8 +77,8 @@ export default function Header() {
           padding: "5px",
           borderRadius: "15px",
         }}
-        className={pathname === "/passenger" ? "active-link" : ""}
-        href="/passenger/"
+        className={pathname === "/passengerdashboard" ? "active-link" : ""}
+        href="/passengerdashboard/"
       >
         Passenger
       </Link>

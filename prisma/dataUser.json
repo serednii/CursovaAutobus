@@ -1,0 +1,64 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "firstName": "Serednii",
+      "lastName": "Mykola",
+      "email": "seredniimykola@gmail.com",
+      "phone": "4767575757",
+      "password": "$2b$10$TQaIZLKq7vG9.kgEUJpm/ed8nAAiQz6gX46RM5SGgd8MZolDapGxS",
+      "role": "driver",
+      "license": "456356356356"
+    },
+    {
+      "id": 2,
+      "firstName": "BOHDAN",
+      "lastName": "ILCHYSHYN",
+      "email": "bogdan@pcgramota.ru",
+      "phone": "345336674764",
+      "password": "$2b$10$/SByyfUPZ.61i4N8U8cyg.h71ZSc97q8BDQ8W2JNnABNMOZvo0c2y",
+      "role": "driver",
+      "license": "3453563456"
+    },
+    {
+      "id": 3,
+      "firstName": "Olena",
+      "lastName": "Burdiak",
+      "email": "olena.burdiak@lnu.edu.ua",
+      "phone": "+380687686339",
+      "password": "$2b$10$FG9ZKhPBLmfoqFSQdUpmEuAI/pohLuKI2FnwUuTdy8AfM5anmm/3G",
+      "role": "passenger",
+      "license": "no licens2154e"
+    },
+    {
+      "id": 9,
+      "firstName": "test",
+      "lastName": "lastTest",
+      "email": "test@pcgramota.ru",
+      "phone": "+321646546216486",
+      "password": "$2b$10$knR.6Y5Mhq876EKo.SsmLeW5enZ0olkwWNBSYmMchzx.e3EwbzhVy",
+      "role": "passenger",
+      "license": "passenjukiyikljger"
+    },
+    {
+      "id": 12,
+      "firstName": "Serednii",
+      "lastName": "Mykola",
+      "email": "seredniimykola1@gmail.com",
+      "phone": "4767575757rt",
+      "password": "$2b$10$jEcIk6rLurKd6kkAZNdJuOxoxLUrBHpD7N8w3hgw7BCjM7Ao3BHJK",
+      "role": "driver",
+      "license": "456356356356"
+    },
+    {
+      "id": 14,
+      "firstName": "Serednii",
+      "lastName": "Mykola",
+      "email": "seredniimykola5@gmail.com",
+      "phone": "4767575757r6t",
+      "password": "$2b$10$vrxoOXOeF61ppkyhBaGEZ.rM1h8BhKX82LJW/os2TJ7pM3d64cby2",
+      "role": "driver",
+      "license": "456356356356"
+    }
+  ]
+}

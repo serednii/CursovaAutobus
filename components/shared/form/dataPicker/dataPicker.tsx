@@ -39,13 +39,12 @@ const CustomDatePicker = ({
 
   // Поточна дата і час
   const now = departureDate || new Date();
-  departureDate && console.log("now ", now);
   const startOfDay = new Date(
     now.getFullYear(),
     now.getMonth(),
     now.getDate(),
     0,
-    0
+    0  
   ); // Початок дня
   const endOfDay = new Date(
     now.getFullYear(),
