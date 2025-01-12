@@ -8,7 +8,7 @@ export interface FormValues {
   arrivalTo: string;
   busSeats: any;
   wifi: boolean;
-  coffeeTea: boolean;
+  coffee: boolean;
   power: boolean;
   restRoom: boolean;
   passengersListId: number[];

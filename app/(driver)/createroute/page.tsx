@@ -4,10 +4,7 @@ import { useState, useMemo } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Container } from "@/components/shared/container";
-import { IoIosWifi } from "react-icons/io";
-import { CgCoffee } from "react-icons/cg";
-import { MdOutlinePower } from "react-icons/md";
-import { FaRestroom } from "react-icons/fa";
+
 import CustomDatePicker from "@/components/shared/form/dataPicker/dataPicker";
 import DynamicTextFields from "@/components/shared/form/dynamicTextFields";
 import MaterialUISelect from "@/components/shared/form/materialUISelect";
@@ -23,7 +20,55 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
 import { SendRouteDriver } from "@/types/sendtrouterdriver.types";
 import { UserSession } from "@/types/session.types";
-import CheckboxOption from "@/components/shared/form/checkboxOption";
+
+type TBusSeat = {
+  passenger: number | null | undefined; // Може бути null, якщо місце доступне
+  number: number; // Номер місця
+  busSeatStatus: "reserved" | "available" | "selected"; // Статус місця
+};
+
+type RouteDriver = {
+  driverId: number; // ID водія
+  departureDate: Date; // Дата відправлення (ISO-формат)
+  arrivalDate: Date; // Дата прибуття (ISO-формат)
+  departureFrom: string; // Місто відправлення
+  arrivalTo: string; // Місто прибуття
+  busNumber: string; // Номер автобуса
+  routePrice: number; // Ціна маршруту
+  selectBusLayout: string; // Макет автобуса
+  notate?: string; // Додаткова примітка (необов'язкове поле)
+  wifi: boolean; // Наявність Wi-Fi
+  coffee: boolean; // Наявність кави
+  power: boolean; // Наявність розеток
+  restRoom: boolean; // Наявність туалету
+  busSeats: TBusSeat[]; // Список місць у автобусі
+  modelBus: string;
+  intermediateStops: string[];
+};
+
+const transformData = (
+  data: FormValues,
+  dataLayoutBus: ILayoutData,
+  sessionUser: UserSession
+) => {
+  const newFormatPassenger = dataLayoutBus.passenger.map((e) => {
+    const { number, busSeatStatus, passenger } = e;
+    return { number, busSeatStatus, passenger };
+  });
+
+  const createRouteDriver: RouteDriver = {
+    ...data,
+    routePrice: Number(data.routePrice),
+    modelBus: dataLayoutBus.modelBus,
+    busSeats: newFormatPassenger,
+    driverId: Number(sessionUser?.id),
+    departureDate: new Date(data.departureDate),
+    notate: "This is a comfortable route.",
+    selectBusLayout: String(data.selectBusLayout),
+    intermediateStops: data.intermediateStops || [],
+  };
+  return createRouteDriver;
+};
 
 const fetchRouterDriver = async (data: any): Promise<any> => {
   try {
@@ -49,7 +94,7 @@ const fetchRouterDriver = async (data: any): Promise<any> => {
   }
 };
 
-export default function CreateRouter() {
+export default function Driver() {
   const { data: session, status } = useSession();
   let sessionUser: UserSession | null = null;
 
@@ -69,7 +114,7 @@ export default function CreateRouter() {
     mode: "onChange",
     defaultValues: {
       wifi: true, // Початкове значення для чекбокса
-      coffeeTea: true,
+      coffee: true,
       power: true,
       restRoom: true,
     },
@@ -86,27 +131,14 @@ export default function CreateRouter() {
     [layoutsData.length]
   );
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    const newFormatPassenger = dataLayoutBus.passenger.map((e) => {
-      const { number, busSeatStatus, passenger } = e;
-      return { number, busSeatStatus, passenger };
-    });
+  const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
+    const createRouteDriver = transformData(
+      data,
+      dataLayoutBus,
+      sessionUser as UserSession
+    );
 
-    const busSeats = {
-      passengersLength: dataLayoutBus.passengerLength,
-      modelBus: dataLayoutBus.modelBus,
-      passenger: newFormatPassenger,
-    };
-    data.coffee = data.coffeeTea
-    delete data.coffeeTea
-    data.busSeats = busSeats;
-    data.passengersListId = [1, 2, 80];
-    data.driverId = Number(sessionUser?.id);
-
-   data.selectBusLayout = String(data.selectBusLayout);
-     data.routePrice = Number(data.routePrice);
-
-    fetchRouterDriver(data)
+    fetchRouterDriver(createRouteDriver)
       .then((response) => {
         if (response) {
           console.log("Response:", response);
@@ -115,8 +147,7 @@ export default function CreateRouter() {
         }
       })
       .catch((err) => console.error("Fetch failed:", err));
-    console.log(data);
-    // alert("Form submitted with data: " + JSON.stringify(data));
+    console.log(createRouteDriver);
     // reset();
   };
 
@@ -225,11 +256,7 @@ export default function CreateRouter() {
               <Typography variant="h6" gutterBottom>
                 Additional options:
               </Typography>
-              <CheckboxOption register={register} watch={watch} name="WiFi" title="Wi-Fi" IconComponent={<IoIosWifi style={{ marginRight: "8px", fontSize: "24px" }} />} />
-              <CheckboxOption register={register} watch={watch} name="restroom" title="Restroom" IconComponent={ <FaRestroom style={{ marginRight: "8px", fontSize: "24px" }} />} />
-              <CheckboxOption register={register} watch={watch} name="power" title="Power Outlets" IconComponent={<MdOutlinePower style={{ marginRight: "8px", fontSize: "24px" }}
-                              />}/>
-              <CheckboxOption register={register} watch={watch} name="coffeeTea" title="Coffee/Tea" IconComponent={<CgCoffee style={{ marginRight: "8px", fontSize: "24px" }} />} />
+              <CheckboxOptions register={register} watch={watch} />
             </div>
             <div className="flex justify-end items-center gap-5 grow">
               <Button variant="contained" color="primary">

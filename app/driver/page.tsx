@@ -65,7 +65,7 @@ export default function Driver() {
     mode: "onChange",
     defaultValues: {
       wifi: true, // Початкове значення для чекбокса
-      coffeeTea: true,
+      coffee: true,
       power: true,
       restRoom: true,
     },
@@ -97,7 +97,7 @@ export default function Driver() {
     data.busSeats = busSeats;
     data.passengersListId = [1, 2, 80];
     // data.driverId = Number(sessionUser?.id);
-    data.driverId =1;
+    data.driverId = 1;
 
     // delete data.selectBusLayout;
     // data.routePrice = data.routePrice;

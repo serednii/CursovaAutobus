@@ -9,30 +9,30 @@ export async function GET() {
   return NextResponse.json({ routeDriver });
 }
 
-// export async function GET() {
-//   try {
-//     console.log("Fetching users...");
-//     await prisma.$queryRaw`DEALLOCATE ALL;`;
-//     // Отримання списку користувачів
-//     const users = await prisma.user.findMany();
+export async function GET() {
+  try {
+    console.log("Fetching users...");
+    await prisma.$queryRaw`DEALLOCATE ALL;`;
+    // Отримання списку користувачів
+    const users = await prisma.user.findMany();
 
-//     // Перевірка, чи знайдені користувачі
-//     if (!users || users.length === 0) {
-//       return NextResponse.json({ message: "No users found" }, { status: 404 });
-//     }
+    // Перевірка, чи знайдені користувачі
+    if (!users || users.length === 0) {
+      return NextResponse.json({ message: "No users found" }, { status: 404 });
+    }
 
-//     // Успішна відповідь
-//     return NextResponse.json({ users: "users || []" }, { status: 200 });
-//   } catch (error) {
-//     console.error("Error fetching users:", error);
+    // Успішна відповідь
+    return NextResponse.json({ users: "users || []" }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching users:", error);
 
-//     // Обробка помилок
-//     return NextResponse.json(
-//       { error: "Failed to fetch users" },
-//       { status: 500 }
-//     );
-//   }
-// }
+    // Обробка помилок
+    return NextResponse.json(
+      { error: "Failed to fetch users" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {

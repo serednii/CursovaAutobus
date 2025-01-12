@@ -65,7 +65,7 @@ export default function CreateRouter() {
     mode: "onChange",
     defaultValues: {
       wifi: true, // Початкове значення для чекбокса
-      coffeeTea: true,
+      coffee: true,
       power: true,
       restRoom: true,
     },
@@ -97,7 +97,7 @@ export default function CreateRouter() {
     data.busSeats = busSeats;
     data.passengersListId = [1, 2, 80];
     // data.driverId = Number(sessionUser?.id);
-    data.driverId =1;
+    data.driverId = 1;
 
     // delete data.selectBusLayout;
     // data.routePrice = data.routePrice;
@@ -144,12 +144,11 @@ export default function CreateRouter() {
           {/* Додавання CustomDatePicker */}
 
           <div className="flex gap-5 mb-5">
-          <CustomTextField
+            <CustomTextField
               register={register}
               errors={errors}
               name={"departureFrom"}
               title={"Departure From"}
-              
               className="grow"
             />
             <CustomTextField
@@ -166,9 +165,8 @@ export default function CreateRouter() {
               errors={errors}
               control={control} // Передаємо control
             />
-           
           </div>
-  
+
           <div className="flex justify-between items-center">
             <div className="grow">
               <Typography variant="h6" gutterBottom>
@@ -177,7 +175,6 @@ export default function CreateRouter() {
               <CheckboxOptions register={register} watch={watch} />
             </div>
           </div>
-
         </form>
       </main>
       <div className="footer"></div>

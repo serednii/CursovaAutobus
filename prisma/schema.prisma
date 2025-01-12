@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id        Int             @id @default(autoincrement())
+  createdAt DateTime @default(now())
   firstName String
   lastName  String
   email     String          @unique
@@ -22,6 +23,7 @@ model User {
 
 model RouteDriver {
   id                Int                 @id @default(autoincrement())
+  createdAt DateTime @default(now())
   driverId          Int                 
   user              User                @relation(fields: [driverId], references: [id])
   departureDate     DateTime            
@@ -36,12 +38,18 @@ model RouteDriver {
   coffee            Boolean             @default(false)
   power             Boolean             @default(false)
   restRoom          Boolean             @default(false)
-  passengerLength   Int                 // Кількість пасажирів
   modelBus          String              // Модель автобуса
-  intermediateStops String                // Проміжні зупинки як JSON
+  intermediateStops IntermediateStop[]  // Проміжні зупинки
+  busSeats          BusSeat[]           // Зв'язок з BusSeat
   orders            OrderedRoute[]      
 }
 
+model IntermediateStop {
+  id       Int    @id @default(autoincrement())
+  stopName String 
+  routeId  Int?    
+  route    RouteDriver? @relation(fields: [routeId], references: [id])
+}
 
 model OrderedRoute {
   id            Int          @id @default(autoincrement())
@@ -60,7 +68,12 @@ model OrderSeat {
   order       OrderedRoute @relation(fields: [orderId], references: [id])
 }
 
-model VariantBusSeats {
-  id       Int   @id @default(autoincrement())
-  busSeats Json  
+model BusSeat {
+  id            Int       @id @default(autoincrement())
+  passenger     Int?      
+  number        Int       
+  busSeatStatus String    
+  routeDriverId Int       
+  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
 }
+

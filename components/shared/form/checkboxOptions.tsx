@@ -36,8 +36,8 @@ export default function CheckboxOptions({ register, watch }: Props) {
           />
           <FormControlLabel
             control={<Checkbox />}
-            {...register("coffeeTea")}
-            checked={watch("coffeeTea") || false}
+            {...register("coffee")}
+            checked={watch("coffee") || false}
             label={
               <div style={{ display: "flex", alignItems: "center" }}>
                 <CgCoffee style={{ marginRight: "8px", fontSize: "24px" }} />
