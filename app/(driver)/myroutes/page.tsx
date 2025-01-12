@@ -5,7 +5,7 @@ import { authConfig } from "@/configs/auth";
 import { Routes } from "@/components/shared/driver/testData";
 import { getServerSession } from "next-auth/next";
 
-async function routeFetch(driverId) {
+async function routeFetch(driverId: any) {
   try {
     // Відправка POST-запиту
     const response = await fetch("http://localhost:3000/api/getroute", {
@@ -25,7 +25,7 @@ async function routeFetch(driverId) {
 
     // Обробка відповіді
     const data = await response.json();
-    console.log("Отримані маршрути:", data.routes);
+    // console.log("Отримані маршрути:", data.routes);
     return data.routes; // Повертаємо маршрути
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);
@@ -33,27 +33,35 @@ async function routeFetch(driverId) {
   }
 }
 
-export default async  function MyRoutes() {
+export default async function MyRoutes() {
   const session = await getServerSession(authConfig);
-  const driverId:number| undefined = session?.user.firstName}
 
-routeFetch(driverId).then((routes) => {
-  if (routes) {
-    console.log("Маршрути для водія:", routes);
-  } else {
-    console.log("Маршрутів не знайдено або виникла помилка.");
-  }
-});
+  const driverId: number | undefined = session?.user.id;
+  console.log("ID водія:", session);
+
+  if (!driverId) return null;
+
+  const routes = (await routeFetch(8)) || [];
+  console.log("****************************");
+  console.log("lengthRoutes", routes);
+
+  const newDate = new Date().getTime();
+
+  const pastRoutes = routes.filter(
+    (route) => new Date(route.arrivalDate).getTime() < newDate
+  );
+  console.log("length pastRoutes", pastRoutes.length);
+
+  const availableRoutes = routes.filter(
+    (route) => new Date(route.arrivalDate).getTime() > newDate
+  );
+  console.log("length availableRoutes", availableRoutes.length);
+  console.log("****************************");
 
   return (
     <div>
-      <AvailableRoutes routes={Routes} />
-
-      <PastRotes routes={Routes} />
+      <AvailableRoutes routes={availableRoutes} />
+      <PastRotes routes={pastRoutes} />
     </div>
   );
 }
-
-
-
-

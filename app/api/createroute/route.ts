@@ -6,11 +6,17 @@ export async function GET() {
   // Вибірка маршрутів по driverId
   const routeDriver = await prisma.routeDriver.findMany({
     where: {
-      driverId: 9, // Потрібно змінити на актуальний driverId
+      driverId: 1, // Потрібно змінити на актуальний driverId
     },
   });
   return NextResponse.json({ routeDriver });
 }
+
+// export async function GET() {
+//   const routeDriver = await prisma.routeDriver.findMany();
+//   console.log("routeDriver", routeDriver);
+//   return NextResponse.json({ routeDriver });
+// }
 
 export async function POST(req: NextRequest) {
   const prisma = new PrismaClient();
