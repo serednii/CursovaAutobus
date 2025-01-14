@@ -18,33 +18,8 @@ import { ILayoutData } from "@/types/layoutbus.types";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
-import { SendRouteDriver } from "@/types/sendtrouterdriver.types";
 import { UserSession } from "@/types/session.types";
-
-type TBusSeat = {
-  passenger: number | null | undefined; // Може бути null, якщо місце доступне
-  number: number; // Номер місця
-  busSeatStatus: "reserved" | "available" | "selected"; // Статус місця
-};
-
-type RouteDriver = {
-  driverId: number; // ID водія
-  departureDate: Date; // Дата відправлення (ISO-формат)
-  arrivalDate: Date; // Дата прибуття (ISO-формат)
-  departureFrom: string; // Місто відправлення
-  arrivalTo: string; // Місто прибуття
-  busNumber: string; // Номер автобуса
-  routePrice: number; // Ціна маршруту
-  selectBusLayout: string; // Макет автобуса
-  notate?: string; // Додаткова примітка (необов'язкове поле)
-  wifi: boolean; // Наявність Wi-Fi
-  coffee: boolean; // Наявність кави
-  power: boolean; // Наявність розеток
-  restRoom: boolean; // Наявність туалету
-  busSeats: TBusSeat[]; // Список місць у автобусі
-  modelBus: string;
-  intermediateStops: string[];
-};
+import { sendDataBaseRouteDriver } from "@/types/route-driver.types";
 
 const transformData = (
   data: FormValues,
@@ -56,7 +31,7 @@ const transformData = (
     return { number, busSeatStatus, passenger };
   });
 
-  const createRouteDriver: RouteDriver = {
+  const createRouteDriver: sendDataBaseRouteDriver = {
     ...data,
     routePrice: Number(data.routePrice),
     modelBus: dataLayoutBus.modelBus,
@@ -66,7 +41,12 @@ const transformData = (
     notate: "This is a comfortable route.",
     selectBusLayout: String(data.selectBusLayout),
     intermediateStops: data.intermediateStops || [],
+    maxSeats: newFormatPassenger.length,
+    bookedSeats: newFormatPassenger.filter(
+      (e) => e.busSeatStatus === "reserved"
+    ).length,
   };
+
   return createRouteDriver;
 };
 
@@ -137,6 +117,7 @@ export default function Driver() {
       dataLayoutBus,
       sessionUser as UserSession
     );
+    console.log(data);
 
     fetchRouterDriver(createRouteDriver)
       .then((response) => {

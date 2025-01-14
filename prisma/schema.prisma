@@ -30,7 +30,9 @@ model RouteDriver {
   arrivalDate       DateTime            
   departureFrom     String              
   arrivalTo         String              
-  busNumber         String              
+  busNumber         String       
+  maxSeats          Int
+  bookedSeats       Int       
   selectBusLayout   String              
   routePrice        Int                 
   notate            String?             
@@ -51,6 +53,15 @@ model IntermediateStop {
   route    RouteDriver? @relation(fields: [routeId], references: [id])
 }
 
+model BusSeat {
+  id            Int       @id @default(autoincrement())
+  passenger     Int?      
+  number        Int       
+  busSeatStatus String    
+  routeDriverId Int       
+  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
+}
+
 model OrderedRoute {
   id            Int          @id @default(autoincrement())
   passengerId   Int          
@@ -68,12 +79,4 @@ model OrderSeat {
   order       OrderedRoute @relation(fields: [orderId], references: [id])
 }
 
-model BusSeat {
-  id            Int       @id @default(autoincrement())
-  passenger     Int?      
-  number        Int       
-  busSeatStatus String    
-  routeDriverId Int       
-  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
-}
 

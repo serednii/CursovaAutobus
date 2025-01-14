@@ -2,22 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import { PrismaClient } from "@prisma/client";
 
-export async function GET() {
-  // Вибірка маршрутів по driverId
-  const routeDriver = await prisma.routeDriver.findMany({
-    where: {
-      driverId: 1, // Потрібно змінити на актуальний driverId
-    },
-  });
-  return NextResponse.json({ routeDriver });
-}
-
-// export async function GET() {
-//   const routeDriver = await prisma.routeDriver.findMany();
-//   console.log("routeDriver", routeDriver);
-//   return NextResponse.json({ routeDriver });
-// }
-
 export async function POST(req: NextRequest) {
   const prisma = new PrismaClient();
   try {
@@ -31,12 +15,14 @@ export async function POST(req: NextRequest) {
       busNumber: string;
       routePrice: number;
       selectBusLayout: string;
-      notate?: string;
-      wifi?: boolean;
-      coffee?: boolean;
-      power?: boolean;
+      notate: string;
+      wifi: boolean;
+      coffee: boolean;
+      power: boolean;
       restRoom?: boolean;
       modelBus: string;
+      maxSeats: number;
+      bookedSeats: number;
       intermediateStops: string[];
       busSeats: {
         passenger: number | null;
@@ -95,6 +81,8 @@ export async function POST(req: NextRequest) {
       coffee,
       power,
       restRoom,
+      maxSeats,
+      bookedSeats,
     } = data;
 
     console.log("Data validation passed");
@@ -109,15 +97,20 @@ export async function POST(req: NextRequest) {
       !busNumber ||
       !routePrice ||
       !modelBus ||
-      !intermediateStops
+      !intermediateStops ||
+      !wifi ||
+      !coffee ||
+      !power ||
+      !restRoom ||
+      !busSeats ||
+      !maxSeats ||
+      !bookedSeats
     ) {
       return NextResponse.json(
         { error: "Invalid data: required fields are missing" },
         { status: 400 }
       );
     }
-
-    console.log("Creating route driver");
 
     // Створення маршруту без проміжних зупинок
     const routeDriver = await prisma.routeDriver.create({
@@ -131,11 +124,13 @@ export async function POST(req: NextRequest) {
         routePrice,
         selectBusLayout,
         notate: data.notate || "",
-        wifi: data.wifi || false,
-        coffee: data.coffee || false,
-        power: data.power || false,
-        restRoom: data.restRoom || false,
+        wifi,
+        coffee,
+        power,
+        restRoom,
         modelBus, // Модель автобуса
+        maxSeats,
+        bookedSeats,
       },
     });
 
@@ -152,7 +147,6 @@ export async function POST(req: NextRequest) {
     );
 
     await Promise.all(intermediateStopPromises);
-    console.log("Intermediate stops created");
 
     // Створення місць у автобусі
     const busSeatPromises = data.busSeats.map((seat) =>
@@ -167,10 +161,9 @@ export async function POST(req: NextRequest) {
     );
 
     await Promise.all(busSeatPromises);
-    console.log("Bus seats created");
 
     return NextResponse.json({ routeDriver }, { status: 201 });
-  } catch (error) {
+  } catch (error: Error | any) {
     console.error("Error creating route driver:", error);
     console.error("Error details:", error.message);
     return NextResponse.json(

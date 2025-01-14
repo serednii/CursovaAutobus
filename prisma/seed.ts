@@ -3,7 +3,7 @@ import { prisma } from "./prisma-client";
 
 const routerDriverFetch = async (routeDriver: any) => {
   try {
-    const response = await fetch("http://localhost:3000/api/routedriver", {
+    const response = await fetch("http://localhost:3000/api/createroute", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
