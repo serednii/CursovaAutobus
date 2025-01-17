@@ -14,7 +14,7 @@ const handleAgainRoute = (route: any) => {
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props {
   routes: GetRoutesByDriverId[];
-  isRouteAgain: boolean;
+  isRouteAgain?: boolean;
 }
 
 export default function TableRoutes({ routes, isRouteAgain }: Props) {
@@ -28,8 +28,8 @@ export default function TableRoutes({ routes, isRouteAgain }: Props) {
 
   // Основні колонки без колонки againRouter
   const baseColumns: GridColDef[] = [
-    { field: "departureDate", headerName: "Departure Date", width: 130 },
-    { field: "arrivalDate", headerName: "Arrival Date", width: 130 },
+    { field: "departureDate", headerName: "Departure Date", width: 180 },
+    { field: "arrivalDate", headerName: "Arrival Date", width: 180 },
     { field: "departureFrom", headerName: "From", width: 130 },
     { field: "arrivalTo", headerName: "To", width: 130 },
     { field: "maxSeats", headerName: "Max Seats", width: 100 },

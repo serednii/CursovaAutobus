@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { FormValues } from "@/types/form.types";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 interface Props {
   register: UseFormRegister<FormValues>;
@@ -17,7 +18,7 @@ interface Props {
   className?: string;
   passengersLength: number[];
   handleChangeVariantBus: (value: number) => void;
-  IndexSelectVariantBus: number | null;
+  indexSelectVariantBus: number | null;
 }
 
 const MaterialUISelect = ({
@@ -26,16 +27,16 @@ const MaterialUISelect = ({
   errors,
   passengersLength,
   handleChangeVariantBus,
-  IndexSelectVariantBus,
+  indexSelectVariantBus,
 }: Props) => {
   const [selectedValue, setSelectedValue] = useState<string | null>(
-    IndexSelectVariantBus
+    String(indexSelectVariantBus)
   );
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const value = event.target.value as number; // Приводимо значення до числа
-    setSelectedValue(value); // Оновлюємо локальний стан для відображення вибраного елемента
-    handleChangeVariantBus(value); // Викликаємо функцію-обробник
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    const value = Number(event.target.value); // Приводимо значення до числа
+    setSelectedValue(event.target.value); // Оновлюємо локальний стан
+    handleChangeVariantBus(value); // Викликаємо зовнішню функцію-обробник
   };
 
   return (

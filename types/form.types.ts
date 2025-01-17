@@ -14,4 +14,15 @@ export interface FormValues {
   passengersListId: number[];
   driverId: number;
   selectBusLayout: string;
+  subFirstName?: string[];
+  subLastName?: string[];
+  subPhone?: string[];
+  subEmail?: string[];
+}
+
+export interface ISubPassengers {
+  subFirstName: string;
+  subLastName: string;
+  subPhone: string;
+  subEmail: string;
 }

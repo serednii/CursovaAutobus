@@ -1,6 +1,6 @@
 import { routerDrivers, users } from "./constants";
 import { prisma } from "./prisma-client";
-
+import { createRoute } from "@/app/api/createroute/createroute";
 const routerDriverFetch = async (routeDriver: any) => {
   try {
     const response = await fetch("http://localhost:3000/api/createroute", {
@@ -10,9 +10,14 @@ const routerDriverFetch = async (routeDriver: any) => {
       },
       body: JSON.stringify(routeDriver),
     });
+
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Помилка запиту:", errorData.error || "Невідома помилка");
+      console.error(
+        "Помилка запиту:",
+        errorData.error || "Невідома помилка",
+        routeDriver.routePrice
+      );
       return null;
     }
 
@@ -29,15 +34,16 @@ async function up() {
     data: users,
   });
 
-  routerDrivers.forEach(async (routeDriver) => {
-    const result = await routerDriverFetch(routeDriver);
-    console.log("result", result);
-    if (result) {
-      console.log("Маршрути успішно створені");
-    } else {
-      console.error("Помилка створення маршрутів");
-    }
-  });
+  // routerDrivers.forEach(async (routeDriver, index) => {
+  //   // const result = await routerDriverFetch(routeDriver);
+  //   createRoute(routeDriver);
+  //   console.log("result", routeDriver.routePrice, index);
+  //   // if (result) {
+  //   //   console.log("Маршрути успішно створені", index);
+  //   // } else {
+  //   //   console.error("Помилка створення маршрутів", index);
+  //   // }
+  // });
 }
 
 async function down() {

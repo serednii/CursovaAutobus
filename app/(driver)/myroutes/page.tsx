@@ -12,7 +12,7 @@ export default async function MyRoutes() {
   const session = await getServerSession(authConfig);
 
   const driverId: number | undefined = session?.user.id;
-
+  console.log("driverid myroutes:", driverId);
   if (!driverId) return null;
 
   const routes: GetRoutesByDriverId[] = (await routeFetch(driverId)) || [];

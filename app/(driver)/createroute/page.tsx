@@ -13,13 +13,17 @@ import CustomTextField from "@/components/shared/form/customTextField";
 
 import LayoutBus from "@/components/shared/layoutBus/layuotBus";
 import { layoutsData } from "@/components/shared/layoutBus/layoutData";
-import { FormValues } from "@/types/form.types";
+import { FormValues, ISubPassengers } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/types/session.types";
-import { sendDataBaseRouteDriver } from "@/types/route-driver.types";
+import {
+  sendDataBaseRouteDriver,
+  TSubPassengersList,
+} from "@/types/route-driver.types";
+import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
 
 const transformData = (
   data: FormValues,
@@ -30,6 +34,35 @@ const transformData = (
     const { number, busSeatStatus, passenger } = e;
     return { number, busSeatStatus, passenger };
   });
+
+  const subPassengerList: TSubPassengersList = {
+    newSubPassengerList: [],
+    idPassenger: 0,
+  };
+
+  if (
+    data.subFirstName &&
+    data.subLastName &&
+    data.subPhone &&
+    data.subEmail &&
+    Array.isArray(data.subFirstName) &&
+    Array.isArray(data.subLastName) &&
+    Array.isArray(data.subPhone) &&
+    Array.isArray(data.subEmail) &&
+    data.subFirstName.length === data.subLastName.length &&
+    data.subLastName.length === data.subPhone.length &&
+    data.subPhone.length === data.subEmail.length
+  ) {
+    const newSubPassengerList = data.subFirstName.map((_, index) => ({
+      subFirstName: data.subFirstName ? data.subFirstName[index] : "",
+      subLastName: data.subLastName ? data.subLastName[index] : "",
+      subPhone: data.subPhone ? data.subPhone[index] : "",
+      subEmail: data.subEmail ? data.subEmail[index] : "",
+    }));
+
+    subPassengerList.newSubPassengerList = newSubPassengerList;
+    subPassengerList.idPassenger = Number(sessionUser?.id);
+  }
 
   const createRouteDriver: sendDataBaseRouteDriver = {
     ...data,
@@ -42,15 +75,17 @@ const transformData = (
     selectBusLayout: String(data.selectBusLayout),
     intermediateStops: data.intermediateStops || [],
     maxSeats: newFormatPassenger.length,
+
     bookedSeats: newFormatPassenger.filter(
       (e) => e.busSeatStatus === "reserved"
-    ).length,
+    ).length, //в дальнішому треба добавити дані для всіх пасажирів а для водія буде просто масив пасажирів
+    subPassengersList: [subPassengerList],
   };
 
   return createRouteDriver;
 };
 
-const fetchRouterDriver = async (data: any): Promise<any> => {
+const fetchCreateRoute = async (data: any): Promise<any> => {
   try {
     const response = await fetch("http://localhost:3000/api/createroute", {
       method: "POST",
@@ -75,13 +110,6 @@ const fetchRouterDriver = async (data: any): Promise<any> => {
 };
 
 export default function Driver() {
-  const { data: session, status } = useSession();
-  let sessionUser: UserSession | null = null;
-
-  if (status === "authenticated") {
-    sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
-  }
-
   const {
     register,
     unregister,
@@ -100,11 +128,18 @@ export default function Driver() {
     },
   });
 
-  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
+  const { data: session, status } = useSession();
 
-  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData>(
-    layoutsData[indexSelectVariantBus]
-  );
+  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
+  const [dataLayoutBus, setDataLayoutBus] = useState<
+    ILayoutData | null | undefined
+  >(null);
+
+  let sessionUser: UserSession | null = null;
+
+  if (status === "authenticated") {
+    sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
+  }
 
   const passengersLength: number[] = useMemo(
     () => layoutsData.map((e) => e.passengerLength),
@@ -114,12 +149,13 @@ export default function Driver() {
   const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
     const createRouteDriver = transformData(
       data,
-      dataLayoutBus,
+      dataLayoutBus as ILayoutData,
       sessionUser as UserSession
     );
+
     console.log(data);
 
-    fetchRouterDriver(createRouteDriver)
+    fetchCreateRoute(createRouteDriver)
       .then((response) => {
         if (response) {
           console.log("Response:", response);
@@ -132,8 +168,12 @@ export default function Driver() {
     // reset();
   };
 
-  // console.log(indexSelectVariantBus, dataLayoutBus);
+  const userIdSession = sessionUser?.id;
+  const idOrderPassengers = dataLayoutBus?.passenger
+    .filter((e) => e.passenger === userIdSession)
+    .map((e) => e.passenger);
 
+  console.log(sessionUser?.id, idOrderPassengers);
   // console.log(errors);
 
   const handleChangeVariantBus = (number: number) => {
@@ -214,6 +254,7 @@ export default function Driver() {
               handleChangeVariantBus={handleChangeVariantBus}
               register={register}
               errors={errors}
+              indexSelectVariantBus={indexSelectVariantBus}
               className="mb-5"
             />
 
@@ -224,6 +265,16 @@ export default function Driver() {
               setDataLayoutBus={setDataLayoutBus}
             />
           </div>
+
+          {idOrderPassengers && idOrderPassengers.length > 0 && (
+            <SubPassengersOrders
+              register={register}
+              errors={errors}
+              unregister={unregister}
+              idOrderPassengers={idOrderPassengers}
+            />
+          )}
+
           <CustomTextField
             register={register}
             errors={errors}

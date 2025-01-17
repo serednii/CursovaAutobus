@@ -8,75 +8,94 @@ datasource db {
 }
 
 model User {
-  id        Int             @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  firstName String
-  lastName  String
-  email     String          @unique
-  phone     String          @unique
-  password  String
-  role      String
-  license   String       
-  routes    RouteDriver[]   // Зв'язок з RouteDriver
-  orders    OrderedRoute[]  // Зв'язок із замовленими маршрутами
+  id                  Int                   @id @default(autoincrement())
+  createdAt           DateTime              @default(now())
+  firstName           String
+  lastName            String
+  email               String                @unique
+  phone               String                @unique
+  password            String
+  role                String
+  license             String
+  routes              RouteDriver[] // Зв'язок з RouteDriver
+  orders              OrderedRoute[] // Зв'язок із замовленими маршрутами
+  passengersSeatsList PassengersSeatsList[]
 }
 
 model RouteDriver {
+  id                  Int                   @id @default(autoincrement())
+  createdAt           DateTime              @default(now())
+  driverId            Int
+  user                User                  @relation(fields: [driverId], references: [id])
+  departureDate       DateTime
+  arrivalDate         DateTime
+  departureFrom       String
+  arrivalTo           String
+  busNumber           String
+  maxSeats            Int
+  bookedSeats         Int
+  selectBusLayout     String
+  routePrice          Int
+  notate              String?
+  wifi                Boolean               @default(false)
+  coffee              Boolean               @default(false)
+  power               Boolean               @default(false)
+  restRoom            Boolean               @default(false)
+  modelBus            String // Модель автобуса
+  intermediateStops   IntermediateStop[] // Проміжні зупинки
+  busSeats            BusSeat[] // Зв'язок з BusSeat
+  orders              OrderedRoute[]
+  passengersSeatsList PassengersSeatsList[]
+}
+
+model PassengersSeatsList {
   id                Int                 @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  driverId          Int                 
-  user              User                @relation(fields: [driverId], references: [id])
-  departureDate     DateTime            
-  arrivalDate       DateTime            
-  departureFrom     String              
-  arrivalTo         String              
-  busNumber         String       
-  maxSeats          Int
-  bookedSeats       Int       
-  selectBusLayout   String              
-  routePrice        Int                 
-  notate            String?             
-  wifi              Boolean             @default(false)
-  coffee            Boolean             @default(false)
-  power             Boolean             @default(false)
-  restRoom          Boolean             @default(false)
-  modelBus          String              // Модель автобуса
-  intermediateStops IntermediateStop[]  // Проміжні зупинки
-  busSeats          BusSeat[]           // Зв'язок з BusSeat
-  orders            OrderedRoute[]      
+  idPassenger       Int
+  user              User                @relation(fields: [idPassenger], references: [id])
+  routeDriverId     Int
+  routeDriver       RouteDriver         @relation(fields: [routeDriverId], references: [id])
+  subPassengersList SubPassengersList[]
+}
+
+model SubPassengersList {
+  id                    Int                 @id @default(autoincrement())
+  passengersSeatsListId Int
+  passengersSeatsList   PassengersSeatsList @relation(fields: [passengersSeatsListId], references: [id])
+  subFirstName          String
+  subLastName           String
+  subPhone              String
+  subEmail              String
 }
 
 model IntermediateStop {
-  id       Int    @id @default(autoincrement())
-  stopName String 
-  routeId  Int?    
+  id       Int          @id @default(autoincrement())
+  stopName String
+  routeId  Int?
   route    RouteDriver? @relation(fields: [routeId], references: [id])
 }
 
 model BusSeat {
-  id            Int       @id @default(autoincrement())
-  passenger     Int?      
-  number        Int       
-  busSeatStatus String    
-  routeDriverId Int       
+  id            Int         @id @default(autoincrement())
+  passenger     Int?
+  number        Int
+  busSeatStatus String
+  routeDriverId Int
   routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
 }
 
 model OrderedRoute {
-  id            Int          @id @default(autoincrement())
-  passengerId   Int          
-  user          User         @relation(fields: [passengerId], references: [id])
-  routeDriverId Int          
-  routeDriver   RouteDriver  @relation(fields: [routeDriverId], references: [id])
-  orderDate     DateTime     @default(now())
-  orderSeats    OrderSeat[]  
+  id            Int         @id @default(autoincrement())
+  passengerId   Int
+  user          User        @relation(fields: [passengerId], references: [id])
+  routeDriverId Int
+  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
+  orderDate     DateTime    @default(now())
+  orderSeats    OrderSeat[]
 }
 
 model OrderSeat {
-  id          Int          @id @default(autoincrement())
-  seatNumber  Int          
-  orderId     Int          
-  order       OrderedRoute @relation(fields: [orderId], references: [id])
+  id         Int          @id @default(autoincrement())
+  seatNumber Int
+  orderId    Int
+  order      OrderedRoute @relation(fields: [orderId], references: [id])
 }
-
-

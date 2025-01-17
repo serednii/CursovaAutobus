@@ -6,7 +6,7 @@ export async function POST(req: any) {
   try {
     // Отримуємо дані з тіла запиту
     const { id } = await req.json();
-    console.log("id", id);
+    // console.log("id", id);
     // Перевірка, чи передано Id
     if (!id) {
       return NextResponse.json(
@@ -16,7 +16,7 @@ export async function POST(req: any) {
     }
 
     // Виконуємо запит до бази даних із включенням зв’язаних таблиць
-    const routes: GetRouteById = await prisma.routeDriver.findMany({
+    const routes = await prisma.routeDriver.findMany({
       where: { id },
 
       select: {
@@ -26,11 +26,12 @@ export async function POST(req: any) {
         arrivalTo: true, // Залишаємо це поле
         routePrice: true, // Залишаємо це поле
         busSeats: true,
+        passengersSeatsList: true,
+
         // Усі інші поля не будуть включені, якщо вони не вказані як `true`
       },
     });
 
-    console.log("XXXXXXXXXXXXXXXXX", routes);
     // Якщо маршрути не знайдено
     if (!routes) {
       return NextResponse.json(

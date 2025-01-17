@@ -1,4 +1,4 @@
-export type SeatStatus = "reserved" | "available" | "selected";
+import { NullableNumber, SeatStatus } from "./types";
 
 export type params = {
   left?: number;
@@ -7,7 +7,7 @@ export type params = {
   right?: number;
   number: number;
   busSeatStatus: SeatStatus;
-  passenger: number | null | undefined;
+  passenger: NullableNumber;
 };
 
 export type paramsSeat = {

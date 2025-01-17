@@ -1,7 +1,15 @@
+import { ISubPassengers } from "./form.types";
+import { NullableNumber, SeatStatus } from "./types";
+
 type TBusSeat = {
-  passenger: number | null | undefined; // Може бути null, якщо місце доступне
+  passenger: NullableNumber; // Може бути null, якщо місце доступне
   number: number; // Номер місця
-  busSeatStatus: "reserved" | "available" | "selected"; // Статус місця
+  busSeatStatus: SeatStatus; // Статус місця
+};
+
+export type TSubPassengersList = {
+  idPassenger: number;
+  newSubPassengerList: ISubPassengers[];
 };
 
 export type RouteDriver = {
@@ -42,6 +50,7 @@ export type sendDataBaseRouteDriver = {
   maxSeats: number;
   bookedSeats: number;
   intermediateStops: string[];
+  subPassengersList: TSubPassengersList[];
 };
 
 export type GetRoutesByDriverId = {
