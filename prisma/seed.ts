@@ -28,22 +28,25 @@ const routerDriverFetch = async (routeDriver: any) => {
     return null;
   }
 };
-
+//9 14 15 20 19 13
 async function up() {
   await prisma.user.createMany({
     data: users,
   });
 
-  // routerDrivers.forEach(async (routeDriver, index) => {
-  //   // const result = await routerDriverFetch(routeDriver);
-  //   createRoute(routeDriver);
-  //   console.log("result", routeDriver.routePrice, index);
-  //   // if (result) {
-  //   //   console.log("Маршрути успішно створені", index);
-  //   // } else {
-  //   //   console.error("Помилка створення маршрутів", index);
-  //   // }
-  // });
+  routerDrivers.forEach(async (routeDriver, index) => {
+    setTimeout(async () => {
+      console.log("Дані послано", index);
+
+      const result = await routerDriverFetch(routeDriver);
+      console.log("result", routeDriver.routePrice, index);
+      if (result) {
+        console.log("Маршрути успішно створені", index);
+      } else {
+        console.error("Помилка створення маршрутів", index);
+      }
+    }, 500);
+  });
 }
 
 async function down() {

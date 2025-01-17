@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { ICreateRoute } from "./interface";
 
 export default function validateFields(data: ICreateRoute) {
@@ -36,26 +35,12 @@ export default function validateFields(data: ICreateRoute) {
     errors.busSeats = `${busSeats}  Invalid data: busSeats must be an array of valid seat objects`;
   }
 
-  // type passengersSeatsList = [{
-  //   idPassenger: number;
-  //   subPassengersList: [{
-  //       subFirstName: string;
-  //       subLastName: string;
-  //       subPhone: string;
-  //       subEmail: string;
-  //   }];
-  // }]
   if (
     !Array.isArray(intermediateStops) ||
     intermediateStops.some((stop) => typeof stop !== "string")
   ) {
     errors.intermediateStops = `${intermediateStops} Invalid data: intermediateStops must be an array of strings`;
   }
-
-  // if (!Array.isArray(passengersSeatsList) || passengersSeatsList.some((stop) => typeof stop !== "object")) {
-  //   errors.passengersSeatsList = `${passengersSeatsList} Invalid data: passengersSeatsList must be an array of objects`;
-
-  // }
 
   const fields = {
     driverId: [driverId, "number"],

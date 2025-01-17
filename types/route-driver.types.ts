@@ -9,7 +9,7 @@ type TBusSeat = {
 
 export type TSubPassengersList = {
   idPassenger: number;
-  newSubPassengerList: ISubPassengers[];
+  subPassengersList: ISubPassengers[];
 };
 
 export type RouteDriver = {
@@ -50,7 +50,7 @@ export type sendDataBaseRouteDriver = {
   maxSeats: number;
   bookedSeats: number;
   intermediateStops: string[];
-  subPassengersList: TSubPassengersList[];
+  passengersSeatsList: TSubPassengersList[];
 };
 
 export type GetRoutesByDriverId = {

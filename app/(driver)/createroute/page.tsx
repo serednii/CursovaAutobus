@@ -35,8 +35,8 @@ const transformData = (
     return { number, busSeatStatus, passenger };
   });
 
-  const subPassengerList: TSubPassengersList = {
-    newSubPassengerList: [],
+  const passengersSeatsList: TSubPassengersList = {
+    subPassengersList: [],
     idPassenger: 0,
   };
 
@@ -53,15 +53,15 @@ const transformData = (
     data.subLastName.length === data.subPhone.length &&
     data.subPhone.length === data.subEmail.length
   ) {
-    const newSubPassengerList = data.subFirstName.map((_, index) => ({
+    const subPassengersList = data.subFirstName.map((_, index) => ({
       subFirstName: data.subFirstName ? data.subFirstName[index] : "",
       subLastName: data.subLastName ? data.subLastName[index] : "",
       subPhone: data.subPhone ? data.subPhone[index] : "",
       subEmail: data.subEmail ? data.subEmail[index] : "",
     }));
 
-    subPassengerList.newSubPassengerList = newSubPassengerList;
-    subPassengerList.idPassenger = Number(sessionUser?.id);
+    passengersSeatsList.subPassengersList = subPassengersList;
+    passengersSeatsList.idPassenger = Number(sessionUser?.id);
   }
 
   const createRouteDriver: sendDataBaseRouteDriver = {
@@ -79,7 +79,8 @@ const transformData = (
     bookedSeats: newFormatPassenger.filter(
       (e) => e.busSeatStatus === "reserved"
     ).length, //в дальнішому треба добавити дані для всіх пасажирів а для водія буде просто масив пасажирів
-    subPassengersList: [subPassengerList],
+    // passengersSeatsList: [passengersSeatsList],
+    passengersSeatsList: [],
   };
 
   return createRouteDriver;
@@ -173,7 +174,7 @@ export default function Driver() {
     .filter((e) => e.passenger === userIdSession)
     .map((e) => e.passenger);
 
-  console.log(sessionUser?.id, idOrderPassengers);
+  // console.log(sessionUser?.id, idOrderPassengers);
   // console.log(errors);
 
   const handleChangeVariantBus = (number: number) => {
@@ -266,14 +267,14 @@ export default function Driver() {
             />
           </div>
 
-          {idOrderPassengers && idOrderPassengers.length > 0 && (
+          {/* {idOrderPassengers && idOrderPassengers.length > 0 && (
             <SubPassengersOrders
               register={register}
               errors={errors}
               unregister={unregister}
               idOrderPassengers={idOrderPassengers}
             />
-          )}
+          )} */}
 
           <CustomTextField
             register={register}
