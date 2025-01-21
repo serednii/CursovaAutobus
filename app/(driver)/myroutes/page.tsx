@@ -5,7 +5,9 @@ import { authConfig } from "@/configs/auth";
 import { getServerSession } from "next-auth/next";
 
 import { Container } from "@mui/material";
-import { routeFetch, sortDate } from "./action";
+import { sortDate } from "./action";
+import { fetchGetRoutesByDriverId } from "@/fetchFunctions/fetchroutes";
+
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
 
 export default async function MyRoutes() {
@@ -15,7 +17,8 @@ export default async function MyRoutes() {
   console.log("driverid myroutes:", driverId);
   if (!driverId) return null;
 
-  const routes: GetRoutesByDriverId[] = (await routeFetch(driverId)) || [];
+  const routes: GetRoutesByDriverId[] =
+    (await fetchGetRoutesByDriverId(driverId)) || [];
 
   const { pastRoutes, availableRoutes } = sortDate(routes);
   console.log("routesssssss:", availableRoutes);

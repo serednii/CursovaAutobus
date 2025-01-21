@@ -24,6 +24,7 @@ import {
   ISubPassengersList,
 } from "@/types/route-driver.types";
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
+import { fetchCreateRoute } from "@/fetchFunctions/fetchroutes";
 
 const transformData = (
   data: FormValues,
@@ -83,30 +84,6 @@ const transformData = (
   };
 
   return createRouteDriver;
-};
-
-const fetchCreateRoute = async (data: any): Promise<any> => {
-  try {
-    const response = await fetch("http://localhost:3000/api/createroute", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      // Якщо сервер повертає помилку (код статусу не 2xx)
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const res = await response.json();
-    return res;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    // Можливо, повернути значення за замовчуванням або null
-    return null;
-  }
 };
 
 export default function Driver() {

@@ -8,10 +8,10 @@ import {
 } from "@/types/route-driver.types";
 import { formatDate } from "./action";
 
-import {
-  getUsersFetchByIdsBySelect,
-  routeFetch,
-} from "../../../../fetchFunctions/fetchdriver";
+import { fetchGetRouteById } from "@/fetchFunctions/fetchroutes";
+
+import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
+
 import cloneDeep from "lodash/cloneDeep";
 import { ISubPassengers } from "@/types/form.types";
 
@@ -26,14 +26,30 @@ interface IBusSeatsFilter extends Omit<IBusSeats, "passenger"> {
 export default async function RouteId({ params }: Props) {
   const { id } = await params;
   console.log("routes", id);
-
+const select = {
+        departureDate: true, // Залишаємо це поле
+        arrivalDate: true, // Залишаємо це поле
+        departureFrom: true, // Залишаємо це поле
+        arrivalTo: true, // Залишаємо це поле
+        routePrice: true, // Залишаємо це поле
+        busSeats: true,
+        passengersSeatsList: {
+          select: {
+            idPassenger: true,
+            subPassengersList: {
+              select: {
+                subFirstName: true,
+                subLastName: true,
+                subPhone: true,
+                subEmail: true,
+              },
+            },
+          },
+        },
+}
   const routeRaw: IGetRouteById[] | null =
-    (await routeFetch(Number(id))) || ({} as IGetRouteById[]);
+    (await fetchGetRouteById(Number(id), select)) || ({} as IGetRouteById[]);
   const [route] = formatDate(routeRaw || ({} as IGetRouteById));
-
-  // const passengersIdRaw: number[] = route.busSeats
-  //   .filter((e) => e.passenger !== null && e.passenger !== undefined)
-  //   .map((e) => e.passenger);
 
   const passengersId: number[] = route.busSeats
     .filter(
@@ -73,7 +89,6 @@ export default async function RouteId({ params }: Props) {
     (a, b) => a.number - b.number
   );
 
-  // console.log("busSeatsSortByNumber", busSeatsSortByNumber);
   const passengerDetails: (PassengerDetails | undefined)[] = Array.from(
     { length: busSeatsSortByNumber.length },
     (_, index) => {

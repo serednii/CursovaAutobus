@@ -1,5 +1,4 @@
 import { IGetRouteById } from "@/types/route-driver.types";
-import { UserSelect } from "@/types/users.types";
 
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";

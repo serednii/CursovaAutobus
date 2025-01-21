@@ -1,11 +1,11 @@
 import { prisma } from "@/prisma/prisma-client";
-import { GetRouteById, GetRoutesByDriverId } from "@/types/route-driver.types";
+import { IGetRouteById, GetRoutesByDriverId } from "@/types/route-driver.types";
 import { NextResponse } from "next/server";
 
 export async function POST(req: any) {
   try {
     // Отримуємо дані з тіла запиту
-    const { id } = await req.json();
+    const { id, select } = await req.json();
     // console.log("id", id);
     // Перевірка, чи передано Id
     if (!id) {
@@ -19,29 +19,7 @@ export async function POST(req: any) {
     const routes = await prisma.routeDriver.findMany({
       where: { id },
 
-      select: {
-        departureDate: true, // Залишаємо це поле
-        arrivalDate: true, // Залишаємо це поле
-        departureFrom: true, // Залишаємо це поле
-        arrivalTo: true, // Залишаємо це поле
-        routePrice: true, // Залишаємо це поле
-        busSeats: true,
-        passengersSeatsList: {
-          select: {
-            idPassenger: true,
-            subPassengersList: {
-              select: {
-                subFirstName: true,
-                subLastName: true,
-                subPhone: true,
-                subEmail: true,
-              },
-            },
-          },
-        },
-        // subPassengersList: true,
-        // Усі інші поля не будуть включені, якщо вони не вказані як `true`
-      },
+      select: select,
     });
 
     // Якщо маршрути не знайдено
