@@ -20,8 +20,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/types/session.types";
 import {
-  sendDataBaseRouteDriver,
-  TSubPassengersList,
+  ISendDataBaseRouteDriver,
+  ISubPassengersList,
 } from "@/types/route-driver.types";
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
 
@@ -35,7 +35,7 @@ const transformData = (
     return { number, busSeatStatus, passenger };
   });
 
-  const passengersSeatsList: TSubPassengersList = {
+  const passengersSeatsList: ISubPassengersList = {
     subPassengersList: [],
     idPassenger: 0,
   };
@@ -63,8 +63,7 @@ const transformData = (
     passengersSeatsList.subPassengersList = subPassengersList;
     passengersSeatsList.idPassenger = Number(sessionUser?.id);
   }
-
-  const createRouteDriver: sendDataBaseRouteDriver = {
+  const createRouteDriver: ISendDataBaseRouteDriver = {
     ...data,
     routePrice: Number(data.routePrice),
     modelBus: dataLayoutBus.modelBus,
@@ -79,8 +78,8 @@ const transformData = (
     bookedSeats: newFormatPassenger.filter(
       (e) => e.busSeatStatus === "reserved"
     ).length, //в дальнішому треба добавити дані для всіх пасажирів а для водія буде просто масив пасажирів
-    // passengersSeatsList: [passengersSeatsList],
-    passengersSeatsList: [],
+    passengersSeatsList: [passengersSeatsList],
+    // passengersSeatsList: [],
   };
 
   return createRouteDriver;
@@ -130,7 +129,6 @@ export default function Driver() {
   });
 
   const { data: session, status } = useSession();
-
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
   const [dataLayoutBus, setDataLayoutBus] = useState<
     ILayoutData | null | undefined
@@ -174,7 +172,7 @@ export default function Driver() {
     .filter((e) => e.passenger === userIdSession)
     .map((e) => e.passenger);
 
-  // console.log(sessionUser?.id, idOrderPassengers);
+  console.log(sessionUser);
   // console.log(errors);
 
   const handleChangeVariantBus = (number: number) => {
@@ -267,14 +265,14 @@ export default function Driver() {
             />
           </div>
 
-          {/* {idOrderPassengers && idOrderPassengers.length > 0 && (
+          {idOrderPassengers && idOrderPassengers.length > 0 && (
             <SubPassengersOrders
               register={register}
               errors={errors}
               unregister={unregister}
               idOrderPassengers={idOrderPassengers}
             />
-          )} */}
+          )}
 
           <CustomTextField
             register={register}

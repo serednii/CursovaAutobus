@@ -26,8 +26,20 @@ export async function POST(req: any) {
         arrivalTo: true, // Залишаємо це поле
         routePrice: true, // Залишаємо це поле
         busSeats: true,
-        passengersSeatsList: true,
-
+        passengersSeatsList: {
+          select: {
+            idPassenger: true,
+            subPassengersList: {
+              select: {
+                subFirstName: true,
+                subLastName: true,
+                subPhone: true,
+                subEmail: true,
+              },
+            },
+          },
+        },
+        // subPassengersList: true,
         // Усі інші поля не будуть включені, якщо вони не вказані як `true`
       },
     });

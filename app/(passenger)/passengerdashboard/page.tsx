@@ -1,29 +1,29 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Button, Typography } from "@mui/material";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { Typography } from "@mui/material";
+import { useForm } from "react-hook-form";
 import { Container } from "@/components/shared/container";
 
-import CustomDatePicker from "@/components/shared/form/dataPicker/dataPicker";
-import DynamicTextFields from "@/components/shared/form/dynamicTextFields";
-import MaterialUISelect from "@/components/shared/form/materialUISelect";
 import CheckboxOptions from "@/components/shared/form/checkboxOptions";
 import CustomTextField from "@/components/shared/form/customTextField";
 
-import LayoutBus from "@/components/shared/layoutBus/layuotBus";
-import { layoutsData } from "@/components/shared/layoutBus/layoutData";
 import { FormValues } from "@/types/form.types";
-import { ILayoutData } from "@/types/layoutbus.types";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
-import { SendRouteDriver } from "@/types/sendtrouterdriver.types";
-import { UserSession } from "@/types/session.types";
 
-const fetchRouterDriver = async (data: any): Promise<any> => {
+import { UserSession } from "@/types/session.types";
+import SearchDataPicker from "@/components/shared/form/searchDataPicker/searchDataPicker";
+import TableSearchRoutes from "@/components/shared/passenger/TableSearchRoutes";
+import {
+  GetSearchRoutePassengers,
+  TableSearchRoutesType,
+} from "@/types/route-passenger.types";
+
+const searchRoute = async (data: any): Promise<any> => {
   try {
-    const response = await fetch("http://localhost:3000/api/routedriver", {
+    const response = await fetch("http://localhost:3000/api/searchRoute", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,6 +37,7 @@ const fetchRouterDriver = async (data: any): Promise<any> => {
     }
 
     const res = await response.json();
+
     return res;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -45,7 +46,23 @@ const fetchRouterDriver = async (data: any): Promise<any> => {
   }
 };
 
-export default function CreateRouter() {
+// type TSearchDates = {
+//   departureDate: string; // Залишаємо це поле
+//   arrivalDate: string; // Залишаємо це поле
+//   departureFrom: string; // Залишаємо це поле
+//   arrivalTo: string; // Залишаємо це поле
+//   routePrice: number; // Залишаємо це поле
+// };
+
+export default function PassengersDashboard() {
+  const highlightedDatesRef = useRef<Date[] | []>([]);
+  const [highlightedDates, setHighlightedDates] = useState<Date[] | []>([]);
+  const [searchDates, setSearchDates] = useState<TableSearchRoutesType[] | []>(
+    []
+  );
+  // console.log("searchDate", searchDates);
+  console.log("highlightedDates", highlightedDates);
+
   const { data: session, status } = useSession();
   let sessionUser: UserSession | null = null;
 
@@ -71,59 +88,142 @@ export default function CreateRouter() {
     },
   });
 
-  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
+  const departureFrom = watch("departureFrom")?.trim();
+  const arrivalTo = watch("arrivalTo")?.trim();
+  const departureDate = watch("departureDate");
 
-  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData>(
-    layoutsData[indexSelectVariantBus]
-  );
+  useEffect(() => {
+    // console.log("Значення змінилось departureFrom:", departureFrom);
+    // console.log("Значення змінилось arrivalTo:", arrivalTo);
+    const newDate =
+      departureDate &&
+      `${departureDate.getFullYear()}-${String(
+        departureDate.getMonth() + 1
+      ).padStart(2, "0")}-${String(departureDate.getDate()).padStart(2, "0")}`;
 
-  const passengersLength: number[] = useMemo(
-    () => layoutsData.map((e) => e.passengerLength),
-    [layoutsData.length]
-  );
+    const startOfDay = new Date(`${newDate}T00:00:00`);
+    const endOfDay = new Date(`${newDate}T23:59:59`);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    const newFormatPassenger = dataLayoutBus.passenger.map((e) => {
-      const { number, busSeatStatus, passenger } = e;
-      return { number, busSeatStatus, passenger };
-    });
+    console.log("startOfDay", startOfDay, newDate);
 
-    const busSeats = {
-      passengersLength: dataLayoutBus.passengerLength,
-      modelBus: dataLayoutBus.modelBus,
-      passenger: newFormatPassenger,
+    console.log("endOfDay", endOfDay);
+    const data = {
+      departureSearch: departureFrom || undefined,
+      arrivalToSearch: arrivalTo || undefined,
+      // specificDateTo: departureDate,
+      startOfDay,
+      endOfDay,
+      // specificDateFrom:
+      //   departureDate &&
+      //   `${departureDate.getFullYear()}-${String(
+      //     departureDate.getMonth() + 1
+      //   ).padStart(2, "0")}-${String(departureDate.getDate()).padStart(
+      //     2,
+      //     "0"
+      //   )}`,
+
+      select: {
+        id: true,
+        driverId: true,
+        departureDate: true,
+        arrivalDate: true,
+        departureFrom: true,
+        arrivalTo: true,
+        busNumber: true,
+        routePrice: true,
+        notate: true,
+        wifi: true,
+        coffee: true,
+        power: true,
+        restRoom: true,
+        modelBus: true,
+        maxSeats: true,
+        bookedSeats: true,
+      },
     };
 
-    data.busSeats = busSeats;
-    data.passengersListId = [1, 2, 80];
-    // data.driverId = Number(sessionUser?.id);
-    data.driverId = 1;
+    (departureFrom || arrivalTo || departureDate) &&
+      searchRoute(data)
+        .then((response) => {
+          if (response) {
+            const routes: GetSearchRoutePassengers[] = response.routes;
+            //add controlled types
 
-    // delete data.selectBusLayout;
-    // data.routePrice = data.routePrice;
+            // const filterHighlightedDates = highlightedDates.filter((date) => {
+            //   const isFindDate = routes.find((item: any) => {
+            //     const itemDate = new Date(item.departureDate);
+            //     // console.log(itemDate, date);
+            //     return (
+            //       itemDate.getDate() === date.getDate() &&
+            //       itemDate.getMonth() === date.getMonth() &&
+            //       itemDate.getFullYear() === date.getFullYear()
+            //     );
+            //   });
 
-    fetchRouterDriver(data)
+            //   if (!isFindDate) {
+            //     return false;
+            //   } else {
+            //     return true;
+            //   }
+            // });
+
+            const filterHighlightedDates = routes.map(
+              (item: any) => new Date(item.departureDate)
+            );
+
+            // console.log("filterHighlightedDates", filterHighlightedDates);
+
+            setHighlightedDates(
+              (departureFrom || arrivalTo) && filterHighlightedDates.length > 0
+                ? filterHighlightedDates
+                : highlightedDatesRef.current
+            );
+            // console.log("Response----------:", routes);
+
+            const newSearchDates: TableSearchRoutesType[] | [] = routes.map(
+              (item: GetSearchRoutePassengers) => ({
+                id: item.id,
+                departureDate: item.departureDate,
+                arrivalDate: item.arrivalDate,
+                departureFrom: item.departureFrom,
+                arrivalTo: item.arrivalTo,
+                routePrice: item.routePrice,
+                AvailableSeats: item.maxSeats - item.bookedSeats,
+              })
+            );
+
+            setSearchDates(newSearchDates);
+          } else {
+            console.log("No data received or an error occurred.");
+          }
+        })
+        .catch((err) => console.error("Fetch failed:", err));
+    // Виконайте додаткову логіку тут
+  }, [departureFrom, arrivalTo, departureDate]);
+
+  useEffect(() => {
+    const data = {
+      select: {
+        departureDate: true,
+      },
+    };
+
+    searchRoute(data)
       .then((response) => {
         if (response) {
-          console.log("Response:", response);
+          const dates = response.routes.map(
+            (route: any) => new Date(route.departureDate)
+          );
+          setHighlightedDates(dates);
+          highlightedDatesRef.current = dates;
+          // console.log("Response----------:", dates);
         } else {
           console.log("No data received or an error occurred.");
         }
       })
       .catch((err) => console.error("Fetch failed:", err));
-    console.log(data);
-    // alert("Form submitted with data: " + JSON.stringify(data));
-    // reset();
-  };
-
-  // console.log(indexSelectVariantBus, dataLayoutBus);
-
-  // console.log(errors);
-
-  const handleChangeVariantBus = (number: number) => {
-    setIndexSelectVariantBus(number);
-    setDataLayoutBus(layoutsData[number]);
-  };
+    // Виконайте додаткову логіку тут
+  }, []);
 
   if (status === "loading") return <p>Loading...</p>;
 
@@ -138,7 +238,7 @@ export default function CreateRouter() {
 
       <main className="px-4 bg-[white] rounded-xl ">
         {/* Форму тепер обгортаємо в onSubmit */}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           {/* TextField з react-hook-form */}
 
           {/* Додавання CustomDatePicker */}
@@ -147,6 +247,7 @@ export default function CreateRouter() {
             <CustomTextField
               register={register}
               errors={errors}
+              // handleSearch={handleSearch}
               name={"departureFrom"}
               title={"Departure From"}
               className="grow"
@@ -158,12 +259,14 @@ export default function CreateRouter() {
               title={"Arrival To"}
               className="grow"
             />
-            <CustomDatePicker
+            <SearchDataPicker
               title="Departure Date"
               name="departureDate"
               register={register}
               errors={errors}
+              highlightedDates={highlightedDates}
               control={control} // Передаємо control
+              className="pt-7 grow search-data-picker"
             />
           </div>
 
@@ -176,6 +279,8 @@ export default function CreateRouter() {
             </div>
           </div>
         </form>
+
+        <TableSearchRoutes routes={searchDates} />
       </main>
       <div className="footer"></div>
     </Container>

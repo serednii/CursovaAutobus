@@ -1,18 +1,19 @@
+import { IntermediateStop } from "@prisma/client";
 import { ISubPassengers } from "./form.types";
 import { NullableNumber, SeatStatus } from "./types";
 
-type TBusSeat = {
+export interface IBusSeats {
   passenger: NullableNumber; // Може бути null, якщо місце доступне
   number: number; // Номер місця
   busSeatStatus: SeatStatus; // Статус місця
-};
+}
 
-export type TSubPassengersList = {
+export interface ISubPassengersList {
   idPassenger: number;
   subPassengersList: ISubPassengers[];
-};
+}
 
-export type RouteDriver = {
+export interface RouteDriver {
   driverId: number; // ID водія
   departureDate: Date; // Дата відправлення (ISO-формат)
   arrivalDate: Date; // Дата прибуття (ISO-формат)
@@ -26,12 +27,12 @@ export type RouteDriver = {
   coffee: boolean; // Наявність кави
   power: boolean; // Наявність розеток
   restRoom: boolean; // Наявність туалету
-  busSeats: TBusSeat[]; // Список місць у автобусі
+  busSeats: IBusSeats[]; // Список місць у автобусі
   modelBus: string;
   intermediateStops: string[];
-};
+}
 
-export type sendDataBaseRouteDriver = {
+export interface ISendDataBaseRouteDriver {
   driverId: number; // ID водія
   departureDate: Date; // Дата відправлення (ISO-формат)
   arrivalDate: Date; // Дата прибуття (ISO-формат)
@@ -45,15 +46,15 @@ export type sendDataBaseRouteDriver = {
   coffee: boolean; // Наявність кави
   power: boolean; // Наявність розеток
   restRoom: boolean; // Наявність туалету
-  busSeats: TBusSeat[]; // Список місць у автобусі
+  busSeats: IBusSeats[]; // Список місць у автобусі
   modelBus: string;
   maxSeats: number;
   bookedSeats: number;
   intermediateStops: string[];
-  passengersSeatsList: TSubPassengersList[];
-};
+  passengersSeatsList: ISubPassengersList[];
+}
 
-export type GetRoutesByDriverId = {
+export interface GetRoutesByDriverId {
   id: number; // Залишаємо це поле
   departureDate: string; // Залишаємо це поле
   arrivalDate: string; // Залишаємо це поле
@@ -62,13 +63,23 @@ export type GetRoutesByDriverId = {
   routePrice: number; // Залишаємо це поле
   bookedSeats: number;
   maxSeats: number;
-};
+}
 
-export type GetRouteById = {
+export interface PassengerDetails {
+  seat: number;
+  orderPassengers: string;
+  orderPassengersId: number;
+  passenger: string;
+  phone: string;
+  email: string;
+}
+
+export interface IGetRouteById {
   departureDate: string; // Залишаємо це поле
   arrivalDate: string; // Залишаємо це поле
   departureFrom: string; // Залишаємо це поле
   arrivalTo: string; // Залишаємо це поле
   routePrice: number; // Залишаємо це поле
-  busSeats: TBusSeat[];
-};
+  busSeats: IBusSeats[];
+  passengersSeatsList: ISubPassengersList[];
+}

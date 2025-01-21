@@ -8,6 +8,7 @@ interface Props {
   errors: FieldErrors<FormValues>;
   name: keyof FormValues;
   title: string;
+  // handleSearch?: () => void;
   className?: string;
 }
 
@@ -16,6 +17,7 @@ export default function CustomTextField({
   errors,
   name,
   title,
+  // handleSearch,
   className,
 }: Props) {
   return (
@@ -28,15 +30,14 @@ export default function CustomTextField({
       </label>
       <TextField
         id={name}
-        {...register(name, {
-          required: `${name} is required`,
-        })}
+        {...register(name)}
         variant="outlined"
         fullWidth
         InputProps={{
           style: { height: "42px" },
         }}
         error={!!errors?.[name]}
+        // onChange={handleSearch}
         helperText={errors?.[name] ? errors?.[name]?.message : ""}
       />
     </div>

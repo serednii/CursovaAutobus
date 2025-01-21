@@ -16,7 +16,7 @@ export async function POST(req: any) {
     }
 
     // Виконуємо запит до бази даних із включенням зв’язаних таблиць
-    const routes: GetRoutesByDriverId[] = await prisma.routeDriver.findMany({
+    const routes = await prisma.routeDriver.findMany({
       where: { driverId },
 
       select: {

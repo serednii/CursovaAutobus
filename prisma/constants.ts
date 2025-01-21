@@ -264,6 +264,237 @@ export const users = [
 
 export const routerDrivers = [
   {
+    routes: [
+        {
+            departureDate: "2025-01-28T08:00:00.000Z",
+            arrivalDate: "2025-01-29T12:00:00.000Z",
+            departureFrom: "New York",
+            arrivalTo: "Washington, D.C.",
+            routePrice: 50,
+            busSeats: [
+                {
+                    passenger: 1,
+                    number: 1,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 10,
+                    number: 13,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 11,
+                    number: 16,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 2,
+                    number: 4,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: null,
+                    number: 19,
+                    busSeatStatus: "available",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: null,
+                    number: 18,
+                    busSeatStatus: "available",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 11,
+                    number: 17,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 5,
+                    number: 8,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 8,
+                    number: 12,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 1,
+                    number: 2,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 5,
+                    number: 7,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 8,
+                    number: 11,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 5,
+                    number: 9,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 2,
+                    number: 5,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 8,
+                    number: 10,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 2,
+                    number: 6,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 11,
+                    number: 15,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 10,
+                    number: 14,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                },
+                {
+                    passenger: 1,
+                    number: 3,
+                    busSeatStatus: "reserved",
+                    routeDriverId: 36
+                }
+            ],
+            passengersSeatsList: [
+                {
+                    idPassenger: 1,
+                    subPassengersList: [
+                        {
+                            subFirstName: "Vlasta",
+                            subLastName: "luksik",
+                            subPhone: "4763478563847563",
+                            subEmail: "luksik@gmail.com"
+                        },
+                        {
+                            subFirstName: "Gonza",
+                            subLastName: "Marek",
+                            subPhone: "2168463216435315",
+                            subEmail: "marekgonza@.gmail.com"
+                        }
+                    ]
+                },
+                {
+                    idPassenger: 10,
+                    subPassengersList: [
+                        {
+                            subFirstName: "Mykola",
+                            subLastName: "Kravchenko",
+                            subPhone: "93487539457",
+                            subEmail: "kravchenko@gmail.com"
+                        },
+                        {
+                            subFirstName: "Sergiy",
+                            subLastName: "Kravchenko",
+                            subPhone: "89475230948725",
+                            subEmail: "sergiykravchenko@gmail.com"
+                        }
+                    ]
+                },
+                {
+                    idPassenger: 2,
+                    subPassengersList: [
+                        {
+                            subFirstName: "Nina",
+                            subLastName: "Novotna",
+                            subPhone: "239847293427",
+                            subEmail: "ninamnovotna@gmail.com"
+                        },
+                        {
+                            subFirstName: "Oleg",
+                            subLastName: "Novothy",
+                            subPhone: "84572349872354",
+                            subEmail: "olegnovotny@gmail.com"
+                        }
+                    ]
+                },
+                {
+                    idPassenger: 5,
+                    subPassengersList: [
+                        {
+                            subFirstName: "Nadia",
+                            subLastName: "Serednia",
+                            subPhone: "983475928347",
+                            subEmail: "serednianadia@gmail.com"
+                        },
+                        {
+                            subFirstName: "Iryna",
+                            subLastName: "Serednia",
+                            subPhone: "73843954735",
+                            subEmail: "irynaserednia@gmail.com"
+                        }
+                    ]
+                },
+                {
+                    idPassenger: 11,
+                    subPassengersList: [
+                        {
+                            subFirstName: "Igor",
+                            subLastName: "Chudlo",
+                            subPhone: "8573989879",
+                            subEmail: "igorchudlo@gmail.com"
+                        },
+                        {
+                            subFirstName: "Mychailo",
+                            subLastName: "Chudlo",
+                            subPhone: "783456567",
+                            subEmail: "mychailochudlo@gmail.com"
+                        }
+                    ]
+                },
+                {
+                    idPassenger: 8,
+                    subPassengersList: [
+                        {
+                            subFirstName: "Olga",
+                            subLastName: "Serednia",
+                            subPhone: "984753984375",
+                            subEmail: "olgaserednia@gmail.com"
+                        },
+                        {
+                            subFirstName: "Muron",
+                            subLastName: "Serednii",
+                            subPhone: "2783462348726",
+                            subEmail: "myronserednii@gmail.com"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+},
+  {
     driverId: 5,
     departureDate: "2025-05-11T19:30:00.000Z",
     arrivalDate: "2025-01-11T19:00:00.000Z",

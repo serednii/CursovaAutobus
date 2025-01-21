@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, InputAdornment } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DatePicker from "react-datepicker";
@@ -23,16 +23,17 @@ interface Props {
   errors: FieldErrors<FormValues>;
   className?: string;
   watch?: UseFormWatch<FormValues>;
+  highlightedDates: Date[]; // Масив дат для підсвічування
 }
 
-const CustomDatePicker = ({
+const SearchDataPicker = ({
   name,
   title,
-  register,
   control,
   errors,
   className,
   watch,
+  highlightedDates,
 }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const departureDate = watch && watch("departureDate");
@@ -46,6 +47,7 @@ const CustomDatePicker = ({
     0,
     0
   ); // Початок дня
+
   const endOfDay = new Date(
     now.getFullYear(),
     now.getMonth(),
@@ -54,26 +56,44 @@ const CustomDatePicker = ({
     59
   ); // Кінець дня
 
+  // Функція для підсвічування днів
+  const dayClassName = (date: Date) => {
+    const isHighlighted = highlightedDates.some((highlightedDate) => {
+      const selectDay = highlightedDate.getDate();
+      const selectMonth = highlightedDate.getMonth();
+      const selectYear = highlightedDate.getFullYear();
+
+      const currentDay = new Date().getDate();
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      const notLastDate =
+        selectYear >= currentYear &&
+        selectMonth >= currentMonth &&
+        selectDay >= currentDay;
+      return (
+        notLastDate && highlightedDate.toDateString() === date.toDateString()
+      );
+    });
+
+    return isHighlighted ? "highlighted-day" : ""; // Додаємо клас, якщо дата підсвічена
+  };
+
   return (
-    <div className={className || "grow"}>
+    <div className={className || "grow border search-data-picker"}>
       <Controller
         name={name}
         control={control}
         rules={{ required: `${title} is required` }}
         render={({ field }) => (
           <DatePicker
-            className="w-[100%]"
+            className="w-[100%] mt-1 p-2 border border-gray-300  "
             selected={field.value}
             onChange={(date: Date | null) => {
               setSelectedDate(date);
               field.onChange(date);
             }}
-            placeholderText="MM/DD/YYYY HH:MM"
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={15}
-            timeCaption="Time"
-            dateFormat="MM/dd/yyyy h:mm aa"
+            placeholderText="MM/DD/YYYY"
+            dateFormat="MM/dd/yyyy"
             minDate={now} // Мінімальна дата
             minTime={
               selectedDate && selectedDate.toDateString() === now.toDateString()
@@ -81,13 +101,21 @@ const CustomDatePicker = ({
                 : startOfDay
             } // Мінімальний час
             maxTime={endOfDay} // Максимальний час
+            dayClassName={dayClassName} // Підсвічування днів
             customInput={
               <TextField
                 label={title}
                 {...field}
-                placeholder="MM/DD/YYYY HH:MM"
+                placeholder="MM/DD/YYYY"
                 error={!!errors[name]}
-                helperText={errors[name]?.message}
+                InputLabelProps={{
+                  style: {
+                    top: "-20px",
+                    zIndex: 10,
+                    fontSize: "18px", // Налаштувати розмір шрифту
+                  },
+                }}
+                // helperText={errors[name]?.message}
                 InputProps={{
                   style: { height: "42px" },
                   startAdornment: (
@@ -110,4 +138,4 @@ const CustomDatePicker = ({
   );
 };
 
-export default CustomDatePicker;
+export default SearchDataPicker;

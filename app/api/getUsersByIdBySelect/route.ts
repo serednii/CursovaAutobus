@@ -7,10 +7,8 @@ export async function POST(req: any) {
     // Отримуємо дані з тіла запиту
     const { ids, select }: { ids: number[]; select: UserSelect } =
       await req.json();
-
     // console.log("Select options oooooooooooooooo:", select, ids);
 
-    // Перевірка, чи передано `ids`
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
       return NextResponse.json(
         { error: "Поле 'ids' є обов'язковим і має бути масивом" },
@@ -18,7 +16,6 @@ export async function POST(req: any) {
       );
     }
 
-    // Виконуємо запит до бази даних
     const users = await prisma.user.findMany({
       where: {
         id: {
@@ -28,7 +25,6 @@ export async function POST(req: any) {
       select: select,
     });
 
-    // Якщо користувачів не знайдено
     if (users.length === 0) {
       return NextResponse.json(
         { message: "Користувачів із заданими ID не знайдено" },
@@ -36,7 +32,6 @@ export async function POST(req: any) {
       );
     }
 
-    // Повертаємо дані користувачів
     return NextResponse.json({ users });
   } catch (error) {
     console.error("Помилка обробки запиту:", error);

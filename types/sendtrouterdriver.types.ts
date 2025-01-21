@@ -1,4 +1,4 @@
-import { SeatStatus } from "./layoutbus.types";
+import { SeatStatus } from "./types";
 
 interface Passenger {
   passenger: number | null; // null, якщо місце не зайняте

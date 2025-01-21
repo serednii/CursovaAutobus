@@ -1,0 +1,17 @@
+.react-datepicker-wrapper {
+    width: 100% !important;
+}
+
+.react-datepicker__day.highlighted-day {
+    background-color: #94f07c;
+    /* Колір фону */
+    color: #000;
+    /* Колір тексту */
+    border-radius: 50%;
+    /* Округлення */
+}
+
+.search-data-picker .css-w1u3ce {
+    position: absolute;
+    top: -20px;
+}

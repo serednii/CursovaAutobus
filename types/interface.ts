@@ -1,3 +1,17 @@
+import { IBusSeats } from "./route-driver.types";
+
+interface ISubPassengerList {
+  subFirstName: string;
+  subLastName: string;
+  subPhone: string;
+  subEmail: string;
+}
+
+interface IPassengersSeatsList {
+  idPassenger: number;
+  subPassengersList: ISubPassengerList[];
+}
+
 export interface ICreateRoute {
   driverId: number;
   departureDate: string;
@@ -16,22 +30,6 @@ export interface ICreateRoute {
   maxSeats: number;
   bookedSeats: number;
   intermediateStops: string[];
-  busSeats: {
-    passenger: number | null;
-    number: number;
-    busSeatStatus: string;
-  }[];
-  passengersSeatsList: [
-    {
-      idPassenger: number;
-      subPassengersList: [
-        {
-          subFirstName: string;
-          subLastName: string;
-          subPhone: string;
-          subEmail: string;
-        }
-      ];
-    }
-  ];
+  busSeats: IBusSeats[];
+  passengersSeatsList: IPassengersSeatsList[];
 }
