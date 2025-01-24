@@ -58,6 +58,7 @@ const SearchDataPicker = ({
 
   // Функція для підсвічування днів
   const dayClassName = (date: Date) => {
+    console.log("date", date);
     const isHighlighted = highlightedDates.some((highlightedDate) => {
       const selectDay = highlightedDate.getDate();
       const selectMonth = highlightedDate.getMonth();
@@ -66,15 +67,22 @@ const SearchDataPicker = ({
       const currentDay = new Date().getDate();
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
-      const notLastDate =
-        selectYear >= currentYear &&
-        selectMonth >= currentMonth &&
-        selectDay >= currentDay;
-      return (
-        notLastDate && highlightedDate.toDateString() === date.toDateString()
-      );
+
+      if (selectYear > currentYear) {
+        return highlightedDate.toDateString() === date.toDateString();
+      } else if (selectYear === currentYear) {
+        if (selectMonth > currentMonth) {
+          return highlightedDate.toDateString() === date.toDateString();
+        } else if (selectMonth === currentMonth) {
+          if (selectDay > currentDay) {
+            return highlightedDate.toDateString() === date.toDateString();
+          }
+        }
+      }
+      return false;
     });
 
+    // console.log("isHighlighted", isHighlighted);
     return isHighlighted ? "highlighted-day" : ""; // Додаємо клас, якщо дата підсвічена
   };
 
