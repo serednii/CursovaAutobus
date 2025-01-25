@@ -11,6 +11,10 @@ export default function RootLayout({
       link: "/passengerdashboard",
     },
     {
+      name: "Seat selection",
+      link: "/seatselection",
+    },
+    {
       name: "My Bookings",
       link: "/mybookings",
     },

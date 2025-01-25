@@ -34,19 +34,27 @@ async function up() {
     data: users,
   });
 
-  routerDrivers.forEach(async (routeDriver, index) => {
-    setTimeout(async () => {
-      console.log("Дані послано", index);
-
-      const result = await routerDriverFetch(routeDriver);
-      console.log("result", routeDriver.routePrice, index);
-      if (result) {
-        console.log("Маршрути успішно створені", index);
-      } else {
-        console.error("Помилка створення маршрутів", index);
+  const processRoutes = async () => {
+    try {
+      for (const [index, routeDriver] of routerDrivers.entries()) {
+        try {
+          const result = await routerDriverFetch(routeDriver);
+          console.log("result", routeDriver);
+          if (result) {
+            console.log("Маршрути успішно створені", index);
+          } else {
+            console.error("Помилка створення маршрутів", index);
+          }
+        } catch (e) {
+          console.error(e);
+        }
       }
-    }, 500);
-  });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  processRoutes();
 }
 
 async function down() {

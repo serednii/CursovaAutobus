@@ -26,29 +26,32 @@ interface IBusSeatsFilter extends Omit<IBusSeats, "passenger"> {
 export default async function RouteId({ params }: Props) {
   const { id } = await params;
   console.log("routes", id);
-const select = {
-        departureDate: true, // Залишаємо це поле
-        arrivalDate: true, // Залишаємо це поле
-        departureFrom: true, // Залишаємо це поле
-        arrivalTo: true, // Залишаємо це поле
-        routePrice: true, // Залишаємо це поле
-        busSeats: true,
-        passengersSeatsList: {
+  const select = {
+    departureDate: true, // Залишаємо це поле
+    arrivalDate: true, // Залишаємо це поле
+    departureFrom: true, // Залишаємо це поле
+    arrivalTo: true, // Залишаємо це поле
+    routePrice: true, // Залишаємо це поле
+    busSeats: true,
+    passengersSeatsList: {
+      select: {
+        idPassenger: true,
+        subPassengersList: {
           select: {
-            idPassenger: true,
-            subPassengersList: {
-              select: {
-                subFirstName: true,
-                subLastName: true,
-                subPhone: true,
-                subEmail: true,
-              },
-            },
+            subFirstName: true,
+            subLastName: true,
+            subPhone: true,
+            subEmail: true,
           },
         },
-}
+      },
+    },
+  };
   const routeRaw: IGetRouteById[] | null =
-    (await fetchGetRouteById(Number(id), select)) || ({} as IGetRouteById[]);
+    (await fetchGetRouteById<typeof select, IGetRouteById[]>(
+      Number(id),
+      select
+    )) || ({} as IGetRouteById[]);
   const [route] = formatDate(routeRaw || ({} as IGetRouteById));
 
   const passengersId: number[] = route.busSeats

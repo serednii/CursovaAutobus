@@ -123,25 +123,6 @@ export default function PassengersDashboard() {
         .then((response) => {
           if (response) {
             const routes: GetSearchRoutePassengers[] = response.routes;
-            //add controlled types
-
-            // const filterHighlightedDates = highlightedDates.filter((date) => {
-            //   const isFindDate = routes.find((item: any) => {
-            //     const itemDate = new Date(item.departureDate);
-            //     // console.log(itemDate, date);
-            //     return (
-            //       itemDate.getDate() === date.getDate() &&
-            //       itemDate.getMonth() === date.getMonth() &&
-            //       itemDate.getFullYear() === date.getFullYear()
-            //     );
-            //   });
-
-            //   if (!isFindDate) {
-            //     return false;
-            //   } else {
-            //     return true;
-            //   }
-            // });
 
             const filterHighlightedDates = routes.map(
               (item: any) => new Date(item.departureDate)
@@ -154,7 +135,8 @@ export default function PassengersDashboard() {
                 ? filterHighlightedDates
                 : highlightedDatesRef.current
             );
-            // console.log("Response----------:", routes);
+
+            console.log("Response----------:", routes);
 
             const newSearchDates: TableSearchRoutesType[] | [] = routes.map(
               (item: GetSearchRoutePassengers) => ({

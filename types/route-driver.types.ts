@@ -83,3 +83,10 @@ export interface IGetRouteById {
   busSeats: IBusSeats[];
   passengersSeatsList: ISubPassengersList[];
 }
+
+export interface IGetRoutePassengerById extends IGetRouteById {
+  selectBusLayout: string;
+  modelBus: string;
+  maxSeats: number;
+  bookedSeats: number;
+}

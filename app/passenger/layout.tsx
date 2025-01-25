@@ -1,5 +1,4 @@
 import HeaderUser from "@/components/shared/user/headerUser";
-import HeaderPassenger from "@/components/shared/passenger/headerPassenger";
 
 export default function RootLayout({
   children,

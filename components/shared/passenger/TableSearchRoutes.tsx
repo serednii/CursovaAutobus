@@ -16,9 +16,9 @@ interface Props {
 export default function TableSearchRoutes({ routes }: Props) {
   const router = useRouter();
 
-  const handleViewRoute = (route: any) => {
+  const handleViewRoute = (route: TableSearchRoutesType) => {
     // console.log("Viewing route:", route);
-    router.push(`/mybookings/${route.id}`);
+    router.push(`/seatselection/${route.id}`);
     // alert(`Viewing route from ${route.id}`);
   };
 
