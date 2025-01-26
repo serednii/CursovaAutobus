@@ -1,5 +1,10 @@
 import handleError from "@/lib/handleError";
 import { prisma } from "@/prisma/prisma-client";
+import {
+  IBusSeats,
+  IPassengersSeatsList,
+  ISubPassengersList,
+} from "@/types/interface";
 
 export async function createIntermediateStops(
   intermediateStops: string[],
@@ -21,7 +26,7 @@ export async function createIntermediateStops(
   }
 }
 
-export async function createBusSeats(busSeats: any[], routeId: number) {
+export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
   try {
     await Promise.all(
       busSeats.map((seat) =>
@@ -41,43 +46,45 @@ export async function createBusSeats(busSeats: any[], routeId: number) {
 }
 
 export async function createPassengersSeatsList(
-  passengersSeatsList: any[],
+  passengersSeatsList: IPassengersSeatsList[],
   routeDriverId: number
 ) {
   try {
-    const promises = passengersSeatsList.map(async (seat) => {
-      console.log("Processing passengersSeatList:", seat);
+    const promises = passengersSeatsList.map(
+      async (seat: IPassengersSeatsList) => {
+        console.log("Processing passengersSeatList:", seat);
 
-      const passengersSeatList = await prisma.passengersSeatsList.create({
-        data: {
-          idPassenger: seat.idPassenger,
-          routeDriverId,
-        },
-      });
+        const passengersSeatList = await prisma.passengersSeatsList.create({
+          data: {
+            idPassenger: seat.idPassenger,
+            routeDriverId,
+          },
+        });
 
-      console.log("Created passengersSeatList:", passengersSeatList);
+        console.log("Created passengersSeatList:", passengersSeatList);
 
-      await Promise.all(
-        seat.subPassengersList.map(async (subPassenger: any) => {
-          try {
-            const result = await prisma.subPassengersList.create({
-              data: {
-                subFirstName: subPassenger.subFirstName,
-                subLastName: subPassenger.subLastName,
-                subPhone: subPassenger.subPhone,
-                subEmail: subPassenger.subEmail,
-                passengersSeatsListId: passengersSeatList.id,
-              },
-            });
+        await Promise.all(
+          seat.subPassengersList.map(async (subPassenger) => {
+            try {
+              const result = await prisma.subPassengersList.create({
+                data: {
+                  subFirstName: subPassenger.subFirstName,
+                  subLastName: subPassenger.subLastName,
+                  subPhone: subPassenger.subPhone,
+                  subEmail: subPassenger.subEmail,
+                  passengersSeatsListId: passengersSeatList.id,
+                },
+              });
 
-            console.log("Created subPassenger:", result);
-            return result;
-          } catch (error) {
-            handleError(error, "Error creating subPassenger");
-          }
-        })
-      );
-    });
+              console.log("Created subPassenger:", result);
+              return result;
+            } catch (error) {
+              handleError(error, "Error creating subPassenger");
+            }
+          })
+        );
+      }
+    );
 
     await Promise.all(promises);
   } catch (error) {

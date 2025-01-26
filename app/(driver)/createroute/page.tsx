@@ -18,13 +18,10 @@ import { ILayoutData } from "@/types/layoutbus.types";
 
 import { useSession } from "next-auth/react";
 import { UserSession } from "@/types/session.types";
-import {
-  ISendDataBaseRouteDriver,
-  ISubPassengersList,
-} from "@/types/route-driver.types";
-import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
+import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { fetchCreateRoute } from "@/fetchFunctions/fetchroutes";
 import "react-datepicker/dist/react-datepicker.css";
+import { ISubPassengersList } from "@/types/interface";
 
 const transformData = (
   data: FormValues,
@@ -144,10 +141,10 @@ export default function CreateRoute() {
     // reset();
   };
 
-  const userIdSession = sessionUser?.id;
-  const idOrderPassengers = dataLayoutBus?.passenger
-    .filter((e) => e.passenger === userIdSession)
-    .map((e) => e.passenger);
+  // const userIdSession = sessionUser?.id;
+  // const idOrderPassengers = dataLayoutBus?.passenger
+  //   .filter((e) => e.passenger === userIdSession)
+  //   .map((e) => e.passenger);
 
   console.log(sessionUser);
   // console.log(errors);
@@ -234,22 +231,24 @@ export default function CreateRoute() {
               className="mb-5"
             />
 
-            <LayoutBus
-              sessionUser={sessionUser}
-              className="flex justify-center"
-              dataLayoutBus={dataLayoutBus}
-              setDataLayoutBus={setDataLayoutBus}
-            />
+            {dataLayoutBus && (
+              <LayoutBus
+                sessionUser={sessionUser}
+                className="flex justify-center"
+                dataLayoutBus={dataLayoutBus}
+                setDataLayoutBus={setDataLayoutBus}
+              />
+            )}
           </div>
 
-          {idOrderPassengers && idOrderPassengers.length > 0 && (
+          {/* {idOrderPassengers && idOrderPassengers.length > 0 && (
             <SubPassengersOrders
               register={register}
               errors={errors}
               unregister={unregister}
               idOrderPassengers={idOrderPassengers}
             />
-          )}
+          )} */}
 
           <CustomTextField
             register={register}

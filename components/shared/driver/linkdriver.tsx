@@ -15,7 +15,6 @@ export default function LinkDriver({ menuDriver }: Props) {
     <div>
       <ul className="flex items-center ">
         {menuDriver.map((item, index) => {
-          console.log("*********", item.link, pathname);
           const includeSeatSelection = item.link.includes("seatselection");
 
           if (includeSeatSelection && !IsSeatSelection) {

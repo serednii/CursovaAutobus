@@ -1,4 +1,4 @@
-export interface FormValues {
+export interface FormValues extends ISubPassenger {
   departureDate: Date;
   arrivalDate: Date;
   intermediateStops: string[];
@@ -14,10 +14,6 @@ export interface FormValues {
   passengersListId: number[];
   driverId: number;
   selectBusLayout: string;
-  subFirstName?: string[];
-  subLastName?: string[];
-  subPhone?: string[];
-  subEmail?: string[];
 }
 
 export interface ISubPassengers {
@@ -25,4 +21,11 @@ export interface ISubPassengers {
   subLastName: string;
   subPhone: string;
   subEmail: string;
+}
+
+export interface ISubPassenger {
+  subFirstName: string[] | undefined;
+  subLastName: string[] | undefined;
+  subPhone: string[] | undefined;
+  subEmail: string[] | undefined;
 }

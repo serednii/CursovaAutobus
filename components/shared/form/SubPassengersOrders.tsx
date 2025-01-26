@@ -26,11 +26,11 @@ const SubPassengersOrders = ({
 }: Props) => {
   const [subPassengers, setSubPassengers] = useState<ISubPassengers[] | []>([]);
 
-  console.log(idOrderPassengers, subPassengers);
+  // console.log(idOrderPassengers, subPassengers);
 
   useEffect(() => {
     if (idOrderPassengers && idOrderPassengers.length > 1) {
-      console.log("delete stopIndexxxxxxxxxxxxxx");
+      // console.log("delete stopIndexxxxxxxxxxxxxx");
 
       // Перевірка на кількість пасажирів
 
@@ -49,17 +49,17 @@ const SubPassengersOrders = ({
     }
 
     if (idOrderPassengers && idOrderPassengers.length > 0) {
-      console.log("delete stopIndexxxxxxxxxxxxxxzzzzzzzzzzzz");
+      // console.log("delete stopIndexxxxxxxxxxxxxxzzzzzzzzzzzz");
 
       // Перевірка на кількість пасажирів
 
       if (idOrderPassengers.length <= subPassengers.length) {
-        console.log("delete stopIndeNNNNNNNNNNNNNNN");
+        // console.log("delete stopIndeNNNNNNNNNNNNNNN");
 
         //останній елемент викинути
         setSubPassengers(subPassengers.slice(0, subPassengers.length - 1));
         const stopIndex = subPassengers.length - 1;
-        console.log("delete stopIndex", stopIndex);
+        // console.log("delete stopIndex", stopIndex);
         unregister(`subFirstName.${stopIndex}`); // Видаляємо значення з react-hook-form
         unregister(`subLastName.${stopIndex}`); // Видаляємо значення з react-hook-form
         unregister(`subPhone.${stopIndex}`); // Видаляємо значення з react-hook-form

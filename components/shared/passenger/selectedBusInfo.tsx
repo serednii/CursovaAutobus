@@ -7,7 +7,7 @@ interface Props {
   route: IGetRoutePassengerById | null;
 }
 
-export default function SelectedBus({ route }: Props) {
+export default function SelectedBusInfo({ route }: Props) {
   if (!route) {
     return null;
   }

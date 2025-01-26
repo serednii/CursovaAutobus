@@ -1,4 +1,5 @@
-import { IBusSeats } from "./route-driver.types";
+import { ISubPassengers } from "./form.types";
+import { NullableNumber, SeatStatus } from "./types";
 
 interface ISubPassengerList {
   subFirstName: string;
@@ -7,7 +8,7 @@ interface ISubPassengerList {
   subEmail: string;
 }
 
-interface IPassengersSeatsList {
+export interface IPassengersSeatsList {
   idPassenger: number;
   subPassengersList: ISubPassengerList[];
 }
@@ -32,4 +33,34 @@ export interface ICreateRoute {
   intermediateStops: string[];
   busSeats: IBusSeats[];
   passengersSeatsList: IPassengersSeatsList[];
+}
+
+export interface IBusSeats {
+  passenger: NullableNumber; // Може бути null, якщо місце доступне
+  number: number; // Номер місця
+  busSeatStatus: SeatStatus; // Статус місця
+}
+
+export interface ISubPassengersList {
+  idPassenger: number;
+  subPassengersList: ISubPassengers[];
+}
+
+export interface RouteDriver {
+  driverId: number; // ID водія
+  departureDate: Date; // Дата відправлення (ISO-формат)
+  arrivalDate: Date; // Дата прибуття (ISO-формат)
+  departureFrom: string; // Місто відправлення
+  arrivalTo: string; // Місто прибуття
+  busNumber: string; // Номер автобуса
+  routePrice: number; // Ціна маршруту
+  selectBusLayout: string; // Макет автобуса
+  notate?: string; // Додаткова примітка (необов'язкове поле)
+  wifi: boolean; // Наявність Wi-Fi
+  coffee: boolean; // Наявність кави
+  power: boolean; // Наявність розеток
+  restRoom: boolean; // Наявність туалету
+  busSeats: IBusSeats[]; // Список місць у автобусі
+  modelBus: string;
+  intermediateStops: string[];
 }

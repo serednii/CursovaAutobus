@@ -6,7 +6,7 @@ import {
   IGetRoutePassengerById,
 } from "@/types/route-driver.types";
 import { layoutsData } from "@/components/shared/layoutBus/layoutData";
-import SelectedBus from "@/components/shared/passenger/selectedBus";
+import SelectedBusInfo from "@/components/shared/passenger/selectedBusInfo";
 import { Container } from "@/components/shared/container";
 
 interface Props {
@@ -15,9 +15,11 @@ interface Props {
 
 export default async function MyBookings({ params }: Props) {
   const id = await params?.id; // Чекаємо `params` асинхронно
+
   console.log("id", id);
 
   const select = {
+    id: true,
     departureDate: true,
     arrivalDate: true,
     departureFrom: true,
@@ -54,7 +56,7 @@ export default async function MyBookings({ params }: Props) {
 
   return (
     <Container className="pt-4 ">
-      <SelectedBus route={route} />
+      <SelectedBusInfo route={route} />
       <OrderSeatsBus layoutsData={layoutsData} route={route} />
       MyBookings{id}
     </Container>

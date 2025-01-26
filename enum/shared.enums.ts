@@ -1,5 +1,12 @@
 export enum SeatStatusEnum {
-  Reserved = "reserved",
-  Available = "available",
-  Selected = "selected",
+  RESERVED = "reserved",
+  AVAILABLE = "available",
+  SELECTED = "selected",
+}
+
+export enum RoleEnum {
+  ADMIN = "admin",
+  GUEST = "guest",
+  DRIVER = "driver",
+  PASSENGER = "passenger",
 }

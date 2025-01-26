@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import validateFields from "./validateFields";
 import { ICreateRoute } from "../../../types/interface";
@@ -8,12 +8,12 @@ import {
   createPassengersSeatsList,
 } from "./createFunctions";
 
-export async function createRoute(req: any) {
+export async function createRoute(req: NextRequest) {
   try {
     // Парсинг даних з запиту
     const data: ICreateRoute = await req.json();
 
-    console.log("Request data:", data);
+    // console.log("Request data:", data);
 
     // Validate busSeats field
 

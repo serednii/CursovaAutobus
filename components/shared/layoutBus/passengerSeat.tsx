@@ -1,6 +1,7 @@
 "use client";
+import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { cn } from "@/lib/utils";
-import { ILayoutData, params, SeatStatus } from "@/types/layoutbus.types";
+import { ILayoutData, params } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/session.types";
 import { use, useEffect, useState } from "react";
 // import { ILayoutData } from "./interface";
@@ -9,7 +10,7 @@ import { use, useEffect, useState } from "react";
 interface Props {
   className?: string;
   params: params;
-  user: "driver" | "passenger";
+  user: string;
   dataLayoutBus: ILayoutData;
   setDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
@@ -24,6 +25,7 @@ export default function PassengerSeat(props: Props) {
     setDataLayoutBus,
     sessionUser,
   } = props;
+
   const { number } = params;
   const [changeStatus, setChangeStatus] = useState<params>(() => params);
 
@@ -63,20 +65,21 @@ export default function PassengerSeat(props: Props) {
     event.preventDefault();
 
     setChangeStatus((prevParams: params) => {
-      const updatedStatus: SeatStatus =
-        user === "driver"
-          ? prevParams.busSeatStatus === "available"
-            ? "reserved"
-            : "available"
-          : prevParams.busSeatStatus === "available"
-          ? "selected"
-          : "available";
+      const updatedStatus: SeatStatusEnum =
+        user === RoleEnum.DRIVER
+          ? prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE
+            ? SeatStatusEnum.RESERVED
+            : SeatStatusEnum.AVAILABLE
+          : prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE
+          ? SeatStatusEnum.SELECTED
+          : SeatStatusEnum.AVAILABLE;
       console.log(updatedStatus);
 
       const res = {
         ...prevParams, // Зберігаємо всі інші властивості без змін
         busSeatStatus: updatedStatus, // Оновлюємо статус сидіння
-        passenger: updatedStatus === "available" ? null : sessionUser?.id, // Оновлюємо пасажира
+        passenger:
+          updatedStatus === "available" ? null : Number(sessionUser?.id), // Оновлюємо пасажира
       };
       console.log(res);
 

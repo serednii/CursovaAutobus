@@ -58,7 +58,6 @@ const SearchDataPicker = ({
 
   // Функція для підсвічування днів
   const dayClassName = (date: Date) => {
-    console.log("date", date);
     const isHighlighted = highlightedDates.some((highlightedDate) => {
       const selectDay = highlightedDate.getDate();
       const selectMonth = highlightedDate.getMonth();

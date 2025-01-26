@@ -1,3 +1,7 @@
+import { ISubPassenger } from "./form.types";
+import { ISubPassengersList } from "./interface";
+import { params } from "./layoutbus.types";
+
 export type TableSearchRoutesType = {
   id: number; // Залишаємо це поле
   departureDate: string; // Залишаємо це поле
@@ -25,24 +29,14 @@ export interface GetSearchRoutePassengers {
   modelBus: string;
   maxSeats: number;
   bookedSeats: number;
-  // selectBusLayout: string;
-  // intermediateStops: string[];
-  // busSeats: {
-  //   passenger: number | null;
-  //   number: number;
-  //   busSeatStatus: string;
-  // }[];
-  // passengersSeatsList: [
-  //   {
-  //     idPassenger: number;
-  //     subPassengersList: [
-  //       {
-  //         subFirstName: string;
-  //         subLastName: string;
-  //         subPhone: string;
-  //         subEmail: string;
-  //       }
-  //     ];
-  //   }
-  // ];
+}
+
+export interface IUpdateRoute {
+  busSeats: params[];
+  bookedSeats: number;
+  passengersSeatsList: ISubPassengersList[];
+}
+
+export interface IUpdateRouteWithId extends IUpdateRoute {
+  idRoute: number;
 }

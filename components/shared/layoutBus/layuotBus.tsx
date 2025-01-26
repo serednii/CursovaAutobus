@@ -11,7 +11,7 @@ import { ILayoutData, params } from "@/types/layoutbus.types";
 
 interface Props {
   className?: string;
-  dataLayoutBus: ILayoutData | null | undefined;
+  dataLayoutBus: ILayoutData;
   setDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
 }
@@ -30,9 +30,10 @@ export default function LayoutBus({
   setDataLayoutBus,
   sessionUser,
 }: Props) {
-  const user: "driver" | "passenger" = "driver";
+  const user = sessionUser?.role;
+  console.log("user session", sessionUser);
 
-  if (dataLayoutBus === null || dataLayoutBus?.passenger.length === 0) {
+  if (dataLayoutBus?.passenger.length === 0) {
     return null;
   }
 
@@ -102,7 +103,7 @@ export default function LayoutBus({
             <div key={index}>
               <PassengerSeat
                 params={item}
-                user={user}
+                user={user || ""}
                 dataLayoutBus={dataLayoutBus}
                 setDataLayoutBus={setDataLayoutBus}
                 sessionUser={sessionUser}

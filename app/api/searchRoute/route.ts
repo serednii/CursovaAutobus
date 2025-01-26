@@ -22,6 +22,7 @@ export async function POST(req: any) {
       limit?: number;
       wifi?: boolean;
     } = await req.json();
+
     console.log("departureSearch", departureSearch);
     console.log("arrivalToSearch", arrivalToSearch);
     console.log("select", select);
