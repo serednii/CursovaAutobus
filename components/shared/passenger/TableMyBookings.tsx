@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
+import { MyDialog } from "@/components/ui/MyDialog/MyDialog";
 
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props<T> {
@@ -14,9 +15,12 @@ interface Props<T> {
 
 export default function TableMyBookings<T>({ routes, isRouteAgain }: Props<T>) {
   const router = useRouter();
-
+  const [open, setOpen] = React.useState(false);
+  const [ok, setOk] = React.useState(false);
   const handleCancelRoute = (route: any) => {
     console.log("Viewing route:", route);
+    console.log("Canceling route:", route);
+    setOpen(true);
     // router.push(`/myroute/${route.id}`);
     // alert(`Viewing route from ${route.id}`);
   };
@@ -73,16 +77,26 @@ export default function TableMyBookings<T>({ routes, isRouteAgain }: Props<T>) {
         },
       ]
     : baseColumns;
-
+  const changeDialog = () => {};
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={routes}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
-        sx={{ border: 0 }}
+    <>
+      <MyDialog
+        title="You really want to delete the route?"
+        // description="description"
+        // content="content"
+        setOpen={setOpen}
+        open={open}
+        setOk={setOk}
       />
-    </Paper>
+      <Paper sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={routes}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          sx={{ border: 0 }}
+        />
+      </Paper>
+    </>
   );
 }
