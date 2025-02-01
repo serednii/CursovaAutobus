@@ -4,10 +4,7 @@ import LayoutBus from "../layoutBus/layuotBus";
 import { UserSession } from "@/types/session.types";
 import { ILayoutData, params } from "@/types/layoutbus.types";
 import { useSession } from "next-auth/react";
-import {
-  IGetRoutePassengerById,
-  ISendDataBaseRouteDriver,
-} from "@/types/route-driver.types";
+import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -88,6 +85,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     unregister,
     formState: { errors },
     handleSubmit,
+    setValue,
     reset,
     watch,
     control,
@@ -100,6 +98,14 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       restRoom: true,
     },
   });
+
+  console.log("1111", watch("subFirstName.0"));
+  console.log("2222", watch("subLastName.0"));
+
+  console.log("3333", watch("subPhone.0"));
+
+  console.log("4444", watch("subEmail.0"));
+
   const { data: session, status } = useSession();
   const [dataLayoutBus, setDataLayoutBus] = useState<
     ILayoutData | null | undefined
@@ -110,8 +116,8 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   }
 
-  console.log("DDDDDDDDDDD", sessionUser);
-  console.log("dataLayoutBus++++++++++++++++", dataLayoutBus?.passenger);
+  // console.log("DDDDDDDDDDD", sessionUser);
+  // console.log("dataLayoutBus++++++++++++++++", dataLayoutBus?.passenger);
 
   const userIdSession = Number(sessionUser?.id);
 
@@ -154,7 +160,9 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   // console.log("dataLayoutBus", dataLayoutBus);
   // console.log("route", route);
 
-  const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
+    // const res = await trigger();
+    // console.log("res", res);
     const createRouteDriver: IUpdateRoute = transformData(
       data,
       dataLayoutBus as ILayoutData,
@@ -165,6 +173,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       ...createRouteDriver,
       idRoute: Number(route?.id),
     };
+
     fetchUpdateRouteById(updateRoteDriver)
       .then((response) => {
         if (response) {
@@ -174,7 +183,8 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
         }
       })
       .catch((err) => console.error("Fetch failed:", err));
-    console.log(JSON.stringify(updateRoteDriver, null, 2));
+
+    // console.log(JSON.stringify(updateRoteDriver, null, 2));
     // reset();
   };
 
@@ -188,14 +198,17 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
           setDataLayoutBus={setDataLayoutBus}
         />
       )}
+
       {idOrderPassengers && idOrderPassengers.length > 0 && (
         <SubPassengersOrders
           register={register}
           errors={errors}
           unregister={unregister}
+          setValue={setValue}
           idOrderPassengers={idOrderPassengers}
         />
       )}
+
       <Button
         variant="contained"
         color="primary"

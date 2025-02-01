@@ -93,7 +93,7 @@ const SearchDataPicker = ({
         rules={{ required: `${title} is required` }}
         render={({ field }) => (
           <DatePicker
-            className="w-[100%] mt-1 p-2 border border-gray-300  "
+            className="w-[100%]  border border-gray-300  "
             selected={field.value}
             onChange={(date: Date | null) => {
               setSelectedDate(date);
@@ -118,13 +118,14 @@ const SearchDataPicker = ({
                 InputLabelProps={{
                   style: {
                     top: "-20px",
+                    fontWeight: "bold",
                     zIndex: 10,
-                    fontSize: "18px", // Налаштувати розмір шрифту
+                    fontSize: "20px", // Налаштувати розмір шрифту
                   },
                 }}
                 // helperText={errors[name]?.message}
                 InputProps={{
-                  style: { height: "42px" },
+                  style: { height: "38px" },
                   startAdornment: (
                     <InputAdornment position="start">
                       <CalendarTodayIcon

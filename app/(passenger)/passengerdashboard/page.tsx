@@ -40,6 +40,7 @@ export default function PassengersDashboard() {
   console.log("highlightedDates", highlightedDates);
 
   const { data: session, status } = useSession();
+
   let sessionUser: UserSession | null = null;
 
   if (status === "authenticated") {
@@ -201,7 +202,7 @@ export default function PassengersDashboard() {
 
           {/* Додавання CustomDatePicker */}
 
-          <div className="flex gap-5 mb-5">
+          <div className="flex gap-5 mb-5 flex-wrap">
             <CustomTextField
               register={register}
               errors={errors}
@@ -224,7 +225,7 @@ export default function PassengersDashboard() {
               errors={errors}
               highlightedDates={highlightedDates}
               control={control} // Передаємо control
-              className="pt-7 grow search-data-picker"
+              className="pt-8 grow search-data-picker"
             />
           </div>
 

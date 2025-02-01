@@ -4,6 +4,7 @@ import { TextField } from "@mui/material";
 import {
   FieldErrors,
   UseFormRegister,
+  UseFormSetValue,
   UseFormUnregister,
 } from "react-hook-form";
 import { FormValues, ISubPassengers } from "@/types/form.types";
@@ -15,6 +16,7 @@ interface Props {
   unregister: UseFormUnregister<FormValues>;
   errors: FieldErrors<FormValues>;
   className?: string;
+  setValue: UseFormSetValue<FormValues>;
   idOrderPassengers: NullableNumber[];
 }
 
@@ -22,16 +24,15 @@ const SubPassengersOrders = ({
   register,
   unregister,
   errors,
+  setValue,
   idOrderPassengers,
 }: Props) => {
   const [subPassengers, setSubPassengers] = useState<ISubPassengers[] | []>([]);
 
   // console.log(idOrderPassengers, subPassengers);
-
   useEffect(() => {
     if (idOrderPassengers && idOrderPassengers.length > 1) {
       // console.log("delete stopIndexxxxxxxxxxxxxx");
-
       // Перевірка на кількість пасажирів
 
       if (idOrderPassengers.length > subPassengers.length) {
@@ -50,16 +51,12 @@ const SubPassengersOrders = ({
 
     if (idOrderPassengers && idOrderPassengers.length > 0) {
       // console.log("delete stopIndexxxxxxxxxxxxxxzzzzzzzzzzzz");
-
       // Перевірка на кількість пасажирів
-
       if (idOrderPassengers.length <= subPassengers.length) {
         // console.log("delete stopIndeNNNNNNNNNNNNNNN");
-
         //останній елемент викинути
         setSubPassengers(subPassengers.slice(0, subPassengers.length - 1));
         const stopIndex = subPassengers.length - 1;
-        // console.log("delete stopIndex", stopIndex);
         unregister(`subFirstName.${stopIndex}`); // Видаляємо значення з react-hook-form
         unregister(`subLastName.${stopIndex}`); // Видаляємо значення з react-hook-form
         unregister(`subPhone.${stopIndex}`); // Видаляємо значення з react-hook-form
@@ -73,6 +70,9 @@ const SubPassengersOrders = ({
     value: string,
     inputName: "subFirstName" | "subLastName" | "subPhone" | "subEmail"
   ) => {
+    console.log("value", value, inputName, index);
+    setValue(`${inputName}.${index}`, value);
+
     const updatedSubPassengers = [...subPassengers];
     updatedSubPassengers[index][inputName] = value; // Оновлюємо відповідне значення
     setSubPassengers(updatedSubPassengers);
@@ -94,6 +94,10 @@ const SubPassengersOrders = ({
             <TextField
               {...register(`subFirstName.${index}`, {
                 required: "This field is required",
+                minLength: {
+                  value: 4,
+                  message: "Must be at least 2 characters",
+                },
               })}
               value={subPassenger.subFirstName} // Прив'язка до стану
               onChange={(e) =>
@@ -115,6 +119,10 @@ const SubPassengersOrders = ({
             <TextField
               {...register(`subLastName.${index}`, {
                 required: "This field is required",
+                minLength: {
+                  value: 4,
+                  message: "Must be at least 2 characters",
+                },
               })}
               value={subPassenger.subLastName} // Прив'язка до стану
               onChange={(e) =>

@@ -20,7 +20,7 @@ interface Props {
 
 export default function CheckboxOptions({ register, watch }: Props) {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between flex-wrap">
       <div>
         <FormGroup>
           <FormControlLabel

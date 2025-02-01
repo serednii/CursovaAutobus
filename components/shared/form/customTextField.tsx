@@ -17,7 +17,6 @@ export default function CustomTextField({
   errors,
   name,
   title,
-  // handleSearch,
   className,
 }: Props) {
   return (
@@ -38,7 +37,7 @@ export default function CustomTextField({
         }}
         error={!!errors?.[name]}
         // onChange={handleSearch}
-        helperText={errors?.[name] ? errors?.[name]?.message : ""}
+        helperText={errors?.[name] ? String(errors?.[name]?.message) : ""}
       />
     </div>
   );
