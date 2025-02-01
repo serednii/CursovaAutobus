@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { styled } from "@mui/material/styles";
 import {
   FormControl,
   InputLabel,
@@ -45,24 +46,43 @@ const MaterialUISelect = ({
       variant="outlined"
       className={cn("", className)}
       error={!!errors}
+      style={{ borderColor: "black" }}
     >
-      <InputLabel id="select-label">Select an Option</InputLabel>
+      <InputLabel style={{ color: "black", top: "5px" }} id="select-label">
+        Select an Option
+      </InputLabel>
+
       <Select
-        sx={{ top: "4px", height: "42px" }}
         {...register("selectBusLayout", {
-          required: "This field is required", // Повідомлення про помилку
+          required: "This field is required",
         })}
         labelId="select-label"
-        value={selectedValue ?? ""} // Використання локального стану для відображення вибору
+        value={selectedValue ?? ""}
         onChange={handleChange}
         label="Select Bus Layout"
+        sx={{
+          "& .MuiOutlinedInput-notchedOutline.MuiOutlinedInput-notchedOutline":
+            {
+              borderColor: "gray", // Чорна рамка
+              height: "45px",
+              top: "0",
+            },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "blue", // Синя рамка при наведенні
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "black", // Червона рамка при фокусі
+          },
+        }}
       >
         {passengersLength.map((e, index) => (
           <MenuItem key={index} value={index}>
             Bus {index + 1}: {e} seats
           </MenuItem>
         ))}
+        ;
       </Select>
+
       {errors && <FormHelperText>{errors.root?.message}</FormHelperText>}
     </FormControl>
   );

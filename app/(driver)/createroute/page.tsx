@@ -172,7 +172,7 @@ export default function CreateRoute() {
 
           {/* Додавання CustomDatePicker */}
 
-          <div className="flex gap-5 mb-5">
+          <div className="flex gap-5 mb-5 flex-wrap">
             <CustomDatePicker
               title="Departure Date"
               name="departureDate"
@@ -189,7 +189,7 @@ export default function CreateRoute() {
               control={control} // Передаємо control
             />
           </div>
-          <div className="flex gap-5  mb-5">
+          <div className="flex gap-5  mb-5 flex-wrap">
             <CustomTextField
               register={register}
               errors={errors}
@@ -258,7 +258,7 @@ export default function CreateRoute() {
             className="mb-5"
           />
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center flex-wrap">
             <div className="grow">
               <Typography variant="h6" gutterBottom>
                 Additional options:
