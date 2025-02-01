@@ -1,6 +1,6 @@
 import React from "react";
 import OrderSeatsBus from "@/components/shared/passenger/OrderseatsBus";
-import { fetchGetRouteById } from "@/fetchFunctions/fetchroutes";
+import { fetchGetRoutesById } from "@/fetchFunctions/fetchroutes";
 import {
   IGetRouteById,
   IGetRoutePassengerById,
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default async function MyBookings({ params }: Props) {
-  const id = await params?.id; // Чекаємо `params` асинхронно
+  const id: string | undefined = await params?.id; // Чекаємо `params` асинхронно
 
   console.log("id", id);
 
@@ -45,10 +45,10 @@ export default async function MyBookings({ params }: Props) {
     },
   };
 
-  const routeArray = await fetchGetRouteById<
+  const routeArray = await fetchGetRoutesById<
     typeof select,
     IGetRoutePassengerById[]
-  >(Number(id), select);
+  >([Number(id)], select);
 
   const route = routeArray && routeArray[0];
 

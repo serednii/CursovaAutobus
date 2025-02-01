@@ -32,7 +32,7 @@ export async function POST(req: any) {
       );
     }
 
-    return NextResponse.json({ users });
+    return NextResponse.json(users);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
     return NextResponse.json(

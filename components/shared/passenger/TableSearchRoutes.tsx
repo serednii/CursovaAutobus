@@ -24,16 +24,47 @@ export default function TableSearchRoutes({ routes }: Props) {
 
   // Основні колонки без колонки againRouter
   const columns: GridColDef[] = [
-    { field: "departureDate", headerName: "Departure Date", width: 180 },
-    { field: "arrivalDate", headerName: "Arrival Date", width: 180 },
-    { field: "departureFrom", headerName: "From", width: 130 },
-    { field: "arrivalTo", headerName: "To", width: 130 },
-    { field: "availableSeats", headerName: "Available Seats", width: 100 },
-    { field: "routePrice", headerName: "Price", width: 50 },
+    {
+      field: "departureDate",
+      headerName: "Departure Date",
+      minWidth: 200,
+      flex: 1,
+    },
+    {
+      field: "arrivalDate",
+      headerName: "Arrival Date",
+      minWidth: 200,
+      flex: 1,
+    },
+    {
+      field: "departureFrom",
+      headerName: "From",
+      minWidth: 130,
+      flex: 1,
+    },
+    {
+      field: "arrivalTo",
+      headerName: "To",
+      minWidth: 130,
+      flex: 1,
+    },
+    {
+      field: "availableSeats",
+      headerName: "Available Seats",
+      minWidth: 100,
+      flex: 1,
+    },
+    {
+      field: "routePrice",
+      headerName: "Price",
+      minWidth: 50,
+      flex: 1,
+    },
     {
       field: "viewRouter",
       headerName: "View Route",
-      width: 130,
+      minWidth: 130,
+      flex: 1,
       sortable: false,
       renderCell: (params) => (
         <Button

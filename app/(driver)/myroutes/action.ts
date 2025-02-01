@@ -1,9 +1,11 @@
-import { GetRoutesByDriverId, RouteDriver } from "@/types/route-driver.types";
+import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
 
-const formatDate = (dateArray: GetRoutesByDriverId[]) => {
-  return dateArray.map((route: GetRoutesByDriverId) => {
+const formatDate = <T extends { arrivalDate: string; departureDate: string }>(
+  dateArray: T[]
+) => {
+  return dateArray.map((route: T) => {
     return {
       ...route,
       arrivalDate: format(route.arrivalDate, "d MMMM yyyy HH:mm", {
@@ -16,16 +18,18 @@ const formatDate = (dateArray: GetRoutesByDriverId[]) => {
   });
 };
 
-export const sortDate = (routes: GetRoutesByDriverId[]) => {
-  const newDate = new Date().getTime();
+export const sortDate = <
+  T extends { arrivalDate: string; departureDate: string }
+>(
+  routes: T[]
+) => {
+  const currentDate = new Date().getTime();
   const pastRoutesRaw = routes.filter(
-    (route: GetRoutesByDriverId) =>
-      new Date(route.arrivalDate).getTime() < newDate
+    (route: T) => new Date(route.arrivalDate).getTime() < currentDate
   );
 
   const availableRoutesRaw = routes.filter(
-    (route: GetRoutesByDriverId) =>
-      new Date(route.arrivalDate).getTime() > newDate
+    (route: T) => new Date(route.arrivalDate).getTime() > currentDate
   );
 
   return {

@@ -117,28 +117,16 @@ export const authConfig: AuthOptions = {
         session.user.license = token.license as string;
         session.user.isNewUser = token.isNewUser as boolean;
       }
-      // setTimeout(() => {
-      //   console.log("*********************");
-      //   console.log("*********************");
-      //   console.log("*********************");
-      //   console.log("*********************");
-      //   console.log("*********************");
-      // }, 4000);
 
       return session;
     },
 
     async jwt({ token, user }) {
-      // console.log("jwt user ", user);
-      // console.log("jwt token", token);
-
       if (user) {
         if (user.isNewUser) {
-          // console.log("55555");
           token.github = user; // Зберігаємо дані GitHub в токені
           token.isNewUser = true; // Якщо новий користувач через GitHub
         } else {
-          // console.log("777777");
           token.id = user.id;
           token.firstName = user.firstName;
           token.lastName = user.lastName;
@@ -149,7 +137,6 @@ export const authConfig: AuthOptions = {
         }
       } else if (!token.isNewUser) {
         token.isNewUser = false; // Якщо користувач увійшов через email та password
-        // console.log("88888");
       }
 
       return token;

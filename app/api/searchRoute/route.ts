@@ -23,15 +23,6 @@ export async function POST(req: any) {
       wifi?: boolean;
     } = await req.json();
 
-    console.log("departureSearch", departureSearch);
-    console.log("arrivalToSearch", arrivalToSearch);
-    console.log("select", select);
-    console.log("startOfDay", startOfDay);
-    console.log("endOfDay", endOfDay);
-
-    // console.log("specificDateTo", specificDateTo);
-    console.log("wifi", wifi);
-
     // Формуємо діапазон часу для конкретного дня
     let dateFilter = {};
     if (startOfDay && endOfDay) {

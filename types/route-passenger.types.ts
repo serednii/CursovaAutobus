@@ -1,6 +1,7 @@
 import { ISubPassenger } from "./form.types";
-import { ISubPassengersList } from "./interface";
+import { IBusSeats, ISubPassengersList } from "./interface";
 import { params } from "./layoutbus.types";
+import { GetRoutesByDriverId } from "./route-driver.types";
 
 export type TableSearchRoutesType = {
   id: number; // Залишаємо це поле
@@ -39,4 +40,10 @@ export interface IUpdateRoute {
 
 export interface IUpdateRouteWithId extends IUpdateRoute {
   idRoute: number;
+}
+
+export interface GetRoutesByPassengerId
+  extends Omit<GetRoutesByDriverId, "maxSeats" | "bookedSeats"> {
+  busSeats: IBusSeats[];
+  passengersSeatsList: ISubPassengersList[];
 }

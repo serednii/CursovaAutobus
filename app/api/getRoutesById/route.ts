@@ -1,29 +1,35 @@
 import { prisma } from "@/prisma/prisma-client";
-import { IGetRouteById, GetRoutesByDriverId } from "@/types/route-driver.types";
 import { NextResponse } from "next/server";
+
+type TypeGetRoutesById = {
+  id: number[];
+  select: any;
+};
 
 export async function POST(req: any) {
   try {
     // Отримуємо дані з тіла запиту
-    const { id, select } = await req.json();
-    // console.log("id", id);
+    const { id, select }: TypeGetRoutesById = await req.json();
+    console.log("id---", id);
     // Перевірка, чи передано Id
-    if (!id) {
+    if (!id || !Array.isArray(id)) {
       return NextResponse.json(
-        { error: "Поле 'driverId' є обов'язковим" },
+        { error: "Поле 'id' має бути масиво або нічого непередано взагалі!" },
         { status: 400 }
       );
     }
 
     // Виконуємо запит до бази даних із включенням зв’язаних таблиць
     const routes = await prisma.routeDriver.findMany({
-      where: { id },
+      where: {
+        id: { in: id },
+      },
 
       select: select,
     });
 
     // Якщо маршрути не знайдено
-    if (!routes) {
+    if (!routes || routes.length === 0) {
       return NextResponse.json(
         { message: "Маршрути для вказаного Id не знайдено" },
         { status: 404 }

@@ -25,64 +25,13 @@ export const fetchCreateRoute = async (data: any): Promise<any> => {
   }
 };
 
-// export async function fetchGetRouteById(id: number, select: any) {
-//   try {
-//     const response = await fetch("http://localhost:3000/api/getRouteById", {
-//       // cache: "force-cache",
-//       // next: { revalidate: 50 },
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ id, select }),
-//     });
-
-//     if (!response.ok) {
-//       const errorData = await response.json();
-//       console.error("Помилка запиту:", errorData.error || "Невідома помилка");
-//       return null;
-//     }
-
-//     const data = await response.json();
-//     return data.routes;
-//   } catch (error) {
-//     console.error("Помилка під час виконання запиту:", error);
-//     return null;
-//   }
-// }
-
-// export async function fetchGetRouteById(id: number, select: any) {
-//   try {
-//     const response = await fetch("http://localhost:3000/api/getRouteById", {
-//       // cache: "force-cache",
-//       // next: { revalidate: 50 },
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ id, select }),
-//     });
-
-//     if (!response.ok) {
-//       const errorData = await response.json();
-//       console.error("Помилка запиту:", errorData.error || "Невідома помилка");
-//       return null;
-//     }
-
-//     const data = await response.json();
-//     return data.routes as IGetRouteById[];
-//   } catch (error) {
-//     console.error("Помилка під час виконання запиту:", error);
-//     return null;
-//   }
-// }
-
-export async function fetchGetRouteById<TSelect, TResult>(
-  id: number,
+export async function fetchGetRoutesById<TSelect, TResult>(
+  id: number[],
   select: TSelect
 ): Promise<TResult | null> {
   try {
-    const response = await fetch("http://localhost:3000/api/getRouteById", {
+    console.log("iddd ", id);
+    const response = await fetch("http://localhost:3000/api/getRoutesById", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -129,7 +78,7 @@ export const searchRoute = async (data: any): Promise<any> => {
   }
 };
 
-export async function fetchGetRoutesByDriverId(driverId: any) {
+export async function fetchGetRoutesByDriverId(driverId: number) {
   try {
     // Відправка POST-запиту
     const response = await fetch(
@@ -156,6 +105,42 @@ export async function fetchGetRoutesByDriverId(driverId: any) {
     const data = await response.json();
     // console.log("Отримані маршрути:", data.routes);
     return data.routes as GetRoutesByDriverId[]; // Повертаємо маршрути
+  } catch (error) {
+    console.error("Помилка під час виконання запиту:", error);
+    return null;
+  }
+}
+//GetRoutesByDriverId
+export async function fetchGetRoutesByPassengerId<TSelect, TResult>(
+  passengerId: number,
+  select: TSelect
+): Promise<TResult | null> {
+  try {
+    // Відправка POST-запиту
+    const response = await fetch(
+      "http://localhost:3000/api/getRoutesByPassengerId",
+      {
+        // cache: "force-cache",
+        // next: { revalidate: 50 },
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ passengerId, select }), // Передаємо driverId
+      }
+    );
+
+    // Перевіряємо статус відповіді
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Помилка запиту:", errorData.error || "Невідома помилка");
+      return null;
+    }
+
+    // Обробка відповіді
+    const data = await response.json();
+    // console.log("Отримані маршрути:", data.routes);
+    return data.routes as TResult; // Повертаємо маршрути
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);
     return null;

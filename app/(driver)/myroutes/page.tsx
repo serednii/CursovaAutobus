@@ -13,12 +13,12 @@ import { GetRoutesByDriverId } from "@/types/route-driver.types";
 export default async function MyRoutes() {
   const session = await getServerSession(authConfig);
 
-  const driverId: number | undefined = session?.user.id;
+  const driverId: string | undefined = session?.user.id;
   console.log("driverid myroutes:", driverId);
   if (!driverId) return null;
 
   const routes: GetRoutesByDriverId[] =
-    (await fetchGetRoutesByDriverId(driverId)) || [];
+    (await fetchGetRoutesByDriverId(Number(driverId))) || [];
 
   const { pastRoutes, availableRoutes } = sortDate(routes);
   console.log("routesssssss:", availableRoutes);
@@ -27,12 +27,9 @@ export default async function MyRoutes() {
     <div>
       <Container>
         <h1 className="text-2xl font-bold mb-10">My routes</h1>
-        <AvailableRoutes
-          className="mb-10"
-          routes={availableRoutes}
-        ></AvailableRoutes>
+        <AvailableRoutes className="mb-10" routes={availableRoutes} />
 
-        <PastRotes routes={pastRoutes}></PastRotes>
+        <PastRotes routes={pastRoutes} />
       </Container>
     </div>
   );

@@ -24,7 +24,7 @@ export async function getUsersFetchByIdsBySelect(
       return null;
     }
 
-    const data = await response.json();
+    const data: unknown = await response.json();
     return data; // Повертаємо маршрути
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);

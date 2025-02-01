@@ -48,6 +48,15 @@ model RouteDriver {
   passengersSeatsList PassengersSeatsList[]
 }
 
+model BusSeat {
+  id            Int         @id @default(autoincrement())
+  passenger     Int?
+  number        Int
+  busSeatStatus String
+  routeDriverId Int
+  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
+}
+
 model PassengersSeatsList {
   id                Int                 @id @default(autoincrement())
   idPassenger       Int
@@ -72,15 +81,6 @@ model IntermediateStop {
   stopName String
   routeId  Int?
   route    RouteDriver? @relation(fields: [routeId], references: [id])
-}
-
-model BusSeat {
-  id            Int         @id @default(autoincrement())
-  passenger     Int?
-  number        Int
-  busSeatStatus String
-  routeDriverId Int
-  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
 }
 
 model OrderedRoute {

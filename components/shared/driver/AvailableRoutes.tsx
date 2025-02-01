@@ -1,5 +1,4 @@
-import { GetRoutesByDriverId, RouteDriver } from "@/types/route-driver.types";
-import React, { ReactElement } from "react";
+import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import TableRoutes from "./TableRoutes";
 
 interface Props {

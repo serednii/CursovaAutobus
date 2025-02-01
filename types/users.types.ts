@@ -8,3 +8,11 @@ export interface UserSelect {
   role?: boolean;
   license?: boolean;
 }
+
+export interface IUser {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+}

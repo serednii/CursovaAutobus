@@ -1,19 +1,18 @@
 import { Container } from "@/components/shared/container";
 import TablePassengerDetails from "@/components/shared/driver/TablePassengerDetails";
-import {
-  IGetRouteById,
-  IBusSeats,
-  PassengerDetails,
-  ISubPassengersList,
-} from "@/types/route-driver.types";
+import { IGetRouteById, PassengerDetails } from "@/types/route-driver.types";
 import { formatDate } from "./action";
 
-import { fetchGetRouteById } from "@/fetchFunctions/fetchroutes";
+import { fetchGetRoutesById } from "@/fetchFunctions/fetchroutes";
 
 import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
 
 import cloneDeep from "lodash/cloneDeep";
 import { ISubPassengers } from "@/types/form.types";
+import { IBusSeats, ISubPassengersList } from "@/types/interface";
+import { isObject } from "lodash";
+import { IUser } from "@/types/users.types";
+import { isUserArray } from "@/lib/utils";
 
 interface Props {
   params: { id: string };
@@ -26,7 +25,8 @@ interface IBusSeatsFilter extends Omit<IBusSeats, "passenger"> {
 export default async function RouteId({ params }: Props) {
   const { id } = await params;
   console.log("routes", id);
-  const select = {
+
+  const selectRoute = {
     departureDate: true, // Залишаємо це поле
     arrivalDate: true, // Залишаємо це поле
     departureFrom: true, // Залишаємо це поле
@@ -47,11 +47,13 @@ export default async function RouteId({ params }: Props) {
       },
     },
   };
+
   const routeRaw: IGetRouteById[] | null =
-    (await fetchGetRouteById<typeof select, IGetRouteById[]>(
-      Number(id),
-      select
+    (await fetchGetRoutesById<typeof selectRoute, IGetRouteById[]>(
+      [Number(id)],
+      selectRoute
     )) || ({} as IGetRouteById[]);
+
   const [route] = formatDate(routeRaw || ({} as IGetRouteById));
 
   const passengersId: number[] = route.busSeats
@@ -67,7 +69,7 @@ export default async function RouteId({ params }: Props) {
   );
 
   const uniquePassengersIdSet = new Set(passengersId);
-  const uniquePassengersId = Array.from(uniquePassengersIdSet) as number[];
+  const uniquePassengersId = Array.from(uniquePassengersIdSet);
 
   if (!uniquePassengersId) {
     return (
@@ -77,13 +79,30 @@ export default async function RouteId({ params }: Props) {
     );
   }
 
-  const { users } = await getUsersFetchByIdsBySelect(uniquePassengersId, {
+  const selectUser = {
     id: true,
     firstName: true,
     lastName: true,
     email: true,
     phone: true,
-  });
+  };
+
+  const usersRaw: unknown = await getUsersFetchByIdsBySelect(
+    uniquePassengersId,
+    selectUser
+  );
+
+  const { message, status } = isUserArray(usersRaw);
+
+  if (!status) {
+    return (
+      <Container>
+        <h1>{message}</h1>
+      </Container>
+    );
+  }
+
+  const users = usersRaw as IUser[];
 
   const tempAddUsers = new Map();
   const tempUnique = new Map();
@@ -106,6 +125,7 @@ export default async function RouteId({ params }: Props) {
       const uniqueId = Array.from(tempUnique.keys()).findIndex(
         (e) => e === idPassenger
       );
+
       console.log("uniqueId", uniqueId);
       if (tempAddUsers.has(idPassenger)) {
         const subOrderPassenger: ISubPassengersList | undefined =
