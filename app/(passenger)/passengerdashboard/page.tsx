@@ -37,7 +37,7 @@ export default function PassengersDashboard() {
     []
   );
   // console.log("searchDate", searchDates);
-  console.log("highlightedDates", highlightedDates);
+  // console.log("highlightedDates", highlightedDates);
 
   const { data: session, status } = useSession();
 
@@ -239,7 +239,9 @@ export default function PassengersDashboard() {
           </div>
         </form>
 
-        <TableSearchRoutes routes={searchDates} />
+        {searchDates && searchDates.length > 0 && (
+          <TableSearchRoutes routes={searchDates} />
+        )}
       </main>
       <div className="footer"></div>
     </Container>

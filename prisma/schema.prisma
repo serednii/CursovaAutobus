@@ -54,22 +54,24 @@ model BusSeat {
   number        Int
   busSeatStatus String
   routeDriverId Int
-  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
+  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id], onDelete: Cascade)
 }
 
 model PassengersSeatsList {
   id                Int                 @id @default(autoincrement())
   idPassenger       Int
-  user              User                @relation(fields: [idPassenger], references: [id])
+  user              User                @relation(fields: [idPassenger], references: [id], onDelete: Cascade)
   routeDriverId     Int
-  routeDriver       RouteDriver         @relation(fields: [routeDriverId], references: [id])
+  routeDriver       RouteDriver         @relation(fields: [routeDriverId], references: [id], onDelete: Cascade)
   subPassengersList SubPassengersList[]
+
+  @@unique([routeDriverId, idPassenger]) // Додаємо унікальний індекс
 }
 
 model SubPassengersList {
   id                    Int                 @id @default(autoincrement())
   passengersSeatsListId Int
-  passengersSeatsList   PassengersSeatsList @relation(fields: [passengersSeatsListId], references: [id])
+  passengersSeatsList   PassengersSeatsList @relation(fields: [passengersSeatsListId], references: [id], onDelete: Cascade)
   subFirstName          String
   subLastName           String
   subPhone              String
@@ -80,15 +82,15 @@ model IntermediateStop {
   id       Int          @id @default(autoincrement())
   stopName String
   routeId  Int?
-  route    RouteDriver? @relation(fields: [routeId], references: [id])
+  route    RouteDriver? @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }
 
 model OrderedRoute {
   id            Int         @id @default(autoincrement())
   passengerId   Int
-  user          User        @relation(fields: [passengerId], references: [id])
+  user          User        @relation(fields: [passengerId], references: [id], onDelete: Cascade)
   routeDriverId Int
-  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id])
+  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id], onDelete: Cascade)
   orderDate     DateTime    @default(now())
   orderSeats    OrderSeat[]
 }
@@ -97,5 +99,5 @@ model OrderSeat {
   id         Int          @id @default(autoincrement())
   seatNumber Int
   orderId    Int
-  order      OrderedRoute @relation(fields: [orderId], references: [id])
+  order      OrderedRoute @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }

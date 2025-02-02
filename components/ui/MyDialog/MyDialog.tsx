@@ -8,7 +8,7 @@ interface DialogProps {
   // description: string;
   // content: ReactNode;
   open: boolean;
-  setOpen: any;
+  setOpen: (value: boolean) => void;
   setOk: any;
 }
 export const MyDialog = ({
@@ -28,14 +28,14 @@ export const MyDialog = ({
         aria-describedby={undefined}
       >
         <DialogPrimitives.DialogTitle className="title">
-          {/* {title} */}
+          {title}
         </DialogPrimitives.DialogTitle>
-        <DialogPrimitives.DialogDescription></DialogPrimitives.DialogDescription>
-        {title}
+        {/* <DialogPrimitives.DialogDescription></DialogPrimitives.DialogDescription> */}
+        {/* {title} */}
         <div className="dialog-buttons">
           <DialogPrimitives.DialogClose asChild>
             <button
-              onClick={() => setOk(false)}
+              // onClick={() => setOk(false)}
               aria-label="Close"
               className="button cancel"
             >

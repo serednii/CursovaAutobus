@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default async function MyBookings({ params }: Props) {
-  const id: string | undefined = await params?.id; // Чекаємо `params` асинхронно
+  const id: string | undefined = params?.id; // Чекаємо `params` асинхронно
 
   console.log("id", id);
 

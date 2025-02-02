@@ -2,7 +2,7 @@ import { IBusSeats, ISubPassengersList, RouteDriver } from "./interface";
 
 export interface ISendDataBaseRouteDriver extends RouteDriver {
   bookedSeats: number;
-  passengersSeatsList: ISubPassengersList[];
+  // passengersSeatsList: ISubPassengersList[];
   maxSeats: number;
 }
 

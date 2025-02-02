@@ -37,7 +37,7 @@ const SearchDataPicker = ({
 }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const departureDate = watch && watch("departureDate");
-
+  console.log("selectedDate", selectedDate);
   // Поточна дата і час
   const now = departureDate || new Date();
   const startOfDay = new Date(
@@ -47,7 +47,10 @@ const SearchDataPicker = ({
     0,
     0
   ); // Початок дня
-
+  const handleSelectDate = (date: any) => {
+    console.log("date", date);
+    setSelectedDate(date);
+  };
   const endOfDay = new Date(
     now.getFullYear(),
     now.getMonth(),
@@ -93,10 +96,10 @@ const SearchDataPicker = ({
         rules={{ required: `${title} is required` }}
         render={({ field }) => (
           <DatePicker
-            className="w-[100%]  border border-gray-300  "
+            className="w-[100%]  border border-gray-300"
             selected={field.value}
             onChange={(date: Date | null) => {
-              setSelectedDate(date);
+              handleSelectDate(date);
               field.onChange(date);
             }}
             placeholderText="MM/DD/YYYY"

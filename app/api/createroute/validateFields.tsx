@@ -21,7 +21,7 @@ export default function validateFields(data: ICreateRoute) {
     busSeats,
     bookedSeats,
     intermediateStops,
-    passengersSeatsList,
+    // passengersSeatsList,
   } = data;
 
   if (
@@ -59,7 +59,7 @@ export default function validateFields(data: ICreateRoute) {
     restRoom: [restRoom, "boolean"],
     maxSeats: [maxSeats, "number"],
     bookedSeats: [bookedSeats, "number"],
-    passengersSeatsList: [passengersSeatsList, "array"],
+    // passengersSeatsList: [passengersSeatsList, "array"],
   };
 
   for (const [key, [value, expectedType]] of Object.entries(fields)) {

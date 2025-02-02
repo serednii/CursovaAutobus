@@ -6,24 +6,34 @@ import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { MyDialog } from "@/components/ui/MyDialog/MyDialog";
+import { IRoutesTable } from "@/app/(passenger)/mybookings/page";
 
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props<T> {
   routes: T[];
   isRouteAgain?: boolean;
+  removeRoutePassenger?: (route: number) => void;
 }
 
-export default function TableMyBookings<T>({ routes, isRouteAgain }: Props<T>) {
+export default function TableMyBookings<T>({
+  routes,
+  isRouteAgain,
+  removeRoutePassenger,
+}: Props<T>) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const [ok, setOk] = React.useState(false);
-  const handleCancelRoute = (route: any) => {
+  const [route, setRoute] = React.useState({} as IRoutesTable);
+  const handleCancelOrderRoute = (route: any) => {
     console.log("Viewing route:", route);
     console.log("Canceling route:", route);
     setOpen(true);
+    setRoute(route);
+    // removeRoutePassenger(route.id);
     // router.push(`/myroute/${route.id}`);
     // alert(`Viewing route from ${route.id}`);
   };
+
+  const setOk = () => removeRoutePassenger && removeRoutePassenger(route.id);
 
   // Основні колонки без колонки againRouter
   const baseColumns: GridColDef[] = [
@@ -69,7 +79,7 @@ export default function TableMyBookings<T>({ routes, isRouteAgain }: Props<T>) {
               variant="contained"
               color="primary"
               size="small"
-              onClick={() => handleCancelRoute(params.row)}
+              onClick={() => handleCancelOrderRoute(params.row)}
             >
               Cancel Booking
             </Button>
@@ -77,7 +87,7 @@ export default function TableMyBookings<T>({ routes, isRouteAgain }: Props<T>) {
         },
       ]
     : baseColumns;
-  const changeDialog = () => {};
+
   return (
     <>
       <MyDialog

@@ -6,7 +6,7 @@ export async function POST(req: any) {
   try {
     // Отримуємо дані з тіла запиту
     const { passengerId, select } = await req.json();
-    console.log("passengerId", passengerId);
+    // console.log("passengerId", passengerId);
     // Перевірка, чи передано driverId
 
     if (!passengerId) {
@@ -30,7 +30,7 @@ export async function POST(req: any) {
     if (!routeDriversId.length) {
       return NextResponse.json(
         { message: "Маршрути для вказаного passengerId не знайдено" },
-        { status: 404 }
+        { status: 200 }
       );
     }
 
@@ -38,7 +38,7 @@ export async function POST(req: any) {
       new Set(routeDriversId.map((route) => route.routeDriverId))
     );
 
-    console.log("XXXXXXXXXXXXXXXXX", uniqueRouteDriversId);
+    // console.log("XXXXXXXXXXXXXXXXX", uniqueRouteDriversId);
     const routes = await prisma.routeDriver.findMany({
       where: {
         id: { in: uniqueRouteDriversId },

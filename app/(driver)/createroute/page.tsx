@@ -58,8 +58,8 @@ const transformData = (
       subEmail: data.subEmail ? data.subEmail[index] : "",
     }));
 
-    passengersSeatsList.subPassengersList = subPassengersList;
-    passengersSeatsList.idPassenger = Number(sessionUser?.id);
+    // passengersSeatsList.subPassengersList = subPassengersList;
+    // passengersSeatsList.idPassenger = Number(sessionUser?.id);
   }
   const createRouteDriver: ISendDataBaseRouteDriver = {
     ...data,
@@ -76,7 +76,7 @@ const transformData = (
     bookedSeats: newFormatPassenger.filter(
       (e) => e.busSeatStatus === "reserved"
     ).length, //в дальнішому треба добавити дані для всіх пасажирів а для водія буде просто масив пасажирів
-    passengersSeatsList: [passengersSeatsList],
+    // passengersSeatsList: [passengersSeatsList],
     // passengersSeatsList: [],
   };
 
@@ -126,7 +126,7 @@ export default function CreateRoute() {
       sessionUser as UserSession
     );
 
-    console.log(data);
+    console.log("createRouteDriver", createRouteDriver);
 
     fetchCreateRoute(createRouteDriver)
       .then((response) => {
@@ -137,7 +137,7 @@ export default function CreateRoute() {
         }
       })
       .catch((err) => console.error("Fetch failed:", err));
-    console.log(createRouteDriver);
+    // console.log(createRouteDriver);
     // reset();
   };
 

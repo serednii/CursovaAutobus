@@ -1,9 +1,12 @@
 import { prisma } from "@/prisma/prisma-client";
 import { params } from "@/types/layoutbus.types";
 
-export async function updatedBusSeats(busSeats: params[], idRoute: number) {
+export async function updatedBusSeats(
+  busSeats: params[],
+  idRoute: number
+): Promise<any> {
   try {
-    await Promise.all(
+    const updatedBusSeats = await Promise.all(
       busSeats.map(async (busSeat) => {
         const seat = await prisma.busSeat.findFirst({
           where: {
@@ -25,6 +28,9 @@ export async function updatedBusSeats(busSeats: params[], idRoute: number) {
         }
       })
     );
+    const res = updatedBusSeats;
+
+    return updatedBusSeats;
   } catch (error) {
     console.error("Error updating bus seats:", error);
     throw new Error("Failed to update bus seats");

@@ -74,18 +74,18 @@ export async function createRoute(req: NextRequest) {
       },
     });
 
-    console.log("Route driver created:", routeDriver);
+    // console.log("Route driver created:", routeDriver);
 
-    // Створення проміжних зупинок
+    // // Створення проміжних зупинок
     await createIntermediateStops(intermediateStops, routeDriver.id);
 
-    // Створення місць у автобусі
+    // // Створення місць у автобусі
     await createBusSeats(busSeats, routeDriver.id);
 
-    // Створення списку пасажирів
-    await createPassengersSeatsList(passengersSeatsList, routeDriver.id);
+    // // Створення списку пасажирів
+    // await createPassengersSeatsList(passengersSeatsList, routeDriver.id);
 
-    return NextResponse.json({ routeDriver }, { status: 201 });
+    return NextResponse.json({ routeDriver: "ok" }, { status: 201 });
   } catch (error: Error | any) {
     console.error("Error creating route driver:", error);
     console.error("Error details:", error.message);

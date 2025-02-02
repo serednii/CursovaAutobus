@@ -87,7 +87,7 @@ const CustomDatePicker = ({
                 {...field}
                 placeholder="MM/DD/YYYY HH:MM"
                 error={!!errors[name]}
-                helperText={errors[name]?.message}
+                // helperText={errors[name]?.message}
                 InputProps={{
                   style: { height: "42px" },
                   startAdornment: (

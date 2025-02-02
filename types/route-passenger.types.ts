@@ -47,3 +47,9 @@ export interface GetRoutesByPassengerId
   busSeats: IBusSeats[];
   passengersSeatsList: ISubPassengersList[];
 }
+
+export interface IDeleteRoutePassenger {
+  routeDriverId: number;
+  idPassenger: number;
+  busSeats: IBusSeats[];
+}

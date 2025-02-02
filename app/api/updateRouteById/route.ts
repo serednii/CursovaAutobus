@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     }: IUpdateRouteWithId = await req.json();
 
     // Perform database update using Prisma
-    const updatedRoute = await prisma.routeDriver.update({
+    const res1 = await prisma.routeDriver.update({
       where: {
         id: idRoute, // Assuming `id` is the primary key field in the `routeDriver` table
       },
@@ -37,14 +37,31 @@ export async function POST(req: Request) {
       },
     });
 
-    updatedBusSeats(busSeats, idRoute);
-    createPassengersSeatsList(passengersSeatsList, idRoute);
-
-    // console.log("Route updated successfully:", updatedRoute);
+    if (!res1) {
+      return NextResponse.json(
+        { error: "Failed to update route" },
+        { status: 500 }
+      );
+    }
+    const res2 = await updatedBusSeats(busSeats, idRoute);
+    if (!res2) {
+      return NextResponse.json(
+        { error: "Failed to update route" },
+        { status: 500 }
+      );
+    }
+    const res3 = await createPassengersSeatsList(passengersSeatsList, idRoute);
+    if (!res3) {
+      return NextResponse.json(
+        { error: "Failed to update route" },
+        { status: 500 }
+      );
+    }
+    console.log("Route updated successfully:", res1);
 
     return NextResponse.json({
       message: "Route updated successfully",
-      updatedRoute,
+      res1,
     });
   } catch (error) {
     console.error("Error updating route:", error);

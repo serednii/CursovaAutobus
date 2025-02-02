@@ -16,6 +16,7 @@ import {
   IUpdateRouteWithId,
 } from "@/types/route-passenger.types";
 import { fetchUpdateRouteById } from "@/fetchFunctions/fetchroutes";
+import { useRouter } from "next/navigation";
 
 interface Props {
   layoutsData: ILayoutData[];
@@ -80,6 +81,7 @@ const transformData = (
 };
 
 export default function OrderSeatsBus({ layoutsData, route }: Props) {
+  const router = useRouter();
   const {
     register,
     unregister,
@@ -98,13 +100,6 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       restRoom: true,
     },
   });
-
-  console.log("1111", watch("subFirstName.0"));
-  console.log("2222", watch("subLastName.0"));
-
-  console.log("3333", watch("subPhone.0"));
-
-  console.log("4444", watch("subEmail.0"));
 
   const { data: session, status } = useSession();
   const [dataLayoutBus, setDataLayoutBus] = useState<
@@ -177,7 +172,8 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     fetchUpdateRouteById(updateRoteDriver)
       .then((response) => {
         if (response) {
-          console.log("Response:", response);
+          console.log("Response***************:", response);
+          router.push("/mybookings");
         } else {
           console.log("No data received or an error occurred.");
         }
@@ -215,7 +211,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
         type="submit"
         // disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
       >
-        Update Route
+        Reserve seats
       </Button>
     </form>
   );
