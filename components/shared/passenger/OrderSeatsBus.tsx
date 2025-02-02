@@ -17,6 +17,7 @@ import {
 } from "@/types/route-passenger.types";
 import { fetchUpdateRouteById } from "@/fetchFunctions/fetchroutes";
 import { useRouter } from "next/navigation";
+import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
 
 interface Props {
   layoutsData: ILayoutData[];
@@ -81,6 +82,7 @@ const transformData = (
 };
 
 export default function OrderSeatsBus({ layoutsData, route }: Props) {
+  const [open, setOpen] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -173,7 +175,11 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       .then((response) => {
         if (response) {
           console.log("Response***************:", response);
-          router.push("/mybookings");
+          setOpen(true);
+          setTimeout(() => {
+            setOpen(false);
+            router.push("/mybookings");
+          }, 1000);
         } else {
           console.log("No data received or an error occurred.");
         }
@@ -185,34 +191,41 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {dataLayoutBus && (
-        <LayoutBus
-          sessionUser={sessionUser}
-          className="flex justify-center"
-          dataLayoutBus={dataLayoutBus}
-          setDataLayoutBus={setDataLayoutBus}
-        />
-      )}
+    <>
+      <MyDialogInfo
+        title="Your reservation has been successfully completed?"
+        open={open}
+        setOpen={setOpen}
+      />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {dataLayoutBus && (
+          <LayoutBus
+            sessionUser={sessionUser}
+            className="flex justify-center"
+            dataLayoutBus={dataLayoutBus}
+            setDataLayoutBus={setDataLayoutBus}
+          />
+        )}
 
-      {idOrderPassengers && idOrderPassengers.length > 0 && (
-        <SubPassengersOrders
-          register={register}
-          errors={errors}
-          unregister={unregister}
-          setValue={setValue}
-          idOrderPassengers={idOrderPassengers}
-        />
-      )}
+        {idOrderPassengers && idOrderPassengers.length > 0 && (
+          <SubPassengersOrders
+            register={register}
+            errors={errors}
+            unregister={unregister}
+            setValue={setValue}
+            idOrderPassengers={idOrderPassengers}
+          />
+        )}
 
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        // disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
-      >
-        Reserve seats
-      </Button>
-    </form>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          // disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
+        >
+          Reserve seats
+        </Button>
+      </form>
+    </>
   );
 }

@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
-import { MyDialog } from "@/components/ui/MyDialog/MyDialog";
+import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
 import { IRoutesTable } from "@/app/(passenger)/mybookings/page";
 
 const paginationModel = { page: 0, pageSize: 5 };
@@ -90,7 +90,7 @@ export default function TableMyBookings<T>({
 
   return (
     <>
-      <MyDialog
+      <MyDialogIsDelete
         title="You really want to delete the route?"
         // description="description"
         // content="content"

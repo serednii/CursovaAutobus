@@ -27,7 +27,7 @@ export interface IRoutesTable {
 }
 
 export default function MyBookings() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const passengerId: number | undefined = Number(session?.user?.id);
   const [reload, setReload] = useState(false);
   const [routesPassenger, setRoutesPassenger] = useState<
@@ -121,7 +121,7 @@ export default function MyBookings() {
         ...e,
         busSeatStatus:
           e.passenger === passengerId
-            ? SeatStatusEnum.RESERVED
+            ? SeatStatusEnum.AVAILABLE
             : e.busSeatStatus,
         passenger: e.passenger === passengerId ? null : e.passenger,
       };

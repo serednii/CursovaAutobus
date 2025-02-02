@@ -36,8 +36,8 @@ export default function PassengersDashboard() {
   const [searchDates, setSearchDates] = useState<TableSearchRoutesType[] | []>(
     []
   );
-  // console.log("searchDate", searchDates);
-  // console.log("highlightedDates", highlightedDates);
+  console.log("searchDate", searchDates);
+  console.log("highlightedDates", highlightedDates);
 
   const { data: session, status } = useSession();
 
