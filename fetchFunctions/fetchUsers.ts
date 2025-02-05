@@ -1,4 +1,4 @@
-import { UserSelect } from "@/types/users.types";
+import { UserSelect } from "@/types/next-auth";
 
 export async function getUsersFetchByIdsBySelect(
   ids: number[],

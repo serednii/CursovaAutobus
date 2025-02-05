@@ -8,12 +8,12 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const pathname = usePathname();
   const session = useSession();
-  // const { data: session, status } = useSession();
 
   if (session.status === "loading") return <p>Loading...</p>;
   if (!session) return <p>No user is logged in</p>;
 
   console.log(session);
+
   return (
     <div className="flex gap-3 fixed bottom-[100px] left-10 z-10 flex-wrap">
       <Link

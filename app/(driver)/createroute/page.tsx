@@ -17,11 +17,12 @@ import { FormValues } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 
 import { useSession } from "next-auth/react";
-import { UserSession } from "@/types/session.types";
+
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { fetchCreateRoute } from "@/fetchFunctions/fetchroutes";
 import "react-datepicker/dist/react-datepicker.css";
 import { ISubPassengersList } from "@/types/interface";
+import { UserSession } from "@/types/next-auth";
 
 const transformData = (
   data: FormValues,

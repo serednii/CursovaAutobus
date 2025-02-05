@@ -13,7 +13,6 @@ import { FormValues } from "@/types/form.types";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
 
-import { UserSession } from "@/types/session.types";
 import SearchDataPicker from "@/components/shared/form/searchDataPicker/searchDataPicker";
 import TableSearchRoutes from "@/components/shared/passenger/TableSearchRoutes";
 import {
@@ -21,14 +20,7 @@ import {
   TableSearchRoutesType,
 } from "@/types/route-passenger.types";
 import { searchRoute } from "@/fetchFunctions/fetchroutes";
-
-// type TSearchDates = {
-//   departureDate: string; // Залишаємо це поле
-//   arrivalDate: string; // Залишаємо це поле
-//   departureFrom: string; // Залишаємо це поле
-//   arrivalTo: string; // Залишаємо це поле
-//   routePrice: number; // Залишаємо це поле
-// };
+import { UserSession } from "@/types/next-auth";
 
 export default function PassengersDashboard() {
   const highlightedDatesRef = useRef<Date[] | []>([]);

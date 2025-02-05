@@ -6,8 +6,8 @@ import DriverSeat from "./driverSeat";
 import PassengerSeat from "./passengerSeat";
 import Stairs from "./stairs";
 
-import { UserSession } from "../../../types/session.types";
 import { ILayoutData, params } from "@/types/layoutbus.types";
+import { UserSession } from "@/types/next-auth";
 
 interface Props {
   className?: string;

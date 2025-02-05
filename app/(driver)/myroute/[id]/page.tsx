@@ -10,9 +10,9 @@ import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
 import cloneDeep from "lodash/cloneDeep";
 import { ISubPassengers } from "@/types/form.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
-import { isObject } from "lodash";
-import { IUser } from "@/types/users.types";
+
 import { isUserArray } from "@/lib/utils";
+import { IUser } from "@/types/next-auth";
 
 interface Props {
   params: { id: string };

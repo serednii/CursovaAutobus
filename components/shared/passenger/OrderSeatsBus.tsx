@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import LayoutBus from "../layoutBus/layuotBus";
-import { UserSession } from "@/types/session.types";
 import { ILayoutData, params } from "@/types/layoutbus.types";
 import { useSession } from "next-auth/react";
 import { IGetRoutePassengerById } from "@/types/route-driver.types";
@@ -18,6 +17,7 @@ import {
 import { fetchUpdateRouteById } from "@/fetchFunctions/fetchroutes";
 import { useRouter } from "next/navigation";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
+import { UserSession } from "@/types/next-auth";
 
 interface Props {
   layoutsData: ILayoutData[];

@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma/prisma-client";
-import { UserSelect } from "@/types/users.types";
+import { UserSelect } from "@/types/next-auth";
 import { NextResponse } from "next/server";
 
 export async function POST(req: any) {
