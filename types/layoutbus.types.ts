@@ -1,38 +1,24 @@
 import { NullableNumber, SeatStatus } from "./types";
 
-export type params = {
-  left?: number;
-  bottom?: number;
-  top?: number;
-  right?: number;
-  number: number;
-  busSeatStatus: SeatStatus;
-  passenger: NullableNumber;
-};
-
-export type paramsSeat = {
+export type SeatPosition = {
   left?: string;
   bottom?: string;
   top?: string;
   right?: string;
 };
 
+export type BusSeatInfo = {
+  number: number;
+  busSeatStatus: SeatStatus;
+  passenger: NullableNumber;
+} & SeatPosition;
+
 export interface ILayoutData {
   passengerLength: number;
   busWidth: string;
   busHeight: string;
-  passenger: params[];
+  passenger: BusSeatInfo[];
   modelBus: string;
-  driverSeat: {
-    left?: string;
-    bottom?: string;
-    top?: string;
-    right?: string;
-  };
-  stairs: {
-    left?: string;
-    bottom?: string;
-    top?: string;
-    right?: string;
-  }[];
+  driverSeat: SeatPosition;
+  stairs: SeatPosition[];
 }

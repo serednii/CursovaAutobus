@@ -1,5 +1,5 @@
 import { ISubPassengersList } from "@/types/interface";
-import { params } from "@/types/layoutbus.types";
+import { BusSeatInfo } from "@/types/layoutbus.types";
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import handleError from "@/lib/handleError";
@@ -7,7 +7,7 @@ import { updatedBusSeats } from "./updateFunction";
 import { createPassengersSeatsList } from "../createroute/createFunctions";
 
 export interface IUpdateRoute {
-  busSeats: params[];
+  busSeats: BusSeatInfo[];
   bookedSeats: number;
   passengersSeatsList: ISubPassengersList[];
 }

@@ -1,19 +1,20 @@
 import { IBusSeats, ISubPassengersList, RouteDriver } from "./interface";
+import { TypeBaseRoute } from "./route-passenger.types";
 
 export interface ISendDataBaseRouteDriver extends RouteDriver {
   bookedSeats: number;
   maxSeats: number;
 }
 
-export interface GetRoutesByDriverId {
-  id: number; // Залишаємо це поле
-  departureDate: string; // Залишаємо це поле
-  arrivalDate: string; // Залишаємо це поле
-  departureFrom: string; // Залишаємо це поле
-  arrivalTo: string; // Залишаємо це поле
-  routePrice: number; // Залишаємо це поле
+export interface GetRoutesByDriverId
+  extends Omit<TypeBaseRoute, "AvailableSeats"> {
   bookedSeats: number;
   maxSeats: number;
+}
+
+export interface IGetRouteById extends Omit<TypeBaseRoute, "id"> {
+  busSeats: IBusSeats[];
+  passengersSeatsList: ISubPassengersList[];
 }
 
 export interface PassengerDetails {
@@ -25,20 +26,10 @@ export interface PassengerDetails {
   email: string;
 }
 
-export interface IGetRouteById {
-  departureDate: string; // Залишаємо це поле
-  arrivalDate: string; // Залишаємо це поле
-  departureFrom: string; // Залишаємо це поле
-  arrivalTo: string; // Залишаємо це поле
-  routePrice: number; // Залишаємо це поле
-  busSeats: IBusSeats[];
-  passengersSeatsList: ISubPassengersList[];
-}
-
 export interface IGetRoutePassengerById extends IGetRouteById {
   id: number;
   selectBusLayout: string;
   modelBus: string;
-  maxSeats: number;
   bookedSeats: number;
+  maxSeats: number;
 }

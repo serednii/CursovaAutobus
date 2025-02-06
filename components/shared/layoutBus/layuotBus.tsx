@@ -6,7 +6,7 @@ import DriverSeat from "./driverSeat";
 import PassengerSeat from "./passengerSeat";
 import Stairs from "./stairs";
 
-import { ILayoutData, params } from "@/types/layoutbus.types";
+import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 
 interface Props {
@@ -98,7 +98,7 @@ export default function LayoutBus({
             className="left-[50px] top-[0px]"
           />
         )}
-        {dataLayoutBus?.passenger.map((item: params, index: number) => {
+        {dataLayoutBus?.passenger.map((item: BusSeatInfo, index: number) => {
           return (
             <div key={index}>
               <PassengerSeat

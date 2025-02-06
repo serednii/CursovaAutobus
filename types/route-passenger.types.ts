@@ -1,39 +1,32 @@
-import { ISubPassenger } from "./form.types";
-import { IBusSeats, ISubPassengersList } from "./interface";
-import { params } from "./layoutbus.types";
+import {
+  IBusSeats,
+  IDateString,
+  IFromTo,
+  IServiceBus,
+  ISubPassengersList,
+} from "./interface";
+import { BusSeatInfo } from "./layoutbus.types";
 import { GetRoutesByDriverId } from "./route-driver.types";
 
-export type TableSearchRoutesType = {
+export interface TypeBaseRoute extends IDateString, IFromTo {
   id: number; // Залишаємо це поле
-  departureDate: string; // Залишаємо це поле
-  arrivalDate: string; // Залишаємо це поле
-  departureFrom: string; // Залишаємо це поле
-  arrivalTo: string; // Залишаємо це поле
   routePrice: number; // Залишаємо це поле
   AvailableSeats: number;
-};
+}
 
-export interface GetSearchRoutePassengers {
-  id: number;
+export interface GetSearchRoutePassengers
+  extends Omit<TypeBaseRoute, "AvailableSeats">,
+    IServiceBus {
   driverId: number;
-  departureDate: string;
-  arrivalDate: string;
-  departureFrom: string;
-  arrivalTo: string;
   busNumber: string;
-  routePrice: number;
   notate: string;
-  wifi: boolean;
-  coffee: boolean;
-  power: boolean;
-  restRoom: boolean;
   modelBus: string;
   maxSeats: number;
   bookedSeats: number;
 }
 
 export interface IUpdateRoute {
-  busSeats: params[];
+  busSeats: BusSeatInfo[];
   bookedSeats: number;
   passengersSeatsList: ISubPassengersList[];
 }
@@ -51,5 +44,13 @@ export interface GetRoutesByPassengerId
 export interface IDeleteRoutePassenger {
   routeDriverId: number;
   idPassenger: number;
+  busSeats: IBusSeats[];
+}
+
+export interface IRoutesTable extends IDateString, IFromTo {
+  id: number;
+  seatsNumber: string;
+  routeTotalPrice: string;
+  routePrice: string;
   busSeats: IBusSeats[];
 }

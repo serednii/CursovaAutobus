@@ -1,29 +1,27 @@
-export interface FormValues extends ISubPassenger {
-  departureDate: Date;
-  arrivalDate: Date;
+import { IDateISO, IFromTo, IServiceBus } from "./interface";
+
+export interface FormValues
+  extends SubPassengerGroup,
+    IDateISO,
+    IServiceBus,
+    IFromTo {
   intermediateStops: string[];
   busNumber: string;
   routePrice: string;
-  departureFrom: string;
-  arrivalTo: string;
   busSeats: any;
-  wifi: boolean;
-  coffee: boolean;
-  power: boolean;
-  restRoom: boolean;
   passengersListId: number[];
   driverId: number;
   selectBusLayout: string;
 }
 
-export interface ISubPassengers {
+export interface SubPassengerDetails {
   subFirstName: string;
   subLastName: string;
   subPhone: string;
   subEmail: string;
 }
 
-export interface ISubPassenger {
+export interface SubPassengerGroup {
   subFirstName: string[] | undefined;
   subLastName: string[] | undefined;
   subPhone: string[] | undefined;

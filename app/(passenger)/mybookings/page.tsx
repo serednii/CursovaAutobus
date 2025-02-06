@@ -10,21 +10,12 @@ import {
   fetchGetRoutesByPassengerId,
 } from "@/fetchFunctions/fetchroutes";
 import { IBusSeats } from "@/types/interface";
-import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
+import {
+  GetRoutesByPassengerId,
+  IRoutesTable,
+} from "@/types/route-passenger.types";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-
-export interface IRoutesTable {
-  id: number;
-  departureDate: string;
-  arrivalDate: string;
-  departureFrom: string;
-  arrivalTo: string;
-  seatsNumber: string;
-  routeTotalPrice: string;
-  routePrice: string;
-  busSeats: IBusSeats[];
-}
 
 export default function MyBookings() {
   const { data: session } = useSession();

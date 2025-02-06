@@ -17,7 +17,7 @@ import SearchDataPicker from "@/components/shared/form/searchDataPicker/searchDa
 import TableSearchRoutes from "@/components/shared/passenger/TableSearchRoutes";
 import {
   GetSearchRoutePassengers,
-  TableSearchRoutesType,
+  TypeBaseRoute,
 } from "@/types/route-passenger.types";
 import { searchRoute } from "@/fetchFunctions/fetchroutes";
 import { UserSession } from "@/types/next-auth";
@@ -25,9 +25,7 @@ import { UserSession } from "@/types/next-auth";
 export default function PassengersDashboard() {
   const highlightedDatesRef = useRef<Date[] | []>([]);
   const [highlightedDates, setHighlightedDates] = useState<Date[] | []>([]);
-  const [searchDates, setSearchDates] = useState<TableSearchRoutesType[] | []>(
-    []
-  );
+  const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);
   console.log("searchDate", searchDates);
   console.log("highlightedDates", highlightedDates);
 
@@ -131,7 +129,7 @@ export default function PassengersDashboard() {
 
             console.log("Response----------:", routes);
 
-            const newSearchDates: TableSearchRoutesType[] | [] = routes.map(
+            const newSearchDates: TypeBaseRoute[] | [] = routes.map(
               (item: GetSearchRoutePassengers) => ({
                 id: item.id,
                 departureDate: item.departureDate,

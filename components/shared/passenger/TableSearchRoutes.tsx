@@ -5,18 +5,18 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
 import { useRouter } from "next/navigation";
-import { TableSearchRoutesType } from "@/types/route-passenger.types";
+import { TypeBaseRoute } from "@/types/route-passenger.types";
 
 const paginationModel = { page: 0, pageSize: 5 };
 
 interface Props {
-  routes: TableSearchRoutesType[];
+  routes: TypeBaseRoute[];
 }
 
 export default function TableSearchRoutes({ routes }: Props) {
   const router = useRouter();
 
-  const handleViewRoute = (route: TableSearchRoutesType) => {
+  const handleViewRoute = (route: TypeBaseRoute) => {
     // console.log("Viewing route:", route);
     router.push(`/seatselection/${route.id}`);
     // alert(`Viewing route from ${route.id}`);

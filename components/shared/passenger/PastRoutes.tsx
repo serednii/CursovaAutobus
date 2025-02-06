@@ -1,4 +1,3 @@
-import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import TableMyBookings from "./TableMyBookings";
 
 interface Props<T> {

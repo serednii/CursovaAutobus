@@ -1,13 +1,7 @@
 import { cn } from "@/lib/utils";
-import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
-import { AiTwotoneMail } from "react-icons/ai";
-import FormError from "./formError";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-interface FormValues {
-  email: string;
-}
 interface Props {
   className?: string;
 }

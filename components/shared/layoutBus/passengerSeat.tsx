@@ -1,15 +1,13 @@
 "use client";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { cn } from "@/lib/utils";
-import { ILayoutData, params } from "@/types/layoutbus.types";
-import { UserSession } from "@/types/session.types";
-import { use, useEffect, useState } from "react";
-// import { ILayoutData } from "./interface";
-// import { params, SeatStatus } from "./type";
+import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
+import { UserSession } from "@/types/next-auth";
+import { useEffect, useState } from "react";
 
 interface Props {
   className?: string;
-  params: params;
+  params: BusSeatInfo;
   user: string;
   dataLayoutBus: ILayoutData;
   setDataLayoutBus: (value: ILayoutData) => void;
@@ -27,7 +25,7 @@ export default function PassengerSeat(props: Props) {
   } = props;
 
   const { number } = params;
-  const [changeStatus, setChangeStatus] = useState<params>(() => params);
+  const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
 
   const keys = Object.keys(params) as (keyof typeof params)[];
 
@@ -64,7 +62,7 @@ export default function PassengerSeat(props: Props) {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    setChangeStatus((prevParams: params) => {
+    setChangeStatus((prevParams: BusSeatInfo) => {
       const updatedStatus: SeatStatusEnum =
         user === RoleEnum.DRIVER
           ? prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE

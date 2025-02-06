@@ -8,7 +8,7 @@ import { fetchGetRoutesById } from "@/fetchFunctions/fetchroutes";
 import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
 
 import cloneDeep from "lodash/cloneDeep";
-import { ISubPassengers } from "@/types/form.types";
+import { SubPassengerDetails } from "@/types/form.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 
 import { isUserArray } from "@/lib/utils";
@@ -144,7 +144,7 @@ export default async function RouteId({ params }: Props) {
             email: "",
           };
         }
-        const subPassengersLists: ISubPassengers[] =
+        const subPassengersLists: SubPassengerDetails[] =
           subOrderPassenger.subPassengersList;
 
         const [subUser] = subPassengersLists.splice(0, 1);

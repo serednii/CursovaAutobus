@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import LayoutBus from "../layoutBus/layuotBus";
-import { ILayoutData, params } from "@/types/layoutbus.types";
+import { ILayoutData } from "@/types/layoutbus.types";
 import { useSession } from "next-auth/react";
 import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ISubPassengersList } from "@/types/interface";
-import { FormValues, ISubPassenger } from "@/types/form.types";
+import { FormValues, SubPassengerGroup } from "@/types/form.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import {
   IUpdateRoute,
@@ -25,7 +25,7 @@ interface Props {
 }
 
 const transformData = (
-  data: ISubPassenger,
+  data: SubPassengerGroup,
   dataLayoutBus: ILayoutData,
   sessionUser: UserSession
 ): IUpdateRoute => {
