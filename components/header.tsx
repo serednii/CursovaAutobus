@@ -4,7 +4,11 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-
+import { Container } from "./shared/container";
+import React from "react";
+import UserInfoParams from "./shared/user/userinfoParams";
+import { RoleEnum } from "@/enum/shared.enums";
+import ShowIf from "./ShowIf";
 export default function Header() {
   const pathname = usePathname();
   const session = useSession();
@@ -12,77 +16,91 @@ export default function Header() {
   if (session.status === "loading") return <p>Loading...</p>;
   if (!session) return <p>No user is logged in</p>;
 
+  const { data } = session;
+  if (data && pathname !== "/") return null;
+
   console.log(session);
 
   return (
-    <div className="flex gap-3 fixed bottom-[100px] left-10 z-10 flex-wrap">
-      <Link
-        style={{
-          backgroundColor: "yellow",
-          padding: "5px",
-          borderRadius: "15px",
-        }}
-        className={pathname === "/auth" ? "active-link" : ""}
-        href="/auth"
-      >
-        Auth
-      </Link>
-      <Link
-        style={{
-          backgroundColor: "yellow",
-          padding: "5px",
-          borderRadius: "15px",
-        }}
-        className={pathname === "/auth/role" ? "active-link" : ""}
-        href="/auth/role"
-      >
-        Auth Role
-      </Link>
-      <Link
-        style={{
-          backgroundColor: "yellow",
-          padding: "5px",
-          borderRadius: "15px",
-        }}
-        className={pathname === "/auth/driver" ? "active-link" : ""}
-        href="/auth/driver"
-      >
-        Auth Driver
-      </Link>
-      <Link
-        style={{
-          backgroundColor: "yellow",
-          padding: "5px",
-          borderRadius: "15px",
-        }}
-        className={pathname === "/auth/passenger" ? "active-link" : ""}
-        href="/auth/passenger"
-      >
-        Auth Passenger
-      </Link>
-      <Link
-        style={{
-          backgroundColor: "yellow",
-          padding: "5px",
-          borderRadius: "15px",
-        }}
-        className={pathname === "/createroute" ? "active-link" : ""}
-        href="/createroute/"
-      >
-        Driver
-      </Link>
-      <Link
-        style={{
-          backgroundColor: "yellow",
-          padding: "5px",
-          borderRadius: "15px",
-        }}
-        className={pathname === "/passengerdashboard" ? "active-link" : ""}
-        href="/passengerdashboard/"
-      >
-        Passenger
-      </Link>
-      {session?.data ? (
+    <Container className="flex gap-3  flex-wrap">
+      <ShowIf condition={!data}>
+        <React.Fragment>
+          <Link
+            style={{
+              backgroundColor: "yellow",
+              padding: "5px",
+              borderRadius: "15px",
+            }}
+            className={pathname === "/auth" ? "active-link" : ""}
+            href="/auth"
+          >
+            Auth
+          </Link>
+          <Link
+            style={{
+              backgroundColor: "yellow",
+              padding: "5px",
+              borderRadius: "15px",
+            }}
+            className={pathname === "/auth/role" ? "active-link" : ""}
+            href="/auth/role"
+          >
+            Auth Role
+          </Link>
+          <Link
+            style={{
+              backgroundColor: "yellow",
+              padding: "5px",
+              borderRadius: "15px",
+            }}
+            className={pathname === "/auth/driver" ? "active-link" : ""}
+            href="/auth/driver"
+          >
+            Auth Driver
+          </Link>
+          <Link
+            style={{
+              backgroundColor: "yellow",
+              padding: "5px",
+              borderRadius: "15px",
+            }}
+            className={pathname === "/auth/passenger" ? "active-link" : ""}
+            href="/auth/passenger"
+          >
+            Auth Passenger
+          </Link>
+        </React.Fragment>
+      </ShowIf>
+
+      <ShowIf condition={!!data}>
+        <ShowIf condition={data?.user?.role === RoleEnum.DRIVER}>
+          <Link
+            style={{
+              backgroundColor: "yellow",
+              padding: "5px",
+              borderRadius: "15px",
+            }}
+            className={pathname === "/createroute" ? "active-link" : ""}
+            href="/createroute/"
+          >
+            Driver
+          </Link>
+        </ShowIf>
+
+        <ShowIf condition={data?.user?.role === RoleEnum.PASSENGER}>
+          <Link
+            style={{
+              backgroundColor: "yellow",
+              padding: "5px",
+              borderRadius: "15px",
+            }}
+            className={pathname === "/passengerdashboard" ? "active-link" : ""}
+            href="/passengerdashboard/"
+          >
+            Passenger
+          </Link>
+        </ShowIf>
+
         <Link
           style={{
             backgroundColor: "yellow",
@@ -94,7 +112,8 @@ export default function Header() {
         >
           Sign Out
         </Link>
-      ) : (
+      </ShowIf>
+      <ShowIf condition={!data}>
         <Link
           style={{
             backgroundColor: "yellow",
@@ -105,26 +124,9 @@ export default function Header() {
         >
           SignIn
         </Link>
-      )}
-      <div>
-        <h1
-          style={{
-            backgroundColor: "yellow",
-            padding: "5px",
-            borderRadius: "15px",
-          }}
-        >
-          {/* <div>
-            <h1>Welcome, {session?.data?.user?.firstName}!</h1>
-            <p>Email: {session?.data?.user?.email}</p>
-            <p>Role: {session?.data?.user?.role}</p>
-            <p>Phone: {session?.data?.user?.phone}</p>
-            <p>License: {session?.data?.user?.license}</p>
-            <p>isNewUser: {session?.data?.user?.isNewUser}</p>
-          </div> */}
-        </h1>
-        {/* {session?.user?.firstName && <img src={session.user.image} alt="" />} */}
-      </div>
-    </div>
+      </ShowIf>
+
+      <UserInfoParams user={data?.user} />
+    </Container>
   );
 }

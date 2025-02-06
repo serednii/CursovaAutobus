@@ -1,3 +1,5 @@
+import { RoleEnum } from "@/enum/shared.enums";
+
 export interface FormValues {
   password: string;
   password_repeat: string;
@@ -5,5 +7,5 @@ export interface FormValues {
   lastName: string;
   email: string;
   phone: string;
-  role: string;
+  role: RoleEnum;
 }
