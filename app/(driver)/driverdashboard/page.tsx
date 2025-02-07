@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function DraverDashboard() {
-  return <div>DraverDashboard</div>;
+export default function DriverDashboard() {
+  return <div>DriverDashboard</div>;
 }

@@ -14,14 +14,14 @@ export default async function MyRoutes() {
   const session = await getServerSession(authConfig);
 
   const driverId: string | undefined = session?.user.id;
-  console.log("driverid myroutes:", driverId);
+  // console.log("driverid myroutes:", driverId);
   if (!driverId) return null;
 
   const routes: GetRoutesByDriverId[] =
     (await fetchGetRoutesByDriverId(Number(driverId))) || [];
 
   const { pastRoutes, availableRoutes } = sortDate(routes);
-  console.log("routesssssss:", availableRoutes);
+
 
   return (
     <div>

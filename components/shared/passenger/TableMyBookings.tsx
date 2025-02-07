@@ -4,9 +4,8 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
-import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
+import { IRoutesTable } from "@/types/route-passenger.types";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
-import { IRoutesTable } from "@/app/(passenger)/mybookings/page";
 
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props<T> {
