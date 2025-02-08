@@ -33,7 +33,8 @@ export async function fetchGetRoutesById<TSelect, TResult>(
   select: TSelect
 ): Promise<TResult | null> {
   try {
-    console.log("iddd ", id);
+    console.log("iddd ", id, select);
+
     const response = await fetch("http://localhost:3000/api/getRoutesById", {
       method: "POST",
       headers: {
@@ -41,6 +42,8 @@ export async function fetchGetRoutesById<TSelect, TResult>(
       },
       body: JSON.stringify({ id, select }),
     });
+
+    console.log("response ", response);
 
     if (!response.ok) {
       const errorData = await response.json();

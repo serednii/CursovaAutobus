@@ -3,10 +3,11 @@ import GitHubProvider from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { prisma } from "@/prisma/prisma-client";
+import { RoleEnum } from "@/enum/shared.enums";
 
 const findOrCreateUser = async (email: string, profile: any) => {
   let user = await prisma.user.findUnique({ where: { email } });
-
+  console.log("USER GITHUB", user);
   if (!user) {
     user = await prisma.user.create({
       data: {
@@ -82,10 +83,11 @@ export const authConfig: AuthOptions = {
         id: token.id as string,
         firstName: token.firstName as string,
         lastName: token.lastName as string,
-        role: token.role as string,
+        role: token.role as RoleEnum,
         phone: token.phone as string,
         license: token.license as string,
         email: token.email as string,
+        avatar_url: token.avatar_url as string,
       };
 
       return session;
@@ -93,6 +95,7 @@ export const authConfig: AuthOptions = {
 
     async jwt({ token, user }) {
       if (user) {
+        console.log("user", user);
         token = {
           ...token,
           ...user,

@@ -1,6 +1,17 @@
 import NextAuth from "next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 
+export interface UserDataBase {
+  id: string;
+  createdAt: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  role: RoleEnum;
+  license: string;
+}
+
 export interface UserSession {
   id: string;
   email: string;
@@ -12,6 +23,7 @@ export interface UserSession {
   phone: string;
   license: string;
   isNewUser: boolean;
+  avatar_url?: string;
 }
 
 // export interface UserSelect {

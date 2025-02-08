@@ -9,10 +9,6 @@ export default function RootLayout({
 }>) {
   const menuDriver = [
     {
-      name: "Driver`s Dashboard",
-      link: "/driverdashboard",
-    },
-    {
       name: "Create route",
       link: "/createroute",
     },
@@ -27,7 +23,7 @@ export default function RootLayout({
       <HeaderUser
         className="h-[60px] shrink-0 flex items-center border-b-2 border-[#E5E7EB] "
         menuDriver={menuDriver}
-      ></HeaderUser>
+      />
       <div className="grow bg-[#F9FAFB]">{children}</div>
     </div>
   );

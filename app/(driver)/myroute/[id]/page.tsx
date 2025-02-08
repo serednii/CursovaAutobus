@@ -18,21 +18,23 @@ interface Props {
 
 export default async function RouteId({ params }: Props) {
   const { id } = await params;
-  // console.log("routes", id);
+  console.log("routes", id);
 
   const routeRaw: IGetRouteById[] | null =
     (await fetchGetRoutesById<typeof selectRoute, IGetRouteById[]>(
       [Number(id)],
       selectRoute
     )) || ({} as IGetRouteById[]);
-
   const [route] = formatDate(routeRaw || ({} as IGetRouteById));
 
   const passengersSeatsList: ISubPassengersList[] = cloneDeep(
     route.passengersSeatsList
   );
 
+  console.log("passengersSeatsList", passengersSeatsList);
+
   const uniquePassengersId = Array.from(new Set(getPassengersId(route)));
+  console.log("uniquePassengersId", uniquePassengersId);
 
   if (!uniquePassengersId) {
     return (
@@ -47,8 +49,10 @@ export default async function RouteId({ params }: Props) {
     selectUser
   );
 
+  console.log("usersRaw", usersRaw);
   const { message, status } = isUserArray(usersRaw);
-
+  console.log("status", status);
+  console.log("message", message);
   if (!status) {
     return (
       <Container>

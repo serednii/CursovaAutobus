@@ -1,8 +1,11 @@
-import { UserSelect } from "@/types/next-auth";
+import {
+  IGetUsersByIdBySelect,
+  IGetUsersByIdBySelectOption,
+} from "@/types/user.types";
 
 export async function getUsersFetchByIdsBySelect(
   ids: number[],
-  select: UserSelect
+  select: IGetUsersByIdBySelectOption
 ) {
   try {
     const response = await fetch(
@@ -24,7 +27,7 @@ export async function getUsersFetchByIdsBySelect(
       return null;
     }
 
-    const data: unknown = await response.json();
+    const data: IGetUsersByIdBySelect[] = await response.json();
     return data; // Повертаємо маршрути
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);

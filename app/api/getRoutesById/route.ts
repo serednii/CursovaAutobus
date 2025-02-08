@@ -1,16 +1,16 @@
 import { prisma } from "@/prisma/prisma-client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 type TypeGetRoutesById = {
   id: number[];
   select: any;
 };
 
-export async function POST(req: any) {
+export async function POST(req: NextRequest) {
   try {
     // Отримуємо дані з тіла запиту
     const { id, select }: TypeGetRoutesById = await req.json();
-    console.log("id---", id);
+    console.log("id---", id, select);
     // Перевірка, чи передано Id
     if (!id || !Array.isArray(id)) {
       return NextResponse.json(
@@ -24,10 +24,10 @@ export async function POST(req: any) {
       where: {
         id: { in: id },
       },
-
       select: select,
     });
 
+    console.log("route.ts", routes);
     // Якщо маршрути не знайдено
     if (!routes || routes.length === 0) {
       return NextResponse.json(
@@ -35,6 +35,7 @@ export async function POST(req: any) {
         { status: 404 }
       );
     }
+    console.log("route.ts----", routes);
 
     return NextResponse.json({ routes });
   } catch (error) {

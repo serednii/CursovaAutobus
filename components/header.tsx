@@ -9,6 +9,9 @@ import React from "react";
 import UserInfoParams from "./shared/user/userinfoParams";
 import { RoleEnum } from "@/enum/shared.enums";
 import ShowIf from "./ShowIf";
+import { IoMdLogOut, IoMdLogIn } from "react-icons/io";
+import UserInfo from "./shared/user/userinfo";
+
 export default function Header() {
   const pathname = usePathname();
   const session = useSession();
@@ -27,7 +30,7 @@ export default function Header() {
         <React.Fragment>
           <Link
             style={{
-              backgroundColor: "yellow",
+              // backgroundColor: "yellow",
               padding: "5px",
               borderRadius: "15px",
             }}
@@ -38,7 +41,7 @@ export default function Header() {
           </Link>
           <Link
             style={{
-              backgroundColor: "yellow",
+              // backgroundColor: "yellow",
               padding: "5px",
               borderRadius: "15px",
             }}
@@ -49,7 +52,7 @@ export default function Header() {
           </Link>
           <Link
             style={{
-              backgroundColor: "yellow",
+              // backgroundColor: "yellow",
               padding: "5px",
               borderRadius: "15px",
             }}
@@ -60,7 +63,7 @@ export default function Header() {
           </Link>
           <Link
             style={{
-              backgroundColor: "yellow",
+              // backgroundColor: "yellow",
               padding: "5px",
               borderRadius: "15px",
             }}
@@ -76,7 +79,7 @@ export default function Header() {
         <ShowIf condition={data?.user?.role === RoleEnum.DRIVER}>
           <Link
             style={{
-              backgroundColor: "yellow",
+              // backgroundColor: "yellow",
               padding: "5px",
               borderRadius: "15px",
             }}
@@ -90,7 +93,7 @@ export default function Header() {
         <ShowIf condition={data?.user?.role === RoleEnum.PASSENGER}>
           <Link
             style={{
-              backgroundColor: "yellow",
+              // backgroundColor: "yellow",
               padding: "5px",
               borderRadius: "15px",
             }}
@@ -100,33 +103,8 @@ export default function Header() {
             Passenger
           </Link>
         </ShowIf>
-
-        <Link
-          style={{
-            backgroundColor: "yellow",
-            padding: "5px",
-            borderRadius: "15px",
-          }}
-          href="#"
-          onClick={() => signOut({ callbackUrl: "/" })}
-        >
-          Sign Out
-        </Link>
       </ShowIf>
-      <ShowIf condition={!data}>
-        <Link
-          style={{
-            backgroundColor: "yellow",
-            padding: "5px",
-            borderRadius: "15px",
-          }}
-          href="/auth/signin"
-        >
-          SignIn
-        </Link>
-      </ShowIf>
-
-      <UserInfoParams user={data?.user} />
+      <UserInfo />
     </Container>
   );
 }
