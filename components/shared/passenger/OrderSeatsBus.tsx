@@ -7,7 +7,7 @@ import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ISubPassengersList } from "@/types/interface";
+import { ISubPassengersList } from "@/fetchFunctions/interface";
 import { FormValues, SubPassengerGroup } from "@/types/form.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import {

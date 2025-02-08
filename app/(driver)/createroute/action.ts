@@ -1,5 +1,5 @@
 import { FormValues } from "@/types/form.types";
-import { ISubPassengersList } from "@/types/interface";
+import { ISubPassengersList } from "@/fetchFunctions/interface";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";

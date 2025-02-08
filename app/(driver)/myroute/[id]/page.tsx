@@ -5,7 +5,7 @@ import { formatDate, getPassengerDetails, getPassengersId } from "./action";
 import { fetchGetRoutesById } from "@/fetchFunctions/fetchroutes";
 import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
 import cloneDeep from "lodash/cloneDeep";
-import { ISubPassengersList } from "@/types/interface";
+import { ISubPassengersList } from "@/fetchFunctions/interface";
 
 import { isUserArray } from "@/lib/utils";
 import { IUser } from "@/types/next-auth";

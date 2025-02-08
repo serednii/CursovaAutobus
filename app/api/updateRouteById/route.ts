@@ -1,4 +1,4 @@
-import { ISubPassengersList } from "@/types/interface";
+import { ISubPassengersList } from "@/fetchFunctions/interface";
 import { BusSeatInfo } from "@/types/layoutbus.types";
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";

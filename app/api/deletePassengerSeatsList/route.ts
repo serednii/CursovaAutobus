@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma/prisma-client";
-import { IBusSeats } from "@/types/interface";
+import { IBusSeats } from "@/fetchFunctions/interface";
 import { NextResponse } from "next/server";
 import { updatedBusSeats } from "../updateRouteById/updateFunction";
 

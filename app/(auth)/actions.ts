@@ -17,6 +17,7 @@ export default function useDriverAuth(reset: any, role: string) {
       alert(result.error);
       return;
     }
+
     console.log("add user to data base");
     const res = await signIn("credentials", {
       email: data.email,

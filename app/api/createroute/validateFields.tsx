@@ -1,4 +1,4 @@
-import { ICreateRoute } from "../../../types/interface";
+import { ICreateRoute } from "../../../fetchFunctions/interface";
 
 export default function validateFields(data: ICreateRoute) {
   const errors: Record<string, string> = {};

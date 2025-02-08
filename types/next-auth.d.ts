@@ -24,6 +24,7 @@ export interface UserSession {
   license: string;
   isNewUser: boolean;
   avatar_url?: string;
+  picture?: string;
 }
 
 // export interface UserSelect {
@@ -39,21 +40,18 @@ export interface UserSession {
 
 // Визначення типу для вибіркових полей
 export type UserSelect = {
-  [key in keyof Omit<UserSession, "name" | "image">]?: boolean;
+  [key in keyof Omit<UserSession, "name">]?: boolean;
 } & {
   createdAt?: boolean;
 };
 
 export interface IUser
-  extends Omit<
-    UserSession,
-    "role" | "name" | "image" | "isNewUser" | "license"
-  > {}
+  extends Omit<UserSession, "role" | "name" | "isNewUser" | "license"> {}
 
 export interface SessionData {
   data: {
     expires: string;
-    user: Omit<UserSession, "name" | "image">;
+    user: Omit<UserSession, "name">;
   };
 }
 
@@ -63,4 +61,34 @@ declare module "next-auth" {
   }
 
   interface User extends Omit<UserSession, "email" | "name" | "image"> {}
+
+  interface JWT {
+    accessToken: string; // Додаємо токен у JWT
+    createdAt: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    role: RoleEnum;
+    license: string;
+    isNewUser: boolean;
+    iat: number;
+    exp: 1741621046;
+    jti: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    accessToken: string; // Додаємо токен у JWT
+    createdAt: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    role: RoleEnum;
+    license: string;
+    isNewUser: boolean;
+    iat: number;
+    exp: 1741621046;
+    jti: string;
+  }
 }

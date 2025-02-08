@@ -18,7 +18,7 @@ export default function UserInfo() {
   // if (!data) return <p>No user is logged in</p>;
   const { user } = data || {};
 
-  console.log(user);
+  console.log("user", user);
 
   return (
     <div className="flex gap-4 items-center">
@@ -30,7 +30,10 @@ export default function UserInfo() {
             3
           </div>
         </div>
-        <UserAvatar avatarUrl={user?.avatar_url || ""} {...user} />
+        <UserAvatar
+          avatarUrl={user?.avatar_url || user?.image || ""}
+          {...user}
+        />
       </ShowIf>
       <ShowIf condition={!!data}>
         <Link
@@ -52,7 +55,7 @@ export default function UserInfo() {
             padding: "5px",
             borderRadius: "15px",
           }}
-          href="/auth/signin"
+          href="/signin"
         >
           <IoMdLogIn style={{ width: "32px", height: "32px" }} />
         </Link>

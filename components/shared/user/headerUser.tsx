@@ -18,14 +18,7 @@ export default function HeaderUser({ className, menuDriver }: Props) {
     <header className={cn("", className)}>
       <Container className="w-full flex justify-between">
         <div className="flex gap-4 items-center ">
-          <Link
-            // style={{
-            //   // backgroundColor: "yellow",
-            //   padding: "5px",
-            //   borderRadius: "15px",
-            // }}
-            href="/"
-          >
+          <Link href="/">
             <FaBusAlt style={{ width: "32px", height: "32px" }} />
           </Link>
           <LinkDriver menuDriver={menuDriver} />

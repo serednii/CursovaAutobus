@@ -1,5 +1,5 @@
-import { SubPassengerDetails } from "./form.types";
-import { NullableNumber, SeatStatus } from "./types";
+import { SubPassengerDetails } from "../types/form.types";
+import { NullableNumber, SeatStatus } from "../types/types";
 
 export interface IFromTo {
   departureFrom: string; // Залишаємо це поле

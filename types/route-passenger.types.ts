@@ -4,7 +4,7 @@ import {
   IFromTo,
   IServiceBus,
   ISubPassengersList,
-} from "./interface";
+} from "../fetchFunctions/interface";
 import { BusSeatInfo } from "./layoutbus.types";
 import { GetRoutesByDriverId } from "./route-driver.types";
 

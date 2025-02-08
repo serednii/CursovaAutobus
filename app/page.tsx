@@ -12,7 +12,7 @@ export default async function Home() {
 
   return (
     <div>
-      <main>
+      {/* <main>
         Welcome to NextJS world
         <div>
           <h1>Welcome, {session.user.firstName}!</h1>
@@ -20,7 +20,7 @@ export default async function Home() {
           <p>Role: {session.user.role}</p>
         </div>
       </main>
-      <footer></footer>
+      <footer></footer> */}
     </div>
   );
 }

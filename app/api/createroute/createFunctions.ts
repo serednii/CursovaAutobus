@@ -1,6 +1,6 @@
 import handleError from "@/lib/handleError";
 import { prisma } from "@/prisma/prisma-client";
-import { IBusSeats, IPassengersSeatsList } from "@/types/interface";
+import { IBusSeats, IPassengersSeatsList } from "@/fetchFunctions/interface";
 
 export async function createIntermediateStops(
   intermediateStops: string[],

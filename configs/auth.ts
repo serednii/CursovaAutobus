@@ -1,5 +1,6 @@
 import type { AuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { prisma } from "@/prisma/prisma-client";
@@ -33,8 +34,15 @@ export const authConfig: AuthOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
-      async profile(profile) {
-        return await findOrCreateUser(profile.email, profile);
+      profile(profile) {
+        return findOrCreateUser(profile.email, profile); // Без `await`
+      },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_SECRET!,
+      profile(profile) {
+        return findOrCreateUser(profile.email, profile); // Без `await`
       },
     }),
 
