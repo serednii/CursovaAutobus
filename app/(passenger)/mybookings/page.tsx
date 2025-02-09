@@ -1,18 +1,17 @@
 "use client";
 
 import { sortDate } from "@/app/(driver)/myroutes/action";
-import { Container } from "@/components/shared/container";
+import { Container } from "@/components/shared/Container";
 import AvailableRoutes from "@/components/shared/passenger/AvailableRoutes";
 import PastRoutes from "@/components/shared/passenger/PastRoutes";
-import {
-  fetchDeleteRoutePassenger,
-  fetchGetRoutesByPassengerId,
-} from "@/fetchFunctions/fetchroutes";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { getBusSeats, getBusSeatsRaw, getRoutesTable } from "./action";
 import { select } from "./const";
+import { toast } from "react-hot-toast";
+import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
+import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 
 export default function MyBookings() {
   const { data: session } = useSession();
@@ -22,8 +21,6 @@ export default function MyBookings() {
     GetRoutesByPassengerId[]
   >([]);
   console.log("routesPassenger", routesPassenger);
-
-  if (!passengerId) return <p>Loading...</p>;
 
   useEffect(() => {
     if (!passengerId) return;
@@ -43,6 +40,8 @@ export default function MyBookings() {
     fetchRoutes();
   }, [passengerId, reload]);
 
+  if (!passengerId) return <p>Loading...</p>;
+
   const { pastRoutes, availableRoutes } = sortDate(
     getRoutesTable(routesPassenger, passengerId)
   );
@@ -56,10 +55,18 @@ export default function MyBookings() {
       idPassenger: passengerId,
       busSeats: busSeats,
     });
+
     console.log("result", result);
+
     if (!result) {
-      //Error delete route passenger
+      toast.error("Error Route deleted");
     } else {
+      // new Promise((resolve) =>
+      //   setTimeout(() => {
+      toast.success("Route deleted", { duration: 3000 });
+      //     resolve(null);
+      //   }, 1000)
+      // );
       setReload(!reload);
     }
     console.log("Removing route ID:", routeId, passengerId);

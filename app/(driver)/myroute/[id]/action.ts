@@ -1,5 +1,5 @@
 import { SubPassengerDetails } from "@/types/form.types";
-import { IBusSeats, ISubPassengersList } from "@/fetchFunctions/interface";
+import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { IUser } from "@/types/next-auth";
 import { IGetRouteById, PassengerDetails } from "@/types/route-driver.types";
 

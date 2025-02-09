@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FaPhoneAlt } from "react-icons/fa";
-import FormError from "./formError";
+import FormError from "./FormError";
 interface FormValues {
   phone: string;
 }

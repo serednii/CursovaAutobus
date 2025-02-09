@@ -7,11 +7,11 @@ import Image from "next/image";
 import "../style.scss";
 import "./style.scss";
 
-import { Overlay } from "@/components/shared/overlay";
+import { Overlay } from "@/components/shared/Overlay";
 
 export default function SelectRole() {
   return (
-    <Overlay className="role bg-[#CED4DA]  items-center top-[80px]">
+    <Overlay className="role items-center top-[80px]">
       <div className="w-[50%] flex justify-center items-center">
         <div className="role__inner">
           <h1>Choose Your Role</h1>

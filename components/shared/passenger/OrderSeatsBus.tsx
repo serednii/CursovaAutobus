@@ -1,23 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import LayoutBus from "../layoutBus/layuotBus";
+import LayoutBus from "../layoutBus/LayuotBus";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { useSession } from "next-auth/react";
 import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ISubPassengersList } from "@/fetchFunctions/interface";
+import { ISubPassengersList } from "@/types/interface";
 import { FormValues, SubPassengerGroup } from "@/types/form.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import {
   IUpdateRoute,
   IUpdateRouteWithId,
 } from "@/types/route-passenger.types";
-import { fetchUpdateRouteById } from "@/fetchFunctions/fetchroutes";
+
 import { useRouter } from "next/navigation";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
 import { UserSession } from "@/types/next-auth";
+import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
 
 interface Props {
   layoutsData: ILayoutData[];

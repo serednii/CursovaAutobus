@@ -1,3 +1,5 @@
+import { Container } from "@/components/shared/Container";
+import FindRoute from "@/components/shared/findroute/FindRoute";
 import { authConfig } from "@/configs/auth";
 import { getServerSession } from "next-auth/next";
 
@@ -6,21 +8,22 @@ export default async function Home() {
 
   // console.log("session ---", session);
 
-  if (!session) {
-    return <p>User is not logged in</p>;
-  }
+  // if (!session) {
+  //   return (
+  //     <Container className=" w-full px-0">
+  //       <div className="bg-[url(/images/img@2x.jpg)] bg-cover w-full h-full">
+  //         <h1>Find Your Route</h1>
+  //       </div>
+  //     </Container>
+  //   );
+  // }
 
   return (
-    <div>
-      {/* <main>
-        Welcome to NextJS world
-        <div>
-          <h1>Welcome, {session.user.firstName}!</h1>
-          <p>Email: {session.user.email}</p>
-          <p>Role: {session.user.role}</p>
-        </div>
-      </main>
-      <footer></footer> */}
-    </div>
+    <Container className="max-w-[1100px] pt-[45px] px-0">
+      <div className="font-bold text-3xl">
+        <h1 className="mb-[30px]">Find Your Route</h1>
+        <FindRoute className="p-6" />
+      </div>
+    </Container>
   );
 }

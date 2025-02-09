@@ -6,7 +6,7 @@ import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { signOut, useSession } from "next-auth/react";
 import { SessionData } from "@/types/next-auth";
 import Link from "next/link";
-import UserInfoParams from "./userinfoParams";
+import UserInfoParams from "./UserinfoParams";
 import ShowIf from "@/components/ShowIf";
 import UserAvatar from "@/components/UserAvatar";
 

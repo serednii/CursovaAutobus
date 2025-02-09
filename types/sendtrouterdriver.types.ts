@@ -1,4 +1,4 @@
-import { RouteDriver } from "../fetchFunctions/interface";
+import { RouteDriver } from "./interface";
 // import { SeatStatus } from "./types";
 
 // interface Passenger {

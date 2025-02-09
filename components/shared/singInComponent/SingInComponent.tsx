@@ -1,9 +1,9 @@
 "use client";
 import GoogleButton from "@/components/shared/form/GoogleButton";
 import GitHubButton from "@/components/shared/form/GithubButton";
-import InputEmail from "@/components/shared/form/inputEmail";
-import InputPassword from "@/components/shared/form/inputPasswords";
-import { Overlay } from "@/components/shared/overlay";
+import InputEmail from "@/components/shared/form/InputEmail";
+import InputPassword from "@/components/shared/form/InputPasswords";
+import { Overlay } from "@/components/shared/Overlay";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";

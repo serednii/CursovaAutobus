@@ -1,23 +1,26 @@
 "use client";
 
 import React from "react";
-// import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
-// import NextTopLoader from "nextjs-toploader";
-import Header from "../header";
-import HeaderUser from "./user/headerUser";
+import Header from "../Header";
+import Footer from "../Footer";
+import Main from "../Main";
 
 export const Providers: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <>
-      <SessionProvider>
+    <SessionProvider>
+      <div className="flex flex-col min-h-screen">
         <Header />
-
-        {children}
-      </SessionProvider>
-      {/* <Toaster /> */}
-      {/* {children} */}
-      {/* <NextTopLoader /> */}
-    </>
+        <Main className="flex-grow flex " children={children} />
+        <Footer />
+      </div>
+    </SessionProvider>
   );
 };
+
+// {/* <Toaster /> */}
+// {/* {children} */}
+// {/* <NextTopLoader /> */}
+{
+  /* <Container className="grow bg-[url(/images/img@2x.jpg)] bg-cover w-full h-full bg-[#F9FAFB]"></Container> */
+}

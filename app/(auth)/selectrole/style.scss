@@ -49,6 +49,30 @@
         }
     }
 
+    /* Адаптивність для мобільних пристроїв */
+    @media (max-width: 768px) {
+        &>div {
+            width: 100%;
+            /* Контейнер займає всю ширину */
+            height: 100%;
+        }
+
+        .welcomeText {
+            font-size: 24px;
+            /* Зменшуємо розмір тексту */
+        }
+
+        .button-blue,
+        .button-transparent {
+            width: 100%;
+            /* Кнопки займають всю ширину */
+        }
+
+        .auth__img {
+            display: none;
+        }
+    }
+
 
 
 }

@@ -1,10 +1,10 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import DriverSeat from "./driverSeat";
+import DriverSeat from "./DriverSeat";
 
-import PassengerSeat from "./passengerSeat";
-import Stairs from "./stairs";
+import PassengerSeat from "./PassengerSeat";
+import Stairs from "./Stairs";
 
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";

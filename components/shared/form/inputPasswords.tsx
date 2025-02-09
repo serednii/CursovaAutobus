@@ -4,7 +4,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { FaUnlockKeyhole } from "react-icons/fa6";
-import FormError from "./formError";
+import FormError from "./FormError";
 
 interface FormValues {
   password: string;

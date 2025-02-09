@@ -1,9 +1,9 @@
 "use client";
-import InputEmail from "@/components/shared/form/inputEmail";
-import InputPassword from "@/components/shared/form/inputPasswords";
-import InputPhone from "@/components/shared/form/inputPhone";
-import InputText from "@/components/shared/form/inputText";
-import { Overlay } from "@/components/shared/overlay";
+import InputEmail from "@/components/shared/form/InputEmail";
+import InputPassword from "@/components/shared/form/InputPasswords";
+import InputPhone from "@/components/shared/form/InputPhone";
+import InputText from "@/components/shared/form/InputText";
+import { Overlay } from "@/components/shared/Overlay";
 import { useForm } from "react-hook-form";
 import useDriverAuth from "../actions";
 import { FormValues } from "../interface";

@@ -1,8 +1,4 @@
-import {
-  IBusSeats,
-  ISubPassengersList,
-  RouteDriver,
-} from "../fetchFunctions/interface";
+import { IBusSeats, ISubPassengersList, RouteDriver } from "./interface";
 import { TypeBaseRoute } from "./route-passenger.types";
 
 export interface ISendDataBaseRouteDriver extends RouteDriver {

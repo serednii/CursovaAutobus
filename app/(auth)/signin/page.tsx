@@ -2,14 +2,13 @@ import Link from "next/link";
 import { FaBusAlt } from "react-icons/fa";
 import Image from "next/image";
 import "../style.scss";
-import { Overlay } from "@/components/shared/overlay";
+import { Overlay } from "@/components/shared/Overlay";
 import SingInComponent from "@/components/shared/singInComponent/SingInComponent";
 
 export default function SignIn() {
   return (
-    // <div className="auth">
     <Overlay className="auth top-[80px]">
-      <div className="auth__select">
+      <div className="auth__select flex">
         <div className="auth__select-inner">
           <FaBusAlt
             style={{ color: "#2563EB", width: "48px", height: "48px" }}
@@ -33,7 +32,5 @@ export default function SignIn() {
         />
       </div>
     </Overlay>
-
-    // </div>
   );
 }

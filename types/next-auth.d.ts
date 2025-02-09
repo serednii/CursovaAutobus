@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 
 export interface UserDataBase {
-  id: string;
+  id: number;
   createdAt: string;
   email: string;
   firstName: string;

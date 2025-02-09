@@ -1,7 +1,8 @@
-import Header from "@/components/header";
-import { Providers } from "@/components/shared/providers";
+import Header from "@/components/Header";
+import { Providers } from "@/components/shared/Providers";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 import "./globals.css";
 
@@ -30,7 +31,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased pt-3`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster
+            position="top-center"
+            // toastOptions={{
+            //   style: {
+            //     position: "fixed",
+            //     top: "50%",
+            //     left: "50%",
+            //     transform: "translate(-50%, -50%)",
+            //     zIndex: 9999,
+            //   },
+            // }}
+          />
+        </Providers>
       </body>
     </html>
   );

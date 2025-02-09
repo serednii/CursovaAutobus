@@ -1,4 +1,4 @@
-import { IDateISO, IFromTo, IServiceBus } from "../fetchFunctions/interface";
+import { IDateISO, IFromTo, IServiceBus } from "./interface";
 
 export interface FormValues
   extends SubPassengerGroup,

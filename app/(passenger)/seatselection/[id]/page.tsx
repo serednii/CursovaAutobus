@@ -1,13 +1,13 @@
 import React from "react";
 import OrderSeatsBus from "@/components/shared/passenger/OrderseatsBus";
-import { fetchGetRoutesById } from "@/fetchFunctions/fetchroutes";
 import {
   IGetRouteById,
   IGetRoutePassengerById,
 } from "@/types/route-driver.types";
-import { layoutsData } from "@/components/shared/layoutBus/layoutData";
-import SelectedBusInfo from "@/components/shared/passenger/selectedBusInfo";
-import { Container } from "@/components/shared/container";
+import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
+import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
+import { Container } from "@/components/shared/Container";
+import fetchGetRoutesById from "@/fetchFunctions/fetchGetRoutesById";
 
 interface Props {
   params: { id: string };
@@ -55,7 +55,7 @@ export default async function MyBookings({ params }: Props) {
   console.log("routeRaw", id, route);
 
   return (
-    <Container className="pt-4 ">
+    <Container className="pt-4">
       <SelectedBusInfo route={route} />
       <OrderSeatsBus layoutsData={layoutsData} route={route} />
       MyBookings{id}

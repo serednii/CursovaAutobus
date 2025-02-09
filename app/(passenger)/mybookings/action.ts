@@ -1,6 +1,7 @@
 import { SeatStatusEnum } from "@/enum/shared.enums";
-import { fetchDeleteRoutePassenger } from "@/fetchFunctions/fetchroutes";
-import { IBusSeats } from "@/fetchFunctions/interface";
+import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
+
+import { IBusSeats } from "@/types/interface";
 import {
   GetRoutesByPassengerId,
   IRoutesTable,

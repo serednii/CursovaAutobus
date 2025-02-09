@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import validateFields from "./validateFields";
-import { ICreateRoute } from "../../../fetchFunctions/interface";
+import { ICreateRoute } from "../../../types/interface";
 import {
   createBusSeats,
   createIntermediateStops,

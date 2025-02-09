@@ -1,16 +1,17 @@
-import { Container } from "@/components/shared/container";
+import { Container } from "@/components/shared/Container";
 import TablePassengerDetails from "@/components/shared/driver/TablePassengerDetails";
 import { IGetRouteById } from "@/types/route-driver.types";
 import { formatDate, getPassengerDetails, getPassengersId } from "./action";
-import { fetchGetRoutesById } from "@/fetchFunctions/fetchroutes";
+
 import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
 import cloneDeep from "lodash/cloneDeep";
-import { ISubPassengersList } from "@/fetchFunctions/interface";
+import { ISubPassengersList } from "@/types/interface";
 
-import { isUserArray } from "@/lib/utils";
+// import { isUserArray } from "@/lib/utils";
 import { IUser } from "@/types/next-auth";
 import ShowIf from "@/components/ShowIf";
 import { selectRoute, selectUser } from "./const";
+import fetchGetRoutesById from "@/fetchFunctions/fetchGetRoutesById";
 
 interface Props {
   params: { id: string };
@@ -49,17 +50,17 @@ export default async function RouteId({ params }: Props) {
     selectUser
   );
 
-  console.log("usersRaw", usersRaw);
-  const { message, status } = isUserArray(usersRaw);
-  console.log("status", status);
-  console.log("message", message);
-  if (!status) {
-    return (
-      <Container>
-        <h1>{message}</h1>
-      </Container>
-    );
-  }
+  // console.log("usersRaw", usersRaw);
+  // const { message, status } = isUserArray(usersRaw);
+  // console.log("status", status);
+  // console.log("message", message);
+  // if (!status) {
+  //   return (
+  //     <Container>
+  //       <h1>{message}</h1>
+  //     </Container>
+  //   );
+  // }
 
   const users = usersRaw as IUser[];
 
