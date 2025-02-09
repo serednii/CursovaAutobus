@@ -1,8 +1,8 @@
 import { prisma } from "@/prisma/prisma-client";
 import { UserSelect } from "@/types/next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: any) {
+export async function POST(req: NextRequest) {
   try {
     // Отримуємо дані з тіла запиту
     const {
@@ -53,7 +53,7 @@ export async function POST(req: any) {
     // Якщо маршрути не знайдено
 
     // Повертаємо дані маршрутів
-    return NextResponse.json({ routes });
+    return NextResponse.json({ ...routes });
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
     return NextResponse.json(

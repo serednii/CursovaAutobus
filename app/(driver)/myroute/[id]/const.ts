@@ -5,7 +5,6 @@ export const selectRoute = {
   arrivalDate: true, // Залишаємо це поле
   departureFrom: true, // Залишаємо це поле
   arrivalTo: true, // Залишаємо це поле
-  // AvailableSeats: true,
   routePrice: true, // Залишаємо це поле
   busSeats: true,
   passengersSeatsList: {

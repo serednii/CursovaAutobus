@@ -48,7 +48,11 @@ export default function Header() {
   const session = useSession();
   let menulist: MenuDriver[] = [];
 
-  if (pathname === "/createroute" || pathname === "/myroutes") {
+  if (
+    pathname === "/createroute" ||
+    pathname === "/myroutes" ||
+    pathname.includes("/myroute")
+  ) {
     menulist = menuDriver;
   } else if (
     pathname === "/passengerdashboard" ||

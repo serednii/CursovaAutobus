@@ -70,3 +70,7 @@ export interface RouteDriver extends IDateISO, IServiceBus, IFromTo {
   modelBus: string;
   intermediateStops: string[];
 }
+
+export interface routeDataBase extends ICreateRoute {
+  id: number;
+}
