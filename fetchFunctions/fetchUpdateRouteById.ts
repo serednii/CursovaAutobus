@@ -1,10 +1,11 @@
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { IUpdateRouteWithId } from "@/types/route-passenger.types";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
   try {
     // Відправка POST-запиту
-    const response = await fetch("http://localhost:3000/api/updateRouteById", {
+    const response = await fetch(`${API_URL}/api/updateRouteById`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

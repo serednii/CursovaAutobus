@@ -1,33 +1,36 @@
 import { routerDrivers, users } from "./constants";
 import { prisma } from "./prisma-client";
 import { createRoute } from "@/app/api/createroute/createroute";
-const routerDriverFetch = async (routeDriver: any) => {
-  try {
-    const response = await fetch("http://localhost:3000/api/createroute", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(routeDriver),
-    });
+import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error(
-        "Помилка запиту:",
-        errorData.error || "Невідома помилка",
-        routeDriver.routePrice
-      );
-      return null;
-    }
+// const routerDriverFetch = async (routeDriver: any) => {
+//   try {
+//     const response = await fetch("http://localhost:3000/api/createroute", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(routeDriver),
+//     });
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Помилка під час виконання запиту:", error);
-    return null;
-  }
-};
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       console.error(
+//         "Помилка запиту:",
+//         errorData.error || "Невідома помилка",
+//         routeDriver.routePrice
+//       );
+//       return null;
+//     }
+
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Помилка під час виконання запиту:", error);
+//     return null;
+//   }
+// };
+
 //9 14 15 20 19 13
 async function up() {
   await prisma.user.createMany({
@@ -38,7 +41,7 @@ async function up() {
     try {
       for (const [index, routeDriver] of routerDrivers.entries()) {
         try {
-          const result = await routerDriverFetch(routeDriver);
+          const result = await fetchCreateRoute(routeDriver);
           console.log("result", routeDriver);
           if (result) {
             console.log("Маршрути успішно створені", index);

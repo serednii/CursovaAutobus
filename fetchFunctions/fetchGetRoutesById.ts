@@ -1,11 +1,12 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
 export default async function fetchGetRoutesById<TSelect, TResult>(
   id: number[],
   select: TSelect
 ): Promise<TResult | null> {
   try {
     console.log("iddd ", id, select);
-
-    const response = await fetch("http://localhost:3000/api/getRoutesById", {
+    const response = await fetch(`${API_URL}/api/getRoutesById`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

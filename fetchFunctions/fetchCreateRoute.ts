@@ -1,6 +1,8 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
 const fetchCreateRoute = async (data: any): Promise<any> => {
   try {
-    const response = await fetch("http://localhost:3000/api/createroute", {
+    const response = await fetch(`${API_URL}/api/createroute`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
