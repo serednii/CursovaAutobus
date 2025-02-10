@@ -21,7 +21,10 @@ import {
 } from "@/types/route-passenger.types";
 import { UserSession } from "@/types/next-auth";
 import { cn } from "@/lib/utils";
-import searchRoute from "@/fetchFunctions/searchRoute";
+import searchRoute, {
+  searchRouteMany,
+  searchRouteOne,
+} from "@/fetchFunctions/searchRoute";
 import { selectMany, selectOne } from "./const";
 import {
   IGetSearchRouteMany,
@@ -41,6 +44,10 @@ interface IGetSearchRouteManyOptionData {
 interface IGetSearchRouteOneOptionData {
   select: IGetSearchRouteOneOption;
 }
+
+const data: IGetSearchRouteOneOptionData = {
+  select: selectOne,
+};
 
 export default function FindRoute({ className }: { className?: string }) {
   const highlightedDatesRef = useRef<Date[] | []>([]);
@@ -80,8 +87,6 @@ export default function FindRoute({ className }: { className?: string }) {
   const departureDate = watch("departureDate");
 
   useEffect(() => {
-    // console.log("Значення змінилось departureFrom:", departureFrom);
-    // console.log("Значення змінилось arrivalTo:", arrivalTo);
     const newDate =
       departureDate &&
       `${departureDate.getFullYear()}-${String(
@@ -90,10 +95,6 @@ export default function FindRoute({ className }: { className?: string }) {
 
     const startOfDay = new Date(`${newDate}T00:00:00`);
     const endOfDay = new Date(`${newDate}T23:59:59`);
-
-    console.log("startOfDay", startOfDay, newDate);
-
-    console.log("endOfDay", endOfDay);
     const data: IGetSearchRouteManyOptionData = {
       departureSearch: departureFrom || undefined,
       arrivalToSearch: arrivalTo || undefined,
@@ -112,25 +113,20 @@ export default function FindRoute({ className }: { className?: string }) {
     };
 
     (departureFrom || arrivalTo || departureDate) &&
-      searchRoute<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(data)
+      searchRouteMany<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(
+        data
+      )
         .then((response: IGetSearchRouteMany[] | null) => {
           if (response) {
-            // const routes: GetSearchRoutePassengers[] = response.routes;
-
             const filterHighlightedDates = response.map(
               (item: any) => new Date(item.departureDate)
             );
-
-            // console.log("filterHighlightedDates", filterHighlightedDates);
 
             setHighlightedDates(
               (departureFrom || arrivalTo) && filterHighlightedDates.length > 0
                 ? filterHighlightedDates
                 : highlightedDatesRef.current
             );
-
-            console.log("Response----------:", response);
-
             const newSearchDates: TypeBaseRoute[] | [] = response.map(
               (item: GetSearchRoutePassengers) => ({
                 id: item.id,
@@ -142,7 +138,6 @@ export default function FindRoute({ className }: { className?: string }) {
                 AvailableSeats: item.maxSeats - item.bookedSeats,
               })
             );
-
             setSearchDates(newSearchDates);
           } else {
             console.log("No data received or an error occurred.");
@@ -152,26 +147,20 @@ export default function FindRoute({ className }: { className?: string }) {
     // Виконайте додаткову логіку тут
   }, [departureFrom, arrivalTo, departureDate]);
 
-  const data: IGetSearchRouteOneOptionData = {
-    select: selectOne,
-  };
-
   useEffect(() => {
-    searchRoute<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(data)
+    searchRouteOne<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(data)
       .then((response: IGetSearchRouteOne[] | null) => {
         if (response) {
-          const dates = response.map(
-            (route: any) => new Date(route.departureDate)
+          const dates: Date[] = response.map(
+            (route: { departureDate: string }) => new Date(route.departureDate)
           );
           setHighlightedDates(dates);
           highlightedDatesRef.current = dates;
-          // console.log("Response----------:", dates);
         } else {
           console.log("No data received or an error occurred.");
         }
       })
       .catch((err) => console.error("Fetch failed:", err));
-    // Виконайте додаткову логіку тут
   }, []);
 
   if (status === "loading") return <p>Loading...</p>;

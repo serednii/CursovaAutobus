@@ -1,35 +1,37 @@
-// const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-
-// const searchRoute<T, K> = async (data: T): Promise<K | null> => {
-//   try {
-//     const response = await fetch(`${API_URL}/api/searchRoute`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(data),
-//     });
-
-//     if (!response.ok) {
-//       // Якщо сервер повертає помилку (код статусу не 2xx)
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
-
-//     const res = await response.json();
-
-//     return res;
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//     // Можливо, повернути значення за замовчуванням або null
-//     return null;
-//   }
-// };
-// export default searchRoute;
+import {
+  IGetSearchRouteMany,
+  IGetSearchRouteOne,
+} from "@/types/searchroute.types";
+import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
+const schemaRouteMany: z.ZodType<IGetSearchRouteMany> = z.object({
+  id: z.number(),
+  driverId: z.number(),
+  departureDate: z.string(),
+  arrivalDate: z.string(),
+  departureFrom: z.string(),
+  arrivalTo: z.string(),
+  busNumber: z.string(),
+  routePrice: z.number(),
+  notate: z.string(),
+  wifi: z.boolean(),
+  coffee: z.boolean(),
+  power: z.boolean(),
+  restRoom: z.boolean(),
+  modelBus: z.string(),
+  maxSeats: z.number(),
+  bookedSeats: z.number(),
+});
+
+const schemaRouteOne: z.ZodType<IGetSearchRouteOne> = z.object({
+  departureDate: z.string(),
+});
+
 const searchRoute = async <T, K>(data: T): Promise<K | null> => {
   try {
+    console.log("data*****----****", data);
     const response = await fetch(`${API_URL}/api/searchRoute`, {
       method: "POST",
       headers: {
@@ -44,8 +46,7 @@ const searchRoute = async <T, K>(data: T): Promise<K | null> => {
 
     const res: K = await response.json();
 
-    // Переконаємось, що відповідь має правильний тип
-    if (!res || typeof res !== "object") {
+    if (!res || !Array.isArray(res)) {
       throw new Error("Invalid response format");
     }
 
@@ -57,3 +58,27 @@ const searchRoute = async <T, K>(data: T): Promise<K | null> => {
 };
 
 export default searchRoute;
+
+export const searchRouteMany = async <T, K extends IGetSearchRouteMany[]>(
+  data: T
+): Promise<K | null> =>
+  searchRoute<T, K>(data).then((res: unknown) => {
+    try {
+      const parsedData = schemaRouteMany.array().parse(res) as K;
+      return parsedData;
+    } catch (error) {
+      throw new Error("Invalid response format: " + error);
+    }
+  });
+
+export const searchRouteOne = async <T, K extends IGetSearchRouteOne[]>(
+  data: T
+): Promise<K | null> =>
+  searchRoute<T, K>(data).then((res: unknown) => {
+    try {
+      const parsedData = schemaRouteOne.array().parse(res) as K;
+      return parsedData;
+    } catch (error) {
+      throw new Error("Invalid response format: " + error);
+    }
+  });
