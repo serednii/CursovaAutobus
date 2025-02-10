@@ -1,8 +1,8 @@
 import { prisma } from "@/prisma/prisma-client";
-import { params } from "@/types/layoutbus.types";
+import { IBusSeats } from "@/types/interface";
 
 export async function updatedBusSeats(
-  busSeats: params[],
+  busSeats: IBusSeats[],
   idRoute: number
 ): Promise<any> {
   try {
@@ -28,7 +28,6 @@ export async function updatedBusSeats(
         }
       })
     );
-    const res = updatedBusSeats;
 
     return updatedBusSeats;
   } catch (error) {

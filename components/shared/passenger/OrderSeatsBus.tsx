@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
 import { UserSession } from "@/types/next-auth";
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
+import toast from "react-hot-toast";
 
 interface Props {
   layoutsData: ILayoutData[];
@@ -83,7 +84,7 @@ const transformData = (
 };
 
 export default function OrderSeatsBus({ layoutsData, route }: Props) {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -175,12 +176,16 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     fetchUpdateRouteById(updateRoteDriver)
       .then((response) => {
         if (response) {
-          console.log("Response***************:", response);
-          setOpen(true);
-          setTimeout(() => {
-            setOpen(false);
-            router.push("/mybookings");
-          }, 1000);
+          // console.log("Response***************:", response);
+          // setOpen(true);
+          toast.success("Your reservation has been successfully completed", {
+            duration: 5000,
+          });
+
+          // setTimeout(() => {
+          //   // setOpen(false);
+          //   router.push("/mybookings");
+          // }, 3000);
         } else {
           console.log("No data received or an error occurred.");
         }
@@ -193,11 +198,11 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
 
   return (
     <>
-      <MyDialogInfo
+      {/* <MyDialogInfo
         title="Your reservation has been successfully completed?"
         open={open}
         setOpen={setOpen}
-      />
+      /> */}
       <form onSubmit={handleSubmit(onSubmit)}>
         {dataLayoutBus && (
           <LayoutBus
