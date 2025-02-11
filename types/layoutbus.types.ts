@@ -1,10 +1,10 @@
 import { NullableNumber, SeatStatus } from "./types";
 
 export type SeatPosition = {
-  left?: string;
-  bottom?: string;
-  top?: string;
-  right?: string;
+  left?: number;
+  bottom?: number;
+  top?: number;
+  right?: number;
 };
 
 export type BusSeatInfo = {

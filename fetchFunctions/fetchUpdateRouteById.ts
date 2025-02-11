@@ -14,10 +14,10 @@ const schemaUpdateRouteIn: z.ZodType<IUpdateRouteWithId> = z.object({
       number: z.number(),
       busSeatStatus: z.nativeEnum(SeatStatusEnum), // Використовуємо точний enum
       passenger: z.number().nullable(),
-      left: z.string().optional(),
-      bottom: z.string().optional(),
-      top: z.string().optional(),
-      right: z.string().optional(),
+      left: z.number().optional(),
+      bottom: z.number().optional(),
+      top: z.number().optional(),
+      right: z.number().optional(),
     })
   ),
   bookedSeats: z.number().min(1).max(50),
@@ -65,6 +65,7 @@ const schemaUpdateRouteRes = z.object({
 
 async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
   try {
+    console.log("updateRouteByIdParsed", updateRouteById);
     // const updateRouteByIdParsed = schemaUpdateRouteIn.parse(updateRouteById);
     const response = await fetch(`${API_URL}/api/updateRouteById`, {
       method: "POST",
