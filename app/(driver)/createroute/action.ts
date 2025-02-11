@@ -17,8 +17,8 @@ const transformDataSchema = z.object({
       .string()
       .min(1)
       .regex(/^[0-9]+$/, "Route price must be a number"),
-    departureDate: z.string().min(1, "Departure date is required"),
-    selectBusLayout: z.string().min(1, "Bus layout is required"),
+    departureDate: z.date().min(new Date(), "Departure date is required"),
+    selectBusLayout: z.number(),
     intermediateStops: z.array(z.string()).optional(),
     subFirstName: z.array(z.string()).optional(),
     subLastName: z.array(z.string()).optional(),
@@ -35,9 +35,6 @@ const transformDataSchema = z.object({
       })
     ),
   }),
-  sessionUser: z.object({
-    id: z.string().min(1, "User ID is required"),
-  }),
 });
 
 export const transformData = (
@@ -45,8 +42,11 @@ export const transformData = (
   dataLayoutBus: ILayoutData,
   sessionUser: UserSession
 ): ISendDataBaseRouteDriver => {
+  console.log("data", data);
+  console.log("dataLayoutBus", dataLayoutBus);
+  console.log("sessionUser", sessionUser);
   // Валідація даних за допомогою Zod
-  transformDataSchema.parse({ data, dataLayoutBus, sessionUser });
+  transformDataSchema.parse({ data, dataLayoutBus });
 
   const newFormatPassenger = dataLayoutBus.passenger.map(
     ({ number, busSeatStatus, passenger }) => ({

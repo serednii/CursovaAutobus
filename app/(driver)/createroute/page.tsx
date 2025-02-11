@@ -21,7 +21,9 @@ import { useSession } from "next-auth/react";
 import "react-datepicker/dist/react-datepicker.css";
 import { UserSession } from "@/types/next-auth";
 import { transformData } from "./action";
-import  fetchCreateRoute  from "@/fetchFunctions/fetchCreateRoute";
+import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
+import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
+import toast from "react-hot-toast";
 
 export default function CreateRoute() {
   const { data: session, status } = useSession();
@@ -56,26 +58,29 @@ export default function CreateRoute() {
     [layoutsData.length]
   );
 
-  const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
-    const createRouteDriver = transformData(
-      data,
-      dataLayoutBus as ILayoutData,
-      sessionUser as UserSession
-    );
+  const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
+    try {
+      const createRouteDriver: ISendDataBaseRouteDriver = transformData(
+        data,
+        dataLayoutBus as ILayoutData,
+        sessionUser as UserSession
+      );
 
-    console.log("createRouteDriver", createRouteDriver);
+      const response = await fetchCreateRoute(createRouteDriver);
 
-    fetchCreateRoute(createRouteDriver)
-      .then((response) => {
-        if (response) {
-          console.log("Response:", response);
-        } else {
-          console.log("No data received or an error occurred.");
-        }
-      })
-      .catch((err) => console.error("Fetch failed:", err));
-    // console.log(createRouteDriver);
-    // reset();
+      if (!response) {
+        throw new Error("No data received or an error occurred.");
+      }
+
+      toast.success("Your route has been successfully created", {
+        duration: 5000,
+      });
+      reset();
+    } catch (err) {
+      console.error("Fetch failed:", err);
+      toast.error("Error creating route");
+      throw err; // 🔥 ЦЕ ДОЗВОЛИТЬ Next.js ПЕРЕХОПИТИ ПОМИЛКУ!
+    }
   };
 
   console.log(sessionUser);

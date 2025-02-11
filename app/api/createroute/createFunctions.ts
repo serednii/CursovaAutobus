@@ -7,7 +7,7 @@ export async function createIntermediateStops(
   routeId: number
 ) {
   try {
-    await Promise.all(
+    const results = await Promise.all(
       intermediateStops.map((stop) =>
         prisma.intermediateStop.create({
           data: {
@@ -17,6 +17,8 @@ export async function createIntermediateStops(
         })
       )
     );
+
+    return results;
   } catch (error) {
     handleError(error, "Error creating intermediate stops");
   }
@@ -24,7 +26,7 @@ export async function createIntermediateStops(
 
 export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
   try {
-    await Promise.all(
+    const results = await Promise.all(
       busSeats.map((seat) =>
         prisma.busSeat.create({
           data: {
@@ -36,6 +38,8 @@ export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
         })
       )
     );
+
+    return results;
   } catch (error) {
     handleError(error, "Error creating bus seats");
   }

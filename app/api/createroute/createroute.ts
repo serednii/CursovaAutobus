@@ -73,19 +73,41 @@ export async function createRoute(req: NextRequest) {
         bookedSeats,
       },
     });
-
+    if (!routeDriver) {
+      return NextResponse.json(
+        { error: "Failed to create route driver" },
+        { status: 500 }
+      );
+    }
     // console.log("Route driver created:", routeDriver);
 
     // // Створення проміжних зупинок
-    await createIntermediateStops(intermediateStops, routeDriver.id);
+    const resultIntermediateStops = await createIntermediateStops(
+      intermediateStops,
+      routeDriver.id
+    );
+    if (!resultIntermediateStops) {
+      return NextResponse.json(
+        { error: "Failed to create intermediate stops" },
+        { status: 500 }
+      );
+    }
+    // Створення місць у автобусі
+    const resultBusSeats = await createBusSeats(busSeats, routeDriver.id);
+    if (!resultBusSeats) {
+      return NextResponse.json(
+        { error: "Failed to create bus seats" },
+        { status: 500 }
+      );
+    }
 
-    // // Створення місць у автобусі
-    await createBusSeats(busSeats, routeDriver.id);
-
-    // // Створення списку пасажирів
+    // Створення списку пасажирів
     // await createPassengersSeatsList(passengersSeatsList, routeDriver.id);
 
-    return NextResponse.json({ routeDriver: "ok" }, { status: 201 });
+    return NextResponse.json(
+      { routeDriver, resultIntermediateStops, resultBusSeats },
+      { status: 201 }
+    );
   } catch (error: Error | any) {
     console.error("Error creating route driver:", error);
     console.error("Error details:", error.message);
