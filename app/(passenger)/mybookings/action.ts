@@ -11,6 +11,7 @@ export const getRoutesTable = (
   routesPassenger: GetRoutesByPassengerId[],
   passengerId: number
 ): IRoutesTable[] => {
+  console.log("routesPassenger ******** ", routesPassenger);
   const routesTable: IRoutesTable[] = routesPassenger.map(
     (route): IRoutesTable => {
       const getTotalPriceSeatsNumber = route.busSeats?.reduce(

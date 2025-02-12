@@ -20,3 +20,12 @@ export const select = {
     },
   },
 };
+
+// id: number;
+// departureDate: string;
+// arrivalDate: string;
+// departureFrom: string;
+// arrivalTo: string;
+// routePrice: number;
+// busSeats: IBusSeats[];
+// passengersSeatsList: ISubPassengersList[];

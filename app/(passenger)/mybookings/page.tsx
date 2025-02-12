@@ -12,6 +12,18 @@ import { select } from "./const";
 import { toast } from "react-hot-toast";
 import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
+import { SeatStatusEnum } from "@/enum/shared.enums";
+
+interface IGetRoutePassengerById
+  extends Omit<GetRoutesByPassengerId, "busSeats"> {
+  busSeats: {
+    number: number;
+    id: number;
+    passenger: number | null;
+    busSeatStatus: SeatStatusEnum;
+    routeDriverId: number;
+  }[];
+}
 
 export default function MyBookings() {
   const { data: session } = useSession();
@@ -20,6 +32,7 @@ export default function MyBookings() {
   const [routesPassenger, setRoutesPassenger] = useState<
     GetRoutesByPassengerId[]
   >([]);
+
   console.log("routesPassenger", routesPassenger);
 
   useEffect(() => {
@@ -27,10 +40,10 @@ export default function MyBookings() {
 
     const fetchRoutes = async () => {
       try {
-        const routes = await fetchGetRoutesByPassengerId<
-          typeof select,
-          GetRoutesByPassengerId[]
-        >(passengerId, select);
+        const routes = await fetchGetRoutesByPassengerId<typeof select>(
+          passengerId,
+          select
+        );
         setRoutesPassenger(routes || []);
       } catch (error) {
         console.error("Error fetching routes:", error);

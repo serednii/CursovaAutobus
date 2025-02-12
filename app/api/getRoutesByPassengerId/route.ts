@@ -47,7 +47,7 @@ export async function POST(req: any) {
       select: select,
     });
 
-    return NextResponse.json({ routes });
+    return NextResponse.json([...routes]);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
     return NextResponse.json(
