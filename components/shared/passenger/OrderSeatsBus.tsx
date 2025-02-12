@@ -84,7 +84,7 @@ const transformData = (
 };
 
 export default function OrderSeatsBus({ layoutsData, route }: Props) {
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -174,35 +174,28 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     };
 
     fetchUpdateRouteById(updateRoteDriver)
-      .then((response) => {
+      .then(async (response) => {
         if (response) {
-          // console.log("Response***************:", response);
-          // setOpen(true);
+          setOpen(true);
           toast.success("Your reservation has been successfully completed", {
             duration: 5000,
           });
-
-          // setTimeout(() => {
-          //   // setOpen(false);
-          //   router.push("/mybookings");
-          // }, 3000);
+          await new Promise((resolve) => setTimeout(() => resolve(null), 5000));
+          router.push("/mybookings");
         } else {
           console.log("No data received or an error occurred.");
         }
       })
       .catch((err) => console.error("Fetch failed:", err));
-
-    // console.log(JSON.stringify(updateRoteDriver, null, 2));
-    // reset();
   };
 
   return (
     <>
-      {/* <MyDialogInfo
+      <MyDialogInfo
         title="Your reservation has been successfully completed?"
         open={open}
         setOpen={setOpen}
-      /> */}
+      />
       <form onSubmit={handleSubmit(onSubmit)}>
         {dataLayoutBus && (
           <LayoutBus

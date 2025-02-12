@@ -65,14 +65,14 @@ const schemaUpdateRouteRes = z.object({
 
 async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
   try {
-    console.log("updateRouteByIdParsed", updateRouteById);
-    // const updateRouteByIdParsed = schemaUpdateRouteIn.parse(updateRouteById);
+    const updateRouteByIdParsed = schemaUpdateRouteIn.parse(updateRouteById);
+    console.log("updateRouteByIdParsed", updateRouteByIdParsed);
     const response = await fetch(`${API_URL}/api/updateRouteById`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updateRouteById),
+      body: JSON.stringify(updateRouteByIdParsed),
     });
 
     if (!response.ok) {
