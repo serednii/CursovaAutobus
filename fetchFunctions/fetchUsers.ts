@@ -1,11 +1,30 @@
 import { RoleEnum } from "@/enum/shared.enums";
-import {
-  IGetUsersByIdBySelect,
-  IGetUsersByIdBySelectOption,
-} from "@/types/user.types";
-import { z } from "zod";
+import { GenerateBooleanType, GenerateType } from "@/types/generaty.types";
+import { UserDataBase } from "@/types/next-auth";
 
+import { z } from "zod";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+type selectUserKeys = (
+  | "id"
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "phone"
+  | "role"
+) &
+  keyof UserDataBase;
+
+// export type IGetUsersByIdBySelectOption = {
+//   [Key in selectUserKeys]: boolean;
+// };
+
+// export type IGetUsersByIdBySelect = {
+//   [K in selectUserKeys]: K extends selectUserKeys ? UserDataBase[K] : never;
+// };
+
+export type IGetUsersByIdBySelectOption = GenerateBooleanType<selectUserKeys>;
+export type IGetUsersByIdBySelect = GenerateType<UserDataBase, selectUserKeys>;
 
 const schemaUser: z.ZodType<IGetUsersByIdBySelect> = z.object({
   id: z.number(),

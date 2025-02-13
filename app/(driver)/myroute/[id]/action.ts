@@ -1,3 +1,4 @@
+import { IGetRouteMyRoute } from "@/fetchFunctions/fetchGetRoutesById";
 import { SubPassengerDetails } from "@/types/form.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { IUser } from "@/types/next-auth";
@@ -10,8 +11,8 @@ interface IBusSeatsFilter extends Omit<IBusSeats, "passenger"> {
   passenger: number;
 }
 
-export const formatDate = (dateArray: IGetRouteById[]) => {
-  return dateArray.map((route: IGetRouteById) => {
+export const formatDate = (dateArray: IGetRouteMyRoute[]) => {
+  return dateArray.map((route: IGetRouteMyRoute) => {
     return {
       ...route,
       arrivalDate: format(route.arrivalDate, "d MMMM yyyy HH:mm", {
@@ -24,7 +25,7 @@ export const formatDate = (dateArray: IGetRouteById[]) => {
   });
 };
 
-export const getPassengersId = (route: IGetRouteById) => {
+export const getPassengersId = (route: IGetRouteMyRoute) => {
   const passengersId: number[] = route.busSeats
     .filter(
       (e): e is IBusSeatsFilter =>
@@ -36,7 +37,7 @@ export const getPassengersId = (route: IGetRouteById) => {
 };
 
 export const getPassengerDetails = (
-  route: IGetRouteById,
+  route: IGetRouteMyRoute,
   usersRaw: IUser[] | null,
   passengersSeatsList: ISubPassengersList[]
 ) => {

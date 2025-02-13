@@ -11,7 +11,7 @@ import { GetRoutesByDriverId } from "./route-driver.types";
 export interface TypeBaseRoute extends IDateString, IFromTo {
   id: number; // Залишаємо це поле
   routePrice: number; // Залишаємо це поле
-  AvailableSeats: number;
+  // AvailableSeats: number;
 }
 
 export interface GetSearchRoutePassengers

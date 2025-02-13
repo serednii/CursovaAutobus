@@ -35,6 +35,12 @@ export interface IPassengersSeatsList {
   subPassengersList: ISubPassengerList[];
 }
 
+export interface IBusSeats {
+  passenger: NullableNumber; // Може бути null, якщо місце доступне
+  number: number; // Номер місця
+  busSeatStatus: SeatStatus; // Статус місця
+}
+
 export interface ICreateRoute extends IDateString, IServiceBus, IFromTo {
   driverId: number;
   busNumber: string;
@@ -47,12 +53,6 @@ export interface ICreateRoute extends IDateString, IServiceBus, IFromTo {
   intermediateStops: string[];
   busSeats: IBusSeats[];
   passengersSeatsList: IPassengersSeatsList[];
-}
-
-export interface IBusSeats {
-  passenger: NullableNumber; // Може бути null, якщо місце доступне
-  number: number; // Номер місця
-  busSeatStatus: SeatStatus; // Статус місця
 }
 
 export interface ISubPassengersList {

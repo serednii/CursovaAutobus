@@ -1,33 +1,48 @@
+import { GenerateBooleanType, GenerateType } from "@/types/generaty.types";
+import { routeDataBase } from "@/types/interface";
 import {
-  IGetSearchRouteMany,
-  IGetSearchRouteOne,
-} from "@/types/searchroute.types";
+  ZodSchemaSearchRouteMany,
+  ZodSchemaSearchRouteOne,
+} from "@/zod_shema.ts/fetchGetRoutesByIdMyRoute";
 import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-const schemaRouteMany: z.ZodType<IGetSearchRouteMany> = z.object({
-  id: z.number(),
-  driverId: z.number(),
-  departureDate: z.string(),
-  arrivalDate: z.string(),
-  departureFrom: z.string(),
-  arrivalTo: z.string(),
-  busNumber: z.string(),
-  routePrice: z.number(),
-  notate: z.string(),
-  wifi: z.boolean(),
-  coffee: z.boolean(),
-  power: z.boolean(),
-  restRoom: z.boolean(),
-  modelBus: z.string(),
-  maxSeats: z.number(),
-  bookedSeats: z.number(),
-});
+type selectRouteManyKeys = (
+  | "id"
+  | "driverId"
+  | "departureDate"
+  | "arrivalDate"
+  | "departureFrom"
+  | "arrivalTo"
+  | "busNumber"
+  | "routePrice"
+  | "notate"
+  | "wifi"
+  | "coffee"
+  | "power"
+  | "restRoom"
+  | "modelBus"
+  | "maxSeats"
+  | "bookedSeats"
+) &
+  keyof routeDataBase;
 
-const schemaRouteOne: z.ZodType<IGetSearchRouteOne> = z.object({
-  departureDate: z.string(),
-});
+type selectRouteOneKeys = "departureDate" & keyof routeDataBase;
+
+export type IGetSearchRouteManyOption =
+  GenerateBooleanType<selectRouteManyKeys>;
+
+export type IGetSearchRouteMany = GenerateType<
+  routeDataBase,
+  selectRouteManyKeys
+>;
+
+export type IGetSearchRouteOneOption = GenerateBooleanType<selectRouteOneKeys>;
+export type IGetSearchRouteOne = GenerateType<
+  routeDataBase,
+  selectRouteOneKeys
+>;
 
 const searchRoute = async <T, K>(data: T): Promise<K | null> => {
   try {
@@ -64,7 +79,7 @@ export const searchRouteMany = async <T, K extends IGetSearchRouteMany[]>(
 ): Promise<K | null> =>
   searchRoute<T, K>(data).then((res: unknown) => {
     try {
-      const parsedData = schemaRouteMany.array().parse(res) as K;
+      const parsedData = ZodSchemaSearchRouteMany.array().parse(res) as K;
       return parsedData;
     } catch (error) {
       throw new Error("Invalid response format: " + error);
@@ -76,7 +91,7 @@ export const searchRouteOne = async <T, K extends IGetSearchRouteOne[]>(
 ): Promise<K | null> =>
   searchRoute<T, K>(data).then((res: unknown) => {
     try {
-      const parsedData = schemaRouteOne.array().parse(res) as K;
+      const parsedData = ZodSchemaSearchRouteOne.array().parse(res) as K;
       return parsedData;
     } catch (error) {
       throw new Error("Invalid response format: " + error);

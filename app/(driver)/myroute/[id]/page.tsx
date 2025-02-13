@@ -1,6 +1,5 @@
 import { Container } from "@/components/shared/Container";
 import TablePassengerDetails from "@/components/shared/driver/TablePassengerDetails";
-import { IGetRouteById } from "@/types/route-driver.types";
 import { formatDate, getPassengerDetails, getPassengersId } from "./action";
 
 import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
@@ -11,22 +10,26 @@ import { ISubPassengersList } from "@/types/interface";
 import { IUser } from "@/types/next-auth";
 import ShowIf from "@/components/ShowIf";
 import { selectRoute, selectUser } from "./const";
-import fetchGetRoutesById from "@/fetchFunctions/fetchGetRoutesById";
+import {
+  fetchGetRoutesByIdMyRoute,
+  IGetRouteMyRoute,
+  IGetSearchRouteMyRouteOption,
+} from "@/fetchFunctions/fetchGetRoutesById";
 
 interface Props {
   params: { id: string };
 }
 
-export default async function RouteId({ params }: Props) {
+export default async function MyRoute({ params }: Props) {
   const { id } = await params;
   console.log("routes", id);
 
-  const routeRaw: IGetRouteById[] | null =
-    (await fetchGetRoutesById<typeof selectRoute, IGetRouteById[]>(
-      [Number(id)],
-      selectRoute
-    )) || ({} as IGetRouteById[]);
-  const [route] = formatDate(routeRaw || ({} as IGetRouteById));
+  const routeRaw: IGetRouteMyRoute[] | null =
+    (await fetchGetRoutesByIdMyRoute<
+      IGetSearchRouteMyRouteOption,
+      IGetRouteMyRoute[]
+    >([Number(id)], selectRoute)) || ({} as IGetRouteMyRoute[]);
+  const [route] = formatDate(routeRaw);
 
   const passengersSeatsList: ISubPassengersList[] = cloneDeep(
     route.passengersSeatsList

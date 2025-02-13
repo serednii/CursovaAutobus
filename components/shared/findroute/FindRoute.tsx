@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { Container } from "@/components/shared/Container";
 
 import CheckboxOptions from "@/components/shared/form/CheckboxOptions";
 import CustomTextField from "@/components/shared/form/CustomTextField";
@@ -21,17 +20,15 @@ import {
 } from "@/types/route-passenger.types";
 import { UserSession } from "@/types/next-auth";
 import { cn } from "@/lib/utils";
-import searchRoute, {
-  searchRouteMany,
-  searchRouteOne,
-} from "@/fetchFunctions/searchRoute";
-import { selectMany, selectOne } from "./const";
 import {
   IGetSearchRouteMany,
   IGetSearchRouteManyOption,
   IGetSearchRouteOne,
   IGetSearchRouteOneOption,
-} from "@/types/searchroute.types";
+  searchRouteMany,
+  searchRouteOne,
+} from "@/fetchFunctions/searchRoute";
+import { selectMany, selectOne } from "./const";
 
 interface IGetSearchRouteManyOptionData {
   departureSearch: string | undefined;

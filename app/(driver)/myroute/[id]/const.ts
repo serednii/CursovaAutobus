@@ -1,12 +1,32 @@
-import { IGetUsersByIdBySelectOption } from "@/types/user.types";
+import { IGetSearchRouteMyRouteOption } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetUsersByIdBySelectOption } from "@/fetchFunctions/fetchUsers";
 
-export const selectRoute = {
+// export const selectRoute: IGetSearchRouteMyRouteOption = {
+//   departureDate: true, // Залишаємо це поле
+//   arrivalDate: true, // Залишаємо це поле
+//   departureFrom: true, // Залишаємо це поле
+//   arrivalTo: true, // Залишаємо це поле
+//   routePrice: true, // Залишаємо це поле
+//   busSeats: true,
+//   passengersSeatsList: true,
+// };
+
+export const selectRoute: IGetSearchRouteMyRouteOption = {
   departureDate: true, // Залишаємо це поле
   arrivalDate: true, // Залишаємо це поле
   departureFrom: true, // Залишаємо це поле
   arrivalTo: true, // Залишаємо це поле
   routePrice: true, // Залишаємо це поле
-  busSeats: true,
+  busSeats: {
+    select: {
+      idBus: true,
+      busNumber: true,
+      selectBusLayout: true,
+      modelBus: true,
+      maxSeats: true,
+      bookedSeats: true,
+    },
+  },
   passengersSeatsList: {
     select: {
       idPassenger: true,
