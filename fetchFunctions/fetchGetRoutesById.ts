@@ -8,7 +8,7 @@ import { IBusSeats, routeDataBase } from "@/types/interface";
 import {
   ZodFetchGetRoutesByIdMyRoute,
   ZodFetchGetRoutesByIdSeatSelection,
-} from "@/zod_shema.ts/fetchGetRoutesByIdMyRoute";
+} from "@/zod_shema/zodGetRoutesById";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 

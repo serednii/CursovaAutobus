@@ -1,4 +1,4 @@
-import { GetRoutesByDriverId } from "@/types/route-driver.types";
+import { zodSchemaGetRoutesBuDriverId } from "@/zod_shema/zodGetRoutesBuDriverId";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 async function fetchGetRoutesByDriverId(driverId: number) {
@@ -22,9 +22,11 @@ async function fetchGetRoutesByDriverId(driverId: number) {
     }
 
     // Обробка відповіді
-    const data = await response.json();
+    const data: unknown = await response.json();
+
+    const res = zodSchemaGetRoutesBuDriverId.array().parse(data);
     // console.log("Отримані маршрути:", data.routes);
-    return data.routes as GetRoutesByDriverId[]; // Повертаємо маршрути
+    return res; // Повертаємо маршрути
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);
     return null;

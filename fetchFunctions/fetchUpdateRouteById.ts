@@ -1,71 +1,15 @@
-import { SeatStatusEnum } from "@/enum/shared.enums";
-import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { IUpdateRouteWithId } from "@/types/route-passenger.types";
-import { z } from "zod";
+import {
+  zodSchemaUpdateRouteIn,
+  zodSchemaUpdateRouteRes,
+} from "@/zod_shema/zodGetUpdateRoute";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-// Оновлений Zod-схема для відповідності IUpdateRouteWithId
-
-const schemaUpdateRouteIn: z.ZodType<IUpdateRouteWithId> = z.object({
-  idRoute: z.number(),
-  busSeats: z.array(
-    z.object({
-      number: z.number(),
-      busSeatStatus: z.nativeEnum(SeatStatusEnum), // Використовуємо точний enum
-      passenger: z.number().nullable(),
-      left: z.number().optional(),
-      bottom: z.number().optional(),
-      top: z.number().optional(),
-      right: z.number().optional(),
-    })
-  ),
-  bookedSeats: z.number().min(1).max(50),
-  passengersSeatsList: z.array(
-    z.object({
-      idPassenger: z.number(),
-      subPassengersList: z
-        .array(
-          z.object({
-            subFirstName: z.string(),
-            subLastName: z.string(),
-            subPhone: z.string(),
-            subEmail: z.string(),
-          })
-        )
-        .min(1)
-        .max(100),
-    })
-  ),
-});
-
-const schemaUpdateRouteRes = z.object({
-  message: z.string(),
-  res: z.object({
-    arrivalDate: z.string(),
-    arrivalTo: z.string(),
-    bookedSeats: z.number(),
-    busNumber: z.string(),
-    coffee: z.boolean(),
-    createdAt: z.string(),
-    departureDate: z.string(),
-    departureFrom: z.string(),
-    driverId: z.number(),
-    id: z.number(),
-    maxSeats: z.number(),
-    modelBus: z.string(),
-    notate: z.string(),
-    power: z.boolean(),
-    restRoom: z.boolean(),
-    routePrice: z.number(),
-    selectBusLayout: z.string(),
-    wifi: z.boolean(),
-  }),
-});
 
 async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
   try {
-    const updateRouteByIdParsed = schemaUpdateRouteIn.parse(updateRouteById);
+    const updateRouteByIdParsed = zodSchemaUpdateRouteIn.parse(updateRouteById);
     console.log("updateRouteByIdParsed", updateRouteByIdParsed);
     const response = await fetch(`${API_URL}/api/updateRouteById`, {
       method: "POST",
@@ -85,7 +29,7 @@ async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
     // console.log("Отриманий маршрут:", data);
 
     try {
-      const parsedData = schemaUpdateRouteRes.parse(data);
+      const parsedData = zodSchemaUpdateRouteRes.parse(data);
       console.log("Отриманий маршрут:", parsedData);
       return parsedData;
     } catch (parseError: unknown) {

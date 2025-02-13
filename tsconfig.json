@@ -23,6 +23,12 @@
       "@mui/*": ["node_modules/@mui/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "zod_shema"
+  ],
   "exclude": ["node_modules"]
 }

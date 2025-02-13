@@ -3,7 +3,8 @@ import { routeDataBase } from "@/types/interface";
 import {
   ZodSchemaSearchRouteMany,
   ZodSchemaSearchRouteOne,
-} from "@/zod_shema.ts/fetchGetRoutesByIdMyRoute";
+} from "@/zod_shema/zodGetSearchRoute";
+
 import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";

@@ -1,8 +1,7 @@
-import { RoleEnum } from "@/enum/shared.enums";
 import { GenerateBooleanType, GenerateType } from "@/types/generaty.types";
 import { UserDataBase } from "@/types/next-auth";
+import { zodSchemaUser } from "@/zod_shema/zodUser";
 
-import { z } from "zod";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 type selectUserKeys = (
@@ -15,30 +14,8 @@ type selectUserKeys = (
 ) &
   keyof UserDataBase;
 
-// export type IGetUsersByIdBySelectOption = {
-//   [Key in selectUserKeys]: boolean;
-// };
-
-// export type IGetUsersByIdBySelect = {
-//   [K in selectUserKeys]: K extends selectUserKeys ? UserDataBase[K] : never;
-// };
-
 export type IGetUsersByIdBySelectOption = GenerateBooleanType<selectUserKeys>;
 export type IGetUsersByIdBySelect = GenerateType<UserDataBase, selectUserKeys>;
-
-const schemaUser: z.ZodType<IGetUsersByIdBySelect> = z.object({
-  id: z.number(),
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  phone: z.string(),
-  role: z.enum([
-    RoleEnum.DRIVER,
-    RoleEnum.PASSENGER,
-    RoleEnum.ADMIN,
-    RoleEnum.GUEST,
-  ] as const),
-});
 
 export async function getUsersFetchByIdsBySelect(
   ids: number[],
@@ -60,7 +37,7 @@ export async function getUsersFetchByIdsBySelect(
     }
 
     const data: unknown = await response.json();
-    const parsedData = schemaUser.array().parse(data);
+    const parsedData = zodSchemaUser.array().parse(data);
 
     return parsedData;
   } catch (error) {
