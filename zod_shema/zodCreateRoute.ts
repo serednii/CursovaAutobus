@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { busSeatSchema, routeStopSchema } from "./zodGlobal";
 
 const routeDriverSchema = z.object({
   arrivalDate: z.string().datetime(),
@@ -19,20 +20,6 @@ const routeDriverSchema = z.object({
   routePrice: z.number().positive(),
   selectBusLayout: z.string(),
   wifi: z.boolean(),
-});
-
-const routeStopSchema = z.object({
-  id: z.number().int().positive(),
-  stopName: z.string(),
-  routeId: z.number().int().positive(),
-});
-
-const busSeatSchema = z.object({
-  id: z.number().int().positive(),
-  passenger: z.number().int().positive().nullable(),
-  number: z.number().int().positive(),
-  busSeatStatus: z.enum(["available", "reserved", "occupied"]),
-  routeDriverId: z.number().int().positive(),
 });
 
 export const zodSchemaCreateRoute = z.object({
