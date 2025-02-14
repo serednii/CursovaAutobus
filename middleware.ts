@@ -5,8 +5,8 @@ import { RoleEnum } from "./enum/shared.enums";
 export async function middleware(req: any) {
   const token = await getToken({ req });
   const url = req.nextUrl.clone();
-  console.log("token token", token);
-  console.log("url url", url);
+  // console.log("token token", token);
+  // console.log("url url", url);
 
   // Якщо є токен (користувач залогінений)
   if (token) {

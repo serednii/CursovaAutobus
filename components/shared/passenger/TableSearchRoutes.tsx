@@ -6,7 +6,9 @@ import Button from "@mui/material/Button";
 
 import { useRouter } from "next/navigation";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
-
+import { useSessionStorage } from "@uidotdev/usehooks";
+import { useSession } from "next-auth/react";
+import { UserSession } from "@/types/next-auth";
 const paginationModel = { page: 0, pageSize: 5 };
 
 interface Props {
@@ -15,9 +17,19 @@ interface Props {
 
 export default function TableSearchRoutes({ routes }: Props) {
   const router = useRouter();
+  const [idRoute, setIdRoute] = useSessionStorage<number | null>(
+    "idRoute",
+    null
+  );
+  const [transition, setTransition] = useSessionStorage<string>(
+    "transition",
+    ""
+  );
 
   const handleViewRoute = (route: TypeBaseRoute) => {
     // console.log("Viewing route:", route);
+    setIdRoute(route.id);
+    setTransition("seatselection");
     router.push(`/seatselection/${route.id}`);
     // alert(`Viewing route from ${route.id}`);
   };

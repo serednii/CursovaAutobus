@@ -20,7 +20,7 @@ export type IGetUsersByIdBySelect = GenerateType<UserDataBase, selectUserKeys>;
 export async function getUsersFetchByIdsBySelect(
   ids: number[],
   select: IGetUsersByIdBySelectOption
-): Promise<IGetUsersByIdBySelect[]> {
+): Promise<unknown> {
   try {
     const response = await fetch(`${API_URL}/api/getUsersByIdBySelect`, {
       method: "POST",
@@ -31,15 +31,24 @@ export async function getUsersFetchByIdsBySelect(
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Request error:", errorData.error || "Unknown error");
-      throw new Error(errorData.error || "Unknown error");
+      throw new Error(
+        `Помилка сервера: ${response.status} ${response.statusText}`
+      );
     }
 
     const data: unknown = await response.json();
-    const parsedData = zodSchemaUser.array().parse(data);
-
-    return parsedData;
+    try {
+      const parsedData = zodSchemaUser.array().parse(data);
+      console.log("Отриманий маршрут:", parsedData);
+      return parsedData;
+    } catch (parseError: unknown) {
+      console.error("Помилка парсингу даних:", parseError);
+      throw new Error(
+        parseError instanceof Error
+          ? parseError.message
+          : "Помилка парсингу даних"
+      );
+    }
   } catch (error) {
     console.error("Error during request execution:", error);
     throw error;

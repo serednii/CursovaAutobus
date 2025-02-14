@@ -19,12 +19,12 @@ export const selectRoute: IGetSearchRouteMyRouteOption = {
   routePrice: true, // Залишаємо це поле
   busSeats: {
     select: {
-      idBus: true,
-      busNumber: true,
-      selectBusLayout: true,
-      modelBus: true,
-      maxSeats: true,
-      bookedSeats: true,
+      id: true,
+      passenger: true,
+      number: true,
+      busSeatStatus: true,
+      routeDriverId: true,
+      routeDriver: true,
     },
   },
   passengersSeatsList: {

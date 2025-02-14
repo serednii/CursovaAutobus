@@ -21,6 +21,3 @@ export const Providers: React.FC<React.PropsWithChildren> = ({ children }) => {
 // {/* <Toaster /> */}
 // {/* {children} */}
 // {/* <NextTopLoader /> */}
-{
-  /* <Container className="grow bg-[url(/images/img@2x.jpg)] bg-cover w-full h-full bg-[#F9FAFB]"></Container> */
-}

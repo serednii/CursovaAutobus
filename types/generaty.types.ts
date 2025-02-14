@@ -9,12 +9,12 @@ export type GenerateType<T, K extends keyof T> = {
 export type IGetBusSeatsBoolean = {
   busSeats: {
     select: {
-      idBus: boolean;
-      busNumber: boolean;
-      selectBusLayout: boolean;
-      modelBus: boolean;
-      maxSeats: boolean;
-      bookedSeats: boolean;
+      id: boolean;
+      passenger: boolean;
+      number: boolean;
+      busSeatStatus: boolean;
+      routeDriverId: boolean;
+      routeDriver: boolean;
     };
   };
 };

@@ -17,9 +17,9 @@ async function fetchDeleteRoutePassenger(
 
     // Перевіряємо статус відповіді
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Помилка запиту:", errorData.error || "Невідома помилка");
-      return null;
+      throw new Error(
+        `Помилка сервера: ${response.status} ${response.statusText}`
+      );
     }
 
     // Обробка відповіді

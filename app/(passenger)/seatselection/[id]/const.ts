@@ -14,8 +14,8 @@
 // };
 
 import { IGetSearchRouteSeatSelectionOption } from "@/fetchFunctions/fetchGetRoutesById";
-
 export const select: IGetSearchRouteSeatSelectionOption = {
+  // export const select = {
   id: true,
   departureDate: true,
   arrivalDate: true,
@@ -24,12 +24,12 @@ export const select: IGetSearchRouteSeatSelectionOption = {
   routePrice: true,
   busSeats: {
     select: {
-      idBus: true,
-      busNumber: true,
-      selectBusLayout: true,
-      modelBus: true,
-      maxSeats: true,
-      bookedSeats: true,
+      id: true,
+      passenger: true,
+      number: true,
+      busSeatStatus: true,
+      routeDriverId: true,
+      // routeDriver: true,
     },
   },
   selectBusLayout: true,

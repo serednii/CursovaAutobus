@@ -6,7 +6,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 async function fetchGetRoutesByPassengerId<TSelect>(
   passengerId: number,
   select: TSelect
-): Promise<GetRoutesByPassengerId[] | null> {
+): Promise<GetRoutesByPassengerId[]> {
   try {
     const response = await fetch(`${API_URL}/api/getRoutesByPassengerId`, {
       method: "POST",
@@ -17,18 +17,26 @@ async function fetchGetRoutesByPassengerId<TSelect>(
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Помилка запиту:", errorData.error || "Невідома помилка");
-      return null;
+      throw new Error(
+        `Помилка сервера: ${response.status} ${response.statusText}`
+      );
     }
 
     const data = await response.json();
-    const res = zodGetRoutesByPassengerId.parse(data); // Валідуємо схему
-    console.log("Отримані маршрути:", res);
-    return res;
+
+    try {
+      const res = zodGetRoutesByPassengerId.parse(data); // Валідуємо схему
+      return res;
+    } catch (parseError) {
+      throw new Error(
+        parseError instanceof Error
+          ? parseError.message
+          : "Помилка парсингу даних"
+      );
+    }
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);
-    return null;
+    throw new Error(`Помилка сервера:${error}`);
   }
 }
 

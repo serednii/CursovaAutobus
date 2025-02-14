@@ -24,11 +24,10 @@ export default async function MyRoute({ params }: Props) {
   const { id } = await params;
   console.log("routes", id);
 
-  const routeRaw: IGetRouteMyRoute[] | null =
-    (await fetchGetRoutesByIdMyRoute<
-      IGetSearchRouteMyRouteOption,
-      IGetRouteMyRoute[]
-    >([Number(id)], selectRoute)) || ({} as IGetRouteMyRoute[]);
+  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesByIdMyRoute<
+    IGetSearchRouteMyRouteOption,
+    IGetRouteMyRoute[]
+  >([Number(id)], selectRoute);
   const [route] = formatDate(routeRaw);
 
   const passengersSeatsList: ISubPassengersList[] = cloneDeep(

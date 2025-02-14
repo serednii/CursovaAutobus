@@ -5,8 +5,6 @@ import {
   ZodSchemaSearchRouteOne,
 } from "@/zod_shema/zodGetSearchRoute";
 
-import { z } from "zod";
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 type selectRouteManyKeys = (
@@ -45,7 +43,7 @@ export type IGetSearchRouteOne = GenerateType<
   selectRouteOneKeys
 >;
 
-const searchRoute = async <T, K>(data: T): Promise<K | null> => {
+const searchRoute = async <T, K>(data: T): Promise<unknown> => {
   try {
     console.log("data*****----****", data);
     const response = await fetch(`${API_URL}/api/searchRoute`, {
@@ -57,7 +55,9 @@ const searchRoute = async <T, K>(data: T): Promise<K | null> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(
+        `Помилка сервера: ${response.status} ${response.statusText}`
+      );
     }
 
     const res: K = await response.json();
@@ -82,8 +82,12 @@ export const searchRouteMany = async <T, K extends IGetSearchRouteMany[]>(
     try {
       const parsedData = ZodSchemaSearchRouteMany.array().parse(res) as K;
       return parsedData;
-    } catch (error) {
-      throw new Error("Invalid response format: " + error);
+    } catch (parseError) {
+      throw new Error(
+        parseError instanceof Error
+          ? parseError.message
+          : "Помилка парсингу даних"
+      );
     }
   });
 
@@ -94,7 +98,11 @@ export const searchRouteOne = async <T, K extends IGetSearchRouteOne[]>(
     try {
       const parsedData = ZodSchemaSearchRouteOne.array().parse(res) as K;
       return parsedData;
-    } catch (error) {
-      throw new Error("Invalid response format: " + error);
+    } catch (parseError) {
+      throw new Error(
+        parseError instanceof Error
+          ? parseError.message
+          : "Помилка парсингу даних"
+      );
     }
   });

@@ -4,7 +4,7 @@ import {
   IGetBusSeatsBoolean,
   IGetPassengersSeatsList,
 } from "@/types/generaty.types";
-import { IBusSeats, routeDataBase } from "@/types/interface";
+import { routeDataBase } from "@/types/interface";
 import {
   ZodFetchGetRoutesByIdMyRoute,
   ZodFetchGetRoutesByIdSeatSelection,
@@ -62,12 +62,13 @@ export type IGetRouteMyRoute = GenerateType<
   selectRouteMyRouteKeys
 >;
 
-export default async function fetchGetRoutesById<TSelect, TResult>(
+export default async function fetchGetRoutesById<TResult, TSelect>(
   id: number[],
   select: TSelect
-): Promise<TResult | null> {
+): Promise<TResult> {
   try {
-    console.log("iddd ", id, select);
+    console.log("Відправка запиту:", id, select);
+
     const response = await fetch(`${API_URL}/api/getRoutesById`, {
       method: "POST",
       headers: {
@@ -76,53 +77,89 @@ export default async function fetchGetRoutesById<TSelect, TResult>(
       body: JSON.stringify({ id, select }),
     });
 
-    console.log("response ", response);
+    console.log("Отримано відповідь:", response.status, response.statusText);
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Помилка запиту:", errorData.error || "Невідома помилка");
-      return null;
+      throw new Error(
+        `Помилка сервера: ${response.status} ${response.statusText}`
+      );
     }
 
-    const data = await response.json();
-    return data.routes as TResult; // Приводимо результат до типу TResult
+    // Перевірка на порожню відповідь
+    if (
+      response.headers.get("Content-Length") === "0" ||
+      response.status === 204
+    ) {
+      throw new Error("Сервер повернув порожню відповідь.");
+    }
+
+    const data: TResult = await response.json();
+    return data;
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);
-    return null;
+    throw error; // Відхиляємо проміс, щоб `.catch()` його обробив
   }
 }
 
 export const fetchGetRoutesByIdSeatSelection = async <
-  T,
-  K extends IGetRouteSeatSelection[]
+  TSelect,
+  TResult extends IGetRouteSeatSelection[]
 >(
   id: number[],
-  data: T
-): Promise<K | null> =>
-  fetchGetRoutesById<T, K>(id, data).then((res: any) => {
-    try {
-      const parsedData = ZodFetchGetRoutesByIdSeatSelection.parse(res) as K;
-      console.log("res11111", parsedData);
+  data: TSelect
+): Promise<IGetRouteSeatSelection[]> => {
+  try {
+    const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
 
-      return parsedData;
-    } catch (error) {
-      throw new Error("Invalid response format: " + error);
+    if (!res) {
+      throw new Error("Помилка: отримано null або undefined");
     }
-  });
 
-export const fetchGetRoutesByIdMyRoute = async <
-  T,
-  K extends IGetRouteMyRoute[]
->(
+    try {
+      const parsedData = ZodFetchGetRoutesByIdSeatSelection.parse(res);
+      return parsedData;
+    } catch (parseError) {
+      throw new Error(
+        parseError instanceof Error
+          ? parseError.message
+          : "Помилка парсингу даних"
+      );
+    }
+  } catch (error) {
+    console.error("Помилка при отриманні або парсингу:", error);
+    throw error;
+  }
+};
+
+export const fetchGetRoutesByIdMyRoute = async <TSelect, TResult>(
   id: number[],
-  data: T
-): Promise<K | null> =>
-  fetchGetRoutesById<T, K>(id, data).then((res: any) => {
-    try {
-      console.log("res2222", res);
-      const parsedData = ZodFetchGetRoutesByIdMyRoute.parse(res) as K;
-      return parsedData;
-    } catch (error) {
-      throw new Error("Invalid response format: " + error);
+  data: TSelect
+): Promise<IGetRouteMyRoute[]> => {
+  try {
+    const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
+
+    console.log("res2222", res);
+
+    if (!res) {
+      throw new Error("Помилка: отримано null або undefined");
     }
-  });
+
+    // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
+
+    try {
+      const parsedData = ZodFetchGetRoutesByIdMyRoute.parse(res);
+      return parsedData;
+    } catch (parseError) {
+      throw new Error(
+        parseError instanceof Error
+          ? parseError.message
+          : "Помилка парсингу даних"
+      );
+    }
+
+    // return res;
+  } catch (error) {
+    console.error("Помилка при отриманні або парсингу:", error);
+    throw error;
+  }
+};

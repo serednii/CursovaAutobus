@@ -29,6 +29,8 @@ import {
   searchRouteOne,
 } from "@/fetchFunctions/searchRoute";
 import { selectMany, selectOne } from "./const";
+import { useSessionStorage } from "@uidotdev/usehooks";
+import { useRouter } from "next/navigation";
 
 interface IGetSearchRouteManyOptionData {
   departureSearch: string | undefined;
@@ -47,20 +49,26 @@ const data: IGetSearchRouteOneOptionData = {
 };
 
 export default function FindRoute({ className }: { className?: string }) {
+  const router = useRouter();
   const highlightedDatesRef = useRef<Date[] | []>([]);
   const [highlightedDates, setHighlightedDates] = useState<Date[] | []>([]);
   const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);
-  console.log("searchDate", searchDates);
-  console.log("highlightedDates", highlightedDates);
+  // console.log("searchDate", searchDates);
+  // console.log("highlightedDates", highlightedDates);
 
+  const [idRoute, setIdRoute] = useSessionStorage<number | null>(
+    "idRoute",
+    null
+  );
+  const [transition, setTransition] = useSessionStorage<string>(
+    "transition",
+    ""
+  );
   const { data: session, status } = useSession();
 
   let sessionUser: UserSession | null = null;
 
-  if (status === "authenticated") {
-    sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
-  }
-
+  console.log("sessionUser", sessionUser);
   const {
     register,
     unregister,
@@ -82,6 +90,14 @@ export default function FindRoute({ className }: { className?: string }) {
   const departureFrom = watch("departureFrom")?.trim();
   const arrivalTo = watch("arrivalTo")?.trim();
   const departureDate = watch("departureDate");
+
+  useEffect(() => {
+    if (idRoute && transition && status === "authenticated") {
+      setTransition("");
+      setIdRoute(null);
+      router.push(`/seatselection/${idRoute}`);
+    }
+  }, [idRoute, transition]);
 
   useEffect(() => {
     const newDate =

@@ -17,9 +17,10 @@ import {
 
 import { useRouter } from "next/navigation";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
-import { UserSession } from "@/types/next-auth";
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
 import toast from "react-hot-toast";
+import { useSessionStorage } from "@uidotdev/usehooks";
+import { UserSession } from "@/types/next-auth";
 
 interface Props {
   layoutsData: ILayoutData[];
@@ -86,6 +87,20 @@ const transformData = (
 export default function OrderSeatsBus({ layoutsData, route }: Props) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { data: session, status } = useSession();
+  const [idRoute, setIdRoute] = useSessionStorage<number | null>(
+    "idRoute",
+    null
+  );
+  const [transition, setTransition] = useSessionStorage<string>(
+    "transition",
+    ""
+  );
+
+  const [dataLayoutBus, setDataLayoutBus] = useState<
+    ILayoutData | null | undefined
+  >(null);
+
   const {
     register,
     unregister,
@@ -105,15 +120,12 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     },
   });
 
-  const { data: session, status } = useSession();
-  const [dataLayoutBus, setDataLayoutBus] = useState<
-    ILayoutData | null | undefined
-  >(null);
-
   let sessionUser: UserSession | null = null;
   if (status === "authenticated") {
     sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   }
+
+  console.log("sessionUser", sessionUser, session?.user);
 
   // console.log("DDDDDDDDDDD", sessionUser);
   // console.log("dataLayoutBus++++++++++++++++", dataLayoutBus?.passenger);
@@ -137,7 +149,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       }
       const transformData = filteredData.passenger.map((e) => {
         const { number, busSeatStatus, ...rest } = e;
-        const findBusSeatStatus = route.busSeats.find(
+        const findBusSeatStatus = route?.busSeats?.find(
           (item) => item.number === number
         );
         return {

@@ -6,7 +6,6 @@ import {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-
 async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
   try {
     const updateRouteByIdParsed = zodSchemaUpdateRouteIn.parse(updateRouteById);
@@ -20,9 +19,9 @@ async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Помилка запиту:", errorData.error || "Невідома помилка");
-      throw new Error(errorData.error || "Невідома помилка");
+      throw new Error(
+        `Помилка сервера: ${response.status} ${response.statusText}`
+      );
     }
 
     const data = await response.json();

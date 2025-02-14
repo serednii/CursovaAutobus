@@ -12,13 +12,23 @@ const fetchCreateRoute = async <T>(data: T): Promise<any> => {
     });
 
     if (!response.ok) {
-      // Якщо сервер повертає помилку (код статусу не 2xx)
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(
+        `Помилка сервера: ${response.status} ${response.statusText}`
+      );
     }
 
-    const res = await response.json();
-    const validatedRes = zodSchemaCreateRoute.parse(res);
-    return validatedRes;
+    const obj = await response.json();
+
+    try {
+      const res = zodSchemaCreateRoute.parse(obj);
+      return res;
+    } catch (parseError) {
+      throw new Error(
+        parseError instanceof Error
+          ? parseError.message
+          : "Помилка парсингу даних"
+      );
+    }
   } catch (error: unknown) {
     console.error("Error fetching data:", error);
     // Можливо, повернути значення за замовчуванням або null

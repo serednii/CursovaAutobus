@@ -16,9 +16,7 @@ interface Props {
 }
 
 export default async function SeatSelection({ params }: Props) {
-  const id: string | undefined = params?.id; // Чекаємо `params` асинхронно
-
-  console.log("id", id);
+  const { id } = (await params) || undefined;
 
   const routeArray = await fetchGetRoutesByIdSeatSelection<
     IGetSearchRouteSeatSelectionOption,

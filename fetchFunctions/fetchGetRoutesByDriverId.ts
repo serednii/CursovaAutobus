@@ -16,17 +16,24 @@ async function fetchGetRoutesByDriverId(driverId: number) {
 
     // Перевіряємо статус відповіді
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Помилка запиту:", errorData.error || "Невідома помилка");
-      return null;
+      throw new Error(
+        `Помилка сервера: ${response.status} ${response.statusText}`
+      );
     }
 
     // Обробка відповіді
     const data: unknown = await response.json();
 
-    const res = zodSchemaGetRoutesBuDriverId.array().parse(data);
-    // console.log("Отримані маршрути:", data.routes);
-    return res; // Повертаємо маршрути
+    try {
+      const res = zodSchemaGetRoutesBuDriverId.array().parse(data);
+      return res;
+    } catch (parseError) {
+      throw new Error(
+        parseError instanceof Error
+          ? parseError.message
+          : "Помилка парсингу даних"
+      );
+    }
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);
     return null;
