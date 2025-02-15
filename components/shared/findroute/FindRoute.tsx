@@ -30,8 +30,7 @@ import {
 } from "@/fetchFunctions/searchRoute";
 import { selectMany, selectOne } from "./const";
 import { useSessionStorage } from "@uidotdev/usehooks";
-import { useRouter } from "next/navigation";
-
+import { useRouter, useSearchParams } from "next/navigation";
 interface IGetSearchRouteManyOptionData {
   departureSearch: string | undefined;
   arrivalToSearch: string | undefined;
@@ -53,6 +52,18 @@ export default function FindRoute({ className }: { className?: string }) {
   const highlightedDatesRef = useRef<Date[] | []>([]);
   const [highlightedDates, setHighlightedDates] = useState<Date[] | []>([]);
   const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);
+  const searchParams = useSearchParams(); // Використовуємо useSearchParams замість query
+  const { data: session, status } = useSession();
+
+  const callbackUrl = searchParams.get("callbackUrl") || "/"; // Отримуємо callbackUrl
+
+  console.log("callbackUrl****", callbackUrl);
+  useEffect(() => {
+    if (session) {
+      router.replace(decodeURIComponent(callbackUrl)); // Переходимо після входу
+    }
+  }, [session, router, callbackUrl]);
+
   // console.log("searchDate", searchDates);
   // console.log("highlightedDates", highlightedDates);
 
@@ -64,11 +75,18 @@ export default function FindRoute({ className }: { className?: string }) {
     "transition",
     ""
   );
-  const { data: session, status } = useSession();
+  // const searchParams = useSearchParams();
+  // const callbackUrl = searchParams.get("callbackUrl") || "/";
+  // console.log("session****", session);
+  console.log("route****", router);
 
-  let sessionUser: UserSession | null = null;
+  // useEffect(() => {
+  //   if (session) {
+  //     router.replace(callbackUrl); // Використовуємо replace, щоб не зберігати історію входу
+  //   }
+  // }, [session, router, callbackUrl]);
 
-  console.log("sessionUser", sessionUser);
+  // console.log("sessionUser", sessionUser);
   const {
     register,
     unregister,

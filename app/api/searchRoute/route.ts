@@ -1,7 +1,7 @@
 import { prisma } from "@/prisma/prisma-client";
 import { UserSelect } from "@/types/next-auth";
 import { NextRequest, NextResponse } from "next/server";
-
+import { Prisma, RouteDriver } from "@prisma/client";
 export async function POST(req: NextRequest) {
   try {
     // Отримуємо дані з тіла запиту
@@ -35,25 +35,52 @@ export async function POST(req: NextRequest) {
     }
 
     // Виконуємо пошук у базі даних
+    // const routes = await prisma.routeDriver.findMany({
+    //   where: {
+    //     departureFrom: departureSearch,
+    //     arrivalTo: arrivalToSearch,
+    //     wifi,
+    //     arrivalDate: {
+    //       gt: new Date(),
+    //     },
+    //     ...dateFilter, // Додаємо фільтр за конкретним днем, якщо є
+    //   },
+    //   take: limit,
+    //   select: select, // Вкажіть, які поля потрібні
+    // });
+
     const routes = await prisma.routeDriver.findMany({
       where: {
-        departureFrom: departureSearch,
-        arrivalTo: arrivalToSearch,
+        departureFrom: {
+          contains: departureSearch ?? "",
+        },
+        arrivalTo: {
+          contains: arrivalToSearch ?? "",
+        },
         wifi,
         arrivalDate: {
           gt: new Date(),
         },
-        ...dateFilter, // Додаємо фільтр за конкретним днем, якщо є
+        ...dateFilter,
       },
       take: limit,
-      select: select, // Вкажіть, які поля потрібні
+      select: select,
     });
 
-    console.log("routes", routes.length);
-    // Якщо маршрути не знайдено
+    //   const routes: RouteDriver[] | null = await prisma.$queryRaw<RouteDriver[]>`
+    //   SELECT * FROM "RouteDriver"
+    //   WHERE "departureFrom" ILIKE ${`%${departureSearch ?? ""}%`}
+    //   AND "arrivalTo" ILIKE ${`%${arrivalToSearch ?? ""}%`}
+    //   AND "wifi" = ${wifi}
+    //   AND "arrivalDate" > NOW()
+    //   LIMIT ${limit}
+    // `;
 
-    // Повертаємо дані маршрутів
-    return NextResponse.json([...routes]);
+    // console.log("routes****************", routes);
+
+    const safeRoutes = Array.isArray(routes) ? routes : []; // Гарантуємо, що це масив
+
+    return NextResponse.json(safeRoutes);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
     return NextResponse.json(

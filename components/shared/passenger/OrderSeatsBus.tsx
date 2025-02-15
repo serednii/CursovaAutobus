@@ -19,7 +19,6 @@ import { useRouter } from "next/navigation";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
 import toast from "react-hot-toast";
-import { useSessionStorage } from "@uidotdev/usehooks";
 import { UserSession } from "@/types/next-auth";
 
 interface Props {
@@ -88,14 +87,6 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [idRoute, setIdRoute] = useSessionStorage<number | null>(
-    "idRoute",
-    null
-  );
-  const [transition, setTransition] = useSessionStorage<string>(
-    "transition",
-    ""
-  );
 
   const [dataLayoutBus, setDataLayoutBus] = useState<
     ILayoutData | null | undefined
