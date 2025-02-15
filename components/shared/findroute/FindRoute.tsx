@@ -14,20 +14,10 @@ import { useSession } from "next-auth/react";
 
 import SearchDataPicker from "@/components/shared/form/searchDataPicker/SearchDataPicker";
 import TableSearchRoutes from "@/components/shared/passenger/TableSearchRoutes";
-import {
-  GetSearchRoutePassengers,
-  TypeBaseRoute,
-} from "@/types/route-passenger.types";
+import { GetSearchRoutePassengers, TypeBaseRoute } from "@/types/route-passenger.types";
 import { UserSession } from "@/types/next-auth";
 import { cn } from "@/lib/utils";
-import {
-  IGetSearchRouteMany,
-  IGetSearchRouteManyOption,
-  IGetSearchRouteOne,
-  IGetSearchRouteOneOption,
-  searchRouteMany,
-  searchRouteOne,
-} from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteMany, IGetSearchRouteManyOption, IGetSearchRouteOne, IGetSearchRouteOneOption, searchRouteMany, searchRouteOne } from "@/fetchFunctions/searchRoute";
 import { selectMany, selectOne } from "./const";
 import { useSessionStorage } from "@uidotdev/usehooks";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -37,6 +27,10 @@ interface IGetSearchRouteManyOptionData {
   endOfDay: Date;
   startOfDay: Date;
   select: IGetSearchRouteManyOption;
+  wifi: boolean | undefined;
+  coffee: boolean | undefined;
+  power: boolean | undefined;
+  restRoom: boolean | undefined;
 }
 
 interface IGetSearchRouteOneOptionData {
@@ -67,14 +61,8 @@ export default function FindRoute({ className }: { className?: string }) {
   // console.log("searchDate", searchDates);
   // console.log("highlightedDates", highlightedDates);
 
-  const [idRoute, setIdRoute] = useSessionStorage<number | null>(
-    "idRoute",
-    null
-  );
-  const [transition, setTransition] = useSessionStorage<string>(
-    "transition",
-    ""
-  );
+  const [idRoute, setIdRoute] = useSessionStorage<number | null>("idRoute", null);
+  const [transition, setTransition] = useSessionStorage<string>("transition", "");
   // const searchParams = useSearchParams();
   // const callbackUrl = searchParams.get("callbackUrl") || "/";
   // console.log("session****", session);
@@ -108,6 +96,10 @@ export default function FindRoute({ className }: { className?: string }) {
   const departureFrom = watch("departureFrom")?.trim();
   const arrivalTo = watch("arrivalTo")?.trim();
   const departureDate = watch("departureDate");
+  const wifi = watch("wifi");
+  const coffee = watch("coffee");
+  const power = watch("power");
+  const restRoom = watch("restRoom");
 
   useEffect(() => {
     if (idRoute && transition && status === "authenticated") {
@@ -118,11 +110,7 @@ export default function FindRoute({ className }: { className?: string }) {
   }, [idRoute, transition]);
 
   useEffect(() => {
-    const newDate =
-      departureDate &&
-      `${departureDate.getFullYear()}-${String(
-        departureDate.getMonth() + 1
-      ).padStart(2, "0")}-${String(departureDate.getDate()).padStart(2, "0")}`;
+    const newDate = departureDate && `${departureDate.getFullYear()}-${String(departureDate.getMonth() + 1).padStart(2, "0")}-${String(departureDate.getDate()).padStart(2, "0")}`;
 
     const startOfDay = new Date(`${newDate}T00:00:00`);
     const endOfDay = new Date(`${newDate}T23:59:59`);
@@ -132,6 +120,10 @@ export default function FindRoute({ className }: { className?: string }) {
       // specificDateTo: departureDate,
       startOfDay,
       endOfDay,
+      wifi,
+      coffee,
+      power,
+      restRoom,
       // specificDateFrom:
       //   departureDate &&
       //   `${departureDate.getFullYear()}-${String(
@@ -144,31 +136,21 @@ export default function FindRoute({ className }: { className?: string }) {
     };
 
     (departureFrom || arrivalTo || departureDate) &&
-      searchRouteMany<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(
-        data
-      )
+      searchRouteMany<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(data)
         .then((response: IGetSearchRouteMany[] | null) => {
           if (response) {
-            const filterHighlightedDates = response.map(
-              (item: any) => new Date(item.departureDate)
-            );
+            const filterHighlightedDates = response.map((item: any) => new Date(item.departureDate));
 
-            setHighlightedDates(
-              (departureFrom || arrivalTo) && filterHighlightedDates.length > 0
-                ? filterHighlightedDates
-                : highlightedDatesRef.current
-            );
-            const newSearchDates: TypeBaseRoute[] | [] = response.map(
-              (item: GetSearchRoutePassengers) => ({
-                id: item.id,
-                departureDate: item.departureDate,
-                arrivalDate: item.arrivalDate,
-                departureFrom: item.departureFrom,
-                arrivalTo: item.arrivalTo,
-                routePrice: item.routePrice,
-                AvailableSeats: item.maxSeats - item.bookedSeats,
-              })
-            );
+            setHighlightedDates((departureFrom || arrivalTo) && filterHighlightedDates.length > 0 ? filterHighlightedDates : highlightedDatesRef.current);
+            const newSearchDates: TypeBaseRoute[] | [] = response.map((item: GetSearchRoutePassengers) => ({
+              id: item.id,
+              departureDate: item.departureDate,
+              arrivalDate: item.arrivalDate,
+              departureFrom: item.departureFrom,
+              arrivalTo: item.arrivalTo,
+              routePrice: item.routePrice,
+              AvailableSeats: item.maxSeats - item.bookedSeats,
+            }));
             setSearchDates(newSearchDates);
           } else {
             console.log("No data received or an error occurred.");
@@ -176,15 +158,13 @@ export default function FindRoute({ className }: { className?: string }) {
         })
         .catch((err) => console.error("Fetch failed:", err));
     // Виконайте додаткову логіку тут
-  }, [departureFrom, arrivalTo, departureDate]);
+  }, [departureFrom, arrivalTo, departureDate, wifi, coffee, power, restRoom]);
 
   useEffect(() => {
     searchRouteOne<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(data)
       .then((response: IGetSearchRouteOne[] | null) => {
         if (response) {
-          const dates: Date[] = response.map(
-            (route: { departureDate: string }) => new Date(route.departureDate)
-          );
+          const dates: Date[] = response.map((route: { departureDate: string }) => new Date(route.departureDate));
           setHighlightedDates(dates);
           highlightedDatesRef.current = dates;
         } else {
@@ -208,13 +188,7 @@ export default function FindRoute({ className }: { className?: string }) {
             title={"Departure From"}
             className="grow"
           />
-          <CustomTextField
-            register={register}
-            errors={errors}
-            name={"arrivalTo"}
-            title={"Arrival To"}
-            className="grow"
-          />
+          <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" />
           <SearchDataPicker
             title="Departure Date"
             name="departureDate"
@@ -235,9 +209,7 @@ export default function FindRoute({ className }: { className?: string }) {
         </div>
       </form>
 
-      {searchDates && searchDates.length > 0 && (
-        <TableSearchRoutes routes={searchDates} />
-      )}
+      {searchDates && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} />}
       <div className="footer"></div>
     </div>
   );

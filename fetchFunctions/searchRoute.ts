@@ -62,9 +62,9 @@ const searchRoute = async <T, K>(data: T): Promise<unknown> => {
 
     const res: K = await response.json();
 
-    if (!res || !Array.isArray(res)) {
-      throw new Error("Invalid response format");
-    }
+    // if (!res || !Array.isArray(res)) {
+    //   throw new Error("Invalid response format");
+    // }
 
     return res;
   } catch (error) {
@@ -80,8 +80,8 @@ export const searchRouteMany = async <T, K extends IGetSearchRouteMany[]>(
 ): Promise<K | null> =>
   searchRoute<T, K>(data).then((res: unknown) => {
     try {
-      const parsedData = ZodSchemaSearchRouteMany.array().parse(res) as K;
-      return parsedData;
+      // const parsedData = ZodSchemaSearchRouteMany.array().parse(res) as K;
+      return res as K;
     } catch (parseError) {
       throw new Error(
         parseError instanceof Error
@@ -96,8 +96,8 @@ export const searchRouteOne = async <T, K extends IGetSearchRouteOne[]>(
 ): Promise<K | null> =>
   searchRoute<T, K>(data).then((res: unknown) => {
     try {
-      const parsedData = ZodSchemaSearchRouteOne.array().parse(res) as K;
-      return parsedData;
+      // const parsedData = ZodSchemaSearchRouteOne.array().parse(res) as K;
+      return res as K;
     } catch (parseError) {
       throw new Error(
         parseError instanceof Error

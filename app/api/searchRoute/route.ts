@@ -12,6 +12,9 @@ export async function POST(req: NextRequest) {
       startOfDay,
       endOfDay,
       wifi,
+      coffee,
+      power,
+      restRoom,
       limit,
     }: {
       departureSearch?: string;
@@ -21,6 +24,9 @@ export async function POST(req: NextRequest) {
       endOfDay?: string;
       limit?: number;
       wifi?: boolean;
+      coffee?: boolean;
+      power?: boolean;
+      restRoom?: boolean;
     } = await req.json();
 
     // Формуємо діапазон часу для конкретного дня
@@ -53,11 +59,15 @@ export async function POST(req: NextRequest) {
       where: {
         departureFrom: {
           contains: departureSearch ?? "",
+          // mode: "insensitive",
         },
         arrivalTo: {
           contains: arrivalToSearch ?? "",
         },
         wifi,
+        coffee,
+        power,
+        restRoom,
         arrivalDate: {
           gt: new Date(),
         },
@@ -83,9 +93,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(safeRoutes);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
-    return NextResponse.json(
-      { error: "Не вдалося обробити запит" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
   }
 }

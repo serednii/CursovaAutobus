@@ -114,7 +114,7 @@ export const fetchGetRoutesByIdSeatSelection = async <
     if (!res) {
       throw new Error("Помилка: отримано null або undefined");
     }
-
+    console.log("res1111", res);
     try {
       const parsedData = ZodFetchGetRoutesByIdSeatSelection.parse(res);
       return parsedData;
