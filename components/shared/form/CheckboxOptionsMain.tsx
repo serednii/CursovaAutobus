@@ -14,7 +14,7 @@ interface Props {
   className?: string;
 }
 
-export default function CheckboxOptions({ register, watch, reset }: Props) {
+export default function CheckboxOptionsMain({ register, watch, reset }: Props) {
   return (
     <div className="flex justify-between flex-wrap">
       {/* <Typography variant="h6" gutterBottom>

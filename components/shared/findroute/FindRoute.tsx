@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Checkbox, FormControlLabel, FormGroup, Typography } from "@mui/material";
 
-import CheckboxOptions from "@/components/shared/form/CheckboxOptions";
 import CustomTextField from "@/components/shared/form/CustomTextField";
 
 import { FormValues } from "@/types/form.types";
@@ -27,6 +26,7 @@ import {
 import { selectMany, selectOne } from "./const";
 import { useSessionStorage } from "@uidotdev/usehooks";
 import { useRouter, useSearchParams } from "next/navigation";
+import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
 interface IGetSearchRouteManyOptionData {
   departureSearch: string | undefined;
   arrivalToSearch: string | undefined;
@@ -268,7 +268,7 @@ export default function FindRoute({ className }: { className?: string }) {
                 label={<div style={{ display: "flex", alignItems: "center" }}> Additional options:</div>}
               />
             </Typography>
-            <CheckboxOptions register={register} watch={watch} reset={reset} />
+            <CheckboxOptionsMain register={register} watch={watch} reset={reset} />
           </div>
         </div>
         restRoom

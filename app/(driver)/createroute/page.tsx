@@ -8,7 +8,7 @@ import { Container } from "@/components/shared/Container";
 import CustomDatePicker from "@/components/shared/form/dataPicker/DataPicker";
 import DynamicTextFields from "@/components/shared/form/DynamicTextFields";
 import MaterialUISelect from "@/components/shared/form/MaterialUISelect";
-import CheckboxOptions from "@/components/shared/form/CheckboxOptions";
+import CheckboxOptions from "@/components/shared/form/CheckboxOptionsDriver";
 import CustomTextField from "@/components/shared/form/CustomTextField";
 
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
@@ -24,13 +24,12 @@ import { transformData } from "./action";
 import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import toast from "react-hot-toast";
+import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
 
 export default function CreateRoute() {
   const { data: session, status } = useSession();
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
-  const [dataLayoutBus, setDataLayoutBus] = useState<
-    ILayoutData | null | undefined
-  >(null);
+  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
 
   const {
     register,
@@ -50,21 +49,13 @@ export default function CreateRoute() {
     },
   });
 
-  const sessionUser =
-    status === "authenticated" ? (session?.user as UserSession) : null; // Присвоюємо значення session.user
+  const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null; // Присвоюємо значення session.user
 
-  const passengersLength: number[] = useMemo(
-    () => layoutsData.map((e) => e.passengerLength),
-    [layoutsData.length]
-  );
+  const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), [layoutsData.length]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     try {
-      const createRouteDriver: ISendDataBaseRouteDriver = transformData(
-        data,
-        dataLayoutBus as ILayoutData,
-        sessionUser as UserSession
-      );
+      const createRouteDriver: ISendDataBaseRouteDriver = transformData(data, dataLayoutBus as ILayoutData, sessionUser as UserSession);
 
       const response = await fetchCreateRoute(createRouteDriver);
 
@@ -127,35 +118,13 @@ export default function CreateRoute() {
             />
           </div>
           <div className="flex gap-5  mb-5 flex-wrap">
-            <CustomTextField
-              register={register}
-              errors={errors}
-              name={"departureFrom"}
-              title={"Departure From"}
-              className="grow"
-            />
-            <CustomTextField
-              register={register}
-              errors={errors}
-              name={"arrivalTo"}
-              title={"Arrival To"}
-              className="grow"
-            />
+            <CustomTextField register={register} errors={errors} name={"departureFrom"} title={"Departure From"} className="grow" />
+            <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" />
           </div>
 
-          <DynamicTextFields
-            unregister={unregister}
-            register={register}
-            errors={errors}
-          />
+          <DynamicTextFields unregister={unregister} register={register} errors={errors} />
 
-          <CustomTextField
-            register={register}
-            errors={errors}
-            name={"busNumber"}
-            title={"Bus Number"}
-            className="mb-5"
-          />
+          <CustomTextField register={register} errors={errors} name={"busNumber"} title={"Bus Number"} className="mb-5" />
 
           <div>
             <h2>Bus Layout</h2>
@@ -187,20 +156,14 @@ export default function CreateRoute() {
             />
           )} */}
 
-          <CustomTextField
-            register={register}
-            errors={errors}
-            name={"routePrice"}
-            title={"Route Price"}
-            className="mb-5"
-          />
+          <CustomTextField register={register} errors={errors} name={"routePrice"} title={"Route Price"} className="mb-5" />
 
           <div className="flex justify-between items-center flex-wrap">
             <div className="grow">
               <Typography variant="h6" gutterBottom>
                 Additional options:
               </Typography>
-              <CheckboxOptions register={register} watch={watch} />
+              <CheckboxOptionsDriver register={register} watch={watch} />
             </div>
             <div className="flex justify-end items-center gap-5 grow">
               <Button variant="contained" color="primary">
