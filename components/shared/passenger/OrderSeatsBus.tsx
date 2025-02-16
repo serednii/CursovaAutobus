@@ -10,10 +10,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ISubPassengersList } from "@/types/interface";
 import { FormValues, SubPassengerGroup } from "@/types/form.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
-import {
-  IUpdateRoute,
-  IUpdateRouteWithId,
-} from "@/types/route-passenger.types";
+import { IUpdateRoute, IUpdateRouteWithId } from "@/types/route-passenger.types";
 
 import { useRouter } from "next/navigation";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
@@ -26,11 +23,7 @@ interface Props {
   route: IGetRoutePassengerById | null;
 }
 
-const transformData = (
-  data: SubPassengerGroup,
-  dataLayoutBus: ILayoutData,
-  sessionUser: UserSession
-): IUpdateRoute => {
+const transformData = (data: SubPassengerGroup, dataLayoutBus: ILayoutData, sessionUser: UserSession): IUpdateRoute => {
   const busSeats = dataLayoutBus.passenger.map((e) => {
     if (e.busSeatStatus === SeatStatusEnum.SELECTED) {
       return {
@@ -74,9 +67,7 @@ const transformData = (
 
   const updateRouteDriver: IUpdateRoute = {
     busSeats,
-    bookedSeats: busSeats.filter(
-      (e) => e.busSeatStatus === SeatStatusEnum.RESERVED
-    ).length, //в дальнішому треба добавити дані для всіх пасажирів а для водія буде просто масив пасажирів
+    bookedSeats: busSeats.filter((e) => e.busSeatStatus === SeatStatusEnum.RESERVED).length, //в дальнішому треба добавити дані для всіх пасажирів а для водія буде просто масив пасажирів
     passengersSeatsList: [passengersSeatsList],
   };
 
@@ -88,9 +79,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  const [dataLayoutBus, setDataLayoutBus] = useState<
-    ILayoutData | null | undefined
-  >(null);
+  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
 
   const {
     register,
@@ -123,9 +112,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
 
   const userIdSession = Number(sessionUser?.id);
 
-  const idOrderPassengers = dataLayoutBus?.passenger
-    .filter((e) => e.passenger === userIdSession)
-    .map((e) => e.passenger);
+  const idOrderPassengers = dataLayoutBus?.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
 
   useEffect(() => {
     if (route) {
@@ -140,15 +127,11 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       }
       const transformData = filteredData.passenger.map((e) => {
         const { number, busSeatStatus, ...rest } = e;
-        const findBusSeatStatus = route?.busSeats?.find(
-          (item) => item.number === number
-        );
+        const findBusSeatStatus = route?.busSeats?.find((item) => item.number === number);
         return {
           ...rest,
           number,
-          busSeatStatus: findBusSeatStatus
-            ? findBusSeatStatus.busSeatStatus
-            : busSeatStatus,
+          busSeatStatus: findBusSeatStatus ? findBusSeatStatus.busSeatStatus : busSeatStatus,
           passenger: findBusSeatStatus ? findBusSeatStatus.passenger : null,
         };
       });
@@ -165,15 +148,11 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     // const res = await trigger();
     // console.log("res", res);
-    const createRouteDriver: IUpdateRoute = transformData(
-      data,
-      dataLayoutBus as ILayoutData,
-      sessionUser as UserSession
-    );
+    const createRouteDriver: IUpdateRoute = transformData(data, dataLayoutBus as ILayoutData, sessionUser as UserSession);
 
     const updateRoteDriver: IUpdateRouteWithId = {
       ...createRouteDriver,
-      idRoute: Number(route?.id),
+      id: Number(route?.id),
     };
 
     fetchUpdateRouteById(updateRoteDriver)
@@ -194,19 +173,10 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
 
   return (
     <>
-      <MyDialogInfo
-        title="Your reservation has been successfully completed?"
-        open={open}
-        setOpen={setOpen}
-      />
+      <MyDialogInfo title="Your reservation has been successfully completed?" open={open} setOpen={setOpen} />
       <form onSubmit={handleSubmit(onSubmit)}>
         {dataLayoutBus && (
-          <LayoutBus
-            sessionUser={sessionUser}
-            className="flex justify-center"
-            dataLayoutBus={dataLayoutBus}
-            setDataLayoutBus={setDataLayoutBus}
-          />
+          <LayoutBus sessionUser={sessionUser} className="flex justify-center" dataLayoutBus={dataLayoutBus} setDataLayoutBus={setDataLayoutBus} />
         )}
 
         {idOrderPassengers && idOrderPassengers.length > 0 && (

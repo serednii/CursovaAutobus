@@ -1,19 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TextField, InputAdornment } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { IoMdClose } from "react-icons/io";
 import DatePicker from "react-datepicker";
-import "./style.scss";
-
-import {
-  FieldErrors,
-  UseFormRegister,
-  Controller,
-  Control,
-  UseFormWatch,
-} from "react-hook-form";
+import { CircularProgress } from "@mui/material";
+import { FieldErrors, UseFormRegister, Controller, Control, UseFormWatch } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import { FormValues } from "@/types/form.types";
+import { cn } from "@/lib/utils";
+import "./style.scss";
 
 interface Props {
   name: keyof FormValues;
@@ -23,43 +19,22 @@ interface Props {
   errors: FieldErrors<FormValues>;
   className?: string;
   watch?: UseFormWatch<FormValues>;
+  clickToDate: number;
+  setClickToDate: React.Dispatch<React.SetStateAction<number>>;
   highlightedDates: Date[]; // Масив дат для підсвічування
+  isLoading: boolean;
 }
 
-const SearchDataPicker = ({
-  name,
-  title,
-  control,
-  errors,
-  className,
-  watch,
-  highlightedDates,
-}: Props) => {
+const SearchDataPicker = ({ name, title, control, errors, className, watch, highlightedDates, clickToDate, setClickToDate, isLoading }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const departureDate = watch && watch("departureDate");
   console.log("selectedDate", selectedDate);
   // Поточна дата і час
   const now = departureDate || new Date();
-  const startOfDay = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0,
-    0
-  ); // Початок дня
-  const handleSelectDate = (date: any) => {
-    console.log("date", date);
-    setSelectedDate(date);
-  };
-  const endOfDay = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    23,
-    59
-  ); // Кінець дня
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0); // Початок дня
+  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59); // Кінець дня
 
-  // Функція для підсвічування днів
+  // Функція підсвічування
   const dayClassName = (date: Date) => {
     const isHighlighted = highlightedDates.some((highlightedDate) => {
       const selectDay = highlightedDate.getDate();
@@ -89,60 +64,58 @@ const SearchDataPicker = ({
   };
 
   return (
-    <div className={className || "grow border search-data-picker"}>
+    <div className={cn(className, "grow  search-data-picker relative")}>
+      {isLoading && <CircularProgress className="absolute top-1/2 left-1/2 color-[#94f07c] z-10" size={60} />}
       <Controller
         name={name}
         control={control}
         rules={{ required: `${title} is required` }}
         render={({ field }) => (
-          <DatePicker
-            className="w-[100%]  border border-gray-300"
-            selected={field.value}
-            onChange={(date: Date | null) => {
-              handleSelectDate(date);
-              field.onChange(date);
-            }}
-            placeholderText="MM/DD/YYYY"
-            dateFormat="MM/dd/yyyy"
-            minDate={now} // Мінімальна дата
-            minTime={
-              selectedDate && selectedDate.toDateString() === now.toDateString()
-                ? now
-                : startOfDay
-            } // Мінімальний час
-            maxTime={endOfDay} // Максимальний час
-            dayClassName={dayClassName} // Підсвічування днів
-            customInput={
-              <TextField
-                label={title}
-                {...field}
-                placeholder="MM/DD/YYYY"
-                error={!!errors[name]}
-                InputLabelProps={{
-                  style: {
-                    top: "-20px",
-                    fontWeight: "bold",
-                    zIndex: 10,
-                    fontSize: "20px", // Налаштувати розмір шрифту
-                  },
-                }}
-                // helperText={errors[name]?.message}
-                InputProps={{
-                  style: { height: "38px" },
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <CalendarTodayIcon
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      />
-                    </InputAdornment>
-                  ),
-                }}
-                fullWidth={false}
-              />
-            }
-          />
+          <div className="relative react-datepicker-wrapper-first">
+            <IoMdClose
+              onClick={() => {
+                setSelectedDate(null);
+                field.onChange(null);
+              }}
+              className="absolute top-[7px] right-[15px] text-2xl cursor-pointer z-10"
+            />
+            <DatePicker
+              className="w-[100%]  border border-gray-300"
+              selected={field.value}
+              onChange={(date: Date | null) => {
+                setSelectedDate(date);
+                field.onChange(date);
+              }}
+              placeholderText="MM/DD/YYYY"
+              dateFormat="MM/dd/yyyy"
+              minDate={now}
+              minTime={selectedDate ? (selectedDate.toDateString() === now.toDateString() ? now : startOfDay) : startOfDay}
+              maxTime={endOfDay}
+              dayClassName={dayClassName}
+              customInput={
+                <TextField
+                  label={title}
+                  onClick={() => setClickToDate(clickToDate + 1)}
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  placeholder="MM/DD/YYYY"
+                  // error={!!errors[name]}
+                  InputLabelProps={{
+                    style: { top: "-20px", fontWeight: "bold", zIndex: 10, fontSize: "20px" },
+                  }}
+                  InputProps={{
+                    style: { height: "38px" },
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <CalendarTodayIcon onClick={() => setClickToDate(clickToDate + 1)} style={{ cursor: "pointer" }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  fullWidth={false}
+                />
+              }
+            />
+          </div>
         )}
       />
     </div>

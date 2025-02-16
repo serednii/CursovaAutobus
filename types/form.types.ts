@@ -1,10 +1,6 @@
 import { IDateISO, IFromTo, IServiceBus } from "./interface";
 
-export interface FormValues
-  extends SubPassengerGroup,
-    IDateISO,
-    IServiceBus,
-    IFromTo {
+export interface FormValues extends SubPassengerGroup, IDateISO, IServiceBus, IFromTo {
   intermediateStops: string[];
   busNumber: string;
   routePrice: string;
@@ -12,6 +8,7 @@ export interface FormValues
   passengersListId: number[];
   driverId: number;
   selectBusLayout: string;
+  isOption: boolean;
 }
 
 export interface SubPassengerDetails {

@@ -1,22 +1,14 @@
-import {
-  IBusSeats,
-  IDateString,
-  IFromTo,
-  IServiceBus,
-  ISubPassengersList,
-} from "./interface";
+import { IBusSeats, IDateString, IFromTo, IServiceBus, ISubPassengersList } from "./interface";
 import { BusSeatInfo } from "./layoutbus.types";
-import { GetRoutesByDriverId } from "./route-driver.types";
+import { GetRoutesByDriverId, ISendDataBaseRouteDriver } from "./route-driver.types";
 
 export interface TypeBaseRoute extends IDateString, IFromTo {
   id: number; // Залишаємо це поле
   routePrice: number; // Залишаємо це поле
-  // AvailableSeats: number;
+  AvailableSeats: number;
 }
 
-export interface GetSearchRoutePassengers
-  extends Omit<TypeBaseRoute, "AvailableSeats">,
-    IServiceBus {
+export interface GetSearchRoutePassengers extends Omit<TypeBaseRoute, "AvailableSeats">, IServiceBus {
   driverId: number;
   busNumber: string;
   notate: string;
@@ -25,18 +17,15 @@ export interface GetSearchRoutePassengers
   bookedSeats: number;
 }
 
-export interface IUpdateRoute {
-  busSeats: BusSeatInfo[];
-  bookedSeats: number;
-  passengersSeatsList: ISubPassengersList[];
+export interface IUpdateRoute extends Partial<ISendDataBaseRouteDriver> {
+  passengersSeatsList?: ISubPassengersList[];
 }
 
 export interface IUpdateRouteWithId extends IUpdateRoute {
-  idRoute: number;
+  id: number;
 }
 
-export interface GetRoutesByPassengerId
-  extends Omit<GetRoutesByDriverId, "maxSeats" | "bookedSeats"> {
+export interface GetRoutesByPassengerId extends Omit<GetRoutesByDriverId, "maxSeats" | "bookedSeats"> {
   busSeats: IBusSeats[];
   passengersSeatsList: ISubPassengersList[];
 }

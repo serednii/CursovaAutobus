@@ -23,6 +23,16 @@ export const timeAmPm = (data: string) => {
   return `${formattedHours}:00 ${amPm}`;
 };
 
+export const firstLetterUpperCase = (string: string | undefined): string | undefined => {
+  return (
+    string &&
+    string
+      .split(" ")
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
+      .join(" ")
+  );
+};
+
 // export function isUserArray(array: any): { message: string; status: boolean } {
 //   if (!Array.isArray(array)) {
 //     return { message: "Invalid user array", status: false };

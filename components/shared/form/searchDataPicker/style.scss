@@ -1,5 +1,7 @@
-.react-datepicker-wrapper {
-    width: 100% !important;
+.search-data-picker .react-datepicker-wrapper-first .react-datepicker-wrapper {
+    // width: 100% !important;
+    display: block ! important;
+    width: 100% ! important;
 }
 
 .react-datepicker__day.highlighted-day {

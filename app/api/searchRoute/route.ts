@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
       coffee,
       power,
       restRoom,
+      isOption,
       limit,
     }: {
       departureSearch?: string;
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
       coffee?: boolean;
       power?: boolean;
       restRoom?: boolean;
+      isOption?: boolean;
     } = await req.json();
 
     // Формуємо діапазон часу для конкретного дня
@@ -54,25 +56,29 @@ export async function POST(req: NextRequest) {
     //   take: limit,
     //   select: select, // Вкажіть, які поля потрібні
     // });
-
-    const routes = await prisma.routeDriver.findMany({
-      where: {
-        departureFrom: {
-          contains: departureSearch ?? "",
-          // mode: "insensitive",
-        },
-        arrivalTo: {
-          contains: arrivalToSearch ?? "",
-        },
-        wifi,
-        coffee,
-        power,
-        restRoom,
-        arrivalDate: {
-          gt: new Date(),
-        },
-        ...dateFilter,
+    const where: any = {
+      departureFrom: {
+        contains: departureSearch ?? "",
+        // mode: "insensitive",
       },
+      arrivalTo: {
+        contains: arrivalToSearch ?? "",
+      },
+
+      arrivalDate: {
+        gt: new Date(),
+      },
+      ...dateFilter,
+    };
+
+    if (isOption) {
+      where.wifi = wifi ?? true;
+      where.coffee = coffee ?? true;
+      where.power = power ?? true;
+      where.restRoom = restRoom ?? true;
+    }
+    const routes = await prisma.routeDriver.findMany({
+      where,
       take: limit,
       select: select,
     });
