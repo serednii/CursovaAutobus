@@ -46,6 +46,33 @@ export const authConfig: AuthOptions = {
       },
     }),
 
+    // Credentials({
+    //   credentials: {
+    //     email: { label: "Email", type: "email", required: true },
+    //     password: { label: "Password", type: "password", required: true },
+    //   },
+    //   async authorize(credentials) {
+    //     if (!credentials?.email || !credentials.password) return null;
+
+    //     const user = await prisma.user.findUnique({
+    //       where: { email: credentials.email },
+    //     });
+
+    //     if (!user) return null;
+
+    //     const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+
+    //     if (!isPasswordValid) return null;
+
+    //     const { password, ...userWithoutPass } = user;
+
+    //     return {
+    //       ...userWithoutPass,
+    //       id: userWithoutPass.id.toString(),
+    //       isNewUser: false,
+    //     };
+    //   },
+    // }),
     Credentials({
       credentials: {
         email: { label: "Email", type: "email", required: true },
@@ -60,18 +87,18 @@ export const authConfig: AuthOptions = {
 
         if (!user) return null;
 
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
+        const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
         if (!isPasswordValid) return null;
 
-        const { password, ...userWithoutPass } = user;
-
         return {
-          ...userWithoutPass,
-          id: userWithoutPass.id.toString(),
+          ...user,
+          id: user.id.toString(),
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role as RoleEnum,
+          phone: user.phone,
+          license: user.license,
           isNewUser: false,
         };
       },
@@ -87,30 +114,41 @@ export const authConfig: AuthOptions = {
     async session({ session, token }) {
       session.user = {
         ...session.user,
-        isNewUser: token.isNewUser as boolean,
-        id: token.id as string,
-        firstName: token.firstName as string,
-        lastName: token.lastName as string,
-        role: token.role as RoleEnum,
-        phone: token.phone as string,
-        license: token.license as string,
-        email: token.email as string,
-        avatar_url: token.avatar_url as string,
+        isNewUser: token.isNewUser,
+        id: token.id,
+        email: token.email,
+        avatar_url: token.avatar_url,
+        firstName: token.firstName,
+        lastName: token.lastName,
+        role: token.role,
+        phone: token.phone,
+        license: token.license,
       };
 
       return session;
     },
 
+    // async jwt({ token, user }) {
+    //   if (user) {
+    //     console.log("user", user);
+    //     token = {
+    //       ...token,
+    //       ...user,
+    //       isNewUser: user.isNewUser ?? false,
+    //     };
+    //   }
+
+    //   return token;
+    // },
     async jwt({ token, user }) {
       if (user) {
-        console.log("user", user);
+        const dbUser = await findOrCreateUser(user?.email ?? "", user);
         token = {
           ...token,
-          ...user,
-          isNewUser: user.isNewUser ?? false,
+          role: dbUser.role as RoleEnum,
+          avatar_url: user.avatar_url ?? "", // Запобігаємо undefined
         };
       }
-
       return token;
     },
   },

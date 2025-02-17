@@ -11,7 +11,7 @@ interface IUpdateRouteWithId extends IUpdateRoute {
 
 // API route handler for updating a route
 export async function PATCH(req: Request) {
-  //   console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", await req.json());
+  console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", await req.json());
   try {
     const {
       id,

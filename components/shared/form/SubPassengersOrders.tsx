@@ -1,13 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
-import {
-  FieldErrors,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormUnregister,
-} from "react-hook-form";
-import { FormValues, ISubPassengers } from "@/types/form.types";
+import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormUnregister } from "react-hook-form";
+import { FormValues, SubPassengerDetails } from "@/types/form.types";
 
 import { NullableNumber } from "@/types/types";
 
@@ -20,14 +15,8 @@ interface Props {
   idOrderPassengers: NullableNumber[];
 }
 
-const SubPassengersOrders = ({
-  register,
-  unregister,
-  errors,
-  setValue,
-  idOrderPassengers,
-}: Props) => {
-  const [subPassengers, setSubPassengers] = useState<ISubPassengers[] | []>([]);
+const SubPassengersOrders = ({ register, unregister, errors, setValue, idOrderPassengers }: Props) => {
+  const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[] | []>([]);
 
   // console.log(idOrderPassengers, subPassengers);
   useEffect(() => {
@@ -65,11 +54,7 @@ const SubPassengersOrders = ({
     }
   }, [idOrderPassengers?.length]);
 
-  const handleChange = (
-    index: number,
-    value: string,
-    inputName: "subFirstName" | "subLastName" | "subPhone" | "subEmail"
-  ) => {
+  const handleChange = (index: number, value: string, inputName: "subFirstName" | "subLastName" | "subPhone" | "subEmail") => {
     console.log("value", value, inputName, index);
     setValue(`${inputName}.${index}`, value);
 
@@ -87,10 +72,7 @@ const SubPassengersOrders = ({
       </div>
       <div className="mt-4">
         {subPassengers.map((subPassenger, index) => (
-          <div
-            className="grid min-[400px]:grid-cols-2 md:grid-cols-4 grid-cols-1 gap-4 "
-            key={index}
-          >
+          <div className="grid min-[400px]:grid-cols-2 md:grid-cols-4 grid-cols-1 gap-4 " key={index}>
             <TextField
               {...register(`subFirstName.${index}`, {
                 required: "This field is required",
@@ -100,9 +82,7 @@ const SubPassengersOrders = ({
                 },
               })}
               value={subPassenger.subFirstName} // Прив'язка до стану
-              onChange={(e) =>
-                handleChange(index, e.target.value, "subFirstName")
-              }
+              onChange={(e) => handleChange(index, e.target.value, "subFirstName")}
               label={`subFirstName ${index + 1}`}
               variant="outlined"
               fullWidth
@@ -125,9 +105,7 @@ const SubPassengersOrders = ({
                 },
               })}
               value={subPassenger.subLastName} // Прив'язка до стану
-              onChange={(e) =>
-                handleChange(index, e.target.value, "subLastName")
-              }
+              onChange={(e) => handleChange(index, e.target.value, "subLastName")}
               label={`subLastName ${index + 1}`}
               variant="outlined"
               fullWidth

@@ -142,12 +142,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     }
   }, [route, layoutsData]);
 
-  // console.log("dataLayoutBus", dataLayoutBus);
-  // console.log("route", route);
-
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
-    // const res = await trigger();
-    // console.log("res", res);
     const createRouteDriver: IUpdateRoute = transformData(data, dataLayoutBus as ILayoutData, sessionUser as UserSession);
 
     const updateRoteDriver: IUpdateRouteWithId = {
@@ -155,6 +150,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       id: Number(route?.id),
     };
 
+    console.log("updateRoteDriver*********************", updateRoteDriver);
     fetchUpdateRouteById(updateRoteDriver)
       .then(async (response) => {
         if (response) {

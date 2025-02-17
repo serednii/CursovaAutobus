@@ -2,12 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Checkbox, FormControlLabel, FormGroup, Typography } from "@mui/material";
+import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 
 import CustomTextField from "@/components/shared/form/CustomTextField";
 
 import { FormValues } from "@/types/form.types";
-
 import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
 import { debounce } from "lodash";
@@ -24,7 +23,6 @@ import {
   searchRouteOne,
 } from "@/fetchFunctions/searchRoute";
 import { selectMany, selectOne } from "./const";
-import { useSessionStorage } from "@uidotdev/usehooks";
 import { useRouter, useSearchParams } from "next/navigation";
 import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
 interface IGetSearchRouteManyOptionData {
@@ -86,9 +84,10 @@ export default function FindRoute({ className }: { className?: string }) {
   // console.log("sessionUser", sessionUser);
   const {
     register,
-    unregister,
-    formState: { errors, isValid },
-    handleSubmit,
+    // unregister,
+    formState: { errors },
+    // formState: { errors, isValid },
+    // handleSubmit,
     reset,
     watch,
     control,

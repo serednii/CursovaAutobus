@@ -12,6 +12,10 @@ export interface UserDataBase {
   license: string;
 }
 
+export interface ICreateUser extends Omit<UserDataBase, "id" | "createdAt" | "license"> {
+  password: string;
+}
+
 export interface UserSession {
   id: string;
   email: string;
@@ -45,8 +49,7 @@ export type UserSelect = {
   createdAt?: boolean;
 };
 
-export interface IUser
-  extends Omit<UserSession, "role" | "name" | "isNewUser" | "license"> {}
+export interface IUser extends Omit<UserSession, "role" | "name" | "isNewUser" | "license"> {}
 
 export interface SessionData {
   data: {
@@ -90,5 +93,8 @@ declare module "next-auth/jwt" {
     iat: number;
     exp: 1741621046;
     jti: string;
+    id: string;
+    email: string;
+    avatar_url: string;
   }
 }

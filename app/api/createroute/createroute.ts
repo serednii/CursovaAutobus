@@ -2,11 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import validateFields from "./validateFields";
 import { ICreateRoute } from "../../../types/interface";
-import {
-  createBusSeats,
-  createIntermediateStops,
-  createPassengersSeatsList,
-} from "./createFunctions";
+import { createBusSeats, createIntermediateStops } from "./createFunctions";
 
 export async function createRoute(req: NextRequest) {
   try {
@@ -37,7 +33,6 @@ export async function createRoute(req: NextRequest) {
       bookedSeats,
       intermediateStops,
       busSeats,
-      passengersSeatsList,
     } = data;
 
     console.log("Data validation passed");
@@ -47,10 +42,7 @@ export async function createRoute(req: NextRequest) {
     console.log("errors", errors);
     // Якщо є помилки, повертаємо їх у відповіді
     if (Object.keys(errors).length > 0) {
-      return NextResponse.json(
-        { error: "Invalid data", details: errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid data", details: errors }, { status: 400 });
     }
 
     const routeDriver = await prisma.routeDriver.create({
@@ -74,47 +66,30 @@ export async function createRoute(req: NextRequest) {
       },
     });
     if (!routeDriver) {
-      return NextResponse.json(
-        { error: "Failed to create route driver" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to create route driver" }, { status: 500 });
     }
     // console.log("Route driver created:", routeDriver);
 
     // // Створення проміжних зупинок
-    const resultIntermediateStops = await createIntermediateStops(
-      intermediateStops,
-      routeDriver.id
-    );
+    const resultIntermediateStops = await createIntermediateStops(intermediateStops, routeDriver.id);
     if (!resultIntermediateStops) {
-      return NextResponse.json(
-        { error: "Failed to create intermediate stops" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
     }
     // Створення місць у автобусі
     const resultBusSeats = await createBusSeats(busSeats, routeDriver.id);
     if (!resultBusSeats) {
-      return NextResponse.json(
-        { error: "Failed to create bus seats" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to create bus seats" }, { status: 500 });
     }
 
     // Створення списку пасажирів
     // await createPassengersSeatsList(passengersSeatsList, routeDriver.id);
 
-    return NextResponse.json(
-      { routeDriver, resultIntermediateStops, resultBusSeats },
-      { status: 201 }
-    );
+    return NextResponse.json({ routeDriver, resultIntermediateStops, resultBusSeats }, { status: 201 });
+    // @typescript-eslint/no-explicit-any
   } catch (error: Error | any) {
     console.error("Error creating route driver:", error);
     console.error("Error details:", error.message);
-    return NextResponse.json(
-      { error: "Internal server error", details: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error", details: error.message }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

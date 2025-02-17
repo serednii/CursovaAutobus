@@ -1,6 +1,5 @@
 import { prisma } from "@/prisma/prisma-client";
 import { NextResponse } from "next/server";
-import { number } from "zod";
 
 export async function POST(req: any) {
   try {
@@ -10,33 +9,24 @@ export async function POST(req: any) {
     // Перевірка, чи передано driverId
 
     if (!passengerId) {
-      return NextResponse.json(
-        { error: "Поле 'passengerId' є обов'язковим" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Поле 'passengerId' є обов'язковим" }, { status: 400 });
     }
 
     // Виконуємо запит до бази даних із включенням зв’язаних таблиць
-    const routeDriversId: { routeDriverId: number }[] =
-      await prisma.busSeat.findMany({
-        where: { passenger: passengerId },
-        select: {
-          routeDriverId: true, // Залишаємо це поле
-          // Усі інші поля не будуть включені, якщо вони не вказані як `true`
-        },
-      });
+    const routeDriversId: { routeDriverId: number }[] = await prisma.busSeat.findMany({
+      where: { passenger: passengerId },
+      select: {
+        routeDriverId: true, // Залишаємо це поле
+        // Усі інші поля не будуть включені, якщо вони не вказані як `true`
+      },
+    });
 
     // Якщо маршрути не знайдено
     if (!routeDriversId.length) {
-      return NextResponse.json(
-        { message: "Маршрути для вказаного passengerId не знайдено" },
-        { status: 200 }
-      );
+      return NextResponse.json({ message: "Маршрути для вказаного passengerId не знайдено" }, { status: 200 });
     }
 
-    const uniqueRouteDriversId: number[] = Array.from(
-      new Set(routeDriversId.map((route) => route.routeDriverId))
-    );
+    const uniqueRouteDriversId: number[] = Array.from(new Set(routeDriversId.map((route) => route.routeDriverId)));
 
     // console.log("XXXXXXXXXXXXXXXXX", uniqueRouteDriversId);
     const routes = await prisma.routeDriver.findMany({
@@ -50,9 +40,6 @@ export async function POST(req: any) {
     return NextResponse.json([...routes]);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
-    return NextResponse.json(
-      { error: "Не вдалося обробити запит" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
   }
 }

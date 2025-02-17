@@ -1,3 +1,5 @@
+import { RoleEnum } from "@/enum/shared.enums";
+
 export interface User {
   id: number;
   firstName: string;
@@ -5,7 +7,7 @@ export interface User {
   email: string;
   phone: string;
   password: string;
-  role: string;
+  role: RoleEnum;
   license: string;
   routes?: RouteDriver[];
   orders?: OrderedRoute[];

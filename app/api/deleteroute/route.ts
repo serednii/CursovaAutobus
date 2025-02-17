@@ -8,10 +8,7 @@ export async function DELETE(req: any) {
     console.log("routedId", routeId);
     // Перевірка, чи передано routeId
     if (!routeId) {
-      return NextResponse.json(
-        { error: "Поле 'routeId' є обов'язковим" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Поле 'routeId' є обов'язковим" }, { status: 400 });
     }
 
     // Видалення маршруту
@@ -19,24 +16,15 @@ export async function DELETE(req: any) {
       where: { id: routeId },
     });
 
-    return NextResponse.json(
-      { message: "Маршрут успішно видалено", deletedRoute },
-      { status: 200 }
-    );
-  } catch (error) {
+    return NextResponse.json({ message: "Маршрут успішно видалено", deletedRoute }, { status: 200 });
+  } catch (error: any) {
     console.error("Помилка видалення маршруту:", error);
 
     // Обробка помилки, якщо маршрут не знайдено
     if (error.code === "P2025") {
-      return NextResponse.json(
-        { error: "Маршрут із зазначеним 'routeId' не знайдено" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Маршрут із зазначеним 'routeId' не знайдено" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { error: "Не вдалося обробити запит" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
   }
 }

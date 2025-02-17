@@ -7,7 +7,6 @@ import { getServerSession } from "next-auth/next";
 import { Container } from "@mui/material";
 import { sortDate } from "./action";
 
-import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import fetchGetRoutesByDriverId from "@/fetchFunctions/fetchGetRoutesByDriverId";
 
 export default async function MyRoutes() {

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Checkbox, FormControlLabel, FormGroup, Typography } from "@mui/material";
+import { Checkbox, FormControlLabel } from "@mui/material";
 import { IoIosWifi } from "react-icons/io";
 import { CgCoffee } from "react-icons/cg";
 import { MdOutlinePower } from "react-icons/md";

@@ -25,10 +25,9 @@ const routeSchemaSeatSelection = z.object({
   modelBus: z.string(),
   maxSeats: z.number().int().positive(),
   bookedSeats: z.number().int(),
+  // AvailableSeats: z.number().int(),
 });
 
 // Схема для масиву маршрутів
 export const ZodFetchGetRoutesByIdMyRoute = z.array(routeSchemaMyRoute);
-export const ZodFetchGetRoutesByIdSeatSelection = z.array(
-  routeSchemaSeatSelection
-);
+export const ZodFetchGetRoutesByIdSeatSelection = z.array(routeSchemaSeatSelection);

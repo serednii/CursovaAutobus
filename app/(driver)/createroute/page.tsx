@@ -8,7 +8,7 @@ import { Container } from "@/components/shared/Container";
 import CustomDatePicker from "@/components/shared/form/dataPicker/DataPicker";
 import DynamicTextFields from "@/components/shared/form/DynamicTextFields";
 import MaterialUISelect from "@/components/shared/form/MaterialUISelect";
-import CheckboxOptions from "@/components/shared/form/CheckboxOptionsDriver";
+
 import CustomTextField from "@/components/shared/form/CustomTextField";
 
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
@@ -51,7 +51,7 @@ export default function CreateRoute() {
 
   const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null; // Присвоюємо значення session.user
 
-  const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), [layoutsData.length]);
+  const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
 
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     try {

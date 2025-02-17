@@ -3,12 +3,14 @@ import { FormValues } from "./interface";
 import { createUser } from "./utils";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { RoleEnum } from "@/enum/shared.enums";
 
-export default function useDriverAuth(reset: any, role: string) {
+export default function useDriverAuth(reset: () => void, role: RoleEnum) {
   const router = useRouter();
-  const onSubmit = async (data: SubmitHandler<FormValues>) => {
-    delete data.password_repeat;
 
+  const onSubmit: SubmitHandler<FormValues> = async (formData) => {
+    const { password_repeat, ...data } = formData; // Удаляем password_repeat
+    void password_repeat;
     data.role = role;
     console.log(data);
     const result = await createUser(data);

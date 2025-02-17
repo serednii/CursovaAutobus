@@ -28,7 +28,7 @@ interface Props {
 const CustomDatePicker = ({
   name,
   title,
-  register,
+  // register,
   control,
   errors,
   className,

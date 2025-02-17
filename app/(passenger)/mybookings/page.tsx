@@ -12,26 +12,23 @@ import { select } from "./const";
 import { toast } from "react-hot-toast";
 import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
-import { SeatStatusEnum } from "@/enum/shared.enums";
 
-interface IGetRoutePassengerById
-  extends Omit<GetRoutesByPassengerId, "busSeats"> {
-  busSeats: {
-    number: number;
-    id: number;
-    passenger: number | null;
-    busSeatStatus: SeatStatusEnum;
-    routeDriverId: number;
-  }[];
-}
+// interface IGetRoutePassengerById
+//   extends Omit<GetRoutesByPassengerId, "busSeats"> {
+//   busSeats: {
+//     number: number;
+//     id: number;
+//     passenger: number | null;
+//     busSeatStatus: SeatStatusEnum;
+//     routeDriverId: number;
+//   }[];
+// }
 
 export default function MyBookings() {
   const { data: session } = useSession();
   const passengerId: number | undefined = Number(session?.user?.id);
   const [reload, setReload] = useState(false);
-  const [routesPassenger, setRoutesPassenger] = useState<
-    GetRoutesByPassengerId[]
-  >([]);
+  const [routesPassenger, setRoutesPassenger] = useState<GetRoutesByPassengerId[]>([]);
 
   console.log("routesPassenger", routesPassenger);
 
@@ -40,10 +37,7 @@ export default function MyBookings() {
 
     const fetchRoutes = async () => {
       try {
-        const routes = await fetchGetRoutesByPassengerId<typeof select>(
-          passengerId,
-          select
-        );
+        const routes = await fetchGetRoutesByPassengerId<typeof select>(passengerId, select);
         setRoutesPassenger(routes || []);
       } catch (error) {
         console.error("Error fetching routes:", error);
@@ -55,9 +49,7 @@ export default function MyBookings() {
 
   if (!passengerId) return <p>Loading...</p>;
 
-  const { pastRoutes, availableRoutes } = sortDate(
-    getRoutesTable(routesPassenger, passengerId)
-  );
+  const { pastRoutes, availableRoutes } = sortDate(getRoutesTable(routesPassenger, passengerId));
 
   const removeRoutePassenger = async (routeId: number) => {
     const busSeatsRaw = getBusSeatsRaw(routesPassenger, routeId);
@@ -89,11 +81,7 @@ export default function MyBookings() {
     <div>
       <Container>
         <h1 className="text-2xl font-bold mb-10">Booked Routes</h1>
-        <AvailableRoutes
-          className="mb-10"
-          routes={availableRoutes}
-          removeRoutePassenger={removeRoutePassenger}
-        />
+        <AvailableRoutes className="mb-10" routes={availableRoutes} removeRoutePassenger={removeRoutePassenger} />
         <PastRoutes routes={pastRoutes} />
       </Container>
     </div>

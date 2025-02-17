@@ -1,6 +1,5 @@
 import * as DialogPrimitives from "@radix-ui/react-dialog";
 import * as Icons from "@radix-ui/react-icons";
-import { ReactNode } from "react";
 import "./dialog.css";
 
 interface DialogProps {

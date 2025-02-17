@@ -3,7 +3,7 @@ import { IUpdateRouteWithId } from "@/types/route-passenger.types";
 import { z } from "zod";
 
 export const zodSchemaUpdateRouteIn: z.ZodType<IUpdateRouteWithId> = z.object({
-  idRoute: z.number(),
+  id: z.number(),
   busSeats: z.array(
     z.object({
       number: z.number(),

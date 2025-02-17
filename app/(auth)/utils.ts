@@ -1,5 +1,7 @@
-export const createUser = async (data: any) => {
-  console.log("creayeuser", data);
+import { ICreateUser } from "@/types/next-auth";
+
+export const createUser = async (data: ICreateUser) => {
+  console.log("creayeuser----------------------------", data);
   try {
     const res = await fetch("/api/users", {
       method: "POST",

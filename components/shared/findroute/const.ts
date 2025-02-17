@@ -1,7 +1,4 @@
-import {
-  IGetSearchRouteManyOption,
-  IGetSearchRouteOneOption,
-} from "@/types/searchroute.types";
+import { IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/searchRoute";
 
 export const selectMany: IGetSearchRouteManyOption = {
   id: true,

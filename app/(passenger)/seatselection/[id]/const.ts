@@ -29,7 +29,7 @@ export const select: IGetSearchRouteSeatSelectionOption = {
       number: true,
       busSeatStatus: true,
       routeDriverId: true,
-      // routeDriver: true,
+      routeDriver: true,
     },
   },
   selectBusLayout: true,

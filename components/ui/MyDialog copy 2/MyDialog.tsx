@@ -1,6 +1,5 @@
 import * as DialogPrimitives from "@radix-ui/react-dialog";
 import * as Icons from "@radix-ui/react-icons";
-import { ReactNode } from "react";
 import "./dialog.css";
 
 interface DialogProps {
@@ -23,13 +22,8 @@ export const MyDialog = ({
       {/* <DialogPrimitives.DialogTrigger>
 
       </DialogPrimitives.DialogTrigger> */}
-      <DialogPrimitives.DialogContent
-        className="content"
-        aria-describedby={undefined}
-      >
-        <DialogPrimitives.DialogTitle className="title">
-          {title}
-        </DialogPrimitives.DialogTitle>
+      <DialogPrimitives.DialogContent className="content" aria-describedby={undefined}>
+        <DialogPrimitives.DialogTitle className="title">{title}</DialogPrimitives.DialogTitle>
         {/* <DialogPrimitives.DialogDescription></DialogPrimitives.DialogDescription> */}
         {/* {title} */}
         <div className="dialog-buttons">
@@ -43,11 +37,7 @@ export const MyDialog = ({
             </button>
           </DialogPrimitives.DialogClose>
           <DialogPrimitives.DialogClose asChild>
-            <button
-              onClick={() => setOk(true)}
-              aria-label="Close"
-              className="button action"
-            >
+            <button onClick={() => setOk(true)} aria-label="Close" className="button action">
               Sure
             </button>
           </DialogPrimitives.DialogClose>

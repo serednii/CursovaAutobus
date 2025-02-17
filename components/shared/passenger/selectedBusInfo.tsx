@@ -4,7 +4,7 @@ import React from "react";
 import { IoArrowForward } from "react-icons/io5";
 
 interface Props {
-  route: IGetRoutePassengerById | null;
+  route: IGetRoutePassengerById;
 }
 
 export default function SelectedBusInfo({ route }: Props) {
@@ -27,10 +27,7 @@ export default function SelectedBusInfo({ route }: Props) {
           <p>{departureFrom}</p>
         </li>
         <li>
-          <IoArrowForward
-            className="w-full"
-            style={{ color: "gray", fontSize: "20px" }}
-          />
+          <IoArrowForward className="w-full" style={{ color: "gray", fontSize: "20px" }} />
           <p>{travelTime(route.departureDate, route.arrivalDate)}</p>
         </li>
         <li>

@@ -4,11 +4,7 @@ import OrderSeatsBus from "@/components/shared/passenger/OrderseatsBus";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/shared/Container";
-import {
-  fetchGetRoutesByIdSeatSelection,
-  IGetRouteSeatSelection,
-  IGetSearchRouteSeatSelectionOption,
-} from "@/fetchFunctions/fetchGetRoutesById";
+import { fetchGetRoutesByIdSeatSelection, IGetRouteSeatSelection, IGetSearchRouteSeatSelectionOption } from "@/fetchFunctions/fetchGetRoutesById";
 import { select } from "./const";
 
 interface Props {
@@ -18,10 +14,7 @@ interface Props {
 export default async function SeatSelection({ params }: Props) {
   const { id } = (await params) || undefined;
 
-  const routeArray = await fetchGetRoutesByIdSeatSelection<
-    IGetSearchRouteSeatSelectionOption,
-    IGetRouteSeatSelection[]
-  >([Number(id)], select);
+  const routeArray = await fetchGetRoutesByIdSeatSelection<IGetSearchRouteSeatSelectionOption, IGetRouteSeatSelection[]>([Number(id)], select);
 
   const route = routeArray && routeArray[0];
 

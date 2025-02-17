@@ -8,6 +8,7 @@ export async function middleware(req: any) {
   // console.log("token token", token);
   // console.log("url url", url);
   const callbackUrl = encodeURIComponent(url.pathname); // Зберігаємо поточний шлях
+  console.log("callbackUrl", callbackUrl);
   // Якщо є токен (користувач залогінений)
   if (token) {
     // const urlRedirect = urlSearch.replaceAll("%2F", "/");
@@ -27,10 +28,8 @@ export async function middleware(req: any) {
       url.pathname.startsWith("/selectrole") ||
       url.pathname.startsWith("/registerdriver") ||
       url.pathname.startsWith("/registerpassenger") ||
-      (token.role === RoleEnum.PASSENGER &&
-        url.pathname.startsWith("/createroute")) ||
-      (token.role === RoleEnum.PASSENGER &&
-        url.pathname.startsWith("/myroutes")) ||
+      (token.role === RoleEnum.PASSENGER && url.pathname.startsWith("/createroute")) ||
+      (token.role === RoleEnum.PASSENGER && url.pathname.startsWith("/myroutes")) ||
       (token.role === RoleEnum.PASSENGER && url.pathname.startsWith("/myroute"))
     ) {
       // url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/";
@@ -50,7 +49,7 @@ export async function middleware(req: any) {
       url.pathname.startsWith("/seatselection")
     ) {
       url.pathname = "/signin";
-      // url.searchParams.set("callbackUrl", callbackUrl); // Додаємо параметр для редиректу після авторизації
+      url.searchParams.set("callbackUrl", callbackUrl); // Додаємо параметр для редиректу після авторизації
       return NextResponse.redirect(url);
     }
   }

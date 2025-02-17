@@ -1,10 +1,10 @@
 import { Container } from "@/components/shared/Container";
 import FindRoute from "@/components/shared/findroute/FindRoute";
-import { authConfig } from "@/configs/auth";
-import { getServerSession } from "next-auth/next";
+// import { authConfig } from "@/configs/auth";
+// import { getServerSession } from "next-auth/next";
 
 export default async function Home() {
-  const session = await getServerSession(authConfig);
+  // const session = await getServerSession(authConfig);
 
   // console.log("session ---", session);
 

@@ -1,8 +1,5 @@
 import { IUpdateRouteWithId } from "@/types/route-passenger.types";
-import {
-  zodSchemaUpdateRouteIn,
-  zodSchemaUpdateRouteRes,
-} from "@/zod_shema/zodGetUpdateRoute";
+import { zodSchemaUpdateRouteIn, zodSchemaUpdateRouteRes } from "@/zod_shema/zodGetUpdateRoute";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -11,7 +8,7 @@ async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
     const updateRouteByIdParsed = zodSchemaUpdateRouteIn.parse(updateRouteById);
     console.log("updateRouteByIdParsed", updateRouteByIdParsed);
     const response = await fetch(`${API_URL}/api/updateRouteById`, {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -19,9 +16,7 @@ async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Помилка сервера: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -33,19 +28,11 @@ async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
       return parsedData;
     } catch (parseError: unknown) {
       console.error("Помилка парсингу даних:", parseError);
-      throw new Error(
-        parseError instanceof Error
-          ? parseError.message
-          : "Помилка парсингу даних"
-      );
+      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
     }
   } catch (error: unknown) {
     console.error("Помилка під час виконання запиту:", error);
-    throw new Error(
-      error instanceof Error
-        ? error.message
-        : "Помилка під час виконання запиту"
-    );
+    throw new Error(error instanceof Error ? error.message : "Помилка під час виконання запиту");
   }
 }
 
