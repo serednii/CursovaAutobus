@@ -18,7 +18,7 @@ export default function UserInfo() {
   // if (!data) return <p>No user is logged in</p>;
   const { user } = data || {};
 
-  console.log("user", user);
+  // console.log("user", user);
 
   return (
     <div className="flex gap-4 items-center">
@@ -30,10 +30,7 @@ export default function UserInfo() {
             3
           </div>
         </div>
-        <UserAvatar
-          avatarUrl={user?.avatar_url || user?.image || ""}
-          {...user}
-        />
+        <UserAvatar avatarUrl={user?.avatar_url || user?.image || ""} {...user} />
       </ShowIf>
       <ShowIf condition={!!data}>
         <Link

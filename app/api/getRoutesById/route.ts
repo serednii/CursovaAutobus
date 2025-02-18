@@ -12,25 +12,19 @@ export async function POST(req: NextRequest) {
     const body: TypeGetRoutesById = await req.json();
     const { id, select } = body;
 
-    console.log("id---", id, select);
+    // console.log("id---", id, select);
 
     // Валідація `id`
     if (!Array.isArray(id) || id.length === 0) {
-      return NextResponse.json(
-        { error: "Поле 'id' має бути непорожнім масивом чисел!" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Поле 'id' має бути непорожнім масивом чисел!" }, { status: 400 });
     }
 
-    console.log("Валідація `id пройшла успішно  ", id, select);
+    // console.log("Валідація `id пройшла успішно  ", id, select);
     // Валідація `select`
     if (!select || typeof select !== "object") {
-      return NextResponse.json(
-        { error: "Некоректне поле 'select'!" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Некоректне поле 'select'!" }, { status: 400 });
     }
-    console.log("Валідація `select пройшла успішно", id, select);
+    // console.log("Валідація `select пройшла успішно", id, select);
 
     // Запит до бази даних
     const routes = await prisma.routeDriver.findMany({
@@ -38,22 +32,16 @@ export async function POST(req: NextRequest) {
       select: select,
     });
 
-    console.log("Найдені маршрути:", routes);
+    // console.log("Найдені маршрути:", routes);
 
     // Перевірка на порожній результат
     if (routes.length === 0) {
-      return NextResponse.json(
-        { message: "Маршрути для вказаного ID не знайдено" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Маршрути для вказаного ID не знайдено" }, { status: 404 });
     }
 
     return NextResponse.json(routes);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
-    return NextResponse.json(
-      { error: "Не вдалося обробити запит" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
   }
 }

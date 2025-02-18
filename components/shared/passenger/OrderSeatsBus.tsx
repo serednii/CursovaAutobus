@@ -87,9 +87,6 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     formState: { errors },
     handleSubmit,
     setValue,
-    reset,
-    watch,
-    control,
   } = useForm<FormValues>({
     mode: "onChange",
     defaultValues: {
@@ -105,11 +102,6 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   }
 
-  console.log("sessionUser", sessionUser, session?.user);
-
-  // console.log("DDDDDDDDDDD", sessionUser);
-  // console.log("dataLayoutBus++++++++++++++++", dataLayoutBus?.passenger);
-
   const userIdSession = Number(sessionUser?.id);
 
   const idOrderPassengers = dataLayoutBus?.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
@@ -117,10 +109,8 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   useEffect(() => {
     if (route) {
       const [filteredData] = layoutsData.filter((item) => {
-        console.log("item.modelBus", item.modelBus);
         return item.modelBus === route.modelBus;
       });
-      console.log("filteredData", filteredData);
       if (!filteredData) {
         console.error("Name Bus not found in layoutsData");
         throw new Error("Name Bus not found in layoutsData");
@@ -150,7 +140,6 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       id: Number(route?.id),
     };
 
-    console.log("updateRoteDriver*********************", updateRoteDriver);
     fetchUpdateRouteById(updateRoteDriver)
       .then(async (response) => {
         if (response) {

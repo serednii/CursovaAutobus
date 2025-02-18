@@ -25,6 +25,7 @@ import {
 import { selectMany, selectOne } from "./const";
 import { useRouter, useSearchParams } from "next/navigation";
 import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
+import { useSessionStorage } from "@uidotdev/usehooks";
 interface IGetSearchRouteManyOptionData {
   departureSearch: string | undefined;
   arrivalToSearch: string | undefined;
@@ -107,14 +108,17 @@ export default function FindRoute({ className }: { className?: string }) {
   const restRoom = watch("restRoom");
   const isOption = watch("isOption");
   // console.log("isOption ttt t t t t t t t ", watch("isOption"), isOption);
-
-  // useEffect(() => {
-  //   if (idRoute && transition && status === "authenticated") {
-  //     setTransition("");
-  //     setIdRoute(null);
-  //     router.push(`/seatselection/${idRoute}`);
-  //   }
-  // }, [idRoute, transition]);
+  const idRoute = sessionStorage.getItem("idRoute");
+  const transition = sessionStorage.getItem("transition");
+  // console.log("sessionStorage idRoute transition", idRoute, transition, status, router);
+  useEffect(() => {
+    if (idRoute && transition === "seatselection" && status === "authenticated") {
+      sessionStorage.removeItem("idRoute");
+      sessionStorage.removeItem("transition");
+      // console.log("go to seatselection");
+      router.push(`/seatselection/${idRoute}`);
+    }
+  }, [idRoute, transition, status, router]);
 
   useEffect(() => {
     console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXX");

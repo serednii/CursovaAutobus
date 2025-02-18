@@ -18,13 +18,11 @@ export default async function SeatSelection({ params }: Props) {
 
   const route = routeArray && routeArray[0];
 
-  console.log("routeRaw", id, route);
-
   return (
     <Container className="pt-4">
       <SelectedBusInfo route={route} />
       <OrderSeatsBus layoutsData={layoutsData} route={route} />
-      MyBookings{id}
+      MyBookings {id}
     </Container>
   );
 }

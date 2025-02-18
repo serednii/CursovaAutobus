@@ -37,7 +37,7 @@ export type IGetRouteMyRoute = GenerateType<routeDataBase, selectRouteMyRouteKey
 
 export default async function fetchGetRoutesById<TResult, TSelect>(id: number[], select: TSelect): Promise<TResult> {
   try {
-    console.log("Відправка запиту:", id, select);
+    // console.log("Відправка запиту:", id, select);
 
     const response = await fetch(`${API_URL}/api/getRoutesById`, {
       method: "POST",
@@ -73,7 +73,7 @@ export const fetchGetRoutesByIdSeatSelection = async <TSelect, TResult>(id: numb
     if (!res) {
       throw new Error("Помилка: отримано null або undefined");
     }
-    console.log("res1111", res);
+    // console.log("res1111", res);
     try {
       const parsedData = ZodFetchGetRoutesByIdSeatSelection.parse(res);
       return parsedData;

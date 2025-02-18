@@ -16,19 +16,15 @@ interface Props {
 
 export default function TableSearchRoutes({ routes }: Props) {
   const router = useRouter();
-  const [idRoute, setIdRoute] = useSessionStorage<number | null>(
-    "idRoute",
-    null
-  );
-  const [transition, setTransition] = useSessionStorage<string>(
-    "transition",
-    ""
-  );
+  // const [idRoute, setIdRoute] = useSessionStorage<number | null>("idRoute", null);
+  // const [transition, setTransition] = useSessionStorage<string>("transition", "");
 
   const handleViewRoute = (route: TypeBaseRoute) => {
     // console.log("Viewing route:", route);
-    setIdRoute(route.id);
-    setTransition("seatselection");
+    // setIdRoute(route.id);
+    sessionStorage.setItem("idRoute", String(route.id));
+    // setTransition("seatselection");
+    sessionStorage.setItem("transition", "seatselection");
     router.push(`/seatselection/${route.id}`);
     // alert(`Viewing route from ${route.id}`);
   };
@@ -78,12 +74,7 @@ export default function TableSearchRoutes({ routes }: Props) {
       flex: 1,
       sortable: false,
       renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={() => handleViewRoute(params.row)}
-        >
+        <Button variant="contained" color="primary" size="small" onClick={() => handleViewRoute(params.row)}>
           Book Now
         </Button>
       ),

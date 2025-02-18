@@ -11,7 +11,6 @@ export default function SelectedBusInfo({ route }: Props) {
   if (!route) {
     return null;
   }
-
   const departureFrom = route.departureFrom;
   const arrivalTo = route.arrivalTo;
   const price = route.routePrice;
