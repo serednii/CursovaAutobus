@@ -72,10 +72,18 @@ export async function POST(req: NextRequest) {
     };
 
     if (isOption) {
-      where.wifi = wifi ?? true;
-      where.coffee = coffee ?? true;
-      where.power = power ?? true;
-      where.restRoom = restRoom ?? true;
+      if (wifi) {
+        where.wifi = wifi;
+      }
+      if (coffee) {
+        where.coffee = coffee;
+      }
+      if (power) {
+        where.power = power;
+      }
+      if (restRoom) {
+        where.restRoom = restRoom;
+      }
     }
     const routes = await prisma.routeDriver.findMany({
       where,
