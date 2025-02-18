@@ -12,6 +12,7 @@ import UserInfo from "./shared/user/Userinfo";
 import { FaBusAlt } from "react-icons/fa";
 import LinkDriver from "./shared/driver/Linkdriver";
 import { MenuDriver } from "@/types/menudriver.types";
+import { title } from "process";
 
 const menuDriver = [
   {
@@ -48,18 +49,9 @@ export default function Header() {
   const session = useSession();
   let menulist: MenuDriver[] = [];
 
-  if (
-    pathname === "/createroute" ||
-    pathname === "/myroutes" ||
-    pathname.includes("/myroute")
-  ) {
+  if (pathname === "/createroute" || pathname === "/myroutes" || pathname.includes("/myroute")) {
     menulist = menuDriver;
-  } else if (
-    pathname === "/passengerdashboard" ||
-    pathname.includes("/seatselection") ||
-    pathname === "/mybookings" ||
-    pathname === "/myprofile"
-  ) {
+  } else if (pathname === "/passengerdashboard" || pathname.includes("/seatselection") || pathname === "/mybookings" || pathname === "/myprofile") {
     menulist = menuPassenger;
   }
 
@@ -74,16 +66,12 @@ export default function Header() {
   return (
     <Container className="flex justify-between gap-3 relative  flex-wrap z-[100] bg-gray-300 rounded-lg py-2 w-full">
       <div className="flex gap-4 items-center">
-        <Link href="/">
-          <FaBusAlt style={{ width: "32px", height: "32px" }} />
+        <Link href="/" className="flex items-center gap-2 ">
+          <FaBusAlt style={{ width: "32px", height: "32px", color: "blue" }} />
+          <h1 className="font-bold text-black text-xl hidden md:block">ExpressBus</h1>
         </Link>
         <ShowIf condition={!!data && pathname === "/"}>
-          <ShowIf
-            condition={
-              data?.user?.role === RoleEnum.DRIVER ||
-              data?.user?.role === RoleEnum.ADMIN
-            }
-          >
+          <ShowIf condition={data?.user?.role === RoleEnum.DRIVER || data?.user?.role === RoleEnum.ADMIN}>
             <Link
               style={{
                 // backgroundColor: "yellow",
@@ -97,22 +85,14 @@ export default function Header() {
             </Link>
           </ShowIf>
 
-          <ShowIf
-            condition={
-              data?.user?.role === RoleEnum.PASSENGER ||
-              data?.user?.role === RoleEnum.ADMIN ||
-              data?.user?.role === RoleEnum.DRIVER
-            }
-          >
+          <ShowIf condition={data?.user?.role === RoleEnum.PASSENGER || data?.user?.role === RoleEnum.ADMIN || data?.user?.role === RoleEnum.DRIVER}>
             <Link
               style={{
                 // backgroundColor: "yellow",
                 padding: "5px",
                 borderRadius: "15px",
               }}
-              className={
-                pathname === "/passengerdashboard" ? "active-link" : ""
-              }
+              className={pathname === "/passengerdashboard" ? "active-link" : ""}
               href="/passengerdashboard/"
             >
               Passenger

@@ -18,16 +18,12 @@ export default function SelectRole() {
           <p>Are you a Driver or a Passenger?</p>
           <div className="role__links">
             <Link href="/registerdriver">
-              <FaBusAlt
-                style={{ color: "#2563EB", width: "32px", height: "36px" }}
-              />
+              <FaBusAlt style={{ color: "#2563EB", width: "32px", height: "36px" }} />
               <h2>Driver</h2>
               <p>I want to drive</p>
             </Link>
             <Link href="/registerpassenger">
-              <FaUserAlt
-                style={{ color: "#2563EB", width: "32px", height: "36px" }}
-              />
+              <FaUserAlt style={{ color: "#2563EB", width: "32px", height: "36px" }} />
               <h2>Passenger</h2>
               <p>I need a ride</p>
             </Link>
@@ -45,14 +41,7 @@ export default function SelectRole() {
         </div>
       </div>
       <div className="auth__img">
-        <Image
-          className="dark:invert"
-          src="/images/bus.png"
-          alt="Next.js logo"
-          width={540}
-          height={540}
-          priority
-        />
+        <Image className="dark:invert" src="/images/bus.png" alt="Next.js logo" width={540} height={540} priority />
       </div>
     </Overlay>
   );

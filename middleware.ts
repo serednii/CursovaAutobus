@@ -8,7 +8,7 @@ export async function middleware(req: any) {
   // console.log("token token", token);
   // console.log("url url", url);
   const callbackUrl = encodeURIComponent(url.pathname); // Зберігаємо поточний шлях
-  console.log("callbackUrl", callbackUrl);
+  // console.log("callbackUrl", callbackUrl);
   // Якщо є токен (користувач залогінений)
   if (token) {
     // const urlRedirect = urlSearch.replaceAll("%2F", "/");
