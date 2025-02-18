@@ -9,14 +9,14 @@ import { FormValues } from "@/types/form.types";
 interface Props {
   register: UseFormRegister<FormValues>;
   watch: UseFormWatch<FormValues>;
-  reset: UseFormReset<FormValues>;
   className?: string;
 }
 
-export default function CheckboxOptionsMain({ register, watch, reset }: Props) {
+export default function CheckboxOptionsMain({ register, watch }: Props) {
   return (
-    <div className="grid grid-cols-1 justify-self-center min-[900px]:justify-self-start min-[500px]:grid-cols-2 min-[900px]:grid-cols-4 gap-4">
+    <div className="w-full grid grid-cols-1 justify-self-center min-[900px]:justify-self-start min-[500px]:grid-cols-2 min-[900px]:grid-cols-4 gap-4">
       <FormControlLabel
+        className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
         control={<Checkbox {...register("wifi")} />}
         checked={watch("wifi") || false}
         disabled={!watch("isOption")}
@@ -28,6 +28,7 @@ export default function CheckboxOptionsMain({ register, watch, reset }: Props) {
         }
       />
       <FormControlLabel
+        className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
         control={<Checkbox {...register("coffee")} />}
         disabled={!watch("isOption")}
         checked={watch("coffee") || false}
@@ -39,6 +40,7 @@ export default function CheckboxOptionsMain({ register, watch, reset }: Props) {
         }
       />
       <FormControlLabel
+        className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
         control={<Checkbox {...register("power")} />}
         disabled={!watch("isOption")}
         checked={watch("power") || false}
@@ -50,6 +52,7 @@ export default function CheckboxOptionsMain({ register, watch, reset }: Props) {
         }
       />
       <FormControlLabel
+        className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
         control={<Checkbox {...register("restRoom")} />}
         disabled={!watch("isOption")}
         checked={watch("restRoom") || false}

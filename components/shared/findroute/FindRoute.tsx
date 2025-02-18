@@ -214,7 +214,7 @@ export default function FindRoute({ className }: { className?: string }) {
 
   return (
     <div className={cn(className, "px-4 bg-[white] rounded-xl min-h-[530px]")}>
-      <form>
+      <form className="mb-10">
         <div className="flex gap-5 mb-5 flex-wrap">
           <CustomTextField
             register={register}
@@ -262,12 +262,11 @@ export default function FindRoute({ className }: { className?: string }) {
                 label={<div style={{ display: "flex", alignItems: "center" }}> Additional options:</div>}
               />
             </Typography>
-            <CheckboxOptionsMain register={register} watch={watch} reset={reset} />
+            <CheckboxOptionsMain register={register} watch={watch} />
           </div>
         </div>
-        restRoom
       </form>
-
+      <h2>Rest Room</h2>
       {Array.isArray(searchDates) && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} />}
       <div className="footer"></div>
     </div>
