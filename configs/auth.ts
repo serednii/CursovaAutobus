@@ -46,33 +46,6 @@ export const authConfig: AuthOptions = {
       },
     }),
 
-    // Credentials({
-    //   credentials: {
-    //     email: { label: "Email", type: "email", required: true },
-    //     password: { label: "Password", type: "password", required: true },
-    //   },
-    //   async authorize(credentials) {
-    //     if (!credentials?.email || !credentials.password) return null;
-
-    //     const user = await prisma.user.findUnique({
-    //       where: { email: credentials.email },
-    //     });
-
-    //     if (!user) return null;
-
-    //     const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
-
-    //     if (!isPasswordValid) return null;
-
-    //     const { password, ...userWithoutPass } = user;
-
-    //     return {
-    //       ...userWithoutPass,
-    //       id: userWithoutPass.id.toString(),
-    //       isNewUser: false,
-    //     };
-    //   },
-    // }),
     Credentials({
       credentials: {
         email: { label: "Email", type: "email", required: true },
@@ -128,27 +101,26 @@ export const authConfig: AuthOptions = {
       return session;
     },
 
-    // async jwt({ token, user }) {
-    //   if (user) {
-    //     console.log("user", user);
-    //     token = {
-    //       ...token,
-    //       ...user,
-    //       isNewUser: user.isNewUser ?? false,
-    //     };
-    //   }
-
-    //   return token;
-    // },
     async jwt({ token, user }) {
       if (user) {
-        const dbUser = await findOrCreateUser(user?.email ?? "", user);
+        console.log("user", user);
         token = {
           ...token,
-          role: dbUser.role as RoleEnum,
+          id: user.id,
+          email: user.email ?? "",
+          name: user.name ?? "",
+          image: user.image ?? "",
+          firstName: user.firstName ?? "",
+          lastName: user.lastName ?? "",
+          phone: user.phone ?? "",
+          license: user.license ?? "",
+          picture: user.picture ?? "",
+          role: user.role as RoleEnum,
           avatar_url: user.avatar_url ?? "", // Запобігаємо undefined
+          isNewUser: user.isNewUser ?? false,
         };
       }
+
       return token;
     },
   },
