@@ -94,10 +94,6 @@ export default function FindRoute({ className }: { className?: string }) {
   } = useForm<FormValues>({
     mode: "onChange",
     defaultValues: {
-      wifi: true, // Початкове значення для чекбокса
-      coffee: true,
-      power: true,
-      restRoom: true,
       isOption: false,
     },
   });
@@ -159,7 +155,6 @@ export default function FindRoute({ className }: { className?: string }) {
           .then((response: IGetSearchRouteMany[] | null) => {
             if (response) {
               const filterHighlightedDates = response.map((item: IGetSearchRouteMany) => new Date(item.departureDate));
-
               setHighlightedDates(
                 (departureFrom || arrivalTo) && filterHighlightedDates.length > 0 ? filterHighlightedDates : highlightedDatesRef.current
               );
@@ -256,10 +251,10 @@ export default function FindRoute({ className }: { className?: string }) {
                       reset({
                         ...watch(),
                         isOption: checked,
-                        wifi: checked,
-                        coffee: checked,
-                        power: checked,
-                        restRoom: checked,
+                        wifi: false,
+                        coffee: false,
+                        power: false,
+                        restRoom: false,
                       });
                     }}
                   />
