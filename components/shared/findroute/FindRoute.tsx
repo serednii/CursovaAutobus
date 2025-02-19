@@ -213,6 +213,7 @@ export default function FindRoute({ className }: { className?: string }) {
         .finally(() => setIsLoadingOne(false));
     }
   }, [clickToDate]);
+
   console.log("clickToDate", clickToDate);
   if (status === "loading") return <p>Loading...</p>;
 
@@ -271,7 +272,7 @@ export default function FindRoute({ className }: { className?: string }) {
         </div>
       </form>
       <h2>Rest Room</h2>
-      {Array.isArray(searchDates) && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} />}
+      {Array.isArray(searchDates) && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} status={status} />}
       <div className="footer"></div>
     </div>
   );
