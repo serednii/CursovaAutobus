@@ -17,8 +17,14 @@ export interface GetSearchRoutePassengers extends Omit<TypeBaseRoute, "Available
   bookedSeats: number;
 }
 
-export interface IUpdateRoute extends Partial<ISendDataBaseRouteDriver> {
+export interface IUpdateRouteAPI extends Partial<ISendDataBaseRouteDriver> {
   passengersSeatsList?: ISubPassengersList[];
+  id: number;
+}
+
+export interface IUpdateRoute extends Pick<ISendDataBaseRouteDriver, "busSeats" | "bookedSeats"> {
+  passengersSeatsList?: ISubPassengersList[];
+  id: number;
 }
 
 export interface IUpdateRouteWithId extends IUpdateRoute {

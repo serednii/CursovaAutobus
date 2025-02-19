@@ -21,14 +21,9 @@ export async function POST(req: any) {
       },
     });
 
-    // Якщо маршрути не знайдено
-    if (!routeDriversId.length) {
-      return NextResponse.json({ message: "Маршрути для вказаного passengerId не знайдено" }, { status: 200 });
-    }
-
     const uniqueRouteDriversId: number[] = Array.from(new Set(routeDriversId.map((route) => route.routeDriverId)));
 
-    // console.log("XXXXXXXXXXXXXXXXX", uniqueRouteDriversId);
+    console.log("XXXXXXXXXXXXXXXXX", uniqueRouteDriversId);
     const routes = await prisma.routeDriver.findMany({
       where: {
         id: { in: uniqueRouteDriversId },

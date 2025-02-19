@@ -23,7 +23,7 @@ interface Props {
   route: IGetRoutePassengerById | null;
 }
 
-const transformData = (data: SubPassengerGroup, dataLayoutBus: ILayoutData, sessionUser: UserSession): IUpdateRoute => {
+const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayoutData, sessionUser: UserSession): IUpdateRoute => {
   const busSeats = dataLayoutBus.passenger.map((e) => {
     if (e.busSeatStatus === SeatStatusEnum.SELECTED) {
       return {
@@ -66,6 +66,7 @@ const transformData = (data: SubPassengerGroup, dataLayoutBus: ILayoutData, sess
   }
 
   const updateRouteDriver: IUpdateRoute = {
+    id,
     busSeats,
     bookedSeats: busSeats.filter((e) => e.busSeatStatus === SeatStatusEnum.RESERVED).length, //в дальнішому треба добавити дані для всіх пасажирів а для водія буде просто масив пасажирів
     passengersSeatsList: [passengersSeatsList],
@@ -75,8 +76,8 @@ const transformData = (data: SubPassengerGroup, dataLayoutBus: ILayoutData, sess
 };
 
 export default function OrderSeatsBus({ layoutsData, route }: Props) {
-  const [open, setOpen] = useState(false);
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const { data: session, status } = useSession();
 
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
@@ -133,12 +134,10 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   }, [route, layoutsData]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
-    const createRouteDriver: IUpdateRoute = transformData(data, dataLayoutBus as ILayoutData, sessionUser as UserSession);
+    if (!dataLayoutBus || !sessionUser) return;
+    const updateRoteDriver: IUpdateRoute = transformData(Number(route?.id), data, dataLayoutBus, sessionUser);
 
-    const updateRoteDriver: IUpdateRouteWithId = {
-      ...createRouteDriver,
-      id: Number(route?.id),
-    };
+    console.log("updateRoteDriver", updateRoteDriver);
 
     fetchUpdateRouteById(updateRoteDriver)
       .then(async (response) => {

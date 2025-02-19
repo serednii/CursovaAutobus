@@ -2,16 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import { updatedBusSeats } from "./updateFunction";
 import { createPassengersSeatsList } from "../createroute/createFunctions";
-import { IUpdateRoute } from "@/types/route-passenger.types";
+import { IUpdateRouteAPI } from "@/types/route-passenger.types";
 import { firstLetterUpperCase } from "@/lib/utils";
-
-interface IUpdateRouteWithId extends IUpdateRoute {
-  id: number;
-}
 
 // API route handler for updating a route
 export async function PATCH(req: Request) {
-  console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", await req.json());
+  const resData = await req.json();
+  console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData);
+  console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList);
+
   try {
     const {
       id,
@@ -24,7 +23,7 @@ export async function PATCH(req: Request) {
       arrivalTo,
       routePrice,
       modelBus,
-    }: IUpdateRouteWithId = await req.json();
+    }: IUpdateRouteAPI = resData;
 
     // Perform database update using Prisma
     const res = await prisma.routeDriver.update({
@@ -43,12 +42,14 @@ export async function PATCH(req: Request) {
     });
 
     if (!res) {
+      console.error("Failed to update route base");
       return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
     }
 
     if (!busSeats) {
       const res2 = await updatedBusSeats(busSeats || [], id);
       if (!res2) {
+        console.error("Failed to update route busSeats");
         return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
       }
     }
@@ -56,6 +57,8 @@ export async function PATCH(req: Request) {
     if (passengersSeatsList) {
       const res3 = await createPassengersSeatsList(passengersSeatsList || [], id);
       if (!res3) {
+        console.error("Failed to update route passengersSeatsList");
+
         return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
       }
     }
