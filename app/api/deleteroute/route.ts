@@ -1,8 +1,14 @@
+import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextResponse } from "next/server";
 
 export async function DELETE(req: any) {
   try {
+    const middlewareResponse = await middleware(req);
+
+    if (middlewareResponse.status !== 200) {
+      return middlewareResponse;
+    }
     // Отримуємо дані з тіла запиту
     const { routeId } = await req.json();
     console.log("routedId", routeId);

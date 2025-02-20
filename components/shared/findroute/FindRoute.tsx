@@ -102,8 +102,12 @@ export default function FindRoute({ className }: { className?: string }) {
   const restRoom = watch("restRoom");
   const isOption = watch("isOption");
   // console.log("isOption ttt t t t t t t t ", watch("isOption"), isOption);
-  const idRoute = sessionStorage.getItem("idRoute");
-  const transition = sessionStorage.getItem("transition");
+  let idRoute: string | null = null;
+  let transition: string | null = "";
+  if (window !== undefined) {
+    idRoute = sessionStorage.getItem("idRoute");
+    transition = sessionStorage.getItem("transition");
+  }
   console.log("sessionStorage-idRoute-transition", idRoute, transition, status, router);
   useEffect(() => {
     if (idRoute && transition === "seatselection" && status === "authenticated") {

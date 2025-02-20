@@ -1,19 +1,21 @@
+import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { UserSelect } from "@/types/next-auth";
 import { NextResponse } from "next/server";
 
 export async function POST(req: any) {
   try {
+    const middlewareResponse = await middleware(req);
+
+    if (middlewareResponse.status !== 200) {
+      return middlewareResponse;
+    }
     // Отримуємо дані з тіла запиту
-    const { ids, select }: { ids: number[]; select: UserSelect } =
-      await req.json();
+    const { ids, select }: { ids: number[]; select: UserSelect } = await req.json();
     // console.log("Select options oooooooooooooooo:", select, ids);
 
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
-      return NextResponse.json(
-        { error: "Поле 'ids' є обов'язковим і має бути масивом" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Поле 'ids' є обов'язковим і має бути масивом" }, { status: 400 });
     }
 
     const users = await prisma.user.findMany({
@@ -26,18 +28,12 @@ export async function POST(req: any) {
     });
 
     if (users.length === 0) {
-      return NextResponse.json(
-        { message: "Користувачів із заданими ID не знайдено" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Користувачів із заданими ID не знайдено" }, { status: 404 });
     }
 
     return NextResponse.json(users);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
-    return NextResponse.json(
-      { error: "Не вдалося обробити запит" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
   }
 }

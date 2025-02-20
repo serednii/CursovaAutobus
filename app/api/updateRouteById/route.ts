@@ -7,6 +7,7 @@ import { firstLetterUpperCase } from "@/lib/utils";
 import { getBusSeats } from "@/app/(passenger)/mybookings/action";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 import { IBusSeats } from "@/types/interface";
+import { middleware } from "@/middleware";
 
 const deletePassenger = async (busSeats: IBusSeats[], id: number, idPassenger: number) => {
   const busSeatsDeletePassenger = getBusSeats(busSeats, idPassenger);
@@ -19,13 +20,18 @@ const deletePassenger = async (busSeats: IBusSeats[], id: number, idPassenger: n
 
 // API route handler for updating a route
 export async function PATCH(req: Request) {
-  const resData = await req.json();
-  // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData);
-  // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList);
-  console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
-  console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].seatId);
-
   try {
+    const middlewareResponse = await middleware(req);
+
+    if (middlewareResponse.status !== 200) {
+      return middlewareResponse;
+    }
+    const resData = await req.json();
+    // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData);
+    // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList);
+    console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
+    console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].seatId);
+
     const {
       id,
       busSeats,

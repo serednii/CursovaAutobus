@@ -1,3 +1,4 @@
+import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,11 +9,16 @@ type TypeGetRoutesById = {
 
 export async function POST(req: NextRequest) {
   try {
+    const middlewareResponse = await middleware(req);
+    console.log("middlewareResponse", middlewareResponse);
+    // if (middlewareResponse.status !== 200) {
+    //   return middlewareResponse;
+    // }
     // Отримуємо дані з тіла запиту
     const body: TypeGetRoutesById = await req.json();
     const { id, select } = body;
 
-    // console.log("id---", id, select);
+    console.log("id---", body);
 
     // Валідація `id`
     if (!Array.isArray(id) || id.length === 0) {

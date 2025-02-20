@@ -3,9 +3,15 @@ import { prisma } from "@/prisma/prisma-client";
 import validateFields from "./validateFields";
 import { ICreateRoute } from "../../../types/interface";
 import { createBusSeats, createIntermediateStops } from "./createFunctions";
+import { middleware } from "@/middleware";
 
 export async function createRoute(req: NextRequest) {
   try {
+    const middlewareResponse = await middleware(req);
+
+    if (middlewareResponse.status !== 200) {
+      return middlewareResponse;
+    }
     // Парсинг даних з запиту
     const data: ICreateRoute = await req.json();
 

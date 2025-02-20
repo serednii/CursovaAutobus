@@ -17,6 +17,7 @@ model User {
   password            String
   role                String
   license             String
+  apiKey              String?               @unique // Додайте це поле
   routes              RouteDriver[] // Зв'язок з RouteDriver
   orders              OrderedRoute[] // Зв'язок із замовленими маршрутами
   passengersSeatsList PassengersSeatsList[]

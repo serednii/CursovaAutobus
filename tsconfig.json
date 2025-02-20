@@ -29,6 +29,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "zod_shema"
-  ],
+, "app/api/testuser"  ],
   "exclude": ["node_modules"]
 }

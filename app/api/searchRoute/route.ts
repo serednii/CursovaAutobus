@@ -1,9 +1,15 @@
+import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { UserSelect } from "@/types/next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma, RouteDriver } from "@prisma/client";
+
 export async function POST(req: NextRequest) {
   try {
+    const middlewareResponse = await middleware(req);
+
+    if (middlewareResponse.status !== 200) {
+      return middlewareResponse;
+    }
     // Отримуємо дані з тіла запиту
     const {
       departureSearch,

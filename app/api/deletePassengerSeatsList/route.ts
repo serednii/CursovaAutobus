@@ -1,3 +1,4 @@
+import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { IBusSeats } from "@/types/interface";
 import { NextResponse } from "next/server";
@@ -5,6 +6,11 @@ import { updatedBusSeats } from "../updateRouteById/updatedBusSeats";
 
 export async function DELETE(req: any) {
   try {
+    const middlewareResponse = await middleware(req);
+
+    if (middlewareResponse.status !== 200) {
+      return middlewareResponse;
+    }
     // Отримуємо дані з тіла запиту
     const { routeDriverId, idPassenger, busSeats }: { routeDriverId: number; idPassenger: number; busSeats: IBusSeats[] } = await req.json();
     console.log("DELETE DELETE routedId", routeDriverId, idPassenger, busSeats);
