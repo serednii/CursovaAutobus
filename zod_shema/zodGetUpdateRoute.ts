@@ -16,9 +16,12 @@ export const zodSchemaUpdateRouteIn: z.ZodType<IUpdateRouteWithId> = z.object({
     })
   ),
   bookedSeats: z.number().min(1).max(50),
+
   passengersSeatsList: z.array(
     z.object({
-      idPassenger: z.number(),
+      idPassenger: z.number().refine((val) => val > 0, {
+        message: "idPassenger має бути більше 0", // Кастомне повідомлення
+      }),
       subPassengersList: z
         .array(
           z.object({
@@ -28,7 +31,6 @@ export const zodSchemaUpdateRouteIn: z.ZodType<IUpdateRouteWithId> = z.object({
             subEmail: z.string(),
           })
         )
-        .min(1)
         .max(100),
     })
   ),

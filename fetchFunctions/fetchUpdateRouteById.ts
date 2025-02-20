@@ -1,5 +1,6 @@
 import { IUpdateRouteWithId } from "@/types/route-passenger.types";
 import { zodSchemaUpdateRouteIn, zodSchemaUpdateRouteRes } from "@/zod_shema/zodGetUpdateRoute";
+import toast from "react-hot-toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -16,6 +17,7 @@ async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
     });
 
     if (!response.ok) {
+      toast.error("Невждалося зарервувати маршрут");
       throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
 
@@ -32,6 +34,7 @@ async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
     }
   } catch (error: unknown) {
     console.error("Помилка під час виконання запиту:", error);
+    toast.error("Невждалося зарервувати маршрут");
     throw new Error(error instanceof Error ? error.message : "Помилка під час виконання запиту");
   }
 }

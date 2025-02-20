@@ -1,10 +1,8 @@
 import { prisma } from "@/prisma/prisma-client";
 import { IBusSeats } from "@/types/interface";
+import { NextResponse } from "next/server";
 
-export async function updatedBusSeats(
-  busSeats: IBusSeats[],
-  idRoute: number
-): Promise<any> {
+export async function updatedBusSeats(busSeats: IBusSeats[], idRoute: number): Promise<any> {
   try {
     const updatedBusSeats = await Promise.all(
       busSeats.map(async (busSeat) => {
@@ -14,9 +12,13 @@ export async function updatedBusSeats(
             number: busSeat.number,
           },
         });
+        // console.log("updatedBusSeats seat", seat);
+        //перевірти zod
 
         if (seat) {
-          await prisma.busSeat.update({
+          //перевірти zod
+
+          return await prisma.busSeat.update({
             where: {
               id: seat.id, // Використовуємо первинний ключ
             },
@@ -26,12 +28,19 @@ export async function updatedBusSeats(
             },
           });
         }
+        return null;
       })
     );
+    // console.log("updatedBusSeats", updatedBusSeats);
 
-    return updatedBusSeats;
+    // console.log(
+    //   "updatedBusSeats",
+    //   updatedBusSeats.every((seat) => seat !== null)
+    // );
+
+    return updatedBusSeats.every((seat) => seat !== null);
   } catch (error) {
     console.error("Error updating bus seats:", error);
-    throw new Error("Failed to update bus seats");
+    return null;
   }
 }

@@ -10,7 +10,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ISubPassengersList } from "@/types/interface";
 import { FormValues, SubPassengerGroup } from "@/types/form.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
-import { IUpdateRoute, IUpdateRouteWithId } from "@/types/route-passenger.types";
+import { IUpdateRoute } from "@/types/route-passenger.types";
 
 import { useRouter } from "next/navigation";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
@@ -24,21 +24,17 @@ interface Props {
 }
 
 const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayoutData, sessionUser: UserSession): IUpdateRoute => {
+  //change status selected to reserved
   const busSeats = dataLayoutBus.passenger.map((e) => {
-    if (e.busSeatStatus === SeatStatusEnum.SELECTED) {
-      return {
-        number: e.number,
-        busSeatStatus: SeatStatusEnum.RESERVED,
-        passenger: e.passenger,
-      };
-    } else {
-      return { ...e };
-    }
+    return {
+      ...e,
+      busSeatStatus: e.busSeatStatus === SeatStatusEnum.SELECTED ? SeatStatusEnum.RESERVED : e.busSeatStatus,
+    };
   });
-
+  console.log("sessioUser", sessionUser);
   const passengersSeatsList: ISubPassengersList = {
     subPassengersList: [],
-    idPassenger: 0,
+    idPassenger: Number(sessionUser?.id),
   };
 
   if (
@@ -62,7 +58,6 @@ const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayo
     }));
 
     passengersSeatsList.subPassengersList = subPassengersList;
-    passengersSeatsList.idPassenger = Number(sessionUser?.id);
   }
 
   const updateRouteDriver: IUpdateRoute = {
@@ -81,7 +76,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   const { data: session, status } = useSession();
 
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
-
+  console.log("OrderSeatsBus route", route);
   const {
     register,
     unregister,
@@ -135,9 +130,10 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
 
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     if (!dataLayoutBus || !sessionUser) return;
+
     const updateRoteDriver: IUpdateRoute = transformData(Number(route?.id), data, dataLayoutBus, sessionUser);
 
-    console.log("updateRoteDriver", updateRoteDriver);
+    console.log("OrderSeatsBus updateRoteDriver", updateRoteDriver);
 
     fetchUpdateRouteById(updateRoteDriver)
       .then(async (response) => {
@@ -150,6 +146,9 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
           router.push("/mybookings");
         } else {
           console.log("No data received or an error occurred.");
+          toast.error("Your reservation has not been completed", {
+            duration: 5000,
+          });
         }
       })
       .catch((err) => console.error("Fetch failed:", err));
@@ -177,7 +176,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
           variant="contained"
           color="primary"
           type="submit"
-          // disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
+          disabled={false} // Вимикає кнопку, якщо форма не валідна
         >
           Reserve seats
         </Button>

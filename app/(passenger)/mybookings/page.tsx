@@ -52,7 +52,9 @@ export default function MyBookings() {
   const { pastRoutes, availableRoutes } = sortDate(getRoutesTable(routesPassenger, passengerId));
 
   const removeRoutePassenger = async (routeId: number) => {
+    //find busSeats by routeId  of selected delete
     const busSeatsRaw = getBusSeatsRaw(routesPassenger, routeId);
+    //change busSeats status of selected delete to AVAILABLE
     const busSeats = getBusSeats(busSeatsRaw, passengerId);
 
     const result = await fetchDeleteRoutePassenger({

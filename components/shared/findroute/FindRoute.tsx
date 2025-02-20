@@ -60,11 +60,11 @@ export default function FindRoute({ className }: { className?: string }) {
   const { data: session, status } = useSession();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   console.log("callbackUrl****", callbackUrl);
-  useEffect(() => {
-    if (session) {
-      router.replace(decodeURIComponent(callbackUrl));
-    }
-  }, [session, router, callbackUrl]);
+  // useEffect(() => {
+  //   if (session) {
+  //     router.replace(decodeURIComponent(callbackUrl));
+  //   }
+  // }, [session, router, callbackUrl]);
 
   // console.log("searchDate", searchDates);
   console.log("highlightedDates", highlightedDates);
@@ -75,12 +75,6 @@ export default function FindRoute({ className }: { className?: string }) {
   // const callbackUrl = searchParams.get("callbackUrl") || "/";
   // console.log("session****", session);
   console.log("route****", router);
-
-  // useEffect(() => {
-  //   if (session) {
-  //     router.replace(callbackUrl); // Використовуємо replace, щоб не зберігати історію входу
-  //   }
-  // }, [session, router, callbackUrl]);
 
   // console.log("sessionUser", sessionUser);
   const {
@@ -110,7 +104,7 @@ export default function FindRoute({ className }: { className?: string }) {
   // console.log("isOption ttt t t t t t t t ", watch("isOption"), isOption);
   const idRoute = sessionStorage.getItem("idRoute");
   const transition = sessionStorage.getItem("transition");
-  // console.log("sessionStorage idRoute transition", idRoute, transition, status, router);
+  console.log("sessionStorage-idRoute-transition", idRoute, transition, status, router);
   useEffect(() => {
     if (idRoute && transition === "seatselection" && status === "authenticated") {
       sessionStorage.removeItem("idRoute");

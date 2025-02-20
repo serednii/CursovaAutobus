@@ -2,10 +2,7 @@ import handleError from "@/lib/handleError";
 import { prisma } from "@/prisma/prisma-client";
 import { IBusSeats, IPassengersSeatsList } from "@/types/interface";
 
-export async function createIntermediateStops(
-  intermediateStops: string[],
-  routeId: number
-) {
+export async function createIntermediateStops(intermediateStops: string[], routeId: number) {
   try {
     const results = await Promise.all(
       intermediateStops.map((stop) =>
@@ -45,32 +42,34 @@ export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
   }
 }
 
-export async function createPassengersSeatsList(
-  passengersSeatsList: IPassengersSeatsList[],
-  routeDriverId: number
-) {
-  if (!Array.isArray(passengersSeatsList) || passengersSeatsList.length === 0) {
-    return new Error("Passengers seats list must be a non-empty array");
-  }
-  if (!routeDriverId) {
-    return new Error("Route Driver ID is required");
-  }
-
+export async function createPassengersSeatsList(passengersSeatsList: IPassengersSeatsList[], routeDriverId: number) {
   try {
+    console.log("createPassengersSeatsList passengersSeatsList", passengersSeatsList, routeDriverId);
+
     const results = await Promise.all(
       passengersSeatsList.map(async (seat) => {
         try {
+          console.log("createPassengersSeatsList seat", seat);
           const passengersSeatList = await prisma.passengersSeatsList.create({
             data: {
               idPassenger: seat.idPassenger,
               routeDriverId,
             },
           });
+          // console.log("passengersSeatList", passengersSeatList);
+          //перевірти zod
+          if (!passengersSeatList) {
+            return false;
+          }
+
+          if (seat.subPassengersList.length === 0) {
+            return true;
+          }
 
           const subPassengers = await Promise.all(
             seat.subPassengersList.map(async (subPassenger) => {
               try {
-                return await prisma.subPassengersList.create({
+                const result = await prisma.subPassengersList.create({
                   data: {
                     subFirstName: subPassenger.subFirstName,
                     subLastName: subPassenger.subLastName,
@@ -79,73 +78,75 @@ export async function createPassengersSeatsList(
                     passengersSeatsListId: passengersSeatList.id,
                   },
                 });
+                //перевірти zod
+
+                if (!result) {
+                  return false;
+                }
+
+                return true;
               } catch (error) {
-                handleError(error, "Error creating subPassenger");
-                return null;
+                console.error("Error creating subPassenger", error);
+                return false;
               }
             })
           );
 
-          return { passengersSeatList, subPassengers };
+          return subPassengers.includes(false) ? false : true;
         } catch (error) {
-          handleError(error, "Error processing passengersSeatsList");
-          return null;
+          console.error("Error creating passengersSeatList", error);
+          return false;
         }
       })
     );
     return results.filter(Boolean);
   } catch (error) {
-    handleError(error, "Error processing passengersSeatsList");
-    return null;
+    console.error("Error processing passengersSeatsList", error);
+    return false;
   }
 }
 
-export async function createPassengersSeatsList1(
-  passengersSeatsList: IPassengersSeatsList[],
-  routeDriverId: number
-) {
-  try {
-    const promises = passengersSeatsList.map(
-      async (seat: IPassengersSeatsList) => {
-        // console.log("Processing passengersSeatList:", seat);
+// export async function createPassengersSeatsList1(passengersSeatsList: IPassengersSeatsList[], routeDriverId: number) {
+//   try {
+//     const promises = passengersSeatsList.map(async (seat: IPassengersSeatsList) => {
+//       // console.log("Processing passengersSeatList:", seat);
 
-        const passengersSeatList = await prisma.passengersSeatsList.create({
-          data: {
-            idPassenger: seat.idPassenger,
-            routeDriverId,
-          },
-        });
+//       const passengersSeatList = await prisma.passengersSeatsList.create({
+//         data: {
+//           idPassenger: seat.idPassenger,
+//           routeDriverId,
+//         },
+//       });
 
-        // console.log("Created passengersSeatList:", passengersSeatList);
+//       // console.log("Created passengersSeatList:", passengersSeatList);
 
-        await Promise.all(
-          seat.subPassengersList.map(async (subPassenger) => {
-            try {
-              const result = await prisma.subPassengersList.create({
-                data: {
-                  subFirstName: subPassenger.subFirstName,
-                  subLastName: subPassenger.subLastName,
-                  subPhone: subPassenger.subPhone,
-                  subEmail: subPassenger.subEmail,
-                  passengersSeatsListId: passengersSeatList.id,
-                },
-              });
+//       await Promise.all(
+//         seat.subPassengersList.map(async (subPassenger) => {
+//           try {
+//             const result = await prisma.subPassengersList.create({
+//               data: {
+//                 subFirstName: subPassenger.subFirstName,
+//                 subLastName: subPassenger.subLastName,
+//                 subPhone: subPassenger.subPhone,
+//                 subEmail: subPassenger.subEmail,
+//                 passengersSeatsListId: passengersSeatList.id,
+//               },
+//             });
 
-              // console.log("Created subPassenger:", result);
-              return result;
-            } catch (error) {
-              handleError(error, "Error creating subPassenger");
-            }
-          })
-        );
-      }
-    );
+//             // console.log("Created subPassenger:", result);
+//             return result;
+//           } catch (error) {
+//             handleError(error, "Error creating subPassenger");
+//           }
+//         })
+//       );
+//     });
 
-    const results = await Promise.all(promises);
-    if (results.length > 0) {
-      return results[0];
-    }
-  } catch (error) {
-    handleError(error, "Error processing passengersSeatsList");
-  }
-}
+//     const results = await Promise.all(promises);
+//     if (results.length > 0) {
+//       return results[0];
+//     }
+//   } catch (error) {
+//     handleError(error, "Error processing passengersSeatsList");
+//   }
+// }
