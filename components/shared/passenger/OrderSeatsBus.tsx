@@ -77,6 +77,8 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
 
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
   console.log("OrderSeatsBus route", route);
+  console.log("OrderSeatsBus--dataLayoutBus", dataLayoutBus);
+
   const {
     register,
     unregister,
@@ -101,7 +103,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   const userIdSession = Number(sessionUser?.id);
 
   const idOrderPassengers = dataLayoutBus?.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
-
+  console.log("OrderSeatsBus--idOrderPassengers", idOrderPassengers);
   useEffect(() => {
     if (route) {
       const [filteredData] = layoutsData.filter((item) => {
@@ -176,7 +178,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
           variant="contained"
           color="primary"
           type="submit"
-          disabled={false} // Вимикає кнопку, якщо форма не валідна
+          disabled={!(idOrderPassengers && idOrderPassengers.length > 0)} // Вимикає кнопку, якщо форма не валідна
         >
           Reserve seats
         </Button>
