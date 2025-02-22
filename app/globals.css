@@ -43,3 +43,7 @@ body {
   background-color: #2563EB !important;
   color: #FFFFFF;
 }
+
+.reservation-row {
+  background-color: cadetblue;
+}

@@ -25,7 +25,7 @@ const routeSchemaSeatSelection = z.object({
   modelBus: z.string(),
   maxSeats: z.number().int().positive(),
   bookedSeats: z.number().int(),
-  // AvailableSeats: z.number().int(),
+  // availableSeats: z.number().int(),
 });
 
 // Схема для масиву маршрутів

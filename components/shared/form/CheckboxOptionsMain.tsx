@@ -19,7 +19,6 @@ export default function CheckboxOptionsMain({ register, watch }: Props) {
         className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
         control={<Checkbox {...register("wifi")} />}
         checked={watch("wifi") || false}
-        disabled={!watch("isOption")}
         label={
           <div style={{ display: "flex", alignItems: "center" }}>
             <IoIosWifi style={{ marginRight: "8px", fontSize: "24px" }} />
@@ -30,7 +29,6 @@ export default function CheckboxOptionsMain({ register, watch }: Props) {
       <FormControlLabel
         className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
         control={<Checkbox {...register("coffee")} />}
-        disabled={!watch("isOption")}
         checked={watch("coffee") || false}
         label={
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -42,7 +40,6 @@ export default function CheckboxOptionsMain({ register, watch }: Props) {
       <FormControlLabel
         className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
         control={<Checkbox {...register("power")} />}
-        disabled={!watch("isOption")}
         checked={watch("power") || false}
         label={
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -54,7 +51,6 @@ export default function CheckboxOptionsMain({ register, watch }: Props) {
       <FormControlLabel
         className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
         control={<Checkbox {...register("restRoom")} />}
-        disabled={!watch("isOption")}
         checked={watch("restRoom") || false}
         label={
           <div style={{ display: "flex", alignItems: "center" }}>

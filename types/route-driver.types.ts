@@ -6,12 +6,12 @@ export interface ISendDataBaseRouteDriver extends RouteDriver {
   maxSeats: number;
 }
 
-export interface GetRoutesByDriverId extends Omit<TypeBaseRoute, "AvailableSeats"> {
+export interface GetRoutesByDriverId extends Omit<TypeBaseRoute, "availableSeats"> {
   bookedSeats: number;
   maxSeats: number;
 }
 
-export interface IGetRouteById extends Omit<TypeBaseRoute, "id" | "AvailableSeats"> {
+export interface IGetRouteById extends Omit<TypeBaseRoute, "id" | "availableSeats"> {
   busSeats: IBusSeats[];
   passengersSeatsList: ISubPassengersList[];
 }

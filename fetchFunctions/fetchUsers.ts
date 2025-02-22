@@ -19,7 +19,7 @@ export type IGetUsersByIdBySelect = GenerateType<UserDataBase, selectUserKeys>;
 
 export async function getUsersFetchByIdsBySelect(
   ids: number[],
-  select: IGetUsersByIdBySelectOption
+  select: IGetUsersByIdBySelectOption 
 ): Promise<unknown> {
   try {
     const response = await fetch(`${API_URL}/api/getUsersByIdBySelect`, {

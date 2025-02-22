@@ -20,7 +20,7 @@ import { UserSession } from "@/types/next-auth";
 
 interface Props {
   layoutsData: ILayoutData[];
-  route: IGetRoutePassengerById | null;
+  route: Omit<IGetRoutePassengerById, "isReservation"> | null;
 }
 
 const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayoutData, sessionUser: UserSession): IUpdateRoute => {

@@ -22,7 +22,10 @@ export default function TableSearchRoutes({ routes, status }: Props) {
       sessionStorage.setItem("idRoute", String(route.id));
       sessionStorage.setItem("transition", "seatselection");
     }
-    router.push(`/seatselection/${route.id}`);
+
+    const newRoute = route.isReservation ? "mybookings" : `/seatselection/${route.id}`;
+
+    router.push(newRoute);
   };
 
   // Основні колонки без колонки againRouter
@@ -66,17 +69,31 @@ export default function TableSearchRoutes({ routes, status }: Props) {
     {
       field: "viewRouter",
       headerName: "View Route",
-      minWidth: 130,
+      minWidth: 250,
       flex: 1,
       sortable: false,
       renderCell: (params) => (
-        <Button variant="contained" color="primary" size="small" onClick={() => handleViewRoute(params.row)}>
-          Book Now
+        <Button
+          variant="contained"
+          color={params.row.isReservation ? "secondary" : "primary"}
+          size="small"
+          onClick={() => handleViewRoute(params.row)}
+        >
+          {params.row.isReservation ? "Edit Reservation" : "Book Now"}
         </Button>
       ),
     },
   ];
 
+  // Функція для зміни класу рядка за умовою isReservation
+  const getRowClassName = (params: any) => {
+    return params.row.isReservation ? "reservation-row" : "";
+  };
+
+  // Перевірка на наявність даних
+  if (routes.length === 0) {
+    return <Paper sx={{ width: "100%", padding: 2 }}>No routes available.</Paper>;
+  }
   // Додаємо колонку againRouter, якщо isRouteAgain === true
 
   return (
@@ -86,6 +103,7 @@ export default function TableSearchRoutes({ routes, status }: Props) {
         columns={columns}
         // initialState={{ pagination: { paginationModel } }}
         // pageSizeOptions={[5, 10]}
+        getRowClassName={getRowClassName} // Додаємо клас до рядків
         sx={{ border: 0 }}
       />
     </Paper>

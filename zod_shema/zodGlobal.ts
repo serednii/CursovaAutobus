@@ -1,4 +1,5 @@
 import { SeatStatusEnum } from "@/enum/shared.enums";
+import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { z } from "zod";
 
 const subPassengerSchema = z.object({
@@ -17,11 +18,7 @@ export const busSeatSchema = z.object({
   id: z.number().int().positive(),
   passenger: z.number().int().nullable(),
   number: z.number().int().positive(),
-  busSeatStatus: z.enum([
-    SeatStatusEnum.AVAILABLE,
-    SeatStatusEnum.RESERVED,
-    SeatStatusEnum.SELECTED,
-  ]),
+  busSeatStatus: z.nativeEnum(SeatStatusEnum),
   routeDriverId: z.number().int().positive(),
 });
 
@@ -30,3 +27,33 @@ export const routeStopSchema = z.object({
   stopName: z.string(),
   routeId: z.number().int().positive(),
 });
+
+export const busSeats: z.ZodType<IBusSeats[]> = z.array(
+  z.object({
+    number: z.number(),
+    busSeatStatus: z.nativeEnum(SeatStatusEnum), // Використовуємо точний enum
+    passenger: z.number().nullable(),
+    left: z.number().optional(),
+    bottom: z.number().optional(),
+    top: z.number().optional(),
+    right: z.number().optional(),
+  })
+);
+
+export const passengersSeatsList: z.ZodType<ISubPassengersList[]> = z.array(
+  z.object({
+    idPassenger: z.number().refine((val) => val > 0, {
+      message: "idPassenger має бути більше 0", // Кастомне повідомлення
+    }),
+    subPassengersList: z
+      .array(
+        z.object({
+          subFirstName: z.string(),
+          subLastName: z.string(),
+          subPhone: z.string(),
+          subEmail: z.string(),
+        })
+      )
+      .max(100),
+  })
+);

@@ -1,39 +1,12 @@
-import { SeatStatusEnum } from "@/enum/shared.enums";
 import { IUpdateRouteWithId } from "@/types/route-passenger.types";
+import { busSeats, passengersSeatsList } from "./zodGlobal";
 import { z } from "zod";
 
 export const zodSchemaUpdateRouteIn: z.ZodType<IUpdateRouteWithId> = z.object({
   id: z.number(),
-  busSeats: z.array(
-    z.object({
-      number: z.number(),
-      busSeatStatus: z.nativeEnum(SeatStatusEnum), // Використовуємо точний enum
-      passenger: z.number().nullable(),
-      left: z.number().optional(),
-      bottom: z.number().optional(),
-      top: z.number().optional(),
-      right: z.number().optional(),
-    })
-  ),
   bookedSeats: z.number().min(1).max(50),
-
-  passengersSeatsList: z.array(
-    z.object({
-      idPassenger: z.number().refine((val) => val > 0, {
-        message: "idPassenger має бути більше 0", // Кастомне повідомлення
-      }),
-      subPassengersList: z
-        .array(
-          z.object({
-            subFirstName: z.string(),
-            subLastName: z.string(),
-            subPhone: z.string(),
-            subEmail: z.string(),
-          })
-        )
-        .max(100),
-    })
-  ),
+  busSeats,
+  passengersSeatsList,
 });
 
 export const zodSchemaUpdateRouteRes = z.object({

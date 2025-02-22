@@ -21,7 +21,6 @@ export interface IServiceBus {
   coffee: boolean;
   power: boolean;
   restRoom: boolean;
-  // isOption: boolean;
 }
 
 interface ISubPassengerList {

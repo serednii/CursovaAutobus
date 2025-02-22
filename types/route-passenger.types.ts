@@ -5,7 +5,8 @@ import { GetRoutesByDriverId, ISendDataBaseRouteDriver } from "./route-driver.ty
 export interface TypeBaseRoute extends IDateString, IFromTo {
   id: number; // Залишаємо це поле
   routePrice: number; // Залишаємо це поле
-  AvailableSeats: number;
+  availableSeats: number;
+  isReservation: boolean; //якщо на даному маршруті заброрньований користувач
 }
 
 export interface GetSearchRoutePassengers extends Omit<TypeBaseRoute, "AvailableSeats">, IServiceBus {

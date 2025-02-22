@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
       coffee,
       power,
       restRoom,
-      isOption,
       limit,
     }: {
       departureSearch?: string;
@@ -34,7 +33,6 @@ export async function POST(req: NextRequest) {
       coffee?: boolean;
       power?: boolean;
       restRoom?: boolean;
-      isOption?: boolean;
     } = await req.json();
 
     // Формуємо діапазон часу для конкретного дня
@@ -77,20 +75,19 @@ export async function POST(req: NextRequest) {
       ...dateFilter,
     };
 
-    if (isOption) {
-      if (wifi) {
-        where.wifi = wifi;
-      }
-      if (coffee) {
-        where.coffee = coffee;
-      }
-      if (power) {
-        where.power = power;
-      }
-      if (restRoom) {
-        where.restRoom = restRoom;
-      }
+    if (wifi) {
+      where.wifi = wifi;
     }
+    if (coffee) {
+      where.coffee = coffee;
+    }
+    if (power) {
+      where.power = power;
+    }
+    if (restRoom) {
+      where.restRoom = restRoom;
+    }
+
     const routes = await prisma.routeDriver.findMany({
       where,
       take: limit,

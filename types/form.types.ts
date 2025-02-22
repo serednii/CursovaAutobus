@@ -8,7 +8,6 @@ export interface FormValues extends SubPassengerGroup, IDateISO, IServiceBus, IF
   passengersListId: number[];
   driverId: number;
   selectBusLayout: string;
-  isOption: boolean;
 }
 
 export interface SubPassengerDetails {

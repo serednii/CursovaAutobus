@@ -22,6 +22,10 @@ export const select: IGetSearchRouteSeatSelectionOption = {
   departureFrom: true,
   arrivalTo: true,
   routePrice: true,
+  selectBusLayout: true,
+  modelBus: true,
+  maxSeats: true,
+  bookedSeats: true,
   busSeats: {
     select: {
       id: true,
@@ -32,10 +36,6 @@ export const select: IGetSearchRouteSeatSelectionOption = {
       routeDriver: true,
     },
   },
-  selectBusLayout: true,
-  modelBus: true,
-  maxSeats: true,
-  bookedSeats: true,
   passengersSeatsList: {
     select: {
       idPassenger: true,

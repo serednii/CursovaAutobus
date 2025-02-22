@@ -22,21 +22,22 @@ import {
   searchRouteMany,
   searchRouteOne,
 } from "@/fetchFunctions/searchRoute";
+
 import { selectMany, selectOne } from "./const";
 import { useRouter, useSearchParams } from "next/navigation";
 import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
-import { useSessionStorage } from "@uidotdev/usehooks";
+import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
+
+// interface IGetSearchRouteManyOptionData extends IGetSearchRouteMany {
+//   select: IGetSearchRouteManyOption & IGetBusSeatsBoolean & IGetPassengersSeatsList;
+// }
+
 interface IGetSearchRouteManyOptionData {
   departureSearch: string | undefined;
   arrivalToSearch: string | undefined;
   endOfDay: Date;
   startOfDay: Date;
-  select: IGetSearchRouteManyOption;
-  wifi: boolean | undefined;
-  coffee: boolean | undefined;
-  power: boolean | undefined;
-  restRoom: boolean | undefined;
-  isOption: boolean | undefined;
+  select: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList;
 }
 
 interface IGetSearchRouteOneOptionData {
@@ -58,15 +59,15 @@ export default function FindRoute({ className }: { className?: string }) {
 
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
-  console.log("callbackUrl****", callbackUrl);
+  // const callbackUrl = searchParams.get("callbackUrl") || "/";
+  console.log("session****", session);
   // useEffect(() => {
   //   if (session) {
   //     router.replace(decodeURIComponent(callbackUrl));
   //   }
   // }, [session, router, callbackUrl]);
 
-  // console.log("searchDate", searchDates);
+  console.log("searchDate", searchDates);
   console.log("highlightedDates", highlightedDates);
 
   // const [idRoute, setIdRoute] = typeof window !== "undefined" ? useSessionStorage<number | null>("idRoute", null) : [null, () => {}];
@@ -88,9 +89,6 @@ export default function FindRoute({ className }: { className?: string }) {
     control,
   } = useForm<FormValues>({
     mode: "onChange",
-    defaultValues: {
-      isOption: false,
-    },
   });
 
   const departureFrom = watch("departureFrom")?.trim();
@@ -100,8 +98,6 @@ export default function FindRoute({ className }: { className?: string }) {
   const coffee = watch("coffee");
   const power = watch("power");
   const restRoom = watch("restRoom");
-  const isOption = watch("isOption");
-  // console.log("isOption ttt t t t t t t t ", watch("isOption"), isOption);
   let idRoute: string | null = null;
   let transition: string | null = "";
   if (window !== undefined) {
@@ -136,11 +132,10 @@ export default function FindRoute({ className }: { className?: string }) {
         // specificDateTo: departureDate,
         startOfDay,
         endOfDay,
-        wifi,
-        coffee,
-        power,
-        restRoom,
-        isOption,
+        // wifi,
+        // coffee,
+        // power,
+        // restRoom,
         // specificDateFrom:
         //   departureDate &&
         //   `${departureDate.getFullYear()}-${String(
@@ -152,15 +147,24 @@ export default function FindRoute({ className }: { className?: string }) {
         select: selectMany,
       };
 
+      //       Тип "Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList" не может быть назначен для типа "IGetSearchRouteManyOption & IGetBusSeatsBoolean & IGetPassengersSeatsList".
+      //   Тип "Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList" не может быть назначен для типа "IGetSearchRouteManyOption".
+      //     Типы свойства "busSeats" несовместимы.
+      //       Тип "{ select: { id: boolean; passenger: boolean; number: boolean; busSeatStatus: boolean; routeDriverId: boolean; routeDriver: boolean; }; }" не может быть назначен для типа "boolean".ts(2322)
+      // FindRoute.tsx(40, 3): Ожидаемый тип поступает из свойства "select", объявленного здесь в типе "IGetSearchRouteManyOptionData"
+
       if (departureFrom || arrivalTo || departureDate) {
         searchRouteMany<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(data)
           .then((response: IGetSearchRouteMany[] | null) => {
             if (response) {
+              console.log("response", response);
               const filterHighlightedDates = response.map((item: IGetSearchRouteMany) => new Date(item.departureDate));
+              //update list date routes
               setHighlightedDates(
                 (departureFrom || arrivalTo) && filterHighlightedDates.length > 0 ? filterHighlightedDates : highlightedDatesRef.current
               );
               const newSearchDates: TypeBaseRoute[] | [] = response.map((item) => {
+                const isReservation = item.busSeats.some((busSeat) => busSeat.passenger === Number(session?.user.id)); //if there is a reserved user on this route
                 const newItem: TypeBaseRoute = {
                   id: item.id,
                   departureDate: item.departureDate,
@@ -168,7 +172,8 @@ export default function FindRoute({ className }: { className?: string }) {
                   departureFrom: item.departureFrom,
                   arrivalTo: item.arrivalTo,
                   routePrice: item.routePrice,
-                  AvailableSeats: item.maxSeats - item.bookedSeats,
+                  availableSeats: item.maxSeats - item.bookedSeats,
+                  isReservation,
                 };
                 return newItem;
               });
@@ -179,6 +184,7 @@ export default function FindRoute({ className }: { className?: string }) {
           })
           .catch((err) => console.error("Fetch failed:", err));
       } else {
+        //update list date routes
         setHighlightedDates(highlightedDatesRef.current);
         setSearchDates([]);
       }
@@ -192,7 +198,7 @@ export default function FindRoute({ className }: { className?: string }) {
     };
 
     // Виконайте додаткову логіку тут
-  }, [departureFrom, arrivalTo, departureDate, wifi, coffee, power, restRoom, isOption]);
+  }, [departureFrom, arrivalTo, departureDate, wifi, coffee, power, restRoom]);
 
   useEffect(() => {
     if (clickToDate) {
@@ -201,6 +207,7 @@ export default function FindRoute({ className }: { className?: string }) {
         .then((response: IGetSearchRouteOne[] | null) => {
           if (response) {
             const dates: Date[] = response.map((route: { departureDate: string }) => new Date(route.departureDate));
+            //update list date routes
             setHighlightedDates(dates);
             highlightedDatesRef.current = dates;
           } else {
@@ -243,28 +250,7 @@ export default function FindRoute({ className }: { className?: string }) {
         </div>
         <div className="flex justify-between items-center">
           <div className="grow">
-            <Typography variant="h6" gutterBottom>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    {...register("isOption")}
-                    checked={watch("isOption") || false} // Переконайтеся, що значення не `undefined`
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      reset({
-                        ...watch(),
-                        isOption: checked,
-                        wifi: false,
-                        coffee: false,
-                        power: false,
-                        restRoom: false,
-                      });
-                    }}
-                  />
-                }
-                label={<div style={{ display: "flex", alignItems: "center" }}> Additional options:</div>}
-              />
-            </Typography>
+            <Typography variant="h6" gutterBottom></Typography>
             <CheckboxOptionsMain register={register} watch={watch} />
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/searchRoute";
+import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 
-export const selectMany: IGetSearchRouteManyOption = {
+export const selectMany: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList = {
   id: true,
   driverId: true,
   departureDate: true,
@@ -9,14 +10,32 @@ export const selectMany: IGetSearchRouteManyOption = {
   arrivalTo: true,
   busNumber: true,
   routePrice: true,
-  notate: true,
-  wifi: true,
-  coffee: true,
-  power: true,
-  restRoom: true,
   modelBus: true,
   maxSeats: true,
   bookedSeats: true,
+  busSeats: {
+    select: {
+      id: true,
+      passenger: true,
+      number: true,
+      busSeatStatus: true,
+      routeDriverId: true,
+      routeDriver: true,
+    },
+  },
+  passengersSeatsList: {
+    select: {
+      idPassenger: true,
+      subPassengersList: {
+        select: {
+          subFirstName: true,
+          subLastName: true,
+          subPhone: true,
+          subEmail: true,
+        },
+      },
+    },
+  },
 };
 
 export const selectOne: IGetSearchRouteOneOption = {
