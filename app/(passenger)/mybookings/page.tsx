@@ -7,7 +7,7 @@ import PastRoutes from "@/components/shared/passenger/PastRoutes";
 import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { getBusSeats, getBusSeatsRaw, getRoutesTable } from "./action";
+import { getBusSeatsPassenger, getBusSeatsRaw, getRoutesTable } from "./action";
 import { select } from "./const";
 import { toast } from "react-hot-toast";
 import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
@@ -55,12 +55,12 @@ export default function MyBookings() {
     //find busSeats by routeId  of selected delete
     const busSeatsRaw = getBusSeatsRaw(routesPassenger, routeId);
     //change busSeats status of selected delete to AVAILABLE
-    const busSeats = getBusSeats(busSeatsRaw, passengerId);
+    // const busSeats = getBusSeatsPassenger(busSeatsRaw, passengerId);
 
     const result = await fetchDeleteRoutePassenger({
       routeDriverId: routeId,
       idPassenger: passengerId,
-      busSeats: busSeats,
+      busSeats: busSeatsRaw,
     });
 
     console.log("result", result);

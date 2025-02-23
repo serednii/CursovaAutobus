@@ -39,7 +39,7 @@ export const getRoutesTable = (routesPassenger: GetRoutesByPassengerId[], passen
 export const getBusSeatsRaw = (routesPassenger: GetRoutesByPassengerId[], routeId: number) =>
   routesPassenger.find((e) => e.id === routeId)?.busSeats || [];
 
-export const getBusSeats = (busSeatsRaw: IBusSeats[], passengerId: number) => {
+export const getBusSeatsPassenger = (busSeatsRaw: IBusSeats[], passengerId: number) => {
   const busSeats = busSeatsRaw.map((e) => {
     return {
       ...e,
@@ -58,12 +58,12 @@ export const removeRoutePassengerFunction = async (
   setReload: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const busSeatsRaw = getBusSeatsRaw(routesPassenger, routeId);
-  const busSeats = getBusSeats(busSeatsRaw, passengerId);
+  // const busSeats = getBusSeatsPassenger(busSeatsRaw, passengerId);
 
   const result = await fetchDeleteRoutePassenger({
     routeDriverId: routeId,
     idPassenger: passengerId,
-    busSeats: busSeats,
+    busSeats: busSeatsRaw,
   });
   console.log("result", result);
   if (!result) {

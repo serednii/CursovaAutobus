@@ -4,19 +4,12 @@ import { updatedBusSeats } from "./updatedBusSeats";
 import { createPassengersSeatsList } from "../createroute/createFunctions";
 import { IUpdateRouteAPI } from "@/types/route-passenger.types";
 import { firstLetterUpperCase } from "@/lib/utils";
-import { getBusSeats } from "@/app/(passenger)/mybookings/action";
+import { getBusSeatsPassenger } from "@/app/(passenger)/mybookings/action";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 import { IBusSeats } from "@/types/interface";
 import { middleware } from "@/middleware";
-
-const deletePassenger = async (busSeats: IBusSeats[], id: number, idPassenger: number) => {
-  const busSeatsDeletePassenger = getBusSeats(busSeats, idPassenger);
-  await fetchDeleteRoutePassenger({
-    routeDriverId: id,
-    idPassenger: idPassenger,
-    busSeats: busSeatsDeletePassenger,
-  });
-};
+import { GetRoutesByDriverId } from "@/types/route-driver.types";
+import { ApiResponse, ErrorResponse } from "@/types/response.types";
 
 // API route handler for updating a route
 export async function PATCH(req: Request) {
@@ -27,8 +20,6 @@ export async function PATCH(req: Request) {
       return middlewareResponse;
     }
     const resData = await req.json();
-    // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData);
-    // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList);
     console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
     console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].seatId);
 
@@ -50,6 +41,16 @@ export async function PATCH(req: Request) {
     }
 
     const idPassenger = passengersSeatsList[0].idPassenger;
+    const deletePassengerResult: ApiResponse = await fetchDeleteRoutePassenger({
+      routeDriverId: id,
+      idPassenger: idPassenger,
+      busSeats,
+    });
+
+    if (deletePassengerResult && "error" in deletePassengerResult) {
+      const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
+      return NextResponse.json(errorResponse, { status: 500 });
+    }
 
     // Perform database update using Prisma
     const res = await prisma.routeDriver.update({
@@ -77,7 +78,16 @@ export async function PATCH(req: Request) {
     if (!updatedBusSeatsResult) {
       console.error("Failed to update route busSeats");
       //delete route passenger if busSeats not updated
-      deletePassenger(busSeats, id, idPassenger);
+      const deletePassengerResult: ApiResponse = await fetchDeleteRoutePassenger({
+        routeDriverId: id,
+        idPassenger: idPassenger,
+        busSeats,
+      });
+
+      if (deletePassengerResult && "error" in deletePassengerResult) {
+        const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
+        return NextResponse.json(errorResponse, { status: 500 });
+      }
       return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
     }
 
@@ -87,7 +97,16 @@ export async function PATCH(req: Request) {
       console.error("Failed to update route passengersSeatsList");
 
       //delete route passenger if createPassengersSeatsList not created
-      deletePassenger(busSeats, id, idPassenger);
+      const deletePassengerResult: ApiResponse = await fetchDeleteRoutePassenger({
+        routeDriverId: id,
+        idPassenger: idPassenger,
+        busSeats,
+      });
+
+      if (deletePassengerResult && "error" in deletePassengerResult) {
+        const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
+        return NextResponse.json(errorResponse, { status: 500 });
+      }
       return NextResponse.json({ error: "Failed to update route passengersSeatsList" }, { status: 500 });
     }
 

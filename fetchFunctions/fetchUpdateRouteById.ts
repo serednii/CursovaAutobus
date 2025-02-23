@@ -8,6 +8,7 @@ async function fetchUpdateRouteById(updateRouteById: IUpdateRouteWithId) {
   try {
     const updateRouteByIdParsed = zodSchemaUpdateRouteIn.parse(updateRouteById);
     console.log("updateRouteByIdParsed", updateRouteByIdParsed);
+
     const response = await fetch(`${API_URL}/api/updateRouteById`, {
       method: "PATCH",
       headers: {

@@ -1,16 +1,24 @@
+import { getBusSeatsPassenger } from "@/app/(passenger)/mybookings/action";
+import { ApiResponse, SuccessResponse, ErrorResponse } from "@/types/response.types";
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { IDeleteRoutePassenger } from "@/types/route-passenger.types";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-async function fetchDeleteRoutePassenger(deleteRouteById: IDeleteRoutePassenger) {
+async function fetchDeleteRoutePassenger(deleteRouteById: IDeleteRoutePassenger): Promise<ApiResponse> {
   try {
-    // Відправка POST-запиту
+    const { busSeats, idPassenger } = deleteRouteById;
+    const newBusSeats = getBusSeatsPassenger(busSeats, idPassenger);
+
+    const newDeleteRouteById = { ...deleteRouteById, busSeats: newBusSeats };
+
+    // Відправка DELETE-запиту
     const response = await fetch(`${API_URL}/api/deletePassengerSeatsList`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(deleteRouteById), // Передаємо driverId
+      body: JSON.stringify(newDeleteRouteById), // Передаємо дані для видалення
     });
 
     // Перевіряємо статус відповіді
@@ -19,12 +27,22 @@ async function fetchDeleteRoutePassenger(deleteRouteById: IDeleteRoutePassenger)
     }
 
     // Обробка відповіді
-    const data = await response.json();
-    console.log("Отримані маршрути/*-/*-/*-*/-*/-*/-*:", data);
-    return data as GetRoutesByDriverId[]; // Повертаємо маршрути
+    const data: GetRoutesByDriverId[] = await response.json();
+    console.log("Отримані маршрути:", data);
+
+    // Повертаємо успішну відповідь
+    const successResponse: SuccessResponse = {
+      message: "Пасажир успішно видалений",
+    };
+    return successResponse;
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);
-    return null;
+
+    // Повертаємо помилкову відповідь
+    const errorResponse: ErrorResponse = {
+      error: error instanceof Error ? error.message : "Невідома помилка",
+    };
+    return errorResponse;
   }
 }
 
