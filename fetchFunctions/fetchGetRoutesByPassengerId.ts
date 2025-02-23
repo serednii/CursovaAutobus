@@ -3,10 +3,7 @@ import { zodGetRoutesByPassengerId } from "@/zod_shema/zodGetRoutesByPassengerId
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-async function fetchGetRoutesByPassengerId<TSelect>(
-  passengerId: number,
-  select: TSelect
-): Promise<GetRoutesByPassengerId[]> {
+async function fetchGetRoutesByPassengerId<TSelect>(passengerId: number, select: TSelect): Promise<GetRoutesByPassengerId[] | null> {
   try {
     const response = await fetch(`${API_URL}/api/getRoutesByPassengerId`, {
       method: "POST",
@@ -17,9 +14,7 @@ async function fetchGetRoutesByPassengerId<TSelect>(
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Помилка сервера: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -28,11 +23,7 @@ async function fetchGetRoutesByPassengerId<TSelect>(
       const res = zodGetRoutesByPassengerId.parse(data); // Валідуємо схему
       return res;
     } catch (parseError) {
-      throw new Error(
-        parseError instanceof Error
-          ? parseError.message
-          : "Помилка парсингу даних"
-      );
+      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
     }
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);

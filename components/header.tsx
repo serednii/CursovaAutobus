@@ -61,7 +61,7 @@ export default function Header() {
   const { data } = session;
   // if (data && pathname !== "/") return null;
 
-  console.log(session);
+  // console.log(session);
 
   return (
     <Container className="flex justify-between gap-3 relative  flex-wrap z-[100] bg-gray-300 rounded-lg py-2 w-full">

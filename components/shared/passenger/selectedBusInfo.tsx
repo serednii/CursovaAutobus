@@ -4,7 +4,7 @@ import React from "react";
 import { IoArrowForward } from "react-icons/io5";
 
 interface Props {
-  route: Omit<IGetRoutePassengerById, "isReservation">;
+  route: Omit<IGetRoutePassengerById, "isReservation"> | undefined;
 }
 
 export default function SelectedBusInfo({ route }: Props) {

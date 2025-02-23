@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { useRouter } from "next/navigation";
+import { IRoutesByIdDriver } from "@/types/route-passenger.types";
 
 const handleAgainRoute = (route: any) => {
   console.log("Activating route again:", route);
@@ -13,7 +14,7 @@ const handleAgainRoute = (route: any) => {
 
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props {
-  routes: GetRoutesByDriverId[];
+  routes: IRoutesByIdDriver[];
   isRouteAgain?: boolean;
 }
 
@@ -21,9 +22,8 @@ export default function TableRoutes({ routes, isRouteAgain }: Props) {
   const router = useRouter();
 
   const handleViewRoute = (route: any) => {
-    // console.log("Viewing route:", route);
+    // console.log("Viewing route:", route)
     router.push(`/myroute/${route.id}`);
-    // alert(`Viewing route from ${route.id}`);
   };
 
   // Основні колонки без колонки againRouter
@@ -41,12 +41,7 @@ export default function TableRoutes({ routes, isRouteAgain }: Props) {
       width: 130,
       sortable: false,
       renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={() => handleViewRoute(params.row)}
-        >
+        <Button variant="contained" color="primary" size="small" onClick={() => handleViewRoute(params.row)}>
           View Route
         </Button>
       ),
@@ -63,12 +58,7 @@ export default function TableRoutes({ routes, isRouteAgain }: Props) {
           width: 250,
           sortable: false,
           renderCell: (params) => (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => handleAgainRoute(params.row)}
-            >
+            <Button variant="contained" color="primary" size="small" onClick={() => handleAgainRoute(params.row)}>
               Activate this route again
             </Button>
           ),
@@ -78,13 +68,7 @@ export default function TableRoutes({ routes, isRouteAgain }: Props) {
 
   return (
     <Paper sx={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={routes}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
-        sx={{ border: 0 }}
-      />
+      <DataGrid rows={routes} columns={columns} initialState={{ pagination: { paginationModel } }} pageSizeOptions={[5, 10]} sx={{ border: 0 }} />
     </Paper>
   );
 }

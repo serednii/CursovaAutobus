@@ -8,27 +8,30 @@ import { IRoutesTable } from "@/types/route-passenger.types";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
 
 const paginationModel = { page: 0, pageSize: 5 };
-interface Props<T> {
-  routes: T[];
+interface Props {
+  routes: IRoutesTable[];
   isRouteAgain?: boolean;
   removeRoutePassenger?: (route: number) => void;
 }
 
-export default function TableMyBookings<T>({
-  routes,
-  isRouteAgain,
-  removeRoutePassenger,
-}: Props<T>) {
+export default function TableMyBookings({ routes, isRouteAgain, removeRoutePassenger }: Props) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [route, setRoute] = React.useState({} as IRoutesTable);
+
   const handleCancelOrderRoute = (route: any) => {
-    console.log("Viewing route:", route);
-    console.log("Canceling route:", route);
     setOpen(true);
     setRoute(route);
     // removeRoutePassenger(route.id);
     // router.push(`/myroute/${route.id}`);
+    // alert(`Viewing route from ${route.id}`);
+  };
+
+  const handleChangeOrderRoute = (route: any) => {
+    // setOpen(true);
+    // setRoute(route);
+    // removeRoutePassenger(route.id);
+    router.push(`/seatselection/${route.id}`);
     // alert(`Viewing route from ${route.id}`);
   };
 
@@ -62,6 +65,17 @@ export default function TableMyBookings<T>({
       minWidth: 100,
       flex: 1,
     },
+    {
+      field: "changeRouter",
+      headerName: "Change Route",
+      width: 150,
+      sortable: false,
+      renderCell: (params) => (
+        <Button variant="contained" color="primary" size="small" onClick={() => handleChangeOrderRoute(params.row)}>
+          Change Booking
+        </Button>
+      ),
+    },
   ];
 
   // Додаємо колонку againRouter, якщо isRouteAgain === true
@@ -74,12 +88,7 @@ export default function TableMyBookings<T>({
           width: 250,
           sortable: false,
           renderCell: (params) => (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => handleCancelOrderRoute(params.row)}
-            >
+            <Button variant="contained" color="primary" size="small" onClick={() => handleCancelOrderRoute(params.row)}>
               Cancel Booking
             </Button>
           ),
@@ -98,13 +107,7 @@ export default function TableMyBookings<T>({
         setOk={setOk}
       />
       <Paper sx={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={routes}
-          columns={columns}
-          initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[5, 10]}
-          sx={{ border: 0 }}
-        />
+        <DataGrid rows={routes} columns={columns} initialState={{ pagination: { paginationModel } }} pageSizeOptions={[5, 10]} sx={{ border: 0 }} />
       </Paper>
     </>
   );

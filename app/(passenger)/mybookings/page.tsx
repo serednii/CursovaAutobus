@@ -4,7 +4,7 @@ import { sortDate } from "@/app/(driver)/myroutes/action";
 import { Container } from "@/components/shared/Container";
 import AvailableRoutes from "@/components/shared/passenger/AvailableRoutes";
 import PastRoutes from "@/components/shared/passenger/PastRoutes";
-import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
+import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { getBusSeats, getBusSeatsRaw, getRoutesTable } from "./action";
@@ -49,7 +49,7 @@ export default function MyBookings() {
 
   if (!passengerId) return <p>Loading...</p>;
 
-  const { pastRoutes, availableRoutes } = sortDate(getRoutesTable(routesPassenger, passengerId));
+  const { pastRoutes, availableRoutes } = sortDate<IRoutesTable>(getRoutesTable(routesPassenger, passengerId));
 
   const removeRoutePassenger = async (routeId: number) => {
     //find busSeats by routeId  of selected delete

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { useSession } from "next-auth/react";
@@ -7,7 +7,7 @@ import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ISubPassengersList } from "@/types/interface";
+import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { FormValues, SubPassengerGroup } from "@/types/form.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import { IUpdateRoute } from "@/types/route-passenger.types";
@@ -20,7 +20,7 @@ import { UserSession } from "@/types/next-auth";
 
 interface Props {
   layoutsData: ILayoutData[];
-  route: Omit<IGetRoutePassengerById, "isReservation"> | null;
+  route: Omit<IGetRoutePassengerById, "isReservation">;
 }
 
 const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayoutData, sessionUser: UserSession): IUpdateRoute => {
@@ -31,7 +31,8 @@ const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayo
       busSeatStatus: e.busSeatStatus === SeatStatusEnum.SELECTED ? SeatStatusEnum.RESERVED : e.busSeatStatus,
     };
   });
-  console.log("sessioUser", sessionUser);
+  // console.log("sessioUser", sessionUser);
+
   const passengersSeatsList: ISubPassengersList = {
     subPassengersList: [],
     idPassenger: Number(sessionUser?.id),
@@ -74,11 +75,10 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const { data: session, status } = useSession();
-
-  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
-  console.log("OrderSeatsBus route", route);
-  console.log("OrderSeatsBus--dataLayoutBus", dataLayoutBus);
-
+  // const [myListPassengers, setMyListPassengers] = useState<ISubPassengersList | undefined>();
+  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
+  // const counterRef = React.useRef(0);
+  const renderRef = useRef(0);
   const {
     register,
     unregister,
@@ -88,31 +88,43 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   } = useForm<FormValues>({
     mode: "onChange",
     defaultValues: {
-      wifi: true, // Початкове значення для чекбокса
+      wifi: true,
       coffee: true,
       power: true,
       restRoom: true,
     },
   });
 
+  // const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
+  // const userIdSession = Number(sessionUser?.id);
+
   let sessionUser: UserSession | null = null;
+
   if (status === "authenticated") {
     sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   }
 
   const userIdSession = Number(sessionUser?.id);
-
   const idOrderPassengers = dataLayoutBus?.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
-  console.log("OrderSeatsBus--idOrderPassengers", idOrderPassengers);
+
+  console.log("RENDER OrderSeatsBus **********************************************");
+  console.log("OrderSeatsBus--idOrderPassengers", idOrderPassengers, renderRef.current);
+  // console.log("OrderSeatsBus route", route);
+  // console.log("OrderSeatsBus--dataLayoutBus", dataLayoutBus);
+  const myListPassengers = useMemo(() => route.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route]);
+
+  console.log("OrderSeatsBus myListPassenger", myListPassengers);
   useEffect(() => {
     if (route) {
       const [filteredData] = layoutsData.filter((item) => {
         return item.modelBus === route.modelBus;
       });
+      //Якщо моделі автобуса незнайдено
       if (!filteredData) {
         console.error("Name Bus not found in layoutsData");
         throw new Error("Name Bus not found in layoutsData");
       }
+
       const transformData = filteredData.passenger.map((e) => {
         const { number, busSeatStatus, ...rest } = e;
         const findBusSeatStatus = route?.busSeats?.find((item) => item.number === number);
@@ -125,6 +137,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
       });
 
       const newData = { ...filteredData, passenger: transformData };
+      console.log("transformData ************************** ----", transformData);
 
       setDataLayoutBus(newData);
     }
@@ -135,7 +148,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
 
     const updateRoteDriver: IUpdateRoute = transformData(Number(route?.id), data, dataLayoutBus, sessionUser);
 
-    console.log("OrderSeatsBus updateRoteDriver", updateRoteDriver);
+    console.log("OrderSeatsBus  ----  updateRoteDriver", updateRoteDriver);
 
     fetchUpdateRouteById(updateRoteDriver)
       .then(async (response) => {
@@ -159,6 +172,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   return (
     <>
       <MyDialogInfo title="Your reservation has been successfully completed?" open={open} setOpen={setOpen} />
+
       <form onSubmit={handleSubmit(onSubmit)}>
         {dataLayoutBus && (
           <LayoutBus sessionUser={sessionUser} className="flex justify-center" dataLayoutBus={dataLayoutBus} setDataLayoutBus={setDataLayoutBus} />
@@ -170,7 +184,9 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
             errors={errors}
             unregister={unregister}
             setValue={setValue}
+            myListPassengers={myListPassengers}
             idOrderPassengers={idOrderPassengers}
+            renderRef={renderRef}
           />
         )}
 

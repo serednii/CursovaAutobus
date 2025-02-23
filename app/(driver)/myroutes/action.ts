@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
 
-const formatDate = <T extends { arrivalDate: string; departureDate: string }>(dateArray: T[]) => {
+const formatDate = <T extends { arrivalDate: string; departureDate: string }>(dateArray: T[]): T[] => {
   return dateArray.map((route: T) => {
     return {
       ...route,
@@ -15,11 +15,16 @@ const formatDate = <T extends { arrivalDate: string; departureDate: string }>(da
   });
 };
 
-export const sortDate = <T extends { arrivalDate: string; departureDate: string }>(routes: T[]) => {
-  const currentDate = new Date().getTime();
-  const pastRoutesRaw = routes.filter((route: T) => new Date(route.arrivalDate).getTime() < currentDate);
+interface IRouteWithDate {
+  arrivalDate: string; // або Date, залежно від вашого типу даних
+  departureDate: string;
+}
 
-  const availableRoutesRaw = routes.filter((route: T) => new Date(route.arrivalDate).getTime() > currentDate);
+export const sortDate = <T extends IRouteWithDate>(routes: T[]) => {
+  const currentDate = new Date().getTime();
+
+  const pastRoutesRaw = routes.filter((route) => new Date(route.arrivalDate).getTime() < currentDate);
+  const availableRoutesRaw = routes.filter((route) => new Date(route.arrivalDate).getTime() > currentDate);
 
   return {
     pastRoutes: formatDate(pastRoutesRaw),

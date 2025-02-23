@@ -4,23 +4,12 @@ import { zodSchemaUser } from "@/zod_shema/zodUser";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-type selectUserKeys = (
-  | "id"
-  | "firstName"
-  | "lastName"
-  | "email"
-  | "phone"
-  | "role"
-) &
-  keyof UserDataBase;
+type selectUserKeys = ("id" | "firstName" | "lastName" | "email" | "phone" | "role") & keyof UserDataBase;
 
 export type IGetUsersByIdBySelectOption = GenerateBooleanType<selectUserKeys>;
 export type IGetUsersByIdBySelect = GenerateType<UserDataBase, selectUserKeys>;
 
-export async function getUsersFetchByIdsBySelect(
-  ids: number[],
-  select: IGetUsersByIdBySelectOption 
-): Promise<unknown> {
+export async function getUsersFetchByIdsBySelect(ids: number[], select: IGetUsersByIdBySelectOption): Promise<IGetUsersByIdBySelect[] | null> {
   try {
     const response = await fetch(`${API_URL}/api/getUsersByIdBySelect`, {
       method: "POST",
@@ -31,23 +20,17 @@ export async function getUsersFetchByIdsBySelect(
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Помилка сервера: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
 
     const data: unknown = await response.json();
     try {
-      const parsedData = zodSchemaUser.array().parse(data);
+      const parsedData: IGetUsersByIdBySelect[] = zodSchemaUser.array().parse(data);
       console.log("Отриманий маршрут:", parsedData);
       return parsedData;
     } catch (parseError: unknown) {
       console.error("Помилка парсингу даних:", parseError);
-      throw new Error(
-        parseError instanceof Error
-          ? parseError.message
-          : "Помилка парсингу даних"
-      );
+      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
     }
   } catch (error) {
     console.error("Error during request execution:", error);

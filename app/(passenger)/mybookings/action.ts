@@ -30,6 +30,7 @@ export const getRoutesTable = (routesPassenger: GetRoutesByPassengerId[], passen
       routeTotalPrice: "$" + getTotalPriceSeatsNumber.totalPrice,
       routePrice: "$" + route.routePrice,
       busSeats: route.busSeats,
+      isReservation: route.isReservation,
     };
   });
   return routesTable;

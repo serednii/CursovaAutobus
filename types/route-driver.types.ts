@@ -9,6 +9,7 @@ export interface ISendDataBaseRouteDriver extends RouteDriver {
 export interface GetRoutesByDriverId extends Omit<TypeBaseRoute, "availableSeats"> {
   bookedSeats: number;
   maxSeats: number;
+  isReservation: boolean;
 }
 
 export interface IGetRouteById extends Omit<TypeBaseRoute, "id" | "availableSeats"> {

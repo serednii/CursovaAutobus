@@ -49,4 +49,12 @@ export interface IRoutesTable extends IDateString, IFromTo {
   routeTotalPrice: string;
   routePrice: string;
   busSeats: IBusSeats[];
+  isReservation: boolean; //якщо на даному маршруті заброрньований користувач
+}
+
+export interface IRoutesByIdDriver extends IDateString, IFromTo {
+  id: number;
+  bookedSeats: number;
+  maxSeats: number;
+  routePrice: number;
 }

@@ -1,8 +1,9 @@
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
+import { IRoutesByIdDriver } from "@/types/route-passenger.types";
 import TableRoutes from "./TableRoutes";
 
 interface Props {
-  routes: GetRoutesByDriverId[];
+  routes: IRoutesByIdDriver[];
   className?: string;
 }
 
