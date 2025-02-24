@@ -7,13 +7,14 @@ import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IBusSeats, ISubPassengersList } from "@/types/interface";
+import { ISubPassengersList } from "@/types/interface";
 import { FormValues, SubPassengerGroup } from "@/types/form.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import { IUpdateRoute } from "@/types/route-passenger.types";
 
 import { useRouter } from "next/navigation";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
+
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
 import toast from "react-hot-toast";
 import { UserSession } from "@/types/next-auth";
@@ -74,6 +75,7 @@ const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayo
 export default function OrderSeatsBus({ layoutsData, route }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
   const { data: session, status } = useSession();
   // const [myListPassengers, setMyListPassengers] = useState<ISubPassengersList | undefined>();
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);

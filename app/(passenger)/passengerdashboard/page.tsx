@@ -1,4 +1,4 @@
-import { Container } from "@/components/shared/Container";
+import { Container } from "@/components/ui/Container";
 import FindRoute from "@/components/shared/findroute/FindRoute";
 
 export default function PassengersDashboard() {

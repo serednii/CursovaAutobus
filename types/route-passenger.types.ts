@@ -1,4 +1,4 @@
-import { IBusSeats, IDateString, IFromTo, IServiceBus, ISubPassengersList } from "./interface";
+import { IBusSeats, IDateString, IFromTo, IPassengersSeatsList, IServiceBus, ISubPassengersList } from "./interface";
 import { BusSeatInfo } from "./layoutbus.types";
 import { GetRoutesByDriverId, ISendDataBaseRouteDriver } from "./route-driver.types";
 
@@ -50,6 +50,7 @@ export interface IRoutesTable extends IDateString, IFromTo {
   routePrice: string;
   busSeats: IBusSeats[];
   isReservation: boolean; //якщо на даному маршруті заброрньований користувач
+  passengersSeatsList: ISubPassengersList | undefined;
 }
 
 export interface IRoutesByIdDriver extends IDateString, IFromTo {

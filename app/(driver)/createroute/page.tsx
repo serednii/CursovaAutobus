@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Container } from "@/components/shared/Container";
+import { Container } from "@/components/ui/Container";
 
 import CustomDatePicker from "@/components/shared/form/dataPicker/DataPicker";
 import DynamicTextFields from "@/components/shared/form/DynamicTextFields";

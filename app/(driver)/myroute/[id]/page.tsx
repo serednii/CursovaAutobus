@@ -1,4 +1,4 @@
-import { Container } from "@/components/shared/Container";
+import { Container } from "@/components/ui/Container";
 import TablePassengerDetails from "@/components/shared/driver/TablePassengerDetails";
 import { formatDate, getPassengerDetails, getPassengersId } from "./action";
 
@@ -9,12 +9,9 @@ import { ISubPassengersList } from "@/types/interface";
 // import { isUserArray } from "@/lib/utils";
 import { IUser } from "@/types/next-auth";
 import ShowIf from "@/components/ShowIf";
-import { selectRoute, selectUser } from "./const";
-import {
-  fetchGetRoutesByIdMyRoute,
-  IGetRouteMyRoute,
-  IGetSearchRouteMyRouteOption,
-} from "@/fetchFunctions/fetchGetRoutesById";
+
+import { fetchGetRoutesByIdMyRoute, IGetRouteMyRoute, IGetSearchRouteMyRouteOption } from "@/fetchFunctions/fetchGetRoutesById";
+import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 
 interface Props {
   params: { id: string };
@@ -24,15 +21,13 @@ export default async function MyRoute({ params }: Props) {
   const { id } = await params;
   console.log("routes", id);
 
-  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesByIdMyRoute<
-    IGetSearchRouteMyRouteOption,
-    IGetRouteMyRoute[]
-  >([Number(id)], selectRoute);
+  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesByIdMyRoute<IGetSearchRouteMyRouteOption, IGetRouteMyRoute[]>(
+    [Number(id)],
+    selectRoute
+  );
   const [route] = formatDate(routeRaw);
 
-  const passengersSeatsList: ISubPassengersList[] = cloneDeep(
-    route.passengersSeatsList
-  );
+  const passengersSeatsList: ISubPassengersList[] = cloneDeep(route.passengersSeatsList);
 
   console.log("passengersSeatsList", passengersSeatsList);
 
@@ -47,10 +42,7 @@ export default async function MyRoute({ params }: Props) {
     );
   }
 
-  const usersRaw: unknown = await getUsersFetchByIdsBySelect(
-    uniquePassengersId,
-    selectUser
-  );
+  const usersRaw: unknown = await getUsersFetchByIdsBySelect(uniquePassengersId, selectUser);
 
   // console.log("usersRaw", usersRaw);
   // const { message, status } = isUserArray(usersRaw);
@@ -66,11 +58,7 @@ export default async function MyRoute({ params }: Props) {
 
   const users = usersRaw as IUser[];
 
-  const passengerDetails = getPassengerDetails(
-    route,
-    users,
-    passengersSeatsList
-  );
+  const passengerDetails = getPassengerDetails(route, users, passengersSeatsList);
 
   // console.log("users", users);
   // console.log("routes", route);
@@ -82,15 +70,10 @@ export default async function MyRoute({ params }: Props) {
       <ShowIf condition={!!route}>
         <header className="h-[150px] flex flex-col justify-center">
           <h1 className="text-3xl font-bold">View Сhosen route</h1>
-          <p>
-            Route:{" "}
-            {`${route.departureFrom} ${route.departureDate} to ${route.arrivalTo} ${route.arrivalDate}`}
-          </p>
+          <p>Route: {`${route.departureFrom} ${route.departureDate} to ${route.arrivalTo} ${route.arrivalDate}`}</p>
         </header>
         <main>
-          <h2 className="text-2xl font-bold h-[80px] bg-white flex items-center pl-5">
-            Passenger Details
-          </h2>
+          <h2 className="text-2xl font-bold h-[80px] bg-white flex items-center pl-5">Passenger Details</h2>
           <TablePassengerDetails passengerDetails={passengerDetails} />
         </main>
         <footer>route {id}</footer>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "./shared/Container";
+import { Container } from "./ui/Container";
 
 export default function Footer() {
   return (
@@ -9,10 +9,7 @@ export default function Footer() {
           <ul className="flex justify-between">
             <li>
               <h3 className="text-white">ExpressBus</h3>
-              <p>
-                Your reliable partner for comfortable bus travel across the
-                country.
-              </p>
+              <p>Your reliable partner for comfortable bus travel across the country.</p>
             </li>
             <li>
               <h3 className="text-white">Quick Links</h3>
@@ -40,9 +37,7 @@ export default function Footer() {
             </li>
           </ul>
         </div>
-        <div className="footer-copyright flex justify-center items-center h-[90px]">
-          © 2025 ExpressBuss. All rights reserved.
-        </div>
+        <div className="footer-copyright flex justify-center items-center h-[90px]">© 2025 ExpressBuss. All rights reserved.</div>
       </Container>
     </footer>
   );

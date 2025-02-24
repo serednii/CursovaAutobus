@@ -1,11 +1,12 @@
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 
-import { IBusSeats } from "@/types/interface";
+import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
 
-export const getRoutesTable = (routesPassenger: GetRoutesByPassengerId[], passengerId: number): IRoutesTable[] => {
+export const separateRoutesTable = (routesPassenger: GetRoutesByPassengerId[], passengerId: number): IRoutesTable[] => {
   console.log("routesPassenger ******** ", routesPassenger);
+
   const routesTable: IRoutesTable[] = routesPassenger.map((route): IRoutesTable => {
     const getTotalPriceSeatsNumber = route.busSeats?.reduce(
       (acc: { totalPrice: number; seatsNumber: number[] }, seat: IBusSeats) => {
@@ -19,6 +20,7 @@ export const getRoutesTable = (routesPassenger: GetRoutesByPassengerId[], passen
       },
       { totalPrice: 0, seatsNumber: [] }
     );
+    const passengersSeatsList: ISubPassengersList | undefined = route.passengersSeatsList.find((e) => e.idPassenger === passengerId);
 
     return {
       id: route.id,
@@ -31,6 +33,7 @@ export const getRoutesTable = (routesPassenger: GetRoutesByPassengerId[], passen
       routePrice: "$" + route.routePrice,
       busSeats: route.busSeats,
       isReservation: route.isReservation,
+      passengersSeatsList,
     };
   });
   return routesTable;

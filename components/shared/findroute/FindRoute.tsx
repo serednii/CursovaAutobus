@@ -23,10 +23,10 @@ import {
   searchRouteOne,
 } from "@/fetchFunctions/searchRoute";
 
-import { selectMany, selectOne } from "./const";
 import { useRouter, useSearchParams } from "next/navigation";
 import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
+import { selectMany, selectOne } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 
 // interface IGetSearchRouteManyOptionData extends IGetSearchRouteMany {
 //   select: IGetSearchRouteManyOption & IGetBusSeatsBoolean & IGetPassengersSeatsList;
@@ -98,6 +98,7 @@ export default function FindRoute({ className }: { className?: string }) {
   const coffee = watch("coffee");
   const power = watch("power");
   const restRoom = watch("restRoom");
+
   let idRoute: string | null = null;
   let transition: string | null = "";
   if (window !== undefined) {
@@ -105,6 +106,7 @@ export default function FindRoute({ className }: { className?: string }) {
     transition = sessionStorage.getItem("transition");
   }
   console.log("sessionStorage-idRoute-transition", idRoute, transition, status, router);
+
   useEffect(() => {
     if (idRoute && transition === "seatselection" && status === "authenticated") {
       sessionStorage.removeItem("idRoute");

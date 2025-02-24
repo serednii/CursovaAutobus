@@ -1,28 +1,18 @@
 "use client";
 
 import { sortDate } from "@/app/(driver)/myroutes/action";
-import { Container } from "@/components/shared/Container";
+import { Container } from "@/components/ui/Container";
 import AvailableRoutes from "@/components/shared/passenger/AvailableRoutes";
 import PastRoutes from "@/components/shared/passenger/PastRoutes";
 import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { getBusSeatsPassenger, getBusSeatsRaw, getRoutesTable } from "./action";
-import { select } from "./const";
+import { getBusSeatsRaw, separateRoutesTable } from "./action";
+
 import { toast } from "react-hot-toast";
 import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
-
-// interface IGetRoutePassengerById
-//   extends Omit<GetRoutesByPassengerId, "busSeats"> {
-//   busSeats: {
-//     number: number;
-//     id: number;
-//     passenger: number | null;
-//     busSeatStatus: SeatStatusEnum;
-//     routeDriverId: number;
-//   }[];
-// }
+import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 
 export default function MyBookings() {
   const { data: session } = useSession();
@@ -37,7 +27,7 @@ export default function MyBookings() {
 
     const fetchRoutes = async () => {
       try {
-        const routes = await fetchGetRoutesByPassengerId<typeof select>(passengerId, select);
+        const routes = await fetchGetRoutesByPassengerId<typeof selectMyBookings>(passengerId, selectMyBookings);
         setRoutesPassenger(routes || []);
       } catch (error) {
         console.error("Error fetching routes:", error);
@@ -48,8 +38,8 @@ export default function MyBookings() {
   }, [passengerId, reload]);
 
   if (!passengerId) return <p>Loading...</p>;
-
-  const { pastRoutes, availableRoutes } = sortDate<IRoutesTable>(getRoutesTable(routesPassenger, passengerId));
+  const separateData = separateRoutesTable(routesPassenger, passengerId);
+  const { pastRoutes, availableRoutes } = sortDate<IRoutesTable>(separateData);
 
   const removeRoutePassenger = async (routeId: number) => {
     //find busSeats by routeId  of selected delete

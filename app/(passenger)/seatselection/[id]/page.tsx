@@ -3,12 +3,12 @@ import OrderSeatsBus from "@/components/shared/passenger/OrderseatsBus";
 
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
-import { Container } from "@/components/shared/Container";
+import { Container } from "@/components/ui/Container";
 import { fetchGetRoutesByIdSeatSelection, IGetRouteSeatSelection, IGetSearchRouteSeatSelectionOption } from "@/fetchFunctions/fetchGetRoutesById";
-import { select } from "./const";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import { authConfig } from "@/configs/auth";
 import { getServerSession } from "next-auth/next";
+import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 
 interface Props {
   params: { id: string };
@@ -19,7 +19,10 @@ export default async function SeatSelection({ params }: Props) {
   const session = await getServerSession(authConfig);
   const driverId: string | undefined = session?.user.id;
 
-  const routeArray = await fetchGetRoutesByIdSeatSelection<IGetSearchRouteSeatSelectionOption, IGetRouteSeatSelection[]>([Number(id)], select);
+  const routeArray = await fetchGetRoutesByIdSeatSelection<IGetSearchRouteSeatSelectionOption, IGetRouteSeatSelection[]>(
+    [Number(id)],
+    selectSeatSelection
+  );
 
   const route = routeArray && routeArray[0];
 

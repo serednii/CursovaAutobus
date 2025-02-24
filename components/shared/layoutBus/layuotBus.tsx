@@ -16,8 +16,6 @@ interface Props {
   sessionUser: UserSession | null;
 }
 
-const keys = ["passenger", "busWidth", "busHeight", "driverSeat", "stairs"] as const;
-
 export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser }: Props) {
   const user = sessionUser?.role;
   // console.log("user session", sessionUser);

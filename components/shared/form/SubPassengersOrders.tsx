@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { TextField } from "@mui/material";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormUnregister } from "react-hook-form";
 import { FormValues, SubPassengerDetails } from "@/types/form.types";
-
+import { IoMdClose } from "react-icons/io";
 import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
 
@@ -25,7 +25,7 @@ const SubPassengersOrders = ({ register, unregister, errors, setValue, idOrderPa
     renderRef.current = 4;
   }
   console.log("SubPassengersOrders ----subPassengers", subPassengers, renderRef.current);
-  
+
   useEffect(() => {
     if (myListPassengers && renderRef.current === 0) {
       console.log("myListPassenger in useEffect", myListPassengers);
@@ -103,7 +103,7 @@ const SubPassengersOrders = ({ register, unregister, errors, setValue, idOrderPa
       <div className="mt-4">
         {subPassengers.length > 0 &&
           subPassengers.map((subPassenger, index) => (
-            <div className="grid min-[400px]:grid-cols-2 md:grid-cols-4 grid-cols-1 gap-4 " key={index}>
+            <div className="grid min-[400px]:grid-cols-2 md:grid-cols-4 grid-cols-1 gap-4 relative" key={index}>
               <TextField
                 {...register(`subFirstName.${index}`, {
                   required: "This field is required",
@@ -197,6 +197,7 @@ const SubPassengersOrders = ({ register, unregister, errors, setValue, idOrderPa
                   style: { top: "5px" },
                 }}
               />
+              {/* <IoMdClose className="absolute top-[7px] right-[-30px] text-2xl cursor-pointer z-10" /> */}
             </div>
           ))}
       </div>

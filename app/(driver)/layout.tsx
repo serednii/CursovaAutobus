@@ -1,4 +1,4 @@
-import { Container } from "@/components/shared/Container";
+import { Container } from "@/components/ui/Container";
 
 export default function RootLayout({
   children,

@@ -1,11 +1,14 @@
 "use client";
-import * as React from "react";
+import React, { useRef, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { IRoutesTable } from "@/types/route-passenger.types";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
+import { MyDialogDetailsRoute } from "@/components/ui/MyDialogDetailsRoute/MyDialogDetailsRoute";
+import { ISubPassengersList } from "@/types/interface";
+import { ContainerViewCenter } from "@/components/ui/ContainerViewCenter";
 
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props {
@@ -16,10 +19,12 @@ interface Props {
 
 export default function TableMyBookings({ routes, isRouteAgain, removeRoutePassenger }: Props) {
   const router = useRouter();
-  const [open, setOpen] = React.useState(false);
-  const [route, setRoute] = React.useState({} as IRoutesTable);
+  const [open, setOpen] = useState(false);
+  const [route, setRoute] = useState({} as IRoutesTable);
+  const [openDetails, setOpenDetails] = useState(false);
+  const routeDetails = useRef({} as ISubPassengersList);
 
-  const handleCancelOrderRoute = (route: any) => {
+  const handleCancelOrderRoute = (route: IRoutesTable) => {
     setOpen(true);
     setRoute(route);
     // removeRoutePassenger(route.id);
@@ -27,12 +32,18 @@ export default function TableMyBookings({ routes, isRouteAgain, removeRoutePasse
     // alert(`Viewing route from ${route.id}`);
   };
 
-  const handleChangeOrderRoute = (route: any) => {
+  const handleChangeOrderRoute = (route: IRoutesTable) => {
     // setOpen(true);
     // setRoute(route);
     // removeRoutePassenger(route.id);
     router.push(`/seatselection/${route.id}`);
     // alert(`Viewing route from ${route.id}`);
+  };
+
+  const handleDetailOrderRoute = (route: IRoutesTable) => {
+    route.passengersSeatsList && (routeDetails.current = route.passengersSeatsList);
+    setOpenDetails(true);
+    console.log("Route Details", route);
   };
 
   const setOk = () => removeRoutePassenger && removeRoutePassenger(route.id);
@@ -56,25 +67,14 @@ export default function TableMyBookings({ routes, isRouteAgain, removeRoutePasse
     {
       field: "routeTotalPrice",
       headerName: "Total Price",
-      minWidth: 100,
+      minWidth: 90,
       flex: 1,
     },
     {
       field: "routePrice",
       headerName: "Price",
-      minWidth: 100,
+      minWidth: 60,
       flex: 1,
-    },
-    {
-      field: "changeRouter",
-      headerName: "Change Route",
-      width: 150,
-      sortable: false,
-      renderCell: (params) => (
-        <Button variant="contained" color="primary" size="small" onClick={() => handleChangeOrderRoute(params.row)}>
-          Change Booking
-        </Button>
-      ),
     },
   ];
 
@@ -83,13 +83,35 @@ export default function TableMyBookings({ routes, isRouteAgain, removeRoutePasse
     ? [
         ...baseColumns,
         {
+          field: "changeRouter",
+          headerName: "Change Route",
+          width: 150,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" size="small" onClick={() => handleChangeOrderRoute(params.row)}>
+              Change Booking
+            </Button>
+          ),
+        },
+        {
           field: "againRouter",
           headerName: "Activate Again",
-          width: 250,
+          width: 150,
           sortable: false,
           renderCell: (params) => (
             <Button variant="contained" color="primary" size="small" onClick={() => handleCancelOrderRoute(params.row)}>
               Cancel Booking
+            </Button>
+          ),
+        },
+        {
+          field: "detailsRoute",
+          headerName: "Details Route",
+          width: 150,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" size="small" onClick={() => handleDetailOrderRoute(params.row)}>
+              Detais
             </Button>
           ),
         },
@@ -106,6 +128,13 @@ export default function TableMyBookings({ routes, isRouteAgain, removeRoutePasse
         open={open}
         setOk={setOk}
       />
+
+      {openDetails && (
+        <ContainerViewCenter setOpen={setOpenDetails}>
+          <MyDialogDetailsRoute passengersSeatsList={routeDetails.current} />
+        </ContainerViewCenter>
+      )}
+
       <Paper sx={{ height: 400, width: "100%" }}>
         <DataGrid rows={routes} columns={columns} initialState={{ pagination: { paginationModel } }} pageSizeOptions={[5, 10]} sx={{ border: 0 }} />
       </Paper>
