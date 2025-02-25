@@ -2,6 +2,7 @@ import { ISubPassengersList } from "@/types/interface";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import "./dialog.css";
+import { useRef } from "react";
 
 interface DialogProps {
   passengersSeatsList: ISubPassengersList;
@@ -9,7 +10,7 @@ interface DialogProps {
 
 export const MyDialogDetailsRoute = ({ passengersSeatsList }: DialogProps) => {
   const subPassengersList = passengersSeatsList.subPassengersList;
-
+  const useIdRef = useRef<number>(0);
   console.log("MyDialogDetailsRoute", subPassengersList);
 
   const paginationModel = { page: 0, pageSize: 5 };
@@ -30,11 +31,12 @@ export const MyDialogDetailsRoute = ({ passengersSeatsList }: DialogProps) => {
       flex: 1,
     },
   ];
+
   return (
     <Paper sx={{ height: 400, width: "100%" }}>
       <DataGrid
         rows={subPassengersList}
-        getRowId={(row) => row.subEmail} //
+        getRowId={() => `MyDialogDetailsRoute${useIdRef.current++}`} //
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
