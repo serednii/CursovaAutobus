@@ -27,6 +27,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 import { selectMany, selectOne } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+import { format } from "date-fns";
+import { uk } from "date-fns/locale";
 
 // interface IGetSearchRouteManyOptionData extends IGetSearchRouteMany {
 //   select: IGetSearchRouteManyOption & IGetBusSeatsBoolean & IGetPassengersSeatsList;
@@ -169,8 +171,12 @@ export default function FindRoute({ className }: { className?: string }) {
                 const isReservation = item.busSeats.some((busSeat) => busSeat.passenger === Number(session?.user.id)); //if there is a reserved user on this route
                 const newItem: TypeBaseRoute = {
                   id: item.id,
-                  departureDate: item.departureDate,
-                  arrivalDate: item.arrivalDate,
+                  departureDate: format(item.departureDate, "d MMMM yyyy HH:mm", {
+                    locale: uk,
+                  }),
+                  arrivalDate: format(item.arrivalDate, "d MMMM yyyy HH:mm", {
+                    locale: uk,
+                  }),
                   departureFrom: item.departureFrom,
                   arrivalTo: item.arrivalTo,
                   routePrice: item.routePrice,
