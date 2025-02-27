@@ -75,10 +75,10 @@ export default function TablePassengerDetails({ passengerDetails }: Props) {
           <TableHead>
             <TableRow>
               <TableCell>Seats</TableCell>
-              <TableCell align="right">Order Passenger</TableCell>
-              <TableCell align="right">Passenger</TableCell>
-              <TableCell align="right">phone</TableCell>
-              <TableCell align="right">email</TableCell>
+              <TableCell align="left">Order Passenger</TableCell>
+              <TableCell align="left">Passenger</TableCell>
+              <TableCell align="left">phone</TableCell>
+              <TableCell align="left">email</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -88,20 +88,15 @@ export default function TablePassengerDetails({ passengerDetails }: Props) {
                   <TableRow
                     key={row?.seat || ""}
                     style={{
-                      backgroundColor:
-                        colorCombinations[row?.orderPassengersId || 0]
-                          .background,
-                      color:
-                        colorCombinations[row?.orderPassengersId || 0].text,
+                      backgroundColor: colorCombinations[row?.orderPassengersId || 0].background,
+                      color: colorCombinations[row?.orderPassengersId || 0].text,
                     }}
                   >
-                    <TableCell align="right">{row?.seat || ""}</TableCell>
-                    <TableCell align="right">
-                      {row?.orderPassengers || ""}
-                    </TableCell>
-                    <TableCell align="right">{row?.passenger || ""}</TableCell>
-                    <TableCell align="right">{row?.phone || ""}</TableCell>
-                    <TableCell align="right">{row?.email || ""}</TableCell>
+                    <TableCell align="left">{row?.seat || ""}</TableCell>
+                    <TableCell align="left">{row?.orderPassengers || ""}</TableCell>
+                    <TableCell align="left">{row?.passenger || ""}</TableCell>
+                    <TableCell align="left">{row?.phone || ""}</TableCell>
+                    <TableCell align="left">{row?.email || ""}</TableCell>
                   </TableRow>
                 );
               })}

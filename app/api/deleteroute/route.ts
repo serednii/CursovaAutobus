@@ -1,8 +1,8 @@
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: any) {
+export async function DELETE(req: NextRequest) {
   try {
     const middlewareResponse = await middleware(req);
 

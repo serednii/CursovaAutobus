@@ -1,9 +1,8 @@
 import { IGetRouteMyRoute } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetUsersByIdBySelect } from "@/fetchFunctions/fetchUsers";
 import { SubPassengerDetails } from "@/types/form.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
-import { IUser } from "@/types/next-auth";
 import { PassengerDetails } from "@/types/route-driver.types";
-
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
 
@@ -33,7 +32,7 @@ export const getPassengersId = (route: IGetRouteMyRoute) => {
   return passengersId;
 };
 
-export const getPassengerDetails = (route: IGetRouteMyRoute, usersRaw: IUser[] | null, passengersSeatsList: ISubPassengersList[]) => {
+export const getPassengerDetails = (route: IGetRouteMyRoute, usersRaw: IGetUsersByIdBySelect[] | null, passengersSeatsList: ISubPassengersList[]) => {
   const tempAddUsers = new Map();
   const tempUnique = new Map();
   const busSeatsSortByNumber = route.busSeats.sort((a, b) => a.number - b.number);
@@ -45,7 +44,7 @@ export const getPassengerDetails = (route: IGetRouteMyRoute, usersRaw: IUser[] |
 
     console.log("SSSSSSSSSS", idPassenger);
 
-    const user = usersRaw?.find((user: IUser) => user.id === String(idPassenger));
+    const user = usersRaw?.find((user: IGetUsersByIdBySelect) => user.id === idPassenger);
 
     const uniqueId = Array.from(tempUnique.keys()).findIndex((e) => e === idPassenger);
 

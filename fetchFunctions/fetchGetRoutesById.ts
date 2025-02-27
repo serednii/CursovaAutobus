@@ -17,6 +17,7 @@ type selectRouteSeatSelectionKeys = (
   | "maxSeats"
   | "bookedSeats"
   | "passengersSeatsList"
+  | "driverId"
 ) &
   keyof routeDataBase;
 
@@ -47,7 +48,7 @@ export default async function fetchGetRoutesById<TResult, TSelect>(id: number[],
       body: JSON.stringify({ id, select }),
     });
 
-    console.log("Отримано відповідь:", response.status, response.statusText);
+    // console.log("Отримано відповідь:", response.status, response.statusText);
 
     if (!response.ok) {
       throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
@@ -73,7 +74,7 @@ export const fetchGetRoutesByIdSeatSelection = async <TSelect, TResult>(id: numb
     if (!res) {
       throw new Error("Помилка: отримано null або undefined");
     }
-    // console.log("res1111", res);
+    console.log("res1111", res);
     try {
       const parsedData = ZodFetchGetRoutesByIdSeatSelection.parse(res);
       return parsedData;
@@ -90,7 +91,7 @@ export const fetchGetRoutesByIdMyRoute = async <TSelect, TResult>(id: number[], 
   try {
     const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
 
-    console.log("res2222", res);
+    // console.log("res2222", res);
 
     if (!res) {
       throw new Error("Помилка: отримано null або undefined");

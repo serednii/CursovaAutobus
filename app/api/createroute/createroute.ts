@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import validateFields from "./validateFields";
 import { ICreateRoute } from "../../../types/interface";
-import { createBusSeats, createIntermediateStops } from "./createFunctions";
+import { createBusSeats, createIntermediateStops, createPassengersSeatsList } from "./createFunctions";
 import { middleware } from "@/middleware";
 
 export async function createRoute(req: NextRequest) {
@@ -39,6 +39,7 @@ export async function createRoute(req: NextRequest) {
       bookedSeats,
       intermediateStops,
       busSeats,
+      passengersSeatsList,
     } = data;
 
     console.log("Data validation passed");
@@ -88,8 +89,10 @@ export async function createRoute(req: NextRequest) {
     }
 
     // Створення списку пасажирів
-    // await createPassengersSeatsList(passengersSeatsList, routeDriver.id);
-
+    const resultPassengersSeatsList = await createPassengersSeatsList(passengersSeatsList, routeDriver.id);
+    if (!resultPassengersSeatsList) {
+      return NextResponse.json({ error: "Failed to create passengers seats list" }, { status: 500 });
+    }
     return NextResponse.json({ routeDriver, resultIntermediateStops, resultBusSeats }, { status: 201 });
     // @typescript-eslint/no-explicit-any
   } catch (error: Error | any) {

@@ -3,6 +3,7 @@ import { FormValues } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
+import { ISubPassengersList } from "@/types/interface";
 
 // const subPassengerSchema = z.object({
 //   subFirstName: z.string().min(1, "First name is required"),
@@ -37,36 +38,46 @@ const transformDataSchema = z.object({
   }),
 });
 
-export const transformData = (
-  data: FormValues,
-  dataLayoutBus: ILayoutData,
-  sessionUser: UserSession
-): ISendDataBaseRouteDriver => {
+export const transformData = (data: FormValues, dataLayoutBus: ILayoutData, sessionUser: UserSession): ISendDataBaseRouteDriver => {
   console.log("data", data);
   console.log("dataLayoutBus", dataLayoutBus);
   console.log("sessionUser", sessionUser);
   // Валідація даних за допомогою Zod
   transformDataSchema.parse({ data, dataLayoutBus });
 
-  const newFormatPassenger = dataLayoutBus.passenger.map(
-    ({ number, busSeatStatus, passenger }) => ({
-      number,
-      busSeatStatus,
-      passenger,
-    })
-  );
+  const newFormatPassenger = dataLayoutBus.passenger.map(({ number, busSeatStatus, passenger }) => ({
+    number,
+    busSeatStatus,
+    passenger,
+  }));
 
-  // let subPassengersList = [];
-  // if (data.subFirstName && data.subLastName && data.subPhone && data.subEmail) {
-  //   subPassengersList = data.subFirstName.map((_, index) =>
-  //     subPassengerSchema.parse({
-  //       subFirstName: data.subFirstName[index],
-  //       subLastName: data.subLastName[index],
-  //       subPhone: data.subPhone[index],
-  //       subEmail: data.subEmail[index],
-  //     })
-  //   );
-  // }
+  const passengersSeatsList: ISubPassengersList = {
+    subPassengersList: [],
+    idPassenger: Number(sessionUser?.id),
+  };
+
+  if (
+    data.subFirstName &&
+    data.subLastName &&
+    data.subPhone &&
+    data.subEmail &&
+    Array.isArray(data.subFirstName) &&
+    Array.isArray(data.subLastName) &&
+    Array.isArray(data.subPhone) &&
+    Array.isArray(data.subEmail) &&
+    data.subFirstName.length === data.subLastName.length &&
+    data.subLastName.length === data.subPhone.length &&
+    data.subPhone.length === data.subEmail.length
+  ) {
+    const subPassengersList = data.subFirstName.map((_, index) => ({
+      subFirstName: data.subFirstName ? data.subFirstName[index] : "",
+      subLastName: data.subLastName ? data.subLastName[index] : "",
+      subPhone: data.subPhone ? data.subPhone[index] : "",
+      subEmail: data.subEmail ? data.subEmail[index] : "",
+    }));
+
+    passengersSeatsList.subPassengersList = subPassengersList;
+  }
 
   return {
     ...data,
@@ -79,8 +90,7 @@ export const transformData = (
     selectBusLayout: String(data.selectBusLayout),
     intermediateStops: data.intermediateStops || [],
     maxSeats: newFormatPassenger.length,
-    bookedSeats: newFormatPassenger.filter(
-      (e) => e.busSeatStatus === "reserved"
-    ).length,
+    bookedSeats: newFormatPassenger.filter((e) => e.busSeatStatus === "reserved").length,
+    passengersSeatsList: [passengersSeatsList],
   };
 };

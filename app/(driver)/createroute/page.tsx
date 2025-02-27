@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Container } from "@/components/ui/Container";
 
-import CustomDatePicker from "@/components/shared/form/dataPicker/DataPicker";
+import CustomDatePicker from "@/components/shared/form/dataPicker/CustomDatePicker";
 import DynamicTextFields from "@/components/shared/form/DynamicTextFields";
 import MaterialUISelect from "@/components/shared/form/MaterialUISelect";
 
@@ -25,11 +25,17 @@ import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import toast from "react-hot-toast";
 import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
+import { ActionEnum } from "@/enum/shared.enums";
+import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
+import { IGetPassengersSeatsList } from "@/types/generaty.types";
+import { IPassengersSeatsList } from "@/types/interface";
+import { cloneDeep } from "lodash";
 
 export default function CreateRoute() {
   const { data: session, status } = useSession();
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
+  const renderRef = useRef(0);
 
   const {
     register,
@@ -39,6 +45,7 @@ export default function CreateRoute() {
     reset,
     watch,
     control,
+    setValue,
   } = useForm<FormValues>({
     mode: "onChange",
     defaultValues: {
@@ -49,10 +56,15 @@ export default function CreateRoute() {
     },
   });
 
-  const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null; // Присвоюємо значення session.user
+  // const [passengersSeatsList, setPassengersSeatsList] = useState<IPassengersSeatsList[]>([]);
 
+  const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null; // Присвоюємо значення session.user
+  const userIdSession = Number(sessionUser?.id);
+  const idOrderPassengers = dataLayoutBus?.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
   const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
 
+  console.log("watch watch", watch(), dataLayoutBus);
+  // const myListPassengers = useMemo(() => passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [passengersSeatsList]);
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     try {
       const createRouteDriver: ISendDataBaseRouteDriver = transformData(data, dataLayoutBus as ILayoutData, sessionUser as UserSession);
@@ -67,6 +79,8 @@ export default function CreateRoute() {
         duration: 5000,
       });
       reset();
+      setDataLayoutBus(null);
+      setIndexSelectVariantBus(0);
     } catch (err) {
       console.error("Fetch failed:", err);
       toast.error("Error creating route");
@@ -74,12 +88,12 @@ export default function CreateRoute() {
     }
   };
 
-  console.log(sessionUser);
+  console.log(idOrderPassengers);
   // console.log(errors);
 
   const handleChangeVariantBus = (number: number) => {
     setIndexSelectVariantBus(number);
-    setDataLayoutBus(layoutsData[number]);
+    setDataLayoutBus(cloneDeep(layoutsData[number]));
   };
 
   if (status === "loading") return <p>Loading...</p>;
@@ -143,18 +157,24 @@ export default function CreateRoute() {
                 className="flex justify-center"
                 dataLayoutBus={dataLayoutBus}
                 setDataLayoutBus={setDataLayoutBus}
+                action={ActionEnum.CREATEROUTEDRIVER}
               />
             )}
           </div>
 
-          {/* {idOrderPassengers && idOrderPassengers.length > 0 && (
+          {idOrderPassengers && idOrderPassengers.length > 0 && (
             <SubPassengersOrders
               register={register}
               errors={errors}
               unregister={unregister}
+              setValue={setValue}
+              myListPassengers={undefined}
               idOrderPassengers={idOrderPassengers}
+              renderRef={renderRef}
+              watch={watch}
+              sessionUser={sessionUser}
             />
-          )} */}
+          )}
 
           <CustomTextField register={register} errors={errors} name={"routePrice"} title={"Route Price"} className="mb-5" />
 

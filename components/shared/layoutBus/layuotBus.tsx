@@ -1,6 +1,5 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
 import DriverSeat from "./DriverSeat";
 
 import PassengerSeat from "./PassengerSeat";
@@ -8,18 +7,21 @@ import Stairs from "./Stairs";
 
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
+import { ActionEnum } from "@/enum/shared.enums";
+import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 
 interface Props {
   className?: string;
   dataLayoutBus: ILayoutData;
   setDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
+  action: ActionEnum;
 }
 
-export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser }: Props) {
+export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser, action }: Props) {
   const user = sessionUser?.role;
   // console.log("user session", sessionUser);
-
+  const driverId = Number(sessionUser?.id);
   if (dataLayoutBus?.passenger.length === 0) {
     return null;
   }
@@ -70,6 +72,8 @@ export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, 
                 dataLayoutBus={dataLayoutBus}
                 setDataLayoutBus={setDataLayoutBus}
                 sessionUser={sessionUser}
+                action={action}
+                driverId={driverId}
               />
             </div>
           );

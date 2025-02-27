@@ -4,6 +4,7 @@ import { TypeBaseRoute } from "./route-passenger.types";
 export interface ISendDataBaseRouteDriver extends RouteDriver {
   bookedSeats: number;
   maxSeats: number;
+  passengersSeatsList: ISubPassengersList[];
 }
 
 export interface GetRoutesByDriverId extends Omit<TypeBaseRoute, "availableSeats"> {

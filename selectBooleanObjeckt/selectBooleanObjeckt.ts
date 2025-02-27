@@ -66,6 +66,7 @@ export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   modelBus: true,
   maxSeats: true,
   bookedSeats: true,
+  driverId: true,
   busSeats,
   passengersSeatsList,
 };

@@ -3,25 +3,22 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { useSession } from "next-auth/react";
-import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ISubPassengersList } from "@/types/interface";
 import { FormValues, SubPassengerGroup } from "@/types/form.types";
-import { SeatStatusEnum } from "@/enum/shared.enums";
+import { ActionEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { IUpdateRoute } from "@/types/route-passenger.types";
-
 import { useRouter } from "next/navigation";
-import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
-
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
 import toast from "react-hot-toast";
 import { UserSession } from "@/types/next-auth";
+import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
+import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 
 interface Props {
-  layoutsData: ILayoutData[];
-  route: Omit<IGetRoutePassengerById, "isReservation">;
+  route: IGetRouteSeatSelection;
 }
 
 const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayoutData, sessionUser: UserSession): IUpdateRoute => {
@@ -72,9 +69,9 @@ const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayo
   return updateRouteDriver;
 };
 
-export default function OrderSeatsBus({ layoutsData, route }: Props) {
+export default function OrderSeatsBus({ route }: Props) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   const { data: session, status } = useSession();
   // const [myListPassengers, setMyListPassengers] = useState<ISubPassengersList | undefined>();
@@ -87,6 +84,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     formState: { errors },
     handleSubmit,
     setValue,
+    watch,
   } = useForm<FormValues>({
     mode: "onChange",
     defaultValues: {
@@ -107,15 +105,17 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
   }
 
   const userIdSession = Number(sessionUser?.id);
-  const idOrderPassengers = dataLayoutBus?.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
+  const idOrderPassengers = dataLayoutBus && dataLayoutBus.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
 
   console.log("RENDER OrderSeatsBus **********************************************");
-  console.log("OrderSeatsBus--idOrderPassengers", idOrderPassengers, renderRef.current);
+  // console.log("OrderSeatsBus--idOrderPassengers", idOrderPassengers, renderRef.current);
   // console.log("OrderSeatsBus route", route);
   // console.log("OrderSeatsBus--dataLayoutBus", dataLayoutBus);
-  const myListPassengers = useMemo(() => route.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route]);
+
+  const myListPassengers = useMemo(() => route.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route, userIdSession]);
 
   console.log("OrderSeatsBus myListPassenger", myListPassengers);
+
   useEffect(() => {
     if (route) {
       const [filteredData] = layoutsData.filter((item) => {
@@ -143,7 +143,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
 
       setDataLayoutBus(newData);
     }
-  }, [route, layoutsData]);
+  }, [route]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     if (!dataLayoutBus || !sessionUser) return;
@@ -155,7 +155,7 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
     fetchUpdateRouteById(updateRoteDriver)
       .then(async (response) => {
         if (response) {
-          setOpen(true);
+          // setOpen(true);
           toast.success("Your reservation has been successfully completed", {
             duration: 5000,
           });
@@ -173,11 +173,17 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
 
   return (
     <>
-      <MyDialogInfo title="Your reservation has been successfully completed?" open={open} setOpen={setOpen} />
+      {/* <MyDialogInfo title="Your reservation has been successfully completed?" open={open} setOpen={setOpen} /> */}
 
       <form onSubmit={handleSubmit(onSubmit)}>
         {dataLayoutBus && (
-          <LayoutBus sessionUser={sessionUser} className="flex justify-center" dataLayoutBus={dataLayoutBus} setDataLayoutBus={setDataLayoutBus} />
+          <LayoutBus
+            sessionUser={sessionUser}
+            className="flex justify-center"
+            dataLayoutBus={dataLayoutBus}
+            setDataLayoutBus={setDataLayoutBus}
+            action={ActionEnum.CREATEROUTEPASSENGER}
+          />
         )}
 
         {idOrderPassengers && idOrderPassengers.length > 0 && (
@@ -187,8 +193,9 @@ export default function OrderSeatsBus({ layoutsData, route }: Props) {
             unregister={unregister}
             setValue={setValue}
             myListPassengers={myListPassengers}
-            idOrderPassengers={idOrderPassengers}
+            idOrderPassengers={idOrderPassengers.slice(1)}
             renderRef={renderRef}
+            watch={watch}
           />
         )}
 

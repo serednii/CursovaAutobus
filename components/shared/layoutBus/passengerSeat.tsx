@@ -1,8 +1,10 @@
 "use client";
-import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
+import { ActionEnum, RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
+import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { cn } from "@/lib/utils";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
+import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -12,13 +14,14 @@ interface Props {
   dataLayoutBus: ILayoutData;
   setDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
+  action: ActionEnum;
+  driverId: number;
 }
 
 export default function PassengerSeat(props: Props) {
-  const { className, params, user, dataLayoutBus, setDataLayoutBus, sessionUser } = props;
+  const { className, params, user, dataLayoutBus, setDataLayoutBus, sessionUser, action, driverId } = props;
   const { number } = params;
   const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
-
   const keys = Object.keys(params) as (keyof typeof params)[];
   const styles: React.CSSProperties = {};
 
@@ -41,42 +44,49 @@ export default function PassengerSeat(props: Props) {
 
   // Змінюємо колір залежно від статусу місця
   const statusColor = {
-    reserved: "bg-red-500",
-    available: "bg-green-500",
-    selected: "bg-blue-500",
+    [SeatStatusEnum.RESERVED]: "bg-red-500",
+    [SeatStatusEnum.RESERVEDEMPTY]: "bg-yellow-500",
+    [SeatStatusEnum.AVAILABLE]: "bg-green-500",
+    [SeatStatusEnum.SELECTED]: "bg-blue-500",
   }[changeStatus.busSeatStatus];
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    console.log("Number(sessionUser?.id)", sessionUser?.id);
+    console.log("Number(sessionUser?.id)", Number(sessionUser?.id));
+    console.log("route.driverId", driverId);
 
     setChangeStatus((prevParams: BusSeatInfo) => {
-      const updatedStatus: SeatStatusEnum =
-        user === RoleEnum.DRIVER
-          ? prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE
-            ? SeatStatusEnum.RESERVED
-            : SeatStatusEnum.AVAILABLE
-          : prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE
-          ? SeatStatusEnum.SELECTED
-          : SeatStatusEnum.AVAILABLE;
+      //Якщо являємося водієм і на своєму маршруті
+      let updatedStatus: SeatStatusEnum = SeatStatusEnum.AVAILABLE;
+      if (user === RoleEnum.DRIVER && Number(sessionUser?.id) === driverId) {
+        updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.RESERVEDEMPTY : SeatStatusEnum.AVAILABLE;
+      } else if (user === RoleEnum.DRIVER && Number(sessionUser?.id) !== driverId) {
+        updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
+      } else if (user === RoleEnum.PASSENGER) {
+        updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
+      }
+
       // console.log(updatedStatus);
 
       const res = {
         ...prevParams, // Зберігаємо всі інші властивості без змін
         busSeatStatus: updatedStatus, // Оновлюємо статус сидіння
-        passenger: updatedStatus === "available" ? null : Number(sessionUser?.id), // Оновлюємо пасажира
+        passenger: updatedStatus === SeatStatusEnum.AVAILABLE ? null : Number(sessionUser?.id), // Оновлюємо пасажира
       };
 
       console.log(res);
-
       // Повертаємо новий об'єкт params з оновленими значеннями
-
       return res;
     });
   };
 
   return (
     <button
-      disabled={changeStatus.busSeatStatus === "reserved" && user === "passenger"}
+      disabled={
+        changeStatus.busSeatStatus === SeatStatusEnum.RESERVED ||
+        (changeStatus.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY && user === RoleEnum.PASSENGER)
+      }
       onClick={handleClick}
       style={styles}
       className={cn("absolute disabled:cursor-not-allowed", className)}
