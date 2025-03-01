@@ -196,6 +196,7 @@ export default function OrderSeatsBus({ route }: Props) {
             idOrderPassengers={idOrderPassengers.slice(1)}
             renderRef={renderRef}
             watch={watch}
+            action={"createRoutePassenger"}
           />
         )}
 

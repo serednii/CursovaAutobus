@@ -49,46 +49,47 @@ export const getPassengerDetails = (route: IGetRouteMyRoute, usersRaw: IGetUsers
     const uniqueId = Array.from(tempUnique.keys()).findIndex((e) => e === idPassenger);
 
     console.log("uniqueId", uniqueId);
-    if (tempAddUsers.has(idPassenger)) {
-      const subOrderPassenger: ISubPassengersList | undefined = passengersSeatsList.find(
-        (user: ISubPassengersList) => user.idPassenger === idPassenger
-      );
+    // if (tempAddUsers.has(idPassenger)) {
+    const subOrderPassenger: ISubPassengersList | undefined = passengersSeatsList.find(
+      (user: ISubPassengersList) => user.idPassenger === idPassenger
+    );
 
-      // console.log("11111111111111", subOrderPassenger);
-      if (!subOrderPassenger) {
-        return {
-          seat: index + 1,
-          orderPassengers: "",
-          orderPassengersId: uniqueId,
-          passenger: "",
-          phone: "",
-          email: "",
-        };
-      }
-      const subPassengersLists: SubPassengerDetails[] = subOrderPassenger.subPassengersList;
-
-      const [subUser] = subPassengersLists.splice(0, 1);
-      // console.log("33333333333", subUser);
-
+    // console.log("11111111111111", subOrderPassenger);
+    if (!subOrderPassenger) {
       return {
         seat: index + 1,
-        orderPassengers: `${user?.firstName || ""} ${user?.lastName || ""}`,
+        orderPassengers: "",
         orderPassengersId: uniqueId,
-        passenger: `${subUser?.subFirstName} ${subUser?.subLastName}` || "",
-        phone: subUser?.subPhone || "",
-        email: subUser?.subEmail || "",
-      };
-    } else {
-      tempAddUsers.set(idPassenger, 1);
-      return {
-        seat: index + 1,
-        orderPassengers: `${user?.firstName || ""} ${user?.lastName || ""}`,
-        orderPassengersId: uniqueId,
-        passenger: `${user?.firstName || ""} ${user?.lastName || ""}` || "",
-        phone: user?.phone || "",
-        email: user?.email || "",
+        passenger: "",
+        phone: "",
+        email: "",
       };
     }
+    const subPassengersLists: SubPassengerDetails[] = subOrderPassenger.subPassengersList;
+
+    const [subUser] = subPassengersLists.splice(0, 1);
+    // console.log("33333333333", subUser);
+
+    return {
+      seat: index + 1,
+      orderPassengers: `${user?.firstName || ""} ${user?.lastName || ""}`,
+      orderPassengersId: uniqueId,
+      passenger: `${subUser?.subFirstName} ${subUser?.subLastName}` || "",
+      phone: subUser?.subPhone || "",
+      email: subUser?.subEmail || "",
+    };
+    // }
+    // else {
+    //   tempAddUsers.set(idPassenger, 1);
+    //   return {
+    //     seat: index + 1,
+    //     orderPassengers: `${user?.firstName || ""} ${user?.lastName || ""}`,
+    //     orderPassengersId: uniqueId,
+    //     passenger: `${user?.firstName || ""} ${user?.lastName || ""}` || "",
+    //     phone: user?.phone || "",
+    //     email: user?.email || "",
+    //   };
+    // }
   });
 
   return passengerDetails;

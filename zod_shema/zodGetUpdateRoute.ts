@@ -1,5 +1,5 @@
 import { IUpdateRouteWithId } from "@/types/route-passenger.types";
-import { busSeats, passengersSeatsList } from "./zodGlobal";
+import { allParametersRoute, busSeats, passengersSeatsList } from "./zodGlobal";
 import { z } from "zod";
 
 export const zodSchemaUpdateRouteIn: z.ZodType<IUpdateRouteWithId> = z.object({
@@ -11,24 +11,5 @@ export const zodSchemaUpdateRouteIn: z.ZodType<IUpdateRouteWithId> = z.object({
 
 export const zodSchemaUpdateRouteRes = z.object({
   message: z.string(),
-  res: z.object({
-    arrivalDate: z.string(),
-    arrivalTo: z.string(),
-    bookedSeats: z.number(),
-    busNumber: z.string(),
-    coffee: z.boolean(),
-    createdAt: z.string(),
-    departureDate: z.string(),
-    departureFrom: z.string(),
-    driverId: z.number(),
-    id: z.number(),
-    maxSeats: z.number(),
-    modelBus: z.string(),
-    notate: z.string(),
-    power: z.boolean(),
-    restRoom: z.boolean(),
-    routePrice: z.number(),
-    selectBusLayout: z.string(),
-    wifi: z.boolean(),
-  }),
+  res: z.object(allParametersRoute),
 });

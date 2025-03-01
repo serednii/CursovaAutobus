@@ -6,7 +6,7 @@ async function fetchGetRoutesByDriverId(driverId: number): Promise<IRoutesByIdDr
   try {
     // Відправка POST-запиту
     const response = await fetch(`${API_URL}/api/getRoutesByDriverId`, {
-      // cache: "force-cache",
+      cache: "no-cache",
       next: { revalidate: 50 },
       method: "POST",
       headers: {

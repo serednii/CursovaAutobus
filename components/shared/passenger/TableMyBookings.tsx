@@ -9,15 +9,16 @@ import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDel
 import { MyDialogDetailsRoute } from "@/components/ui/MyDialogDetailsRoute/MyDialogDetailsRoute";
 import { ISubPassengersList } from "@/types/interface";
 import { ContainerViewCenter } from "@/components/ui/ContainerViewCenter";
+import { Container } from "@/components/ui/Container";
 
 const paginationModel = { page: 0, pageSize: 5 };
-interface Props {
-  routes: IRoutesTable[];
+interface Props<T> {
+  routes: T[];
   isRouteAgain?: boolean;
   removeRoutePassenger?: (route: number) => void;
 }
 
-export default function TableMyBookings({ routes, isRouteAgain, removeRoutePassenger }: Props) {
+export default function TableMyBookings<T>({ routes, isRouteAgain, removeRoutePassenger }: Props<T>) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState({} as IRoutesTable);
@@ -130,7 +131,7 @@ export default function TableMyBookings({ routes, isRouteAgain, removeRoutePasse
       />
 
       {openDetails && (
-        <ContainerViewCenter setOpen={setOpenDetails}>
+        <ContainerViewCenter className="mx-auto max-w-[1280px] px-4" setOpen={setOpenDetails}>
           <MyDialogDetailsRoute passengersSeatsList={routeDetails.current} />
         </ContainerViewCenter>
       )}

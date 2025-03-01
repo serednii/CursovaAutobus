@@ -34,6 +34,7 @@ const searchRoute = async <T, K>(data: T): Promise<unknown> => {
   try {
     console.log("data*****----****", data);
     const response = await fetch(`${API_URL}/api/searchRoute`, {
+      cache: "no-cache",
       method: "POST",
       headers: {
         "Content-Type": "application/json",

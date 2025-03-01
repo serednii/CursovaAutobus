@@ -12,7 +12,7 @@ import UserAvatar from "@/components/UserAvatar";
 
 export default function UserInfo() {
   const session = useSession();
-  if (session.status === "loading") return <p>Loading...</p>;
+  if (session.status === "loading") return <p>Loading userInfo...</p>;
 
   const { data } = session as SessionData;
   // if (!data) return <p>No user is logged in</p>;

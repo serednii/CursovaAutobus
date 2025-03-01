@@ -1,5 +1,6 @@
+import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { z } from "zod";
-import { busSeatSchema, passengerSchema } from "./zodGlobal";
+import { busSeats, passengersSeatsList } from "./zodGlobal";
 
 // Схема для маршруту
 const routeSchema = z.object({
@@ -9,9 +10,9 @@ const routeSchema = z.object({
   departureFrom: z.string().min(1),
   arrivalTo: z.string().min(1),
   routePrice: z.number().positive(),
-  busSeats: z.array(busSeatSchema),
-  passengersSeatsList: z.array(passengerSchema),
+  busSeats,
+  passengersSeatsList,
 });
 
 // Схема для масиву маршрутів
-export const zodGetRoutesByPassengerId = z.array(routeSchema);
+export const zodGetRoutesByPassengerId: z.ZodType<Omit<GetRoutesByPassengerId, "isReservation">[]> = z.array(routeSchema);

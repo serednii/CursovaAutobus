@@ -57,3 +57,24 @@ export const passengersSeatsList: z.ZodType<ISubPassengersList[]> = z.array(
       .max(100),
   })
 );
+
+export const allParametersRoute = {
+  id: z.number(),
+  createdAt: z.string(),
+  driverId: z.number(),
+  departureDate: z.string(),
+  arrivalDate: z.string(),
+  departureFrom: z.string(),
+  arrivalTo: z.string(),
+  busNumber: z.string(),
+  maxSeats: z.number(),
+  bookedSeats: z.number(),
+  selectBusLayout: z.string(),
+  routePrice: z.number(),
+  notate: z.string(),
+  wifi: z.boolean(),
+  coffee: z.boolean(),
+  power: z.boolean(),
+  restRoom: z.boolean(),
+  modelBus: z.string(),
+};

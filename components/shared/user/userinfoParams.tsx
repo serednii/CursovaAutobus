@@ -5,7 +5,7 @@ interface Props {
 }
 
 export default function UserInfoParams({ user }: Props) {
-  console.log(user);
+  // console.log(user);
   if (!user) return <p>No user is logged in</p>;
 
   return (

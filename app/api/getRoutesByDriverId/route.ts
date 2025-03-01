@@ -33,7 +33,7 @@ export async function POST(req: any) {
         // Усі інші поля не будуть включені, якщо вони не вказані як `true`
       },
     });
-    console.log("getRoutesByDriverId XXXXXXXXXXXXXXXXX", routes);
+    // console.log("getRoutesByDriverId XXXXXXXXXXXXXXXXX", routes);
     // Якщо маршрути не знайдено
     if (!routes.length) {
       return NextResponse.json({ message: "Маршрути для вказаного driverId не знайдено" }, { status: 404 });

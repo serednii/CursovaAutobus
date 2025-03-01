@@ -228,7 +228,7 @@ export default function FindRoute({ className }: { className?: string }) {
   }, [clickToDate]);
 
   console.log("clickToDate", clickToDate);
-  if (status === "loading") return <p>Loading...</p>;
+  if (status === "loading") return <p>Loading findRoute...</p>;
 
   return (
     <div className={cn(className, "px-4 bg-[white] rounded-xl min-h-[530px]")}>

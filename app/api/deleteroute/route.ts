@@ -11,7 +11,7 @@ export async function DELETE(req: NextRequest) {
     }
     // Отримуємо дані з тіла запиту
     const { routeId } = await req.json();
-    console.log("routedId", routeId);
+    console.log("routeId", routeId);
     // Перевірка, чи передано routeId
     if (!routeId) {
       return NextResponse.json({ error: "Поле 'routeId' є обов'язковим" }, { status: 400 });
@@ -22,7 +22,7 @@ export async function DELETE(req: NextRequest) {
       where: { id: routeId },
     });
 
-    return NextResponse.json({ message: "Маршрут успішно видалено", deletedRoute }, { status: 200 });
+    return NextResponse.json(deletedRoute, { status: 200 });
   } catch (error: any) {
     console.error("Помилка видалення маршруту:", error);
 

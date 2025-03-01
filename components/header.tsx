@@ -12,7 +12,6 @@ import UserInfo from "./shared/user/Userinfo";
 import { FaBusAlt } from "react-icons/fa";
 import LinkDriver from "./shared/driver/Linkdriver";
 import { MenuDriver } from "@/types/menudriver.types";
-import { title } from "process";
 
 const menuDriver = [
   {
@@ -38,10 +37,10 @@ const menuPassenger = [
     name: "My Bookings",
     link: "/mybookings",
   },
-  {
-    name: "My profile",
-    link: "/myprofile",
-  },
+  // {
+  //   name: "My profile",
+  //   link: "/myprofile",
+  // },
 ];
 
 export default function Header() {
@@ -49,13 +48,13 @@ export default function Header() {
   const session = useSession();
   let menulist: MenuDriver[] = [];
 
-  if (pathname === "/createroute" || pathname === "/myroutes" || pathname.includes("/myroute")) {
+  if (pathname.includes("/createroute") || pathname === "/myroutes" || pathname.includes("/myroute")) {
     menulist = menuDriver;
   } else if (pathname === "/passengerdashboard" || pathname.includes("/seatselection") || pathname === "/mybookings" || pathname === "/myprofile") {
     menulist = menuPassenger;
   }
 
-  if (session.status === "loading") return <p>Loading...</p>;
+  if (session.status === "loading") return <p>Loading Header...</p>;
   if (!session) return <p>No user is logged in</p>;
 
   const { data } = session;

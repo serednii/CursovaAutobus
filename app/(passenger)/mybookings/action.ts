@@ -4,10 +4,13 @@ import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenge
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
 
-export const separateRoutesTable = (routesPassenger: GetRoutesByPassengerId[], passengerId: number): IRoutesTable[] => {
+export const separateRoutesTable = (
+  routesPassenger: Omit<GetRoutesByPassengerId, "isReservation">[],
+  passengerId: number
+): Omit<IRoutesTable, "isReservation">[] => {
   console.log("routesPassenger ******** ", routesPassenger);
 
-  const routesTable: IRoutesTable[] = routesPassenger.map((route): IRoutesTable => {
+  const routesTable: Omit<IRoutesTable, "isReservation">[] = routesPassenger.map((route): Omit<IRoutesTable, "isReservation"> => {
     const getTotalPriceSeatsNumber = route.busSeats?.reduce(
       (acc: { totalPrice: number; seatsNumber: number[] }, seat: IBusSeats) => {
         if (seat?.passenger === passengerId) {
@@ -32,14 +35,14 @@ export const separateRoutesTable = (routesPassenger: GetRoutesByPassengerId[], p
       routeTotalPrice: "$" + getTotalPriceSeatsNumber.totalPrice,
       routePrice: "$" + route.routePrice,
       busSeats: route.busSeats,
-      isReservation: route.isReservation,
+      // isReservation: route.isReservation,
       passengersSeatsList,
     };
   });
   return routesTable;
 };
 
-export const getBusSeatsRaw = (routesPassenger: GetRoutesByPassengerId[], routeId: number) =>
+export const getBusSeatsRaw = (routesPassenger: Omit<GetRoutesByPassengerId, "isReservation">[], routeId: number) =>
   routesPassenger.find((e) => e.id === routeId)?.busSeats || [];
 
 export const getBusSeatsPassenger = (busSeatsRaw: IBusSeats[], passengerId: number) => {

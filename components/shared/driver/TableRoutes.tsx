@@ -1,11 +1,14 @@
 "use client";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { useRouter } from "next/navigation";
-import { IRoutesByIdDriver } from "@/types/route-passenger.types";
+import { IRoutesByIdDriver, IRoutesTable } from "@/types/route-passenger.types";
+import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
+import fetchDeleteRouteById from "@/fetchFunctions/fetchDeleteRouteById";
+import toast from "react-hot-toast";
 
 const handleAgainRoute = (route: any) => {
   console.log("Activating route again:", route);
@@ -16,14 +19,36 @@ const paginationModel = { page: 0, pageSize: 5 };
 interface Props {
   routes: IRoutesByIdDriver[];
   isRouteAgain?: boolean;
+  setOk?: (id: number) => void;
 }
 
-export default function TableRoutes({ routes, isRouteAgain }: Props) {
+export default function TableRoutes({ routes, isRouteAgain, setOk }: Props) {
+  const [open, setOpen] = useState(false);
+
+  const [route, setRoute] = useState<IRoutesByIdDriver | null>(null);
   const router = useRouter();
 
-  const handleViewRoute = (route: any) => {
-    // console.log("Viewing route:", route)
+  console.log("Activating route again:", routes);
+  const handleViewRoute = (route: IRoutesByIdDriver) => {
     router.push(`/myroute/${route.id}`);
+  };
+
+  const handleCancelRoute = (route: IRoutesByIdDriver) => {
+    console.log("Cancel route again:", route);
+    setOpen(true);
+    setRoute(route);
+  };
+
+  const handleOkDeleteRoute = (route: IRoutesByIdDriver | null) => {
+    console.log("Delete route again:", route);
+    if (route) {
+      setOpen(false);
+      setOk && setOk(route.id);
+    }
+  };
+
+  const handleCngeRoute = (route: IRoutesByIdDriver) => {
+    router.push(`/editroute/${route.id}`);
   };
 
   // Основні колонки без колонки againRouter
@@ -53,6 +78,17 @@ export default function TableRoutes({ routes, isRouteAgain }: Props) {
     ? [
         ...baseColumns,
         {
+          field: "deleteRouter",
+          headerName: "Delete Route",
+          width: 250,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" size="small" onClick={() => handleCancelRoute(params.row)}>
+              Delete Route
+            </Button>
+          ),
+        },
+        {
           field: "againRouter",
           headerName: "Activate Again",
           width: 250,
@@ -64,11 +100,45 @@ export default function TableRoutes({ routes, isRouteAgain }: Props) {
           ),
         },
       ]
-    : baseColumns;
+    : [
+        ...baseColumns,
+        {
+          field: "againRouter",
+          headerName: "Activate Again",
+          width: 250,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" size="small" onClick={() => handleCancelRoute(params.row)}>
+              Cancel Route
+            </Button>
+          ),
+        },
+        {
+          field: "changeRouter",
+          headerName: "Change Route",
+          width: 250,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" size="small" onClick={() => handleCngeRoute(params.row)}>
+              Change Route
+            </Button>
+          ),
+        },
+      ];
 
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
-      <DataGrid rows={routes} columns={columns} initialState={{ pagination: { paginationModel } }} pageSizeOptions={[5, 10]} sx={{ border: 0 }} />
-    </Paper>
+    <>
+      <MyDialogIsDelete
+        title="You really want to delete the route?"
+        // description="description"
+        // content="content"
+        setOpen={setOpen}
+        open={open}
+        setOk={() => handleOkDeleteRoute(route)}
+      />
+      <Paper sx={{ height: 400, width: "100%" }}>
+        <DataGrid rows={routes} columns={columns} initialState={{ pagination: { paginationModel } }} pageSizeOptions={[5, 10]} sx={{ border: 0 }} />
+      </Paper>
+    </>
   );
 }

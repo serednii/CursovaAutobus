@@ -6,27 +6,17 @@ interface DialogProps {
   title: string;
   open: boolean;
   setOpen: (value: boolean) => void;
-  setOk: (value: boolean) => void;
+  setOk: () => void;
 }
 
-export const MyDialogIsDelete = ({
-  title,
-  setOk,
-  open,
-  setOpen,
-}: DialogProps) => {
+export const MyDialogIsDelete = ({ title, setOk, open, setOpen }: DialogProps) => {
   return (
     <DialogPrimitives.Dialog open={open} onOpenChange={setOpen}>
       {/* <DialogPrimitives.DialogTrigger>
 
       </DialogPrimitives.DialogTrigger> */}
-      <DialogPrimitives.DialogContent
-        className="content"
-        aria-describedby={undefined}
-      >
-        <DialogPrimitives.DialogTitle className="title">
-          {title}
-        </DialogPrimitives.DialogTitle>
+      <DialogPrimitives.DialogContent className="content" aria-describedby={undefined}>
+        <DialogPrimitives.DialogTitle className="title">{title}</DialogPrimitives.DialogTitle>
         {/* <DialogPrimitives.DialogDescription></DialogPrimitives.DialogDescription> */}
         {/* {title} */}
         <div className="dialog-buttons">
@@ -36,11 +26,7 @@ export const MyDialogIsDelete = ({
             </button>
           </DialogPrimitives.DialogClose>
           <DialogPrimitives.DialogClose asChild>
-            <button
-              onClick={() => setOk(true)}
-              aria-label="Close"
-              className="button action"
-            >
+            <button onClick={setOk} aria-label="Close" className="button action">
               Sure
             </button>
           </DialogPrimitives.DialogClose>

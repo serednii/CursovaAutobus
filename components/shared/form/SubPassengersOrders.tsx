@@ -19,6 +19,7 @@ interface Props {
   renderRef: React.RefObject<number>;
   watch: UseFormWatch<FormValues>;
   sessionUser?: UserSession | null;
+  action: "createRouteDriver" | "createRoutePassenger";
 }
 
 const SubPassengersOrders = ({
@@ -31,6 +32,7 @@ const SubPassengersOrders = ({
   myListPassengers,
   renderRef,
   watch,
+  action,
 }: Props) => {
   const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[] | []>([]);
 
@@ -39,7 +41,13 @@ const SubPassengersOrders = ({
   }
 
   console.log("SubPassengersOrders ----subPassengers", subPassengers, idOrderPassengers);
-
+  function isDriver(text: string): string {
+    if (action === "createRouteDriver") {
+      return text;
+    } else {
+      return "";
+    }
+  }
   useEffect(() => {
     if (myListPassengers && renderRef.current === 0) {
       console.log("myListPassenger in useEffect", myListPassengers);
@@ -90,17 +98,17 @@ const SubPassengersOrders = ({
         for (let i = 0; i < deltaData; i++) {
           const newIndex = dataForm.length; // Індекс нового елемента
           dataForm.push({
-            subFirstName: "RESERVATION" + sessionUser?.firstName || "",
-            subLastName: "RESERVATION" + sessionUser?.lastName || "",
-            subPhone: sessionUser?.phone || "",
-            subEmail: "RESERVATION" + sessionUser?.email || "",
+            subFirstName: isDriver("RESERVATION DRIVER"),
+            subLastName: isDriver("RESERVATION DRIVER"),
+            subPhone: isDriver(sessionUser?.phone || ""),
+            subEmail: isDriver("RESERVATIONDRIVER@gmail.com"),
           });
 
           // Реєструємо нові пусті значення в react-hook-form
-          setValue(`subFirstName.${newIndex}`, "RESERVATION" + sessionUser?.firstName || "");
-          setValue(`subLastName.${newIndex}`, "RESERVATION" + sessionUser?.lastName || "");
-          setValue(`subPhone.${newIndex}`, sessionUser?.phone || "");
-          setValue(`subEmail.${newIndex}`, "RESERVATION" + sessionUser?.email || "");
+          setValue(`subFirstName.${newIndex}`, isDriver("RESERVATION DRIVER"));
+          setValue(`subLastName.${newIndex}`, isDriver("RESERVATION DRIVER"));
+          setValue(`subPhone.${newIndex}`, isDriver(sessionUser?.phone || ""));
+          setValue(`subEmail.${newIndex}`, isDriver("RESERVATIONDRIVER@gmail.com"));
         }
       } else {
         dataForm.splice(-1, Math.abs(deltaData));
