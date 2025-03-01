@@ -27,8 +27,6 @@ import toast from "react-hot-toast";
 import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
 import { ActionEnum } from "@/enum/shared.enums";
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
-import { IGetPassengersSeatsList } from "@/types/generaty.types";
-import { IPassengersSeatsList } from "@/types/interface";
 import { cloneDeep } from "lodash";
 
 export default function CreateRoute() {
@@ -96,7 +94,7 @@ export default function CreateRoute() {
     setDataLayoutBus(cloneDeep(layoutsData[number]));
   };
 
-  if (status === "loading") return <p>Loading...</p>;
+  if (status === "loading") return <p>Loading createRouter...</p>;
 
   return (
     <Container>
@@ -173,6 +171,7 @@ export default function CreateRoute() {
               renderRef={renderRef}
               watch={watch}
               sessionUser={sessionUser}
+              action={"createRouteDriver"}
             />
           )}
 

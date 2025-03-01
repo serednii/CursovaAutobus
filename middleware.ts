@@ -5,8 +5,8 @@ import { prisma } from "@/prisma/prisma-client"; // Імпортуйте Prisma 
 
 export async function middleware(req: any) {
   const apiKey = req.headers.get("api-key"); // Отримуємо API ключ з заголовків
-  console.log("middleware apiKey", apiKey);
   const url = req.nextUrl.clone();
+  console.log("middleware apiKey", url.pathname);
   // const callbackUrl = encodeURIComponent(url.pathname); // Зберігаємо поточний шлях для редиректу
 
   // Перевірка API ключа
@@ -53,9 +53,19 @@ export async function middleware(req: any) {
         (token.role === RoleEnum.PASSENGER && url.pathname.startsWith("/myroutes")) ||
         (token.role === RoleEnum.PASSENGER && url.pathname.startsWith("/myroute"))
       ) {
+        if (url.pathname.startsWith("/createroute")) {
+          url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0";
+        }
         url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/";
+
         url.searchParams.delete("callbackUrl"); // Видаляємо параметр, щоб він не передавався далі
         return NextResponse.redirect(url);
+      } else {
+        if (url.pathname === "/createroute") {
+          url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0";
+          url.searchParams.delete("callbackUrl"); // Видаляємо параметр, щоб він не передавався далі
+          return NextResponse.redirect(url);
+        }
       }
     }
   }
