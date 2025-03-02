@@ -44,13 +44,13 @@ export async function createRoute(req: NextRequest) {
 
     console.log("Data validation passed");
 
-    const errors = validateFields(data);
+    // const errors = validateFields(data);
 
-    console.log("errors", errors);
-    // Якщо є помилки, повертаємо їх у відповіді
-    if (Object.keys(errors).length > 0) {
-      return NextResponse.json({ error: "Invalid data", details: errors }, { status: 400 });
-    }
+    // console.log("errors", errors);
+    // // Якщо є помилки, повертаємо їх у відповіді
+    // if (Object.keys(errors).length > 0) {
+    //   return NextResponse.json({ error: "Invalid data", details: errors }, { status: 400 });
+    // }
 
     const routeDriver = await prisma.routeDriver.create({
       data: {

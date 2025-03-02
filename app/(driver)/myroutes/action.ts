@@ -5,10 +5,10 @@ const formatDate = <T extends { arrivalDate: string; departureDate: string }>(da
   return dateArray.map((route: T) => {
     return {
       ...route,
-      arrivalDate: format(route.arrivalDate, "d MMMM yyyy HH:mm", {
+      arrivalDate: format(route.arrivalDate, "d-MM-yyyy HH:mm", {
         locale: uk,
       }),
-      departureDate: format(route.departureDate, "d MMMM yyyy HH:mm", {
+      departureDate: format(route.departureDate, "d-MM-yyyy HH:mm", {
         locale: uk,
       }),
     };

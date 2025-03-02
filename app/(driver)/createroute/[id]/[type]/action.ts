@@ -19,7 +19,7 @@ const transformDataSchema = z.object({
       .min(1)
       .regex(/^[0-9]+$/, "Route price must be a number"),
     departureDate: z.date().min(new Date(), "Departure date is required"),
-    selectBusLayout: z.number(),
+    selectBusLayout: z.string(),
     intermediateStops: z.array(z.string()).optional(),
     subFirstName: z.array(z.string()).optional(),
     subLastName: z.array(z.string()).optional(),

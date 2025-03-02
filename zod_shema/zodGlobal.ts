@@ -60,7 +60,6 @@ export const passengersSeatsList: z.ZodType<ISubPassengersList[]> = z.array(
 
 export const allParametersRoute = {
   id: z.number(),
-  createdAt: z.string(),
   driverId: z.number(),
   departureDate: z.string(),
   arrivalDate: z.string(),
@@ -77,4 +76,35 @@ export const allParametersRoute = {
   power: z.boolean(),
   restRoom: z.boolean(),
   modelBus: z.string(),
+};
+
+export const zodUpdateRouteAll = {
+  ...allParametersRoute,
+  departureDate: z.date(),
+  arrivalDate: z.date(),
+  passengersSeatsList,
+  busSeats,
+  intermediateStops: z.array(z.string()),
+};
+
+export const zodCreateRouteAll = {
+  driverId: z.number(),
+  departureFrom: z.string(),
+  arrivalTo: z.string(),
+  busNumber: z.string(),
+  maxSeats: z.number(),
+  bookedSeats: z.number(),
+  selectBusLayout: z.string(),
+  routePrice: z.number(),
+  notate: z.string(),
+  wifi: z.boolean(),
+  coffee: z.boolean(),
+  power: z.boolean(),
+  restRoom: z.boolean(),
+  modelBus: z.string(),
+  departureDate: z.date(),
+  arrivalDate: z.date(),
+  passengersSeatsList,
+  busSeats,
+  intermediateStops: z.array(z.string()),
 };

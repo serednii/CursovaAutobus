@@ -62,7 +62,7 @@ export async function middleware(req: any) {
         return NextResponse.redirect(url);
       } else {
         if (url.pathname === "/createroute") {
-          url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0";
+          url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0/type";
           url.searchParams.delete("callbackUrl"); // Видаляємо параметр, щоб він не передавався далі
           return NextResponse.redirect(url);
         }

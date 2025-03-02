@@ -103,10 +103,12 @@ export default function FindRoute({ className }: { className?: string }) {
 
   let idRoute: string | null = null;
   let transition: string | null = "";
-  if (window !== undefined) {
-    idRoute = sessionStorage.getItem("idRoute");
-    transition = sessionStorage.getItem("transition");
-  }
+
+  // if (window !== undefined) {
+  idRoute = sessionStorage.getItem("idRoute");
+  transition = sessionStorage.getItem("transition");
+  // }
+
   console.log("sessionStorage-idRoute-transition", idRoute, transition, status, router);
 
   useEffect(() => {
@@ -133,29 +135,10 @@ export default function FindRoute({ className }: { className?: string }) {
       const data: IGetSearchRouteManyOptionData = {
         departureSearch: firstLetterUpperCase(departureFrom),
         arrivalToSearch: firstLetterUpperCase(arrivalTo),
-        // specificDateTo: departureDate,
         startOfDay,
         endOfDay,
-        // wifi,
-        // coffee,
-        // power,
-        // restRoom,
-        // specificDateFrom:
-        //   departureDate &&
-        //   `${departureDate.getFullYear()}-${String(
-        //     departureDate.getMonth() + 1
-        //   ).padStart(2, "0")}-${String(departureDate.getDate()).padStart(
-        //     2,
-        //     "0"
-        //   )}`,
         select: selectMany,
       };
-
-      //       Тип "Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList" не может быть назначен для типа "IGetSearchRouteManyOption & IGetBusSeatsBoolean & IGetPassengersSeatsList".
-      //   Тип "Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList" не может быть назначен для типа "IGetSearchRouteManyOption".
-      //     Типы свойства "busSeats" несовместимы.
-      //       Тип "{ select: { id: boolean; passenger: boolean; number: boolean; busSeatStatus: boolean; routeDriverId: boolean; routeDriver: boolean; }; }" не может быть назначен для типа "boolean".ts(2322)
-      // FindRoute.tsx(40, 3): Ожидаемый тип поступает из свойства "select", объявленного здесь в типе "IGetSearchRouteManyOptionData"
 
       if (departureFrom || arrivalTo || departureDate) {
         searchRouteMany<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(data)

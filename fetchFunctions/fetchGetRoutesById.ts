@@ -1,8 +1,15 @@
 import { GenerateBooleanType, GenerateType, IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
-import { routeDataBase } from "@/types/interface";
-import { ZodFetchGetRoutesByIdMyRoute, ZodFetchGetRoutesByIdSeatSelection } from "@/zod_shema/zodGetRoutesById";
+import { IIntermediateStops, routeDataBase } from "@/types/interface";
+import {
+  ZodFetchGetRoutesByIdAgain,
+  ZodFetchGetRoutesByIdMyRoute,
+  ZodFetchGetRoutesByIdSeatSelection,
+  ZodFetchGetRoutesByIdUpdate,
+} from "@/zod_shema/zodGetRoutesById";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+//********************************************************** */
 
 type selectRouteSeatSelectionKeys = (
   | "id"
@@ -20,21 +27,59 @@ type selectRouteSeatSelectionKeys = (
   | "driverId"
 ) &
   keyof routeDataBase;
-
-type selectRouteMyRouteKeys = ("departureDate" | "arrivalDate" | "departureFrom" | "arrivalTo" | "routePrice" | "busSeats" | "passengersSeatsList") &
-  keyof routeDataBase;
-
 export type IGetSearchRouteSeatSelectionOption = GenerateBooleanType<Exclude<selectRouteSeatSelectionKeys, "passengersSeatsList" | "busSeats">> &
   IGetBusSeatsBoolean &
   IGetPassengersSeatsList;
-
 export type IGetRouteSeatSelection = GenerateType<routeDataBase, selectRouteSeatSelectionKeys>;
 
+//********************************************************** */
+
+type selectRouteMyRouteKeys = ("departureDate" | "arrivalDate" | "departureFrom" | "arrivalTo" | "routePrice" | "busSeats" | "passengersSeatsList") &
+  keyof routeDataBase;
 export type IGetSearchRouteMyRouteOption = GenerateBooleanType<Exclude<selectRouteMyRouteKeys, "busSeats" | "passengersSeatsList">> &
   IGetBusSeatsBoolean &
   IGetPassengersSeatsList;
-
 export type IGetRouteMyRoute = GenerateType<routeDataBase, selectRouteMyRouteKeys>;
+
+//********************************************************** */
+
+type selectRouteSeatUpdateKeys = (
+  | "id"
+  | "departureDate"
+  | "arrivalDate"
+  | "departureFrom"
+  | "arrivalTo"
+  | "routePrice"
+  | "busSeats"
+  | "selectBusLayout"
+  | "modelBus"
+  | "passengersSeatsList"
+  | "driverId"
+  | "wifi"
+  | "coffee"
+  | "power"
+  | "restRoom"
+  | "bookedSeats"
+  | "maxSeats"
+  | "intermediateStops"
+) &
+  keyof routeDataBase;
+export type IGetSearchRouteUpdateOption = GenerateBooleanType<Exclude<selectRouteSeatUpdateKeys, "busSeats" | "passengersSeatsList">> &
+  IGetBusSeatsBoolean &
+  IGetPassengersSeatsList;
+export type IGetRouteUpdate = GenerateType<routeDataBase, Exclude<selectRouteSeatUpdateKeys, "intermediateStops">> & {
+  intermediateStops: IIntermediateStops[];
+};
+
+//********************************************************** */
+
+type selectRouteAgainKeys = ("departureFrom" | "arrivalTo" | "routePrice" | "modelBus" | "driverId" | "intermediateStops") & keyof routeDataBase;
+export type IGetSearchRouteAgainOption = GenerateBooleanType<selectRouteAgainKeys>;
+export type IGetRouteAgain = GenerateType<routeDataBase, Exclude<selectRouteAgainKeys, "intermediateStops">> & {
+  intermediateStops: IIntermediateStops[];
+};
+
+//********************************************************** */
 
 export default async function fetchGetRoutesById<TResult, TSelect>(id: number[], select: TSelect): Promise<TResult> {
   try {
@@ -101,6 +146,58 @@ export const fetchGetRoutesByIdMyRoute = async <TSelect, TResult>(id: number[], 
 
     try {
       const parsedData = ZodFetchGetRoutesByIdMyRoute.parse(res);
+      return parsedData;
+    } catch (parseError) {
+      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
+    }
+
+    // return res;
+  } catch (error) {
+    console.error("Помилка при отриманні або парсингу:", error);
+    throw error;
+  }
+};
+
+export const fetchGetRoutesByIdUpdate = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteUpdate[]> => {
+  try {
+    const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
+
+    // console.log("res2222", res);
+
+    if (!res) {
+      throw new Error("Помилка: отримано null або undefined");
+    }
+
+    // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
+
+    try {
+      const parsedData = ZodFetchGetRoutesByIdUpdate.parse(res);
+      return parsedData;
+    } catch (parseError) {
+      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
+    }
+
+    // return res;
+  } catch (error) {
+    console.error("Помилка при отриманні або парсингу:", error);
+    throw error;
+  }
+};
+
+export const fetchGetRoutesByIdAgain = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteAgain[]> => {
+  try {
+    const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
+
+    console.log("res2222", res);
+
+    if (!res) {
+      throw new Error("Помилка: отримано null або undefined");
+    }
+
+    // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
+
+    try {
+      const parsedData = ZodFetchGetRoutesByIdAgain.parse(res);
       return parsedData;
     } catch (parseError) {
       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");

@@ -1,19 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { useRouter } from "next/navigation";
-import { IRoutesByIdDriver, IRoutesTable } from "@/types/route-passenger.types";
+import { IRoutesByIdDriver } from "@/types/route-passenger.types";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
-import fetchDeleteRouteById from "@/fetchFunctions/fetchDeleteRouteById";
-import toast from "react-hot-toast";
-
-const handleAgainRoute = (route: any) => {
-  console.log("Activating route again:", route);
-  // alert(`Activating route again from ${route.id}`);
-};
 
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props {
@@ -34,31 +26,32 @@ export default function TableRoutes({ routes, isRouteAgain, setOk }: Props) {
   };
 
   const handleCancelRoute = (route: IRoutesByIdDriver) => {
-    console.log("Cancel route again:", route);
     setOpen(true);
     setRoute(route);
   };
 
   const handleOkDeleteRoute = (route: IRoutesByIdDriver | null) => {
-    console.log("Delete route again:", route);
     if (route) {
       setOpen(false);
       setOk && setOk(route.id);
     }
   };
 
-  const handleCngeRoute = (route: IRoutesByIdDriver) => {
-    router.push(`/editroute/${route.id}`);
+  const handleChangeRoute = (route: IRoutesByIdDriver) => {
+    router.push(`/createroute/${route.id}/change`);
+  };
+  const handleAgainRoute = (route: any) => {
+    router.push(`/createroute/${route.id}/again`);
   };
 
   // Основні колонки без колонки againRouter
   const baseColumns: GridColDef[] = [
-    { field: "departureDate", headerName: "Departure Date", width: 180 },
-    { field: "arrivalDate", headerName: "Arrival Date", width: 180 },
-    { field: "departureFrom", headerName: "From", width: 130 },
-    { field: "arrivalTo", headerName: "To", width: 130 },
-    { field: "maxSeats", headerName: "Max Seats", width: 100 },
-    { field: "bookedSeats", headerName: "Booked Seats", width: 100 },
+    { field: "departureDate", headerName: "Departure Date", width: 150 },
+    { field: "arrivalDate", headerName: "Arrival Date", width: 150 },
+    { field: "departureFrom", headerName: "From", width: 100 },
+    { field: "arrivalTo", headerName: "To", width: 100 },
+    { field: "maxSeats", headerName: "Max Seats", width: 50 },
+    { field: "bookedSeats", headerName: "Booked Seats", width: 50 },
     { field: "routePrice", headerName: "Price", width: 50 },
     {
       field: "viewRouter",
@@ -78,9 +71,20 @@ export default function TableRoutes({ routes, isRouteAgain, setOk }: Props) {
     ? [
         ...baseColumns,
         {
+          field: "againRouter",
+          headerName: "Activate Again",
+          width: 200,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" size="small" onClick={() => handleAgainRoute(params.row)}>
+              Activate route again
+            </Button>
+          ),
+        },
+        {
           field: "deleteRouter",
           headerName: "Delete Route",
-          width: 250,
+          width: 130,
           sortable: false,
           renderCell: (params) => (
             <Button variant="contained" color="primary" size="small" onClick={() => handleCancelRoute(params.row)}>
@@ -88,39 +92,28 @@ export default function TableRoutes({ routes, isRouteAgain, setOk }: Props) {
             </Button>
           ),
         },
-        {
-          field: "againRouter",
-          headerName: "Activate Again",
-          width: 250,
-          sortable: false,
-          renderCell: (params) => (
-            <Button variant="contained" color="primary" size="small" onClick={() => handleAgainRoute(params.row)}>
-              Activate this route again
-            </Button>
-          ),
-        },
       ]
     : [
         ...baseColumns,
         {
-          field: "againRouter",
-          headerName: "Activate Again",
-          width: 250,
+          field: "changeRouter",
+          headerName: "Change Route",
+          width: 150,
           sortable: false,
           renderCell: (params) => (
-            <Button variant="contained" color="primary" size="small" onClick={() => handleCancelRoute(params.row)}>
-              Cancel Route
+            <Button variant="contained" color="primary" size="small" onClick={() => handleChangeRoute(params.row)}>
+              Change Route
             </Button>
           ),
         },
         {
-          field: "changeRouter",
-          headerName: "Change Route",
-          width: 250,
+          field: "Cancel Route",
+          headerName: "Cancel Route",
+          width: 130,
           sortable: false,
           renderCell: (params) => (
-            <Button variant="contained" color="primary" size="small" onClick={() => handleCngeRoute(params.row)}>
-              Change Route
+            <Button variant="contained" color="primary" size="small" onClick={() => handleCancelRoute(params.row)}>
+              Cancel Route
             </Button>
           ),
         },

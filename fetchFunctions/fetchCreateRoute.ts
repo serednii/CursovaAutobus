@@ -1,3 +1,5 @@
+import { ISendDataBaseRouteDriverWidthId } from "@/app/(driver)/createroute/[id]/[type]/page";
+import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { zodSchemaCreateRoute } from "@/zod_shema/zodCreateRoute";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -12,22 +14,16 @@ const fetchCreateRoute = async <T>(data: T): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Помилка сервера: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
 
     const obj = await response.json();
-
+    console.log("obj", obj);
     try {
       const res = zodSchemaCreateRoute.parse(obj);
       return res;
     } catch (parseError) {
-      throw new Error(
-        parseError instanceof Error
-          ? parseError.message
-          : "Помилка парсингу даних"
-      );
+      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
     }
   } catch (error: unknown) {
     console.error("Error fetching data:", error);

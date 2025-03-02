@@ -1,3 +1,4 @@
+import { SeatStatusEnum } from "@/enum/shared.enums";
 import { SubPassengerDetails } from "./form.types";
 import { NullableNumber, SeatStatus } from "./types";
 
@@ -38,7 +39,13 @@ export interface IPassengersSeatsList {
 export interface IBusSeats {
   passenger: NullableNumber; // Може бути null, якщо місце доступне
   number: number; // Номер місця
-  busSeatStatus: SeatStatus; // Статус місця
+  busSeatStatus: SeatStatusEnum; // Статус місця
+}
+
+export interface IIntermediateStops {
+  id: number;
+  routeId: number;
+  stopName: string;
 }
 
 export interface ICreateRoute extends IDateString, IServiceBus, IFromTo {

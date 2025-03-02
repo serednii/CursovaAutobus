@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Container } from "@/components/ui/Container";
 
 import CustomDatePicker from "@/components/shared/form/dataPicker/CustomDatePicker";
-import DynamicTextFields from "@/components/shared/form/DynamicTextFields";
+import IntermediateStops from "@/components/shared/form/IntermediateStops";
 import MaterialUISelect from "@/components/shared/form/MaterialUISelect";
 
 import CustomTextField from "@/components/shared/form/CustomTextField";
@@ -25,20 +25,31 @@ import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import toast from "react-hot-toast";
 import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
-import { ActionEnum } from "@/enum/shared.enums";
+import { ActionEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
-import { cloneDeep } from "lodash";
+import { useParams } from "next/navigation";
+import {
+  fetchGetRoutesByIdAgain,
+  fetchGetRoutesByIdUpdate,
+  IGetRouteAgain,
+  IGetRouteUpdate,
+  IGetSearchRouteAgainOption,
+  IGetSearchRouteUpdateOption,
+} from "@/fetchFunctions/fetchGetRoutesById";
+import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+import { IBusSeats } from "@/types/interface";
+import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
+import { z } from "zod";
+import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodGlobal";
 
+export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
+  id: number;
+}
 export default function CreateRoute() {
-  const { data: session, status } = useSession();
-  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
-  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
-  const renderRef = useRef(0);
-
   const {
     register,
     unregister,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
     reset,
     watch,
@@ -53,29 +64,118 @@ export default function CreateRoute() {
       restRoom: true,
     },
   });
+  const { data: session, status } = useSession();
+  const params = useParams();
+  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
+  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
+  // const [route, setRoute] = useState<IGetRouteUpdate | IGetRouteAgain | null>(null);
+  const [startStops, setStartStops] = useState<string[]>([]);
+  const renderRef = useRef(0);
+  // type TypeParams = "update" | "create";
+  const id = params.id ? Number(params.id) : 0;
+  const type = params.type ? params.type : "";
+  // console.log("Create route route", route);
 
-  // const [passengersSeatsList, setPassengersSeatsList] = useState<IPassengersSeatsList[]>([]);
+  const handleChangeVariantBus = (number: number, newLayoutsData?: IBusSeats[]) => {
+    setIndexSelectVariantBus(number);
+    if (newLayoutsData) {
+      const selectLayoutsData = layoutsData[number].passenger.map((e) => {
+        const findSeats = newLayoutsData.find((seat) => seat.number === e.number);
+        return { ...e, busSeatStatus: findSeats?.busSeatStatus || SeatStatusEnum.AVAILABLE, passenger: findSeats?.passenger || null };
+      });
+      setDataLayoutBus({ ...layoutsData[number], passenger: selectLayoutsData });
+    } else {
+      setDataLayoutBus(layoutsData[number]);
+    }
+  };
+
+  useEffect(() => {
+    if (id !== 0) {
+      if (type === "change") {
+        fetchGetRoutesByIdUpdate<IGetSearchRouteUpdateOption, IGetRouteUpdate[]>([Number(id)], selectRouteUpdate).then(
+          (result: IGetRouteUpdate[]) => {
+            const res = result[0];
+            setValue("departureDate", new Date(res.departureDate));
+            setValue("arrivalDate", new Date(res.arrivalDate));
+            setValue("routePrice", String(res.routePrice));
+            setValue("departureFrom", res.departureFrom);
+            setValue("wifi", res.wifi);
+            setValue("coffee", res.coffee);
+            setValue("power", res.power);
+            setValue("restRoom", res.restRoom);
+            setValue("arrivalTo", res.arrivalTo);
+            setValue("busNumber", res.modelBus);
+            setValue("selectBusLayout", res.modelBus);
+            setStartStops(res.intermediateStops.map((e) => e.stopName));
+            const findIndexlayoutBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
+            handleChangeVariantBus(findIndexlayoutBus, res.busSeats);
+          }
+        );
+      } else if (type === "again") {
+        fetchGetRoutesByIdAgain<IGetSearchRouteAgainOption, IGetRouteAgain[]>([Number(id)], selectRouteAgain).then((result: IGetRouteAgain[]) => {
+          const res = result[0];
+          setValue("routePrice", String(res.routePrice));
+          setValue("departureFrom", res.departureFrom);
+          setValue("arrivalTo", res.arrivalTo);
+          setValue("busNumber", res.modelBus);
+          setValue("selectBusLayout", res.modelBus);
+          setStartStops(res.intermediateStops.map((e) => e.stopName));
+          const findIndexlayoutsBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
+          handleChangeVariantBus(findIndexlayoutsBus);
+        });
+      }
+    }
+  }, [id]);
+
+  console.log("CreateRoute params id", id, type);
+  console.log("CreateRoute params watch", watch());
 
   const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null; // Присвоюємо значення session.user
   const userIdSession = Number(sessionUser?.id);
   const idOrderPassengers = dataLayoutBus?.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
   const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
 
-  console.log("watch watch", watch(), dataLayoutBus);
-  // const myListPassengers = useMemo(() => passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [passengersSeatsList]);
+  console.log("dataLayoutBus", dataLayoutBus);
+
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     try {
+      console.log("ISendDataBaseRouteDriverWidthId", type, data);
       const createRouteDriver: ISendDataBaseRouteDriver = transformData(data, dataLayoutBus as ILayoutData, sessionUser as UserSession);
+      // zodSchemaUpdateRouteIn.parse(createRouteDriver);
+      console.log("createRouteDriver", createRouteDriver);
+      const updateRouteByIdParsed = z.object(zodUpdateRouteAll).parse({ ...createRouteDriver, id });
 
-      const response = await fetchCreateRoute(createRouteDriver);
+      if (type === "change") {
+        console.log("ISendDataBaseRouteDriverWidthId", { ...updateRouteByIdParsed, id });
+        fetchUpdateRouteById<ISendDataBaseRouteDriverWidthId>({ ...updateRouteByIdParsed, id })
+          .then(async (response) => {
+            if (response) {
+              // setOpen(true);
+              toast.success("Your route has been successfully update", {
+                duration: 5000,
+              });
+              await new Promise((resolve) => setTimeout(() => resolve(null), 5000));
+              // router.push("/mybookings");
+            } else {
+              console.log("No data received or an error occurred.");
+              toast.error("Your reservation has not been completed", {
+                duration: 5000,
+              });
+            }
+          })
+          .catch((err) => console.error("Fetch failed:", err));
+      } else {
+        const updateRouteByIdParsed = z.object(zodCreateRouteAll).parse(createRouteDriver);
+        const response = await fetchCreateRoute<ISendDataBaseRouteDriver>(updateRouteByIdParsed);
 
-      if (!response) {
-        throw new Error("No data received or an error occurred.");
+        if (!response) {
+          throw new Error("No data received or an error occurred.");
+        }
+
+        toast.success("Your route has been successfully created", {
+          duration: 5000,
+        });
       }
-
-      toast.success("Your route has been successfully created", {
-        duration: 5000,
-      });
       reset();
       setDataLayoutBus(null);
       setIndexSelectVariantBus(0);
@@ -84,14 +184,6 @@ export default function CreateRoute() {
       toast.error("Error creating route");
       throw err; // 🔥 ЦЕ ДОЗВОЛИТЬ Next.js ПЕРЕХОПИТИ ПОМИЛКУ!
     }
-  };
-
-  console.log(idOrderPassengers);
-  // console.log(errors);
-
-  const handleChangeVariantBus = (number: number) => {
-    setIndexSelectVariantBus(number);
-    setDataLayoutBus(cloneDeep(layoutsData[number]));
   };
 
   if (status === "loading") return <p>Loading createRouter...</p>;
@@ -107,7 +199,8 @@ export default function CreateRoute() {
 
       <main className="px-4 bg-[white] rounded-xl ">
         {/* Форму тепер обгортаємо в onSubmit */}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+        <form>
           {/* TextField з react-hook-form */}
 
           {/* Додавання CustomDatePicker */}
@@ -134,7 +227,7 @@ export default function CreateRoute() {
             <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" />
           </div>
 
-          <DynamicTextFields unregister={unregister} register={register} errors={errors} />
+          <IntermediateStops startStops={startStops} unregister={unregister} register={register} errors={errors} />
 
           <CustomTextField register={register} errors={errors} name={"busNumber"} title={"Bus Number"} className="mb-5" />
 
@@ -192,9 +285,10 @@ export default function CreateRoute() {
                 variant="contained"
                 color="primary"
                 type="submit"
-                // disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
+                onClick={handleSubmit(onSubmit)}
+                disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
               >
-                Create Route
+                {type === "change" ? "Update Route" : "Create Route"}
               </Button>
             </div>
           </div>

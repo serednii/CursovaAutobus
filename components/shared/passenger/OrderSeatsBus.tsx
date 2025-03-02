@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
+import { zodSchemaUpdateRouteIn } from "@/zod_shema/zodGetUpdateRoute";
 
 interface Props {
   route: IGetRouteSeatSelection;
@@ -149,10 +150,10 @@ export default function OrderSeatsBus({ route }: Props) {
     if (!dataLayoutBus || !sessionUser) return;
 
     const updateRoteDriver: IUpdateRoute = transformData(Number(route?.id), data, dataLayoutBus, sessionUser);
-
+    const updateRouteByIdParsed = zodSchemaUpdateRouteIn.parse(updateRoteDriver);
     console.log("OrderSeatsBus  ----  updateRoteDriver", updateRoteDriver);
 
-    fetchUpdateRouteById(updateRoteDriver)
+    fetchUpdateRouteById<IUpdateRoute>(updateRouteByIdParsed)
       .then(async (response) => {
         if (response) {
           // setOpen(true);

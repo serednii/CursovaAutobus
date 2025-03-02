@@ -57,7 +57,12 @@ export const selectMyBookings = {
   passengersSeatsList,
 };
 
-import { IGetSearchRouteSeatSelectionOption } from "@/fetchFunctions/fetchGetRoutesById";
+import {
+  IGetRouteUpdate,
+  IGetSearchRouteAgainOption,
+  IGetSearchRouteSeatSelectionOption,
+  IGetSearchRouteUpdateOption,
+} from "@/fetchFunctions/fetchGetRoutesById";
 export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   // export const select = {
   id: true,
@@ -73,10 +78,39 @@ export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
 
 import { IGetSearchRouteMyRouteOption } from "@/fetchFunctions/fetchGetRoutesById";
 import { IGetUsersByIdBySelectOption } from "@/fetchFunctions/fetchUsers";
+import { number } from "zod";
+
 export const selectRoute: IGetSearchRouteMyRouteOption = {
   ...baseDate,
   busSeats,
   passengersSeatsList,
+};
+
+export const selectRouteUpdate: IGetSearchRouteUpdateOption = {
+  id: true,
+  driverId: true,
+  selectBusLayout: true,
+  wifi: true,
+  maxSeats: true,
+  coffee: true,
+  bookedSeats: true,
+  power: true,
+  restRoom: true,
+  modelBus: true,
+  ...baseDate,
+  busSeats,
+  passengersSeatsList,
+  intermediateStops: true,
+
+};
+
+export const selectRouteAgain: IGetSearchRouteAgainOption = {
+  driverId: true,
+  departureFrom: true, // Залишаємо це поле
+  arrivalTo: true, // Залишаємо це поле
+  routePrice: true, // Залишаємо це поле
+  modelBus: true,
+  intermediateStops: true,
 };
 
 export const selectUser: IGetUsersByIdBySelectOption = {
