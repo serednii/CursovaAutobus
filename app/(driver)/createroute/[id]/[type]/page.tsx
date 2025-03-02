@@ -189,7 +189,7 @@ export default function CreateRoute() {
   if (status === "loading") return <p>Loading createRouter...</p>;
 
   return (
-    <Container>
+    <Container className=" bg-[#F9FAFB]">
       <header className=" px-4 pt-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold">Route Management</h1>
@@ -200,7 +200,7 @@ export default function CreateRoute() {
       <main className="px-4 bg-[white] rounded-xl ">
         {/* Форму тепер обгортаємо в onSubmit */}
         {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           {/* TextField з react-hook-form */}
 
           {/* Додавання CustomDatePicker */}
@@ -278,14 +278,11 @@ export default function CreateRoute() {
               <CheckboxOptionsDriver register={register} watch={watch} />
             </div>
             <div className="flex justify-end items-center gap-5 grow">
-              <Button variant="contained" color="primary">
-                Cancel
-              </Button>
               <Button
                 variant="contained"
                 color="primary"
                 type="submit"
-                onClick={handleSubmit(onSubmit)}
+                // onClick={handleSubmit(onSubmit)}
                 disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
               >
                 {type === "change" ? "Update Route" : "Create Route"}

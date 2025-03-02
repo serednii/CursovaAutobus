@@ -82,7 +82,7 @@ export default function MyBookings() {
 
   return (
     <div>
-      <Container>
+      <Container className="bg-[#F9FAFB]">
         <h1 className="text-2xl font-bold mb-10">Booked Routes</h1>
         <AvailableRoutes className="mb-10" routes={availableRoutes} removeRoutePassenger={removeRoutePassenger} />
         <PastRoutes routes={pastRoutes} />

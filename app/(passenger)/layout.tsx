@@ -7,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className="flex flex-col  w-[100%] h-[100%]">
-      <Container className="grow  w-[100%] ">{children}</Container>
+      <div className="grow  w-[100%] ">{children}</div>
     </div>
   );
 }

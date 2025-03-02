@@ -11,13 +11,9 @@ export const Providers: React.FC<React.PropsWithChildren> = ({ children }) => {
     <SessionProvider>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <Main className="flex-grow flex " children={children} />
+        <Main className="flex-grow flex pt-6" children={children} />
         <Footer />
       </div>
     </SessionProvider>
   );
 };
-
-// {/* <Toaster /> */}
-// {/* {children} */}
-// {/* <NextTopLoader /> */}
