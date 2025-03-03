@@ -3,48 +3,43 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Container } from "@/components/ui/Container";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
+import { z } from "zod";
+import toast from "react-hot-toast";
 
+import { Container } from "@/components/ui/Container";
 import CustomDatePicker from "@/components/shared/form/dataPicker/CustomDatePicker";
 import IntermediateStops from "@/components/shared/form/IntermediateStops";
 import MaterialUISelect from "@/components/shared/form/MaterialUISelect";
-
 import CustomTextField from "@/components/shared/form/CustomTextField";
-
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
+import MyScaleLoader from "@/components/ui/MyScaleLoader";
+import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
+import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
+
 import { FormValues } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
-
-import { useSession } from "next-auth/react";
-
-import "react-datepicker/dist/react-datepicker.css";
 import { UserSession } from "@/types/next-auth";
+import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
+import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
+import { IGetRouteAgain, IGetRouteUpdate, IGetSearchRouteAgainOption, IGetSearchRouteUpdateOption } from "@/fetchFunctions/fetchGetRoutesById";
+import { IBusSeats } from "@/types/interface";
+
 import { transformData } from "./action";
 import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
-import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
-import toast from "react-hot-toast";
-import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
-import { ActionEnum, SeatStatusEnum } from "@/enum/shared.enums";
-import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
-import { useParams } from "next/navigation";
-import {
-  fetchGetRoutesByIdAgain,
-  fetchGetRoutesByIdUpdate,
-  IGetRouteAgain,
-  IGetRouteUpdate,
-  IGetSearchRouteAgainOption,
-  IGetSearchRouteUpdateOption,
-} from "@/fetchFunctions/fetchGetRoutesById";
-import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
-import { IBusSeats } from "@/types/interface";
+import { fetchGetRoutesByIdAgain, fetchGetRoutesByIdUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
-import { z } from "zod";
 import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodGlobal";
+import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
 }
+
 export default function CreateRoute() {
   const {
     register,
@@ -68,7 +63,7 @@ export default function CreateRoute() {
   const params = useParams();
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number>(0);
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
-  // const [route, setRoute] = useState<IGetRouteUpdate | IGetRouteAgain | null>(null);
+  const [route, setRoute] = useState<IGetRouteUpdate | IGetRouteAgain | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
   const renderRef = useRef(0);
   // type TypeParams = "update" | "create";
@@ -109,6 +104,7 @@ export default function CreateRoute() {
             setStartStops(res.intermediateStops.map((e) => e.stopName));
             const findIndexlayoutBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
             handleChangeVariantBus(findIndexlayoutBus, res.busSeats);
+            setRoute(res);
           }
         );
       } else if (type === "again") {
@@ -122,6 +118,7 @@ export default function CreateRoute() {
           setStartStops(res.intermediateStops.map((e) => e.stopName));
           const findIndexlayoutsBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
           handleChangeVariantBus(findIndexlayoutsBus);
+          setRoute(res);
         });
       }
     }
@@ -132,10 +129,13 @@ export default function CreateRoute() {
 
   const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null; // Присвоюємо значення session.user
   const userIdSession = Number(sessionUser?.id);
-  const idOrderPassengers = dataLayoutBus?.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
+
+  const idOrderPassengers = dataLayoutBus?.passenger
+    .filter((e) => e.passenger === userIdSession && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
+    .map((e) => e.passenger);
   const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
 
-  console.log("dataLayoutBus", dataLayoutBus);
+  console.log("idOrderPassengers", idOrderPassengers);
 
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     try {
@@ -186,7 +186,7 @@ export default function CreateRoute() {
     }
   };
 
-  if (status === "loading") return <p>Loading createRouter...</p>;
+  if (status === "loading") return <MyScaleLoader />;
 
   return (
     <Container className=" bg-[#F9FAFB]">
@@ -248,7 +248,8 @@ export default function CreateRoute() {
                 className="flex justify-center"
                 dataLayoutBus={dataLayoutBus}
                 setDataLayoutBus={setDataLayoutBus}
-                action={ActionEnum.CREATEROUTEDRIVER}
+                action={RoleEnum.DRIVER}
+                driverId={route?.driverId || 0}
               />
             )}
           </div>
@@ -264,7 +265,7 @@ export default function CreateRoute() {
               renderRef={renderRef}
               watch={watch}
               sessionUser={sessionUser}
-              action={"createRouteDriver"}
+              action={RoleEnum.DRIVER}
             />
           )}
 
@@ -291,6 +292,9 @@ export default function CreateRoute() {
           </div>
         </form>
       </main>
+      <p>
+        RouteDriverId {route?.driverId} UserId-- {sessionUser?.id}
+      </p>
       <div className="footer"></div>
     </Container>
   );

@@ -12,6 +12,7 @@ const routeSchema = z.object({
   routePrice: z.number().positive(),
   busSeats,
   passengersSeatsList,
+  driverId: z.number().positive(),
 });
 
 // Схема для масиву маршрутів

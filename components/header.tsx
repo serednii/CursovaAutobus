@@ -1,5 +1,3 @@
-// // import Image from "next/image";
-
 "use client";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -7,11 +5,11 @@ import { usePathname } from "next/navigation";
 import { Container } from "./ui/Container";
 import React from "react";
 import { RoleEnum } from "@/enum/shared.enums";
-import ShowIf from "./ShowIf";
 import UserInfo from "./shared/user/Userinfo";
 import { FaBusAlt } from "react-icons/fa";
 import LinkDriver from "./shared/driver/Linkdriver";
 import { MenuDriver } from "@/types/menudriver.types";
+import { CircularProgress } from "@mui/material";
 
 const menuDriver = [
   {
@@ -26,82 +24,39 @@ const menuDriver = [
 
 const menuPassenger = [
   {
-    name: "Passenger`s Dashboard",
-    link: "/passengerdashboard",
+    name: "My Bookings",
+    link: "/mybookings",
   },
   {
     name: "Seat selection",
     link: "/seatselection",
   },
-  {
-    name: "My Bookings",
-    link: "/mybookings",
-  },
-  // {
-  //   name: "My profile",
-  //   link: "/myprofile",
-  // },
 ];
 
 export default function Header() {
-  const pathname = usePathname();
   const session = useSession();
   let menulist: MenuDriver[] = [];
+  const { data } = session;
 
-  if (pathname.includes("/createroute") || pathname === "/myroutes" || pathname.includes("/myroute")) {
-    menulist = menuDriver;
-  } else if (pathname === "/passengerdashboard" || pathname.includes("/seatselection") || pathname === "/mybookings" || pathname === "/myprofile") {
+  if (data?.user?.role === RoleEnum.PASSENGER) {
     menulist = menuPassenger;
+  } else if (data?.user?.role === RoleEnum.DRIVER) {
+    menulist = [...menuDriver, ...menuPassenger];
   }
 
-  if (session.status === "loading") return <p>Loading Header...</p>;
-  if (!session) return <p>No user is logged in</p>;
-
-  const { data } = session;
-  // if (data && pathname !== "/") return null;
-
-  // console.log(session);
+  console.log("Header", session);
 
   return (
     <Container className="flex justify-between gap-3 relative  flex-wrap z-[100] bg-gray-300 rounded-lg py-2 w-full">
+      {session.status === "loading" && <CircularProgress className="absolute top-2 left-1/2 color-[#94f07c] z-10" size={30} />}
+
       <header className="flex gap-4 items-center">
         <Link href="/" className="flex items-center gap-2 ">
           <FaBusAlt style={{ width: "32px", height: "32px", color: "blue" }} />
           <h1 className="font-bold text-black text-xl hidden md:block">ExpressBus</h1>
         </Link>
-        <ShowIf condition={!!data && pathname === "/"}>
-          <ShowIf condition={data?.user?.role === RoleEnum.DRIVER || data?.user?.role === RoleEnum.ADMIN}>
-            <Link
-              style={{
-                // backgroundColor: "yellow",
-                padding: "5px",
-                borderRadius: "15px",
-              }}
-              className={pathname === "/createroute" ? "active-link" : ""}
-              href="/createroute/"
-            >
-              Driver
-            </Link>
-          </ShowIf>
 
-          <ShowIf condition={data?.user?.role === RoleEnum.PASSENGER || data?.user?.role === RoleEnum.ADMIN || data?.user?.role === RoleEnum.DRIVER}>
-            <Link
-              style={{
-                // backgroundColor: "yellow",
-                padding: "5px",
-                borderRadius: "15px",
-              }}
-              className={pathname === "/passengerdashboard" ? "active-link" : ""}
-              href="/passengerdashboard/"
-            >
-              Passenger
-            </Link>
-          </ShowIf>
-        </ShowIf>
-
-        <ShowIf condition={!!data && pathname !== "/"}>
-          <LinkDriver menuDriver={menulist} />
-        </ShowIf>
+        <LinkDriver menuDriver={menulist} />
       </header>
 
       <UserInfo />

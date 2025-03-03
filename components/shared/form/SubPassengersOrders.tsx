@@ -7,6 +7,7 @@ import { IoMdClose } from "react-icons/io";
 import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
 import { UserSession } from "@/types/next-auth";
+import { RoleEnum } from "@/enum/shared.enums";
 
 interface Props {
   register: UseFormRegister<FormValues>;
@@ -19,7 +20,7 @@ interface Props {
   renderRef: React.RefObject<number>;
   watch: UseFormWatch<FormValues>;
   sessionUser?: UserSession | null;
-  action: "createRouteDriver" | "createRoutePassenger";
+  action: RoleEnum;
 }
 
 const SubPassengersOrders = ({
@@ -41,13 +42,15 @@ const SubPassengersOrders = ({
   }
 
   console.log("SubPassengersOrders ----subPassengers", subPassengers, idOrderPassengers);
+
   function isDriver(text: string): string {
-    if (action === "createRouteDriver") {
+    if (action === RoleEnum.DRIVER) {
       return text;
     } else {
       return "";
     }
   }
+
   useEffect(() => {
     if (myListPassengers && renderRef.current === 0) {
       console.log("myListPassenger in useEffect", myListPassengers);
@@ -56,14 +59,16 @@ const SubPassengersOrders = ({
 
       myListPassengers.subPassengersList.forEach((item: SubPassengerDetails, index: number) => {
         console.log("SubPassengersOrders item", item);
+        // if (item.subFirstName.includes("RESERVATION DRIVER") && action === RoleEnum.DRIVER) {
         startSubPassengers.push({
           subFirstName: item.subFirstName,
           subLastName: item.subLastName,
           subPhone: item.subPhone,
           subEmail: item.subEmail,
         });
+        // }
       });
-
+      console.log("startSubPassengers", startSubPassengers);
       setSubPassengers(startSubPassengers);
     } else if (renderRef.current > 2) {
       // if (idOrderPassengers && idOrderPassengers.length > 1) {
@@ -114,37 +119,12 @@ const SubPassengersOrders = ({
         dataForm.splice(-1, Math.abs(deltaData));
       }
       console.log("deltaData----", dataForm);
-
-      // idOrderPassengers.forEach((_, index) => {
-      //   const objDataForm: SubPassengerDetails = {};
-      //   objDataForm.subFirstName = dataForm[index].subFirstName;
-      //   objDataForm.subLastName = dataForm[index].subLastName;
-      //   objDataForm.subPhone = dataForm[index].subPhone;
-      //   objDataForm.subEmail = dataForm[index].subEmail;
-      //   dataForm.push(objDataForm);
-      // });
       setSubPassengers(dataForm);
       dataForm = [];
-      // }
-      // }
-      // if (idOrderPassengers && idOrderPassengers.length > 0) {
-      // console.log("delete stopIndexxxxxxxxxxxxxxzzzzzzzzzzzz");
-      // Перевірка на кількість пасажирів
-      // if (idOrderPassengers && idOrderPassengers.length > 0 && idOrderPassengers.length <= subPassengers.length) {
-      //   // console.log("delete stopIndeNNNNNNNNNNNNNNN");
-      //   //останній елемент викинути
-      //   setSubPassengers(subPassengers.slice(0, subPassengers.length - 1));
-      //   const stopIndex = subPassengers.length - 1;
-      //   unregister(`subFirstName.${stopIndex}`); // Видаляємо значення з react-hook-form
-      //   unregister(`subLastName.${stopIndex}`); // Видаляємо значення з react-hook-form
-      //   unregister(`subPhone.${stopIndex}`); // Видаляємо значення з react-hook-form
-      //   unregister(`subEmail.${stopIndex}`); // Видаляємо значення з react-hook-form
-      // }
-      // }
     }
 
     renderRef.current++;
-  }, [idOrderPassengers?.length, myListPassengers]);
+  }, [idOrderPassengers.length, myListPassengers]);
 
   const handleChange = (index: number, value: string, inputName: "subFirstName" | "subLastName" | "subPhone" | "subEmail") => {
     console.log("value", value, inputName, index);
@@ -160,7 +140,7 @@ const SubPassengersOrders = ({
   }
 
   return (
-    <div>
+    <div className="bg-white p-4 mb-4">
       <div className="flex gap-4 items-center">
         <h3>Add Sub Passengers</h3>
       </div>

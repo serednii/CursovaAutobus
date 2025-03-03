@@ -11,10 +11,3 @@ export enum RoleEnum {
   DRIVER = "driver",
   PASSENGER = "passenger",
 }
-
-export enum ActionEnum {
-  CREATEROUTEDRIVER = "createRouteDriver",
-  CREATEROUTEPASSENGER = "createRoutePassenger",
-  UPDATEROUTEPASSENGER = "updateRoutePassenger",
-  UPDATEROUTEDRIVER = "updateRouteDriver",
-}

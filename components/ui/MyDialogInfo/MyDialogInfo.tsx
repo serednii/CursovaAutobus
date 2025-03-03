@@ -5,7 +5,7 @@ import "./dialog.css";
 interface DialogProps {
   title: string;
   open: boolean;
-  setOpen: (value: boolean) => void;
+  setOpen?: (value: boolean) => void;
 }
 export const MyDialogInfo = ({ title, open, setOpen }: DialogProps) => {
   return (

@@ -48,21 +48,18 @@ export const selectMany: Omit<IGetSearchRouteManyOption, "busSeats" | "passenger
 
 export const selectOne: IGetSearchRouteOneOption = {
   departureDate: true,
+  driverId: true,
 };
 
 export const selectMyBookings = {
   id: true,
+  driverId: true,
   ...baseDate,
   busSeats,
   passengersSeatsList,
 };
 
-import {
-  IGetRouteUpdate,
-  IGetSearchRouteAgainOption,
-  IGetSearchRouteSeatSelectionOption,
-  IGetSearchRouteUpdateOption,
-} from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetSearchRouteAgainOption, IGetSearchRouteSeatSelectionOption, IGetSearchRouteUpdateOption } from "@/fetchFunctions/fetchGetRoutesById";
 export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   // export const select = {
   id: true,
@@ -101,7 +98,6 @@ export const selectRouteUpdate: IGetSearchRouteUpdateOption = {
   busSeats,
   passengersSeatsList,
   intermediateStops: true,
-
 };
 
 export const selectRouteAgain: IGetSearchRouteAgainOption = {

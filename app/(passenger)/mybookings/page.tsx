@@ -1,7 +1,6 @@
 "use client";
 
 import { sortDate } from "@/app/(driver)/myroutes/action";
-import { Container } from "@/components/ui/Container";
 import AvailableRoutes from "@/components/shared/passenger/AvailableRoutes";
 import PastRoutes from "@/components/shared/passenger/PastRoutes";
 import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
@@ -13,9 +12,7 @@ import { toast } from "react-hot-toast";
 import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
-import { ScaleLoader } from "react-spinners";
-import { ContainerViewCenter } from "@/components/ui/ContainerViewCenter";
-import { ContainerCenter } from "@/components/ui/ContainerCenter";
+import MyScaleLoader from "@/components/ui/MyScaleLoader";
 export default function MyBookings() {
   const { data: session } = useSession();
   const passengerId: number | undefined = Number(session?.user?.id);
@@ -32,7 +29,8 @@ export default function MyBookings() {
       fetchGetRoutesByPassengerId<typeof selectMyBookings>(passengerId, selectMyBookings)
         .then((routes: Omit<GetRoutesByPassengerId, "isReservation">[] | null) => {
           if (routes !== null) {
-            setRoutesPassenger(routes);
+            const filterRoutes = routes.filter((item) => item.driverId !== passengerId);
+            setRoutesPassenger(filterRoutes);
             setLoading(false);
           }
         })
@@ -43,6 +41,7 @@ export default function MyBookings() {
   }, [passengerId, reload]);
 
   const separateData = separateRoutesTable(routesPassenger, passengerId);
+
   const { pastRoutes, availableRoutes } = sortDate<Omit<IRoutesTable, "isReservation">>(separateData);
 
   const removeRoutePassenger = async (routeId: number) => {
@@ -73,20 +72,13 @@ export default function MyBookings() {
     console.log("Removing route ID:", routeId, passengerId);
   };
 
-  if (loading)
-    return (
-      <ContainerCenter>
-        <ScaleLoader speedMultiplier={1.5} radius={10} height={100} width={20} color="#0fcee1" />
-      </ContainerCenter>
-    );
+  if (loading) return <MyScaleLoader />;
 
   return (
-    <div>
-      <Container className="bg-[#F9FAFB]">
-        <h1 className="text-2xl font-bold mb-10">Booked Routes</h1>
-        <AvailableRoutes className="mb-10" routes={availableRoutes} removeRoutePassenger={removeRoutePassenger} />
-        <PastRoutes routes={pastRoutes} />
-      </Container>
+    <div className="bg-[#F9FAFB] px-4">
+      <h1 className="text-2xl font-bold mb-10">Booked Routes</h1>
+      <AvailableRoutes className="mb-10" routes={availableRoutes} removeRoutePassenger={removeRoutePassenger} />
+      <PastRoutes routes={pastRoutes} />
     </div>
   );
 }

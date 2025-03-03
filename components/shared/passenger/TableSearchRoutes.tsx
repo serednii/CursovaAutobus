@@ -33,31 +33,31 @@ export default function TableSearchRoutes({ routes, status }: Props) {
     {
       field: "departureDate",
       headerName: "Departure Date",
-      minWidth: 200,
+      minWidth: 140,
       flex: 1,
     },
     {
       field: "arrivalDate",
       headerName: "Arrival Date",
-      minWidth: 200,
+      minWidth: 140,
       flex: 1,
     },
     {
       field: "departureFrom",
       headerName: "From",
-      minWidth: 130,
+      minWidth: 100,
       flex: 1,
     },
     {
       field: "arrivalTo",
       headerName: "To",
-      minWidth: 130,
+      minWidth: 100,
       flex: 1,
     },
     {
       field: "availableSeats",
       headerName: "Available Seats",
-      minWidth: 100,
+      minWidth: 80,
       flex: 1,
     },
     {
@@ -69,7 +69,7 @@ export default function TableSearchRoutes({ routes, status }: Props) {
     {
       field: "viewRouter",
       headerName: "View Route",
-      minWidth: 250,
+      minWidth: 100,
       flex: 1,
       sortable: false,
       renderCell: (params) => (

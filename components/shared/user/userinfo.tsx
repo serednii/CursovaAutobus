@@ -1,8 +1,5 @@
 "use client";
-import Image from "next/image";
-
 import { FaRegBell } from "react-icons/fa";
-import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { signOut, useSession } from "next-auth/react";
 import { SessionData } from "@/types/next-auth";
 import Link from "next/link";
@@ -12,13 +9,9 @@ import UserAvatar from "@/components/UserAvatar";
 
 export default function UserInfo() {
   const session = useSession();
-  if (session.status === "loading") return <p>Loading userInfo...</p>;
 
   const { data } = session as SessionData;
-  // if (!data) return <p>No user is logged in</p>;
   const { user } = data || {};
-
-  // console.log("user", user);
 
   return (
     <div className="flex gap-4 items-center">
@@ -42,7 +35,10 @@ export default function UserInfo() {
           href="#"
           onClick={() => signOut({ callbackUrl: "/" })}
         >
-          <IoMdLogOut style={{ width: "32px", height: "32px" }} />
+          {/* <IoMdLogOut style={{ width: "32px", height: "32px" }} /> */}
+          <button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-2 px-4 rounded transform hover:scale-105 transition duration-300">
+            SignOut
+          </button>
         </Link>
       </ShowIf>
       <ShowIf condition={!data}>
@@ -54,7 +50,10 @@ export default function UserInfo() {
           }}
           href="/signin"
         >
-          <IoMdLogIn style={{ width: "32px", height: "32px" }} />
+          {/* <IoMdLogIn style={{ width: "32px", height: "32px" }} /> */}
+          <button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-2 px-4 rounded transform hover:scale-105 transition duration-300">
+            SignIn
+          </button>
         </Link>
       </ShowIf>
     </div>

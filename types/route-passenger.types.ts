@@ -33,6 +33,7 @@ export interface IUpdateRoute extends Pick<ISendDataBaseRouteDriver, "busSeats" 
 // }
 
 export interface GetRoutesByPassengerId extends Omit<GetRoutesByDriverId, "maxSeats" | "bookedSeats"> {
+  driverId: number;
   busSeats: IBusSeats[];
   passengersSeatsList: ISubPassengersList[];
 }

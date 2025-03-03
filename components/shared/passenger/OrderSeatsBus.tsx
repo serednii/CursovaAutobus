@@ -8,7 +8,7 @@ import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ISubPassengersList } from "@/types/interface";
 import { FormValues, SubPassengerGroup } from "@/types/form.types";
-import { ActionEnum, SeatStatusEnum } from "@/enum/shared.enums";
+import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { IUpdateRoute } from "@/types/route-passenger.types";
 import { useRouter } from "next/navigation";
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
@@ -17,6 +17,7 @@ import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import { zodSchemaUpdateRouteIn } from "@/zod_shema/zodGetUpdateRoute";
+import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
 
 interface Props {
   route: IGetRouteSeatSelection;
@@ -56,7 +57,6 @@ const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayo
       subPhone: data.subPhone ? data.subPhone[index] : "",
       subEmail: data.subEmail ? data.subEmail[index] : "",
     }));
-
     passengersSeatsList.subPassengersList = subPassengersList;
   }
 
@@ -96,9 +96,6 @@ export default function OrderSeatsBus({ route }: Props) {
     },
   });
 
-  // const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
-  // const userIdSession = Number(sessionUser?.id);
-
   let sessionUser: UserSession | null = null;
 
   if (status === "authenticated") {
@@ -109,7 +106,7 @@ export default function OrderSeatsBus({ route }: Props) {
   const idOrderPassengers = dataLayoutBus && dataLayoutBus.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
 
   console.log("RENDER OrderSeatsBus **********************************************");
-  // console.log("OrderSeatsBus--idOrderPassengers", idOrderPassengers, renderRef.current);
+  console.log("OrderSeatsBus--idOrderPassengers", idOrderPassengers, renderRef.current);
   // console.log("OrderSeatsBus route", route);
   // console.log("OrderSeatsBus--dataLayoutBus", dataLayoutBus);
 
@@ -174,8 +171,6 @@ export default function OrderSeatsBus({ route }: Props) {
 
   return (
     <>
-      {/* <MyDialogInfo title="Your reservation has been successfully completed?" open={open} setOpen={setOpen} /> */}
-
       <form onSubmit={handleSubmit(onSubmit)}>
         {dataLayoutBus && (
           <LayoutBus
@@ -183,7 +178,8 @@ export default function OrderSeatsBus({ route }: Props) {
             className="flex justify-center"
             dataLayoutBus={dataLayoutBus}
             setDataLayoutBus={setDataLayoutBus}
-            action={ActionEnum.CREATEROUTEPASSENGER}
+            action={RoleEnum.PASSENGER}
+            driverId={route.driverId}
           />
         )}
 
@@ -197,7 +193,7 @@ export default function OrderSeatsBus({ route }: Props) {
             idOrderPassengers={idOrderPassengers.slice(1)}
             renderRef={renderRef}
             watch={watch}
-            action={"createRoutePassenger"}
+            action={RoleEnum.PASSENGER}
           />
         )}
 
@@ -210,6 +206,9 @@ export default function OrderSeatsBus({ route }: Props) {
           Reserve seats
         </Button>
       </form>
+      <p>
+        RouteDriverId {route.driverId} UserId {sessionUser?.id}
+      </p>
     </>
   );
 }

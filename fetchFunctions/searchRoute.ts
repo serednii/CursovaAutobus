@@ -21,7 +21,7 @@ type selectRouteManyKeys = (
 ) &
   keyof routeDataBase;
 
-type selectRouteOneKeys = "departureDate" & keyof routeDataBase;
+type selectRouteOneKeys = ("departureDate" | "driverId") & keyof routeDataBase;
 
 export type IGetSearchRouteManyOption = GenerateBooleanType<selectRouteManyKeys>;
 

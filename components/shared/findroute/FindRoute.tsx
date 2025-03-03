@@ -29,6 +29,8 @@ import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.t
 import { selectMany, selectOne } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
+import MyScaleLoader from "@/components/ui/MyScaleLoader";
+import { SeatStatusEnum } from "@/enum/shared.enums";
 
 // interface IGetSearchRouteManyOptionData extends IGetSearchRouteMany {
 //   select: IGetSearchRouteManyOption & IGetBusSeatsBoolean & IGetPassengersSeatsList;
@@ -61,6 +63,7 @@ export default function FindRoute({ className }: { className?: string }) {
 
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
+  const sessionIdUser = Number(session?.user.id);
   // const callbackUrl = searchParams.get("callbackUrl") || "/";
   console.log("session****", session);
   // useEffect(() => {
@@ -151,13 +154,15 @@ export default function FindRoute({ className }: { className?: string }) {
                 (departureFrom || arrivalTo) && filterHighlightedDates.length > 0 ? filterHighlightedDates : highlightedDatesRef.current
               );
               const newSearchDates: TypeBaseRoute[] | [] = response.map((item) => {
-                const isReservation = item.busSeats.some((busSeat) => busSeat.passenger === Number(session?.user.id)); //if there is a reserved user on this route
+                const isReservation = item.busSeats.some(
+                  (busSeat) => busSeat.passenger === Number(session?.user.id) && busSeat.busSeatStatus === SeatStatusEnum.RESERVED
+                ); //if there is a reserved user on this route
                 const newItem: TypeBaseRoute = {
                   id: item.id,
-                  departureDate: format(item.departureDate, "d MMMM yyyy HH:mm", {
+                  departureDate: format(item.departureDate, "d MM yyyy HH:mm", {
                     locale: uk,
                   }),
-                  arrivalDate: format(item.arrivalDate, "d MMMM yyyy HH:mm", {
+                  arrivalDate: format(item.arrivalDate, "d MM yyyy HH:mm", {
                     locale: uk,
                   }),
                   departureFrom: item.departureFrom,
@@ -197,7 +202,10 @@ export default function FindRoute({ className }: { className?: string }) {
       searchRouteOne<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(data)
         .then((response: IGetSearchRouteOne[] | null) => {
           if (response) {
-            const dates: Date[] = response.map((route: { departureDate: string }) => new Date(route.departureDate));
+            console.log("response", response);
+            const dates: Date[] = response
+              .filter((item) => item.driverId !== sessionIdUser)
+              .map((route: { departureDate: string }) => new Date(route.departureDate));
             //update list date routes
             setHighlightedDates(dates);
             highlightedDatesRef.current = dates;
@@ -211,7 +219,13 @@ export default function FindRoute({ className }: { className?: string }) {
   }, [clickToDate]);
 
   console.log("clickToDate", clickToDate);
-  if (status === "loading") return <p>Loading findRoute...</p>;
+  if (status === "loading")
+    return (
+      <>
+        FindRoute
+        <MyScaleLoader />;
+      </>
+    );
 
   return (
     <div className={cn(className, "px-4 bg-[white] rounded-xl min-h-[530px]")}>
@@ -241,7 +255,9 @@ export default function FindRoute({ className }: { className?: string }) {
         </div>
         <div className="flex justify-between items-center">
           <div className="grow">
-            <Typography variant="h6" gutterBottom></Typography>
+            <Typography variant="h6" gutterBottom>
+              Select options
+            </Typography>
             <CheckboxOptionsMain register={register} watch={watch} />
           </div>
         </div>

@@ -1,5 +1,5 @@
 "use client";
-import { ActionEnum, RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
+import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { cn } from "@/lib/utils";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
@@ -14,7 +14,7 @@ interface Props {
   dataLayoutBus: ILayoutData;
   setDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
-  action: ActionEnum;
+  action: RoleEnum;
   driverId: number;
 }
 
@@ -24,7 +24,7 @@ export default function PassengerSeat(props: Props) {
   const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
   const keys = Object.keys(params) as (keyof typeof params)[];
   const styles: React.CSSProperties = {};
-
+  const sessionUserId = Number(sessionUser?.id);
   //add styles top, bottom, left, right
   keys.forEach((key) => {
     if (params[key] && key !== "number" && key !== "busSeatStatus" && key !== "passenger") {
@@ -52,16 +52,17 @@ export default function PassengerSeat(props: Props) {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log("Number(sessionUser?.id)", sessionUser?.id);
-    console.log("Number(sessionUser?.id)", Number(sessionUser?.id));
-    console.log("route.driverId", driverId);
 
     setChangeStatus((prevParams: BusSeatInfo) => {
       //Якщо являємося водієм і на своєму маршруті
       let updatedStatus: SeatStatusEnum = SeatStatusEnum.AVAILABLE;
-      if (user === RoleEnum.DRIVER && Number(sessionUser?.id) === driverId) {
+      if ((user === RoleEnum.DRIVER && Number(sessionUser?.id) === driverId) || driverId === 0) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.RESERVEDEMPTY : SeatStatusEnum.AVAILABLE;
-      } else if (user === RoleEnum.DRIVER && Number(sessionUser?.id) !== driverId) {
+        // updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
+        // if (action === RoleEnum.PASSENGER) {
+        // } else if (action === RoleEnum.DRIVER) {
+        // }
+      } else if (user === RoleEnum.DRIVER && sessionUserId !== driverId) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
       } else if (user === RoleEnum.PASSENGER) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
@@ -72,10 +73,8 @@ export default function PassengerSeat(props: Props) {
       const res = {
         ...prevParams, // Зберігаємо всі інші властивості без змін
         busSeatStatus: updatedStatus, // Оновлюємо статус сидіння
-        passenger: updatedStatus === SeatStatusEnum.AVAILABLE ? null : Number(sessionUser?.id), // Оновлюємо пасажира
+        passenger: updatedStatus === SeatStatusEnum.AVAILABLE ? null : sessionUserId, // Оновлюємо пасажира
       };
-
-      console.log(res);
       // Повертаємо новий об'єкт params з оновленими значеннями
       return res;
     });
@@ -83,10 +82,7 @@ export default function PassengerSeat(props: Props) {
 
   return (
     <button
-      disabled={
-        changeStatus.busSeatStatus === SeatStatusEnum.RESERVED ||
-        (changeStatus.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY && user === RoleEnum.PASSENGER)
-      }
+      disabled={changeStatus.busSeatStatus === SeatStatusEnum.RESERVED || (action === RoleEnum.PASSENGER && sessionUserId === driverId)}
       onClick={handleClick}
       style={styles}
       className={cn("absolute disabled:cursor-not-allowed", className)}

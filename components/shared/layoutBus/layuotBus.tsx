@@ -7,7 +7,7 @@ import Stairs from "./Stairs";
 
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
-import { ActionEnum } from "@/enum/shared.enums";
+import { RoleEnum } from "@/enum/shared.enums";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 
 interface Props {
@@ -15,13 +15,13 @@ interface Props {
   dataLayoutBus: ILayoutData;
   setDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
-  action: ActionEnum;
+  action: RoleEnum;
+  driverId: number;
 }
 
-export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser, action }: Props) {
+export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser, action, driverId }: Props) {
   const user = sessionUser?.role;
   // console.log("user session", sessionUser);
-  const driverId = Number(sessionUser?.id);
   if (dataLayoutBus?.passenger.length === 0) {
     return null;
   }
