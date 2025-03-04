@@ -1,5 +1,5 @@
 import { IUpdateRoute } from "@/types/route-passenger.types";
-import { allParametersRoute, busSeats, passengersSeatsList } from "./zodGlobal";
+import { allParametersRoute, busSeats, passengersSeatsList } from "./zodBase";
 import { z } from "zod";
 
 export const zodSchemaUpdateRouteIn: z.ZodType<IUpdateRoute> = z.object({
@@ -13,7 +13,3 @@ export const zodSchemaUpdateRouteRes = z.object({
   message: z.string(),
   res: z.object(allParametersRoute),
 });
-
-// const zodSchemaUpdateRouteRes = z.object({
-//   res: z.object(allParametersRoute),
-// });

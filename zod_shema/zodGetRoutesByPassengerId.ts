@@ -1,14 +1,11 @@
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { z } from "zod";
-import { busSeats, passengersSeatsList } from "./zodGlobal";
+import { busSeats, dateAndNameCitySchema, passengersSeatsList } from "./zodBase";
 
 // Схема для маршруту
 const routeSchema = z.object({
   id: z.number().int().positive(),
-  departureDate: z.string().datetime(),
-  arrivalDate: z.string().datetime(),
-  departureFrom: z.string().min(1),
-  arrivalTo: z.string().min(1),
+  ...dateAndNameCitySchema,
   routePrice: z.number().positive(),
   busSeats,
   passengersSeatsList,

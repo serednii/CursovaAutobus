@@ -1,12 +1,9 @@
 import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import { z } from "zod";
-import { busSeats, passengersSeatsList, passengerSchema } from "./zodGlobal";
+import { busSeats, passengersSeatsList, passengerSchema, fullBaseRouteSchema, citySchema, dateAndNameCitySchema } from "./zodBase";
 
 const routeSchemaMyRoute = z.object({
-  departureDate: z.string().datetime(),
-  arrivalDate: z.string().datetime(),
-  departureFrom: z.string().min(1),
-  arrivalTo: z.string().min(1),
+  ...dateAndNameCitySchema,
   routePrice: z.number().positive(),
   busSeats,
   passengersSeatsList,
@@ -14,37 +11,23 @@ const routeSchemaMyRoute = z.object({
 
 // Схема для маршруту
 const routeSchemaSeatSelection = z.object({
-  departureDate: z.string().datetime(),
-  arrivalDate: z.string().datetime(),
-  departureFrom: z.string().min(1),
-  arrivalTo: z.string().min(1),
-  routePrice: z.number().positive(),
   id: z.number().int().positive(),
+  ...dateAndNameCitySchema,
+  routePrice: z.number().positive(),
   selectBusLayout: z.string(),
+  bookedSeats: z.number().int().positive(),
   modelBus: z.string(),
   maxSeats: z.number().int().positive(),
-  bookedSeats: z.number().int(),
   driverId: z.number().int(),
   busSeats,
   passengersSeatsList,
 });
 
 const routeSchemaUpdate = z.object({
-  id: z.number().int().positive(),
-  routePrice: z.number().positive(),
+  ...fullBaseRouteSchema,
+
   driverId: z.number().int(),
-  departureDate: z.string().datetime(),
-  arrivalDate: z.string().datetime(),
-  departureFrom: z.string().min(1),
-  arrivalTo: z.string().min(1),
-  selectBusLayout: z.string(),
-  modelBus: z.string(),
-  maxSeats: z.number().int().positive(),
-  bookedSeats: z.number().int(),
-  wifi: z.boolean(),
-  coffee: z.boolean(),
-  power: z.boolean(),
-  restRoom: z.boolean(),
+
   intermediateStops: z.array(
     z.object({
       id: z.number().int().positive(),
@@ -57,8 +40,7 @@ const routeSchemaUpdate = z.object({
 });
 
 const routeSchemaAgain = z.object({
-  departureFrom: z.string().min(1),
-  arrivalTo: z.string().min(1),
+  ...citySchema,
   routePrice: z.number().positive(),
   modelBus: z.string(),
   driverId: z.number().int(),

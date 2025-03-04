@@ -28,6 +28,33 @@ export const routeStopSchema = z.object({
   routeId: z.number().int().positive(),
 });
 
+export const dateSchemaString = {
+  departureDate: z.string().datetime(),
+  arrivalDate: z.string().datetime(),
+};
+
+export const dateSchemaDate = {
+  departureDate: z.date(),
+  arrivalDate: z.date(),
+};
+
+export const citySchema = {
+  departureFrom: z.string(),
+  arrivalTo: z.string(),
+};
+
+export const dateAndNameCitySchema = {
+  ...dateSchemaString,
+  ...citySchema,
+};
+
+export const servicesSchema = {
+  wifi: z.boolean(),
+  coffee: z.boolean(),
+  power: z.boolean(),
+  restRoom: z.boolean(),
+};
+
 export const busSeats: z.ZodType<IBusSeats[]> = z.array(
   z.object({
     number: z.number(),
@@ -58,28 +85,27 @@ export const passengersSeatsList: z.ZodType<ISubPassengersList[]> = z.array(
   })
 );
 
-export const allParametersRoute = {
-  id: z.number(),
-  driverId: z.number(),
-  departureDate: z.string(),
-  arrivalDate: z.string(),
-  departureFrom: z.string(),
-  arrivalTo: z.string(),
+export const fullBaseRouteSchema = {
+  id: z.number().int().positive(),
+  ...dateAndNameCitySchema,
+  routePrice: z.number().positive(),
   busNumber: z.string(),
-  maxSeats: z.number(),
-  bookedSeats: z.number(),
+  maxSeats: z.number().int().positive(),
+  bookedSeats: z.number().int().nonnegative(),
   selectBusLayout: z.string(),
-  routePrice: z.number(),
   notate: z.string(),
-  wifi: z.boolean(),
-  coffee: z.boolean(),
-  power: z.boolean(),
-  restRoom: z.boolean(),
+  ...servicesSchema,
   modelBus: z.string(),
 };
 
+export const allParametersRoute = {
+  ...fullBaseRouteSchema,
+  driverId: z.number(),
+};
+
 export const zodUpdateRouteAll = {
-  ...allParametersRoute,
+  ...fullBaseRouteSchema,
+  driverId: z.number(),
   departureDate: z.date(),
   arrivalDate: z.date(),
   passengersSeatsList,
@@ -88,20 +114,8 @@ export const zodUpdateRouteAll = {
 };
 
 export const zodCreateRouteAll = {
+  ...fullBaseRouteSchema,
   driverId: z.number(),
-  departureFrom: z.string(),
-  arrivalTo: z.string(),
-  busNumber: z.string(),
-  maxSeats: z.number(),
-  bookedSeats: z.number(),
-  selectBusLayout: z.string(),
-  routePrice: z.number(),
-  notate: z.string(),
-  wifi: z.boolean(),
-  coffee: z.boolean(),
-  power: z.boolean(),
-  restRoom: z.boolean(),
-  modelBus: z.string(),
   departureDate: z.date(),
   arrivalDate: z.date(),
   passengersSeatsList,

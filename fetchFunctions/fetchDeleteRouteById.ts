@@ -2,7 +2,7 @@ import { getBusSeatsPassenger } from "@/app/(passenger)/mybookings/action";
 import { ApiResponse, SuccessResponse, ErrorResponse } from "@/types/response.types";
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { IDeleteRoutePassenger } from "@/types/route-passenger.types";
-import { allParametersRoute } from "@/zod_shema/zodGlobal";
+import { allParametersRoute } from "@/zod_shema/zodBase";
 import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";

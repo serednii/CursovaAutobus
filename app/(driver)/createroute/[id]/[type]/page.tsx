@@ -31,7 +31,7 @@ import { transformData } from "./action";
 import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
 import { fetchGetRoutesByIdAgain, fetchGetRoutesByIdUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
-import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodGlobal";
+import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodBase";
 import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 
 import "react-datepicker/dist/react-datepicker.css";
