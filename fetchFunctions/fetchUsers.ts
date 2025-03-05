@@ -1,6 +1,6 @@
 import { GenerateBooleanType, GenerateType } from "@/types/generaty.types";
 import { UserDataBase } from "@/types/next-auth";
-import { zodSchemaUser } from "@/zod_shema/zodUser";
+import { zodSchemaUsers } from "@/zod_shema/zodUser";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -26,8 +26,7 @@ export async function getUsersFetchByIdsBySelect(ids: number[], select: IGetUser
 
     const data: unknown = await response.json();
     try {
-      const parsedData: IGetUsersByIdBySelect[] | null = zodSchemaUser.array().parse(data);
-      console.log("getUsersFetchByIdsBySelect Отриманий маршрут:", parsedData);
+      const parsedData: IGetUsersByIdBySelect[] | null = zodSchemaUsers.array().parse(data);
       return parsedData;
     } catch (parseError: unknown) {
       console.error("Помилка парсингу даних:", parseError);

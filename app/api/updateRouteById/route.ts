@@ -4,11 +4,9 @@ import { updatedBusSeats } from "./updatedBusSeats";
 import { createPassengersSeatsList } from "../createroute/createFunctions";
 import { IUpdateRouteAPI } from "@/types/route-passenger.types";
 import { firstLetterUpperCase } from "@/lib/utils";
-import { getBusSeatsPassenger } from "@/app/(passenger)/mybookings/action";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
-import { IBusSeats } from "@/types/interface";
+import { IPassengersSeatsList } from "@/types/interface";
 import { middleware } from "@/middleware";
-import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { ApiResponse, ErrorResponse } from "@/types/response.types";
 
 // API route handler for updating a route
@@ -34,6 +32,11 @@ export async function PATCH(req: Request) {
       arrivalTo,
       routePrice,
       modelBus,
+      notate,
+      wifi,
+      coffee,
+      power,
+      restRoom,
     }: IUpdateRouteAPI = resData;
 
     if (!(Array.isArray(passengersSeatsList) && passengersSeatsList.length > 0 && Array.isArray(busSeats) && busSeats.length > 0)) {
@@ -65,6 +68,11 @@ export async function PATCH(req: Request) {
         arrivalTo: firstLetterUpperCase(arrivalTo),
         routePrice,
         modelBus,
+        notate,
+        wifi,
+        coffee,
+        power,
+        restRoom,
       },
     });
 
@@ -73,7 +81,7 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
     }
 
-    const updatedBusSeatsResult: boolean = await updatedBusSeats(busSeats || [], id);
+    const updatedBusSeatsResult = await updatedBusSeats(busSeats || [], id);
     console.log("ipdatedBusSeatsResult", updatedBusSeatsResult);
     if (!updatedBusSeatsResult) {
       console.error("Failed to update route busSeats");
@@ -92,7 +100,7 @@ export async function PATCH(req: Request) {
     }
 
     console.log("passengersSeatsList - - - - - - - - - - - ", passengersSeatsList);
-    const createPassengersSeatsListResult = await createPassengersSeatsList(passengersSeatsList, id);
+    const createPassengersSeatsListResult = (await createPassengersSeatsList(passengersSeatsList, id)) as IPassengersSeatsList[] | null;
     if (!createPassengersSeatsListResult) {
       console.error("Failed to update route passengersSeatsList");
 
@@ -112,10 +120,7 @@ export async function PATCH(req: Request) {
 
     // console.log("Route updated successfully:", res);
 
-    return NextResponse.json({
-      message: "Route updated successfully",
-      res,
-    });
+    return NextResponse.json({ ...res, passengersSeatsList: createPassengersSeatsListResult, busSeats: updatedBusSeatsResult });
   } catch (error) {
     console.error("Error updating route:", error);
     return NextResponse.json({ error: "Failed to update route" }, { status: 500 });

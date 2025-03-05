@@ -28,11 +28,5 @@ export const fullBaseRouteSchema = {
   bookedSeats: z.number().int().nonnegative(),
   selectBusLayout: z.string(),
   modelBus: z.string(),
-
   busNumber: z.string(),
-  // notate: z.string(),
-  // wifi: z.boolean(),
-  // coffee: z.boolean(),
-  // power: z.boolean(),
-  // restRoom: z.boolean(),
 };

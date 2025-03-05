@@ -1,6 +1,6 @@
-import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetRouteAgain, IGetRouteMyRoute, IGetRouteSeatSelection, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import { z } from "zod";
-import { busSeats, passengersSeatsList, passengerSchema, fullBaseRouteSchema, citySchema, dateAndNameCitySchema } from "./zodBase";
+import { busSeats, passengersSeatsList, passengerSchema, fullBaseRouteSchema, citySchema, dateAndNameCitySchema, servicesSchema } from "./zodBase";
 
 const routeSchemaMyRoute = z.object({
   ...dateAndNameCitySchema,
@@ -24,7 +24,14 @@ const routeSchemaSeatSelection = z.object({
 });
 
 const routeSchemaUpdate = z.object({
-  ...fullBaseRouteSchema,
+  id: z.number().int().positive(),
+  ...dateAndNameCitySchema,
+  routePrice: z.number().positive(),
+  maxSeats: z.number().int().positive(),
+  bookedSeats: z.number().int().nonnegative(),
+  selectBusLayout: z.string(),
+  ...servicesSchema,
+  modelBus: z.string(),
 
   driverId: z.number().int(),
 
@@ -54,7 +61,7 @@ const routeSchemaAgain = z.object({
 });
 
 // Схема для масиву маршрутів
-export const ZodFetchGetRoutesByIdMyRoute = z.array(routeSchemaMyRoute);
-export const ZodFetchGetRoutesByIdSeatSelection = z.array(routeSchemaSeatSelection);
+export const ZodFetchGetRoutesByIdMyRoute: z.ZodType<IGetRouteMyRoute[]> = z.array(routeSchemaMyRoute);
+export const ZodFetchGetRoutesByIdSeatSelection: z.ZodType<IGetRouteSeatSelection[]> = z.array(routeSchemaSeatSelection);
 export const ZodFetchGetRoutesByIdUpdate: z.ZodType<IGetRouteUpdate[]> = z.array(routeSchemaUpdate);
 export const ZodFetchGetRoutesByIdAgain: z.ZodType<IGetRouteAgain[]> = z.array(routeSchemaAgain);

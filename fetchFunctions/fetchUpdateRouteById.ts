@@ -1,15 +1,38 @@
-import { GenerateBooleanType, GenerateType, IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
-import { routeDataBase } from "@/types/interface";
-import { IUpdateRoute } from "@/types/route-passenger.types";
-import { zodSchemaUpdateRouteIn, zodSchemaUpdateRouteRes } from "@/zod_shema/zodGetUpdateRoute";
+import { GenerateType } from "@/types/generaty.types";
+import { IRouteDataBase } from "@/types/interface";
+import { zodSchemaUpdateRouteResData } from "@/zod_shema/zodGetUpdateRoute";
 import toast from "react-hot-toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
+type TRouteSeatUpdateKeys = (
+  | "id"
+  | "departureDate"
+  | "arrivalDate"
+  | "departureFrom"
+  | "arrivalTo"
+  | "routePrice"
+  | "bookedSeats"
+  | "selectBusLayout"
+  | "busNumber"
+  | "modelBus"
+  | "createdAt"
+  | "driverId"
+  | "wifi"
+  | "coffee"
+  | "power"
+  | "restRoom"
+  | "maxSeats"
+  | "notate"
+  | "busSeats"
+) &
+  // | "passengersSeatsList"
+  keyof IRouteDataBase;
+
+export type TRouteUpdateResult = GenerateType<IRouteDataBase, TRouteSeatUpdateKeys>;
+
 async function fetchUpdateRouteById<TResult>(updateRouteById: TResult) {
   try {
-    console.log("updateRouteByIdParsed", updateRouteById);
-
     const response = await fetch(`${API_URL}/api/updateRouteById`, {
       method: "PATCH",
       headers: {
@@ -24,11 +47,10 @@ async function fetchUpdateRouteById<TResult>(updateRouteById: TResult) {
     }
 
     const data: unknown = await response.json();
-    // console.log("Отриманий маршрут:", data);
+    console.log("Отриманий маршрут fetchUpdateRouteById:", data);
 
     try {
-      const parsedData = zodSchemaUpdateRouteRes.parse(data);
-      console.log("Отриманий маршрут:", parsedData);
+      const parsedData: TRouteUpdateResult = zodSchemaUpdateRouteResData.parse(data);
       return parsedData;
     } catch (parseError: unknown) {
       console.error("Помилка парсингу даних:", parseError);

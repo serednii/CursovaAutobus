@@ -5,12 +5,12 @@ import { IDeleteRoutePassenger } from "@/types/route-passenger.types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-async function fetchDeleteRoutePassenger(deleteRouteById: IDeleteRoutePassenger): Promise<ApiResponse> {
+async function fetchDeleteRoutePassenger(deleteRouteIdData: IDeleteRoutePassenger): Promise<ApiResponse> {
   try {
-    const { busSeats, idPassenger } = deleteRouteById;
+    const { busSeats, idPassenger } = deleteRouteIdData;
     const newBusSeats = getBusSeatsPassenger(busSeats, idPassenger);
 
-    const newDeleteRouteById = { ...deleteRouteById, busSeats: newBusSeats };
+    const newDeleteRouteIdData = { ...deleteRouteIdData, busSeats: newBusSeats };
 
     // Відправка DELETE-запиту
     const response = await fetch(`${API_URL}/api/deletePassengerSeatsList`, {
@@ -18,7 +18,7 @@ async function fetchDeleteRoutePassenger(deleteRouteById: IDeleteRoutePassenger)
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newDeleteRouteById), // Передаємо дані для видалення
+      body: JSON.stringify(newDeleteRouteIdData), // Передаємо дані для видалення
     });
 
     // Перевіряємо статус відповіді
@@ -28,7 +28,7 @@ async function fetchDeleteRoutePassenger(deleteRouteById: IDeleteRoutePassenger)
 
     // Обробка відповіді
     const data: GetRoutesByDriverId[] = await response.json();
-    console.log("Отримані маршрути:", data);
+    console.log("Отримані маршрути fetchDeleteRoutePassenger:", data);
 
     // Повертаємо успішну відповідь
     const successResponse: SuccessResponse = {

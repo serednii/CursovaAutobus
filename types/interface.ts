@@ -78,6 +78,6 @@ export interface RouteDriver extends IDateISO, IServiceBus, IFromTo {
   intermediateStops: string[];
 }
 
-export interface routeDataBase extends ICreateRoute {
+export interface IRouteDataBase extends ICreateRoute {
   id: number;
 }

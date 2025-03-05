@@ -31,14 +31,8 @@ export async function updatedBusSeats(busSeats: IBusSeats[], idRoute: number): P
         return null;
       })
     );
-    // console.log("updatedBusSeats", updatedBusSeats);
 
-    // console.log(
-    //   "updatedBusSeats",
-    //   updatedBusSeats.every((seat) => seat !== null)
-    // );
-
-    return updatedBusSeats.every((seat) => seat !== null);
+    return updatedBusSeats;
   } catch (error) {
     console.error("Error updating bus seats:", error);
     return null;

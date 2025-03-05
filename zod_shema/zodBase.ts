@@ -86,7 +86,7 @@ export const passengersSeatsList: z.ZodType<ISubPassengersList[]> = z.array(
 );
 
 export const fullBaseRouteSchema = {
-  id: z.number().int().positive(),
+  id: z.number().int(),
   ...dateAndNameCitySchema,
   routePrice: z.number().positive(),
   busNumber: z.string(),
@@ -115,6 +115,7 @@ export const zodUpdateRouteAll = {
 
 export const zodCreateRouteAll = {
   ...fullBaseRouteSchema,
+  id: z.undefined(),
   driverId: z.number(),
   departureDate: z.date(),
   arrivalDate: z.date(),

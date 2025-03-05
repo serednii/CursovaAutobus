@@ -1,4 +1,6 @@
 import { getBusSeatsPassenger } from "@/app/(passenger)/mybookings/action";
+import { GenerateBooleanType, GenerateType, IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
+import { IIntermediateStops, IRouteDataBase } from "@/types/interface";
 import { ApiResponse, SuccessResponse, ErrorResponse } from "@/types/response.types";
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
 import { IDeleteRoutePassenger } from "@/types/route-passenger.types";
@@ -6,6 +8,32 @@ import { allParametersRoute } from "@/zod_shema/zodBase";
 import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+//********************************************************** */
+
+type selectRouteSeatUpdateKeys = (
+  | "id"
+  | "departureDate"
+  | "arrivalDate"
+  | "departureFrom"
+  | "arrivalTo"
+  | "routePrice"
+  | "selectBusLayout"
+  | "modelBus"
+  | "wifi"
+  | "coffee"
+  | "power"
+  | "restRoom"
+  | "maxSeats"
+  | "bookedSeats"
+  | "notate"
+) &
+  keyof IRouteDataBase;
+export type TDeleteRouteUpdateResult = GenerateType<IRouteDataBase, selectRouteSeatUpdateKeys> & {
+  intermediateStops: IIntermediateStops[];
+};
+
+//********************************************************** */
 
 async function fetchDeleteRouteById(routeId: number) {
   try {
@@ -28,7 +56,7 @@ async function fetchDeleteRouteById(routeId: number) {
     const data: unknown = await response.json();
     console.log("Отримані маршрути:", data);
     try {
-      z.object(allParametersRoute).parse(data);
+      const res = z.object(allParametersRoute).parse(data);
       const successResponse: SuccessResponse = {
         message: "Пасажир успішно видалений",
       };
@@ -50,23 +78,3 @@ async function fetchDeleteRouteById(routeId: number) {
 }
 
 export default fetchDeleteRouteById;
-// const deletedRoute = {
-//   id: 109,
-//   createdAt: "2025-02-27T17:56:33.788Z",
-//   driverId: 1,
-//   departureDate: "2025-02-27T23:00:00.000Z",
-//   arrivalDate: "2025-03-01T17:30:00.000Z",
-//   departureFrom: "Moskov",
-//   arrivalTo: "London",
-//   busNumber: "33456",
-//   maxSeats: 19,
-//   bookedSeats: 0,
-//   selectBusLayout: "0",
-//   routePrice: 456,
-//   notate: "This is a comfortable route.",
-//   wifi: true,
-//   coffee: true,
-//   power: true,
-//   restRoom: true,
-//   modelBus: "Bus 1",
-// };

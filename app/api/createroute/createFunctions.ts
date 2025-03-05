@@ -46,7 +46,7 @@ export async function createPassengersSeatsList(passengersSeatsList: IPassengers
   try {
     console.log("createPassengersSeatsList passengersSeatsList", passengersSeatsList, routeDriverId);
 
-    const results = await Promise.all(
+    const [results] = await Promise.all(
       passengersSeatsList.map(async (seat) => {
         try {
           console.log("createPassengersSeatsList seat", seat);
@@ -59,11 +59,11 @@ export async function createPassengersSeatsList(passengersSeatsList: IPassengers
           // console.log("passengersSeatList", passengersSeatList);
           //перевірти zod
           if (!passengersSeatList) {
-            return false;
+            return passengersSeatList;
           }
 
           if (seat.subPassengersList.length === 0) {
-            return true;
+            return [];
           }
 
           const subPassengers = await Promise.all(
@@ -80,29 +80,29 @@ export async function createPassengersSeatsList(passengersSeatsList: IPassengers
                 });
                 //перевірти zod
 
-                if (!result) {
-                  return false;
-                }
+                // if (!result) {
+                //   return false;
+                // }
 
-                return true;
+                return result;
               } catch (error) {
                 console.error("Error creating subPassenger", error);
-                return false;
+                return error;
               }
             })
           );
 
-          return subPassengers.includes(false) ? false : true;
+          return subPassengers;
         } catch (error) {
           console.error("Error creating passengersSeatList", error);
-          return false;
+          return error;
         }
       })
     );
-    return results.filter(Boolean);
+    return results;
   } catch (error) {
     console.error("Error processing passengersSeatsList", error);
-    return false;
+    return error;
   }
 }
 

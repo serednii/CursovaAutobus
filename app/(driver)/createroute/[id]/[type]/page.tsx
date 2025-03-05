@@ -150,12 +150,12 @@ export default function CreateRoute() {
         fetchUpdateRouteById<ISendDataBaseRouteDriverWidthId>({ ...updateRouteByIdParsed, id })
           .then(async (response) => {
             if (response) {
-              // setOpen(true);
               toast.success("Your route has been successfully update", {
                 duration: 5000,
               });
-              await new Promise((resolve) => setTimeout(() => resolve(null), 5000));
-              // router.push("/mybookings");
+              setDataLayoutBus(null);
+              setIndexSelectVariantBus(0);
+              reset();
             } else {
               console.log("No data received or an error occurred.");
               toast.error("Your reservation has not been completed", {
@@ -169,16 +169,18 @@ export default function CreateRoute() {
         const response = await fetchCreateRoute<ISendDataBaseRouteDriver>(updateRouteByIdParsed);
 
         if (!response) {
-          throw new Error("No data received or an error occurred.");
+          toast.error("Error creating route or update route", {
+            duration: 5000,
+          });
+          return;
         }
-
         toast.success("Your route has been successfully created", {
           duration: 5000,
         });
+        setDataLayoutBus(null);
+        setIndexSelectVariantBus(0);
+        reset();
       }
-      reset();
-      setDataLayoutBus(null);
-      setIndexSelectVariantBus(0);
     } catch (err) {
       console.error("Fetch failed:", err);
       toast.error("Error creating route");
