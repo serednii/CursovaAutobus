@@ -58,6 +58,7 @@ export default searchRoute;
 
 export const searchRouteMany = async <T, K extends IGetSearchRouteMany[]>(data: T): Promise<K | null> =>
   searchRoute<T, K>(data).then((res: unknown) => {
+    console.log("search route many", data);
     try {
       const parsedData = ZodSchemaSearchRouteMany.array().parse(res) as K;
       return parsedData;

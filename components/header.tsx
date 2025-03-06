@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 import { Container } from "./ui/Container";
 import React from "react";
 import { RoleEnum } from "@/enum/shared.enums";

@@ -15,7 +15,7 @@ const routeSchemaSeatSelection = z.object({
   ...dateAndNameCitySchema,
   routePrice: z.number().positive(),
   selectBusLayout: z.string(),
-  bookedSeats: z.number().int().positive(),
+  bookedSeats: z.number().int(),
   modelBus: z.string(),
   maxSeats: z.number().int().positive(),
   driverId: z.number().int(),

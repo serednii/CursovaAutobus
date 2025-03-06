@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
         },
       };
     }
-
+    console.log("services search ", wifi, coffee, power, restRoom);
     // Виконуємо пошук у базі даних
     // const routes = await prisma.routeDriver.findMany({
     //   where: {

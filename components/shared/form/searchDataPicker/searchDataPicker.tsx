@@ -4,7 +4,6 @@ import { TextField, InputAdornment } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { IoMdClose } from "react-icons/io";
 import DatePicker from "react-datepicker";
-import { CircularProgress } from "@mui/material";
 import { FieldErrors, UseFormRegister, Controller, Control, UseFormWatch } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import { FormValues } from "@/types/form.types";
@@ -22,10 +21,9 @@ interface Props {
   clickToDate: number;
   setClickToDate: React.Dispatch<React.SetStateAction<number>>;
   highlightedDates: Date[]; // Масив дат для підсвічування
-  isLoading: boolean;
 }
 
-const SearchDataPicker = ({ name, title, control, errors, className, watch, highlightedDates, clickToDate, setClickToDate, isLoading }: Props) => {
+const SearchDataPicker = ({ name, title, control, errors, className, watch, highlightedDates, clickToDate, setClickToDate }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const departureDate = watch && watch("departureDate");
   console.log("selectedDate", selectedDate);
@@ -65,7 +63,6 @@ const SearchDataPicker = ({ name, title, control, errors, className, watch, high
 
   return (
     <div className={cn(className, "grow  search-data-picker relative")}>
-      {isLoading && <CircularProgress className="absolute top-1/2 left-1/2 color-[#94f07c] z-10" size={60} />}
       <Controller
         name={name}
         control={control}
@@ -87,6 +84,7 @@ const SearchDataPicker = ({ name, title, control, errors, className, watch, high
                 field.onChange(date);
               }}
               placeholderText="MM/DD/YYYY"
+              onInputClick={() => setClickToDate(clickToDate + 1)}
               dateFormat="MM/dd/yyyy"
               minDate={now}
               minTime={selectedDate ? (selectedDate.toDateString() === now.toDateString() ? now : startOfDay) : startOfDay}
@@ -95,10 +93,8 @@ const SearchDataPicker = ({ name, title, control, errors, className, watch, high
               customInput={
                 <TextField
                   label={title}
-                  onClick={() => setClickToDate(clickToDate + 1)}
                   value={field.value || ""}
                   onChange={field.onChange}
-                  placeholder="MM/DD/YYYY"
                   // error={!!errors[name]}
                   InputLabelProps={{
                     style: { top: "-20px", fontWeight: "bold", zIndex: 10, fontSize: "20px" },
@@ -107,7 +103,7 @@ const SearchDataPicker = ({ name, title, control, errors, className, watch, high
                     style: { height: "38px" },
                     startAdornment: (
                       <InputAdornment position="start">
-                        <CalendarTodayIcon onClick={() => setClickToDate(clickToDate + 1)} style={{ cursor: "pointer" }} />
+                        <CalendarTodayIcon style={{ cursor: "pointer" }} />
                       </InputAdornment>
                     ),
                   }}

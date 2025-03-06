@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Checkbox, FormControlLabel, Typography } from "@mui/material";
+import { Checkbox, CircularProgress, FormControlLabel, Typography } from "@mui/material";
 
 import CustomTextField from "@/components/shared/form/CustomTextField";
 
@@ -31,6 +31,7 @@ import { format } from "date-fns";
 import { uk } from "date-fns/locale";
 import MyScaleLoader from "@/components/ui/MyScaleLoader";
 import { SeatStatusEnum } from "@/enum/shared.enums";
+import { FindRouteContext } from "./findRouteContext";
 
 // interface IGetSearchRouteManyOptionData extends IGetSearchRouteMany {
 //   select: IGetSearchRouteManyOption & IGetBusSeatsBoolean & IGetPassengersSeatsList;
@@ -41,6 +42,11 @@ interface IGetSearchRouteManyOptionData {
   arrivalToSearch: string | undefined;
   endOfDay: Date;
   startOfDay: Date;
+  wifi: boolean;
+  coffee: boolean;
+  power: boolean;
+  restRoom: boolean;
+
   select: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList;
 }
 
@@ -60,7 +66,7 @@ export default function FindRoute({ className }: { className?: string }) {
   const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);
   const [clickToDate, setClickToDate] = useState(0);
   const [isLoadingOne, setIsLoadingOne] = useState(false);
-
+  const [isLoadingMany, setIsLoadingMany] = useState(false);
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
   const sessionIdUser = Number(session?.user.id);
@@ -112,7 +118,7 @@ export default function FindRoute({ className }: { className?: string }) {
   transition = sessionStorage.getItem("transition");
   // }
 
-  console.log("sessionStorage-idRoute-transition", idRoute, transition, status, router);
+  console.log("Watch", watch());
 
   useEffect(() => {
     if (idRoute && transition === "seatselection" && status === "authenticated") {
@@ -140,10 +146,15 @@ export default function FindRoute({ className }: { className?: string }) {
         arrivalToSearch: firstLetterUpperCase(arrivalTo),
         startOfDay,
         endOfDay,
+        wifi,
+        coffee,
+        power,
+        restRoom,
         select: selectMany,
       };
 
       if (departureFrom || arrivalTo || departureDate) {
+        setIsLoadingOne(true);
         searchRouteMany<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(data)
           .then((response: IGetSearchRouteMany[] | null) => {
             if (response) {
@@ -178,7 +189,8 @@ export default function FindRoute({ className }: { className?: string }) {
               console.log("No data received or an error occurred.");
             }
           })
-          .catch((err) => console.error("Fetch failed:", err));
+          .catch((err) => console.error("Fetch failed:", err))
+          .finally(() => setIsLoadingOne(false));
       } else {
         //update list date routes
         setHighlightedDates(highlightedDatesRef.current);
@@ -218,53 +230,54 @@ export default function FindRoute({ className }: { className?: string }) {
     }
   }, [clickToDate]);
 
-  console.log("clickToDate", clickToDate);
   if (status === "loading")
     return (
       <>
         FindRoute
-        <MyScaleLoader />;
+        <MyScaleLoader />
       </>
     );
 
   return (
-    <div className={cn(className, "px-4 bg-[white] rounded-xl min-h-[530px]")}>
-      <form className="mb-10">
-        <div className="flex gap-5 mb-5 flex-wrap">
-          <CustomTextField
-            register={register}
-            errors={errors}
-            // handleSearch={handleSearch}
-            name={"departureFrom"}
-            title={"Departure From"}
-            className="grow"
-          />
-          <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" />
-          <SearchDataPicker
-            title="Departure Date"
-            name="departureDate"
-            register={register}
-            errors={errors}
-            highlightedDates={highlightedDates}
-            control={control} // Передаємо control
-            className="pt-8 grow search-data-picker"
-            clickToDate={clickToDate}
-            setClickToDate={setClickToDate}
-            isLoading={isLoadingOne}
-          />
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="grow">
-            <Typography variant="h6" gutterBottom>
-              Select options
-            </Typography>
-            <CheckboxOptionsMain register={register} watch={watch} />
+    <FindRouteContext.Provider value={{ isLoadingOne, setIsLoadingMany }}>
+      <div className={cn(className, "relative px-4 bg-[white] rounded-xl min-h-[530px]")}>
+        {isLoadingOne && <MyScaleLoader className="absolute top-0 left-1/2" settings={{ height: 30, width: 5 }} />}
+        <form className="mb-10">
+          <div className="flex gap-5 mb-5 flex-wrap">
+            <CustomTextField
+              register={register}
+              errors={errors}
+              // handleSearch={handleSearch}
+              name={"departureFrom"}
+              title={"Departure From"}
+              className="grow"
+            />
+            <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" />
+            <SearchDataPicker
+              title="Departure Date"
+              name="departureDate"
+              register={register}
+              errors={errors}
+              highlightedDates={highlightedDates}
+              control={control} // Передаємо control
+              className="pt-8 grow search-data-picker"
+              clickToDate={clickToDate}
+              setClickToDate={setClickToDate}
+            />
           </div>
-        </div>
-      </form>
-      <h2>Rest Room</h2>
-      {Array.isArray(searchDates) && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} status={status} />}
-      <div className="footer"></div>
-    </div>
+          <div className="flex justify-between items-center">
+            <div className="grow">
+              <Typography variant="h6" gutterBottom>
+                Select options
+              </Typography>
+              <CheckboxOptionsMain register={register} watch={watch} />
+            </div>
+          </div>
+        </form>
+        <h2>Available Routes</h2>
+        {Array.isArray(searchDates) && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} status={status} />}
+        <div className="footer"></div>
+      </div>
+    </FindRouteContext.Provider>
   );
 }

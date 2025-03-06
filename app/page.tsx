@@ -1,4 +1,3 @@
-import { Container } from "@/components/ui/Container";
 import FindRoute from "@/components/shared/findroute/FindRoute";
 
 export default async function Home() {
