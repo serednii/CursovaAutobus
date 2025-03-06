@@ -4,12 +4,12 @@ import { TextField } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { FieldErrors, UseFormRegister, UseFormUnregister } from "react-hook-form";
-import { FormValues } from "@/types/form.types";
+import { FormValuesRoute } from "@/types/form.types";
 
 interface Props {
-  register: UseFormRegister<FormValues>;
-  unregister: UseFormUnregister<FormValues>;
-  errors: FieldErrors<FormValues>;
+  register: UseFormRegister<FormValuesRoute>;
+  unregister: UseFormUnregister<FormValuesRoute>;
+  errors: FieldErrors<FormValuesRoute>;
   className?: string;
   startStops?: string[];
 }

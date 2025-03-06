@@ -1,6 +1,6 @@
 import { IDateISO, IFromTo, IServiceBus } from "./interface";
 
-export interface FormValues extends SubPassengerGroup, IDateISO, IServiceBus, IFromTo {
+export interface FormValuesRoute extends SubPassengerGroup, IDateISO, IServiceBus, IFromTo {
   intermediateStops: string[];
   busNumber: string;
   routePrice: string;

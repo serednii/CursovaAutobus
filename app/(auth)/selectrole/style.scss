@@ -1,9 +1,8 @@
 .role {
-
-
     &__inner {
-        max-width: 480px;
-        width: 100%;
+        // max-width: 480px;
+        width: clamp(30rem, 31.339rem + -3.571vw, 28.125rem);
+        // width: 100%;
         background-color: white;
         border-radius: 12px;
         padding: 30px;

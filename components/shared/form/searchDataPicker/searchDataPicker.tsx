@@ -6,18 +6,18 @@ import { IoMdClose } from "react-icons/io";
 import DatePicker from "react-datepicker";
 import { FieldErrors, UseFormRegister, Controller, Control, UseFormWatch } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
-import { FormValues } from "@/types/form.types";
+import { FormValuesRoute } from "@/types/form.types";
 import { cn } from "@/lib/utils";
 import "./style.scss";
 
 interface Props {
-  name: keyof FormValues;
+  name: keyof FormValuesRoute;
   title: string;
-  register: UseFormRegister<FormValues>;
-  control: Control<FormValues>;
-  errors: FieldErrors<FormValues>;
+  register: UseFormRegister<FormValuesRoute>;
+  control: Control<FormValuesRoute>;
+  errors: FieldErrors<FormValuesRoute>;
   className?: string;
-  watch?: UseFormWatch<FormValues>;
+  watch?: UseFormWatch<FormValuesRoute>;
   clickToDate: number;
   setClickToDate: React.Dispatch<React.SetStateAction<number>>;
   highlightedDates: Date[]; // Масив дат для підсвічування

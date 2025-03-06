@@ -7,7 +7,7 @@ import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ISubPassengersList } from "@/types/interface";
-import { FormValues, SubPassengerGroup } from "@/types/form.types";
+import { FormValuesRoute, SubPassengerGroup } from "@/types/form.types";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { IUpdateRoute } from "@/types/route-passenger.types";
 import { useRouter } from "next/navigation";
@@ -86,7 +86,7 @@ export default function OrderSeatsBus({ route }: Props) {
     handleSubmit,
     setValue,
     watch,
-  } = useForm<FormValues>({
+  } = useForm<FormValuesRoute>({
     mode: "onChange",
     defaultValues: {
       wifi: true,
@@ -143,7 +143,7 @@ export default function OrderSeatsBus({ route }: Props) {
     }
   }, [route]);
 
-  const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValuesRoute> = async (data: FormValuesRoute) => {
     if (!dataLayoutBus || !sessionUser) return;
 
     const updateRoteDriver: IUpdateRoute = transformData(Number(route?.id), data, dataLayoutBus, sessionUser);

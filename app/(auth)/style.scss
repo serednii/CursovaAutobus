@@ -1,44 +1,44 @@
 .auth {
 
 
-  &>div {
-    height: 100%;
-    /* Повна висота для обох частин */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  // &>div {
+  //   height: 100%;
+  //   width: 100%;
+  //   /* Повна висота для обох частин */
+  //   // display: flex;
+  //   // justify-content: center;
+  //   // align-items: center;
+  // }
 
   /* Ліва частина екрану */
   &__select {
-    width: 50%;
+    width: 100%;
     /* Ліва частина */
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 20px;
-    padding-right: 20px;
+    // padding-left: 20px;
+    // padding-right: 20px;
     height: 100%;
-    background-color: white;
   }
 
-  /* Правая частина екрану з синім фоном */
-  &__img {
-    width: 50%;
-    /* Права частина займає 50% ширини */
-    background-color: #2563EB;
-    /* Синій фон */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-left: 0;
+  // /* Правая частина екрану з синім фоном */
+  // &__img {
+  //   width: 50%;
+  //   /* Права частина займає 50% ширини */
+  //   background-color: #2563EB;
+  //   /* Синій фон */
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   height: 100%;
+  //   margin-left: 0;
 
-    /* Видалено відступ зліва */
-    img {
-      width: 80%;
-    }
-  }
+  //   /* Видалено відступ зліва */
+  //   img {
+  //     width: 80%;
+  //   }
+  // }
 
   .welcomeText {
     font-family: 'Inter', sans-serif;
@@ -49,13 +49,14 @@
   }
 
   &__select-inner {
-    width: 100%;
-    max-width: 385px;
+    width: clamp(30.75rem, 12.054rem + 17.857vw, 28.125rem);
+    // max-width: 385px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1.2rem;
+    background-color: white;
 
     h1 {
       font-size: 2rem;
@@ -88,7 +89,7 @@
     color: #2563EB;
     border-radius: 8px;
     height: 50px;
-    width: 100%;
+    width: 60%;
     line-height: 50px;
     text-align: center;
     cursor: pointer;

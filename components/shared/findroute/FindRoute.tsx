@@ -6,7 +6,7 @@ import { Checkbox, CircularProgress, FormControlLabel, Typography } from "@mui/m
 
 import CustomTextField from "@/components/shared/form/CustomTextField";
 
-import { FormValues } from "@/types/form.types";
+import { FormValuesRoute } from "@/types/form.types";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSession } from "next-auth/react";
 import { debounce } from "lodash";
@@ -98,7 +98,7 @@ export default function FindRoute({ className }: { className?: string }) {
     reset,
     watch,
     control,
-  } = useForm<FormValues>({
+  } = useForm<FormValuesRoute>({
     mode: "onChange",
   });
 

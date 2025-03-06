@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from "@mui/material";
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { FormValues } from "@/types/form.types";
+import { FormValuesRoute } from "@/types/form.types";
 import { SelectChangeEvent } from "@mui/material/Select";
 
 interface Props {
-  register: UseFormRegister<FormValues>;
-  errors: FieldErrors<FormValues>;
+  register: UseFormRegister<FormValuesRoute>;
+  errors: FieldErrors<FormValuesRoute>;
   className?: string;
   passengersLength: number[];
   handleChangeVariantBus: (value: number) => void;

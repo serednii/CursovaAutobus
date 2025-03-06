@@ -8,4 +8,6 @@ export interface FormValues {
   email: string;
   phone: string;
   role: RoleEnum;
+  license: string;
+  name: string;
 }

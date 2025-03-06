@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { TextField } from "@mui/material";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormUnregister, UseFormWatch } from "react-hook-form";
-import { FormValues, SubPassengerDetails } from "@/types/form.types";
+import { FormValuesRoute, SubPassengerDetails } from "@/types/form.types";
 import { IoMdClose } from "react-icons/io";
 import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
@@ -10,15 +10,15 @@ import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 
 interface Props {
-  register: UseFormRegister<FormValues>;
-  unregister: UseFormUnregister<FormValues>;
-  errors: FieldErrors<FormValues>;
+  register: UseFormRegister<FormValuesRoute>;
+  unregister: UseFormUnregister<FormValuesRoute>;
+  errors: FieldErrors<FormValuesRoute>;
   className?: string;
-  setValue: UseFormSetValue<FormValues>;
+  setValue: UseFormSetValue<FormValuesRoute>;
   idOrderPassengers: NullableNumber[];
   myListPassengers: ISubPassengersList | undefined;
   renderRef: React.RefObject<number>;
-  watch: UseFormWatch<FormValues>;
+  watch: UseFormWatch<FormValuesRoute>;
   sessionUser?: UserSession | null;
   action: RoleEnum;
 }

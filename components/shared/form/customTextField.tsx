@@ -1,30 +1,21 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { cn } from "@/lib/utils";
-import { FormValues } from "@/types/form.types";
+import { FormValuesRoute } from "@/types/form.types";
 
 interface Props {
-  register: UseFormRegister<FormValues>;
-  errors: FieldErrors<FormValues>;
-  name: keyof FormValues;
+  register: UseFormRegister<FormValuesRoute>;
+  errors: FieldErrors<FormValuesRoute>;
+  name: keyof FormValuesRoute;
   title: string;
   // handleSearch?: () => void;
   className?: string;
 }
 
-export default function CustomTextField({
-  register,
-  errors,
-  name,
-  title,
-  className,
-}: Props) {
+export default function CustomTextField({ register, errors, name, title, className }: Props) {
   return (
     <div className={cn("", className)}>
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium text-gray-700 mb-2"
-      >
+      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-2">
         {title}
       </label>
       <TextField

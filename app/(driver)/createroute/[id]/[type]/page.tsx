@@ -19,7 +19,7 @@ import MyScaleLoader from "@/components/ui/MyScaleLoader";
 import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
 
-import { FormValues } from "@/types/form.types";
+import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
@@ -50,7 +50,7 @@ export default function CreateRoute() {
     watch,
     control,
     setValue,
-  } = useForm<FormValues>({
+  } = useForm<FormValuesRoute>({
     mode: "onChange",
     defaultValues: {
       wifi: true, // Початкове значення для чекбокса
@@ -137,7 +137,7 @@ export default function CreateRoute() {
 
   console.log("idOrderPassengers", idOrderPassengers);
 
-  const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValuesRoute> = async (data: FormValuesRoute) => {
     try {
       console.log("ISendDataBaseRouteDriverWidthId", type, data);
       const createRouteDriver: ISendDataBaseRouteDriver = transformData(data, dataLayoutBus as ILayoutData, sessionUser as UserSession);

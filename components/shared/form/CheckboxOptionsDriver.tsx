@@ -4,11 +4,11 @@ import { CgCoffee } from "react-icons/cg";
 import { MdOutlinePower } from "react-icons/md";
 import { FaRestroom } from "react-icons/fa";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
-import { FormValues } from "@/types/form.types";
+import { FormValuesRoute } from "@/types/form.types";
 
 interface Props {
-  register: UseFormRegister<FormValues>;
-  watch: UseFormWatch<FormValues>;
+  register: UseFormRegister<FormValuesRoute>;
+  watch: UseFormWatch<FormValuesRoute>;
   className?: string;
 }
 

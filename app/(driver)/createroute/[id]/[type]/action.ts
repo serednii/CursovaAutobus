@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FormValues } from "@/types/form.types";
+import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
@@ -38,7 +38,7 @@ const transformDataSchema = z.object({
   }),
 });
 
-export const transformData = (data: FormValues, dataLayoutBus: ILayoutData, sessionUser: UserSession): ISendDataBaseRouteDriver => {
+export const transformData = (data: FormValuesRoute, dataLayoutBus: ILayoutData, sessionUser: UserSession): ISendDataBaseRouteDriver => {
   console.log("data", data);
   console.log("dataLayoutBus", dataLayoutBus);
   console.log("sessionUser", sessionUser);

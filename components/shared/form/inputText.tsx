@@ -1,11 +1,8 @@
+import { FormValues } from "@/app/(auth)/interface";
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import FormError from "./FormError";
 
-interface FormValues {
-  firstName?: string;
-  lastName?: string;
-}
 interface Props {
   name: keyof FormValues;
   title: string;
@@ -14,20 +11,9 @@ interface Props {
   className?: string;
 }
 
-export default function InputText({
-  name,
-  title,
-  register,
-  errors,
-  className,
-}: Props) {
+export default function InputText({ name, title, register, errors, className }: Props) {
   return (
-    <div
-      className={cn(
-        "relative  mb-4 inline-block w-[184px] max-[420px]:w-[100%] ",
-        className
-      )}
-    >
+    <div className={cn("relative  mb-4 inline-block w-[184px] max-[420px]:w-[100%] ", className)}>
       <label htmlFor={name} className="block text-sm font-medium text-gray-700">
         {title}
       </label>
