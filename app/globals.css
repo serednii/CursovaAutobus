@@ -57,3 +57,11 @@ body {
 .reservation-row {
   background-color: cadetblue;
 }
+
+.header-gradient {
+  background: rgb(131, 58, 180);
+  background: -moz-linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(29, 79, 253, 0.09352244315695024) 51%, rgba(69, 156, 252, 1) 100%);
+  background: -webkit-linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(29, 79, 253, 0.09352244315695024) 51%, rgba(69, 156, 252, 1) 100%);
+  background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(29, 79, 253, 0.09352244315695024) 51%, rgba(69, 156, 252, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4", endColorstr="#459cfc", GradientType=1);
+}
