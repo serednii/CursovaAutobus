@@ -54,6 +54,7 @@ export default function CreateRoute() {
       restRoom: true,
     },
   });
+
   const router = useRouter();
   const { data: session, status } = useSession();
   const params = useParams();
@@ -69,9 +70,6 @@ export default function CreateRoute() {
   const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
   const userIdSession = Number(sessionUser?.id);
 
-  console.log("CreateRoute params id", id, type);
-  console.log("CreateRoute params watch", watch());
-
   const idOrderPassengers = useMemo(
     () =>
       dataLayoutBus?.passenger
@@ -80,7 +78,6 @@ export default function CreateRoute() {
     [dataLayoutBus, userIdSession]
   );
 
-  console.log("idiOrderPassengers", idOrderPassengers);
   //Кількість пасажирів в кожному автобусі
   const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
 
@@ -95,8 +92,6 @@ export default function CreateRoute() {
     setDataLayoutBus,
     setIndexSelectVariantBus,
   });
-
-  console.log("idOrderPassengers", idOrderPassengers);
 
   if (status === "loading") return <MyScaleLoader />;
 

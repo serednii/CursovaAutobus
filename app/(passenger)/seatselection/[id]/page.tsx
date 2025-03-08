@@ -27,7 +27,6 @@ export default async function SeatSelection({ params }: Props) {
 
   if (route.busSeats) {
     const updatedPassengers = route.busSeats.map((e) => {
-      // console.log("XXXXXXXXXXX", e.passenger, driverId, e.busSeatStatus);
       if (e.passenger === Number(driverId) && e.busSeatStatus === SeatStatusEnum.RESERVED) {
         return { ...e, busSeatStatus: SeatStatusEnum.SELECTED };
       }
@@ -35,8 +34,6 @@ export default async function SeatSelection({ params }: Props) {
     });
     route.busSeats = updatedPassengers;
   }
-
-  console.log("SeatSelection route ************************** ----", route);
 
   return (
     <Container className="pt-4">

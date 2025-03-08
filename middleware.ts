@@ -33,7 +33,6 @@ export async function middleware(req: any) {
         url.pathname.startsWith("/myroutes") ||
         url.pathname.startsWith("/mybookings") ||
         url.pathname.startsWith("/myprofile") ||
-        url.pathname.startsWith("/passengerdashboard") ||
         url.pathname.startsWith("/seatselection")
       ) {
         url.pathname = "/signin";
