@@ -17,15 +17,7 @@ interface UseSubPassengersProps {
   action: RoleEnum;
 }
 
-export function useSubPassengers({
-  idOrderPassengers,
-  myListPassengers,
-  renderRef,
-  unregister,
-  setValue,
-  action,
-  sessionUser,
-}: UseSubPassengersProps) {
+export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRef, unregister, action, sessionUser }: UseSubPassengersProps) {
   const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[]>([]);
 
   useEffect(() => {

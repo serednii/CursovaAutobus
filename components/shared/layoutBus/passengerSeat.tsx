@@ -23,6 +23,7 @@ export default function PassengerSeat(props: Props) {
   const keys = Object.keys(params) as (keyof typeof params)[];
   const styles: React.CSSProperties = {};
   const sessionUserId = Number(sessionUser?.id);
+
   //add styles top, bottom, left, right
   keys.forEach((key) => {
     if (params[key] && key !== "number" && key !== "busSeatStatus" && key !== "passenger") {
