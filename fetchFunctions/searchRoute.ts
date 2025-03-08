@@ -30,6 +30,7 @@ export type IGetSearchRouteManyOption = GenerateBooleanType<selectRouteManyKeys>
 export type IGetSearchRouteMany = GenerateType<IRouteDataBase, selectRouteManyKeys>;
 
 export type IGetSearchRouteOneOption = GenerateBooleanType<selectRouteOneKeys>;
+
 export type IGetSearchRouteOne = GenerateType<IRouteDataBase, selectRouteOneKeys>;
 
 const searchRoute = async <T, K>(data: T): Promise<K | null> => {

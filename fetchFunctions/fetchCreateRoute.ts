@@ -1,5 +1,3 @@
-import { ISendDataBaseRouteDriverWidthId } from "@/app/(driver)/createroute/[id]/[type]/page";
-import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { zodSchemaCreateRoute } from "@/zod_shema/zodCreateRoute";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
