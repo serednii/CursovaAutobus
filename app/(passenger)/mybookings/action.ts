@@ -71,7 +71,7 @@ export const removeRoutePassengerFunction = async (
     idPassenger: passengerId,
     busSeats: busSeatsRaw,
   });
-  console.log("result", result);
+  
   if (!result) {
     //Error delete route passenger
   } else {
