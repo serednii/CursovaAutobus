@@ -2,11 +2,9 @@
 
 import { useState, useMemo, useRef } from "react";
 import { Button, Typography } from "@mui/material";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import { z } from "zod";
-import toast from "react-hot-toast";
 
 import { Container } from "@/components/ui/Container";
 import CustomDatePicker from "@/components/shared/form/dataPicker/CustomDatePicker";
@@ -25,16 +23,11 @@ import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 
-import { handleChangeVariantBus, transformData, updateValues } from "./action";
-import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
-import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
-import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodBase";
+import { handleChangeVariantBus, updateValues } from "./action";
 import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFetchRoute } from "./useFetchRoute";
-import { delay } from "@/lib/utils";
-import { on } from "events";
 import { handleRouteSubmit } from "./handleRouteSubmit";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
@@ -67,7 +60,6 @@ export default function CreateRoute() {
 
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
-  // const [route, setRoute] = useState<IGetRouteUpdate | IGetRouteAgain | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
 
   const renderRef = useRef(0);

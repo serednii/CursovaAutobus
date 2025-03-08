@@ -1,5 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { format } from "date-fns";
+import { uk } from "date-fns/locale";
+import { DateNumberType } from "react-datepicker/dist/date_utils";
+import { IGetRouteMyRoute } from "@/fetchFunctions/fetchGetRoutesById";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -30,6 +34,20 @@ export const firstLetterUpperCase = (string: string | undefined): string | undef
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
       .join(" ")
   );
+};
+
+export const formatDate = <T extends { arrivalDate: string; departureDate: string }>(dateArray: T[]): T[] => {
+  return dateArray.map((route: T) => {
+    return {
+      ...route,
+      arrivalDate: format(route.arrivalDate, "d-MM-yyyy HH:mm", {
+        locale: uk,
+      }),
+      departureDate: format(route.departureDate, "d-MM-yyyy HH:mm", {
+        locale: uk,
+      }),
+    };
+  });
 };
 
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
