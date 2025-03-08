@@ -17,7 +17,6 @@ export const getPassengersId = (route: IGetRouteMyRoute) => {
 };
 
 export const getPassengerDetails = (route: IGetRouteMyRoute, usersRaw: IGetUsersByIdBySelect[] | null, passengersSeatsList: ISubPassengersList[]) => {
-  const tempAddUsers = new Map();
   const tempUnique = new Map();
   const busSeatsSortByNumber = route.busSeats.sort((a, b) => a.number - b.number);
 
@@ -26,14 +25,8 @@ export const getPassengerDetails = (route: IGetRouteMyRoute, usersRaw: IGetUsers
     void number;
     tempUnique.set(idPassenger, 1);
 
-    console.log("SSSSSSSSSS", idPassenger);
-
     const user = usersRaw?.find((user: IGetUsersByIdBySelect) => user.id === idPassenger);
-
     const uniqueId = Array.from(tempUnique.keys()).findIndex((e) => e === idPassenger);
-
-    console.log("uniqueId", uniqueId);
-
     const subOrderPassenger: ISubPassengersList | undefined = passengersSeatsList.find(
       (user: ISubPassengersList) => user.idPassenger === idPassenger
     );
@@ -48,6 +41,7 @@ export const getPassengerDetails = (route: IGetRouteMyRoute, usersRaw: IGetUsers
         email: "",
       };
     }
+
     const subPassengersLists: SubPassengerDetails[] = subOrderPassenger.subPassengersList;
 
     const [subUser] = subPassengersLists.splice(0, 1);

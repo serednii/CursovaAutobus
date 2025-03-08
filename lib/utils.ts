@@ -2,8 +2,11 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
-import { DateNumberType } from "react-datepicker/dist/date_utils";
-import { IGetRouteMyRoute } from "@/fetchFunctions/fetchGetRoutesById";
+
+interface IRouteWithDate {
+  arrivalDate: string; // або Date, залежно від вашого типу даних
+  departureDate: string;
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -48,6 +51,18 @@ export const formatDate = <T extends { arrivalDate: string; departureDate: strin
       }),
     };
   });
+};
+
+export const getPastRoutesAndAvailableRoutes = <T extends IRouteWithDate>(routes: T[]) => {
+  const currentDate = new Date().getTime();
+
+  const pastRoutesRaw = routes.filter((route) => new Date(route.arrivalDate).getTime() < currentDate);
+  const availableRoutesRaw = routes.filter((route) => new Date(route.arrivalDate).getTime() > currentDate);
+
+  return {
+    pastRoutes: formatDate(pastRoutesRaw),
+    availableRoutes: formatDate(availableRoutesRaw),
+  };
 };
 
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

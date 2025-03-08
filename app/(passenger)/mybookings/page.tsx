@@ -1,6 +1,5 @@
 "use client";
 
-import { sortDate } from "@/app/(driver)/myroutes/action";
 import AvailableRoutes from "@/components/shared/passenger/AvailableRoutes";
 import PastRoutes from "@/components/shared/passenger/PastRoutes";
 import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
@@ -13,6 +12,7 @@ import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassen
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import MyScaleLoader from "@/components/ui/MyScaleLoader";
+import { getPastRoutesAndAvailableRoutes } from "@/lib/utils";
 export default function MyBookings() {
   const { data: session } = useSession();
   const passengerId: number | undefined = Number(session?.user?.id);
@@ -42,7 +42,7 @@ export default function MyBookings() {
 
   const separateData = separateRoutesTable(routesPassenger, passengerId);
 
-  const { pastRoutes, availableRoutes } = sortDate<Omit<IRoutesTable, "isReservation">>(separateData);
+  const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes<Omit<IRoutesTable, "isReservation">>(separateData);
 
   const removeRoutePassenger = async (routeId: number) => {
     //find busSeats by routeId  of selected delete
