@@ -33,6 +33,9 @@ import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/sele
 import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFetchRoute } from "./useFetchRoute";
+import { delay } from "@/lib/utils";
+import { on } from "events";
+import { handleRouteSubmit } from "./handleRouteSubmit";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -103,58 +106,6 @@ export default function CreateRoute() {
 
   console.log("idOrderPassengers", idOrderPassengers);
 
-  const onSubmit: SubmitHandler<FormValuesRoute> = async (dataForm: FormValuesRoute) => {
-    try {
-      console.log("ISendDataBaseRouteDriverWidthId--------------", type, dataForm);
-      const createRouteDriver: ISendDataBaseRouteDriver = transformData(dataForm, dataLayoutBus as ILayoutData, sessionUser as UserSession);
-      const updateRouteByIdParsed = z.object(zodUpdateRouteAll).parse({ ...createRouteDriver, id });
-
-      if (type === "change") {
-        console.log("ISendDataBaseRouteDriverWidthId", { ...updateRouteByIdParsed, id });
-        fetchUpdateRouteById<ISendDataBaseRouteDriverWidthId>({ ...updateRouteByIdParsed, id })
-          .then(async (response) => {
-            if (response) {
-              toast.success("Your route has been successfully update", {
-                duration: timeShowToast,
-              });
-              // setDataLayoutBus(null);
-              // setIndexSelectVariantBus(null);
-              // reset();
-              await new Promise((resolve) => setTimeout(() => resolve(null), timeShowToast));
-              router.push("/myroutes");
-            } else {
-              toast.error("Your reservation has not been completed", {
-                duration: timeShowToast,
-              });
-            }
-          })
-          .catch((err) => console.error("Fetch failed:", err));
-      } else {
-        const updateRouteByIdParsed = z.object(zodCreateRouteAll).parse(createRouteDriver);
-        const response = await fetchCreateRoute<ISendDataBaseRouteDriver>(updateRouteByIdParsed);
-
-        if (!response) {
-          toast.error("Error creating route or update route", {
-            duration: timeShowToast,
-          });
-          return;
-        }
-        toast.success("Your route has been successfully created", {
-          duration: timeShowToast,
-        });
-        // setDataLayoutBus(null);
-        // setIndexSelectVariantBus(null);
-        // reset();
-        await new Promise((resolve) => setTimeout(() => resolve(null), timeShowToast));
-        router.push("/myroutes");
-      }
-    } catch (err) {
-      console.error("Fetch failed:", err);
-      toast.error("Error creating route");
-      throw err; // 🔥 ЦЕ ДОЗВОЛИТЬ Next.js ПЕРЕХОПИТИ ПОМИЛКУ!
-    }
-  };
-
   if (status === "loading") return <MyScaleLoader />;
 
   return (
@@ -169,7 +120,7 @@ export default function CreateRoute() {
       <main className="px-4 bg-[white] rounded-xl ">
         {/* Форму тепер обгортаємо в onSubmit */}
         {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleRouteSubmit(type, id, dataLayoutBus, sessionUser, router))}>
           {/* TextField з react-hook-form */}
 
           {/* Додавання CustomDatePicker */}

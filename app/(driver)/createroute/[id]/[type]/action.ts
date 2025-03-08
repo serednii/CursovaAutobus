@@ -27,42 +27,6 @@ import { SeatStatusEnum } from "@/enum/shared.enums";
 //   wifi: false,
 // };
 
-export const handleChangeVariantBus = (
-  number: number,
-  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>,
-  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>,
-  dataLayoutBus?: IBusSeats[]
-) => {
-  console.log("handleChangeVariantBus+++++++++++++++", number);
-  setIndexSelectVariantBus(number);
-  if (dataLayoutBus) {
-    const selectLayoutsData = layoutsData[number].passenger.map((e) => {
-      const findSeats = dataLayoutBus.find((seat) => seat.number === e.number);
-      return { ...e, busSeatStatus: findSeats?.busSeatStatus || SeatStatusEnum.AVAILABLE, passenger: findSeats?.passenger || null };
-    });
-    setDataLayoutBus({ ...layoutsData[number], passenger: selectLayoutsData });
-  } else {
-    setDataLayoutBus(layoutsData[number]);
-  }
-};
-
-export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
-  res: T,
-  setValue: UseFormSetValue<FormValuesRoute>,
-  setStartStops: React.Dispatch<React.SetStateAction<string[]>>,
-  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>,
-  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>
-) => {
-  setValue("routePrice", String(res.routePrice));
-  setValue("departureFrom", res.departureFrom);
-  setValue("arrivalTo", res.arrivalTo);
-  setValue("busNumber", res.modelBus);
-  setValue("selectBusLayout", res.modelBus);
-  setStartStops(res.intermediateStops.map((e) => e.stopName));
-  const findIndexLayoutsBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
-  handleChangeVariantBus(findIndexLayoutsBus, setDataLayoutBus, setIndexSelectVariantBus, "busSeats" in res ? res.busSeats : undefined);
-};
-
 export const transformData = (data: FormValuesRoute, dataLayoutBus: ILayoutData, sessionUser: UserSession): ISendDataBaseRouteDriver => {
   console.log("data", data);
   console.log("dataLayoutBus", dataLayoutBus);
@@ -105,4 +69,40 @@ export const transformData = (data: FormValuesRoute, dataLayoutBus: ILayoutData,
     bookedSeats: newFormatPassenger.filter((e) => e.busSeatStatus === "reserved").length,
     passengersSeatsList: [passengersSeatsList],
   };
+};
+
+export const handleChangeVariantBus = (
+  number: number,
+  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>,
+  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>,
+  dataLayoutBus?: IBusSeats[]
+) => {
+  console.log("handleChangeVariantBus+++++++++++++++", number);
+  setIndexSelectVariantBus(number);
+  if (dataLayoutBus) {
+    const selectLayoutsData = layoutsData[number].passenger.map((e) => {
+      const findSeats = dataLayoutBus.find((seat) => seat.number === e.number);
+      return { ...e, busSeatStatus: findSeats?.busSeatStatus || SeatStatusEnum.AVAILABLE, passenger: findSeats?.passenger || null };
+    });
+    setDataLayoutBus({ ...layoutsData[number], passenger: selectLayoutsData });
+  } else {
+    setDataLayoutBus(layoutsData[number]);
+  }
+};
+
+export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
+  res: T,
+  setValue: UseFormSetValue<FormValuesRoute>,
+  setStartStops: React.Dispatch<React.SetStateAction<string[]>>,
+  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>,
+  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>
+) => {
+  setValue("routePrice", String(res.routePrice));
+  setValue("departureFrom", res.departureFrom);
+  setValue("arrivalTo", res.arrivalTo);
+  setValue("busNumber", res.modelBus);
+  setValue("selectBusLayout", res.modelBus);
+  setStartStops(res.intermediateStops.map((e) => e.stopName));
+  const findIndexLayoutsBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
+  handleChangeVariantBus(findIndexLayoutsBus, setDataLayoutBus, setIndexSelectVariantBus, "busSeats" in res ? res.busSeats : undefined);
 };
