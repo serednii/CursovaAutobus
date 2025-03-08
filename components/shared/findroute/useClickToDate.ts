@@ -1,9 +1,8 @@
 import { IGetSearchRouteOne, IGetSearchRouteOneOption, searchRouteOne } from "@/fetchFunctions/searchRoute";
 import { selectOne } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+import { IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
 import { useEffect, useState } from "react";
-interface IGetSearchRouteOneOptionData {
-  select: IGetSearchRouteOneOption;
-}
+
 const data: IGetSearchRouteOneOptionData = {
   select: selectOne,
 };
@@ -25,7 +24,7 @@ export const useClickToDate = ({
   useEffect(() => {
     if (clickToDate) {
       setIsLoadingOne(true);
-      searchRouteOne<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(data)
+      searchRouteOne([data])
         .then((response: IGetSearchRouteOne[] | null) => {
           if (response) {
             console.log("response", response);

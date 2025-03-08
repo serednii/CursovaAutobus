@@ -10,18 +10,19 @@ import { FormValuesRoute } from "@/types/form.types";
 import { selectMany, selectOne } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
+import { IGetSearchRouteManyOptionData } from "@/types/searchRoute.types";
 
-interface IGetSearchRouteManyOptionData {
-  departureSearch: string | undefined;
-  arrivalToSearch: string | undefined;
-  endOfDay: Date;
-  startOfDay: Date;
-  wifi: boolean;
-  coffee: boolean;
-  power: boolean;
-  restRoom: boolean;
-  select: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList;
-}
+// export interface IGetSearchRouteManyOptionData {
+//   departureSearch: string | undefined;
+//   arrivalToSearch: string | undefined;
+//   endOfDay: Date;
+//   startOfDay: Date;
+//   wifi: boolean;
+//   coffee: boolean;
+//   power: boolean;
+//   restRoom: boolean;
+//   select: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList;
+// }
 
 interface IUseSearchRouteMany {
   setIsLoadingOne: React.Dispatch<React.SetStateAction<boolean>>;
@@ -70,7 +71,7 @@ export const useSearchRouteMany = ({
 
       if (departureFrom || arrivalTo || departureDate) {
         setIsLoadingOne(true);
-        searchRouteMany<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(data)
+        searchRouteMany([data])
           .then((response: IGetSearchRouteMany[] | null) => {
             if (response) {
               console.log("response", response);
