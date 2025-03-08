@@ -45,7 +45,7 @@ const CustomDatePicker = ({
         render={({ field }) => (
           <DatePicker
             className="w-[100%]"
-            selected={field.value}
+            selected={field.value instanceof Date ? field.value : null}
             onChange={(date: Date | null) => {
               setSelectedDate(date);
               field.onChange(date);
@@ -63,9 +63,10 @@ const CustomDatePicker = ({
               <TextField
                 label={title}
                 {...field}
+                value={field.value instanceof Date ? field.value.toLocaleDateString() : ""} //add new change
                 placeholder="MM/DD/YYYY HH:MM"
                 error={!!errors[name]}
-                // helperText={errors[name]?.message}
+                helperText={errors[name]?.message}
                 InputProps={{
                   style: { height: "42px" },
                   startAdornment: (

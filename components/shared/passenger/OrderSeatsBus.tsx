@@ -22,6 +22,7 @@ import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
 interface Props {
   route: IGetRouteSeatSelection;
 }
+const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 
 const transformData = (id: number, data: SubPassengerGroup, dataLayoutBus: ILayoutData, sessionUser: UserSession): IUpdateRoute => {
   //change status selected to reserved
@@ -155,14 +156,14 @@ export default function OrderSeatsBus({ route }: Props) {
         if (response) {
           // setOpen(true);
           toast.success("Your reservation has been successfully completed", {
-            duration: 5000,
+            duration: timeShowToast,
           });
-          await new Promise((resolve) => setTimeout(() => resolve(null), 5000));
+          await new Promise((resolve) => setTimeout(() => resolve(null), timeShowToast));
           router.push("/mybookings");
         } else {
           console.log("No data received or an error occurred.");
           toast.error("Your reservation has not been completed", {
-            duration: 5000,
+            duration: timeShowToast,
           });
         }
       })

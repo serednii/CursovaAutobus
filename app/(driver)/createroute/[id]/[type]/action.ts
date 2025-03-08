@@ -1,49 +1,72 @@
-import { z } from "zod";
 import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
-import { ISubPassengersList } from "@/types/interface";
+import { IBusSeats, ISubPassengersList } from "@/types/interface";
+import { UseFormSetValue } from "react-hook-form";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
+import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
+import { SeatStatusEnum } from "@/enum/shared.enums";
 
-// const subPassengerSchema = z.object({
-//   subFirstName: z.string().min(1, "First name is required"),
-//   subLastName: z.string().min(1, "Last name is required"),
-//   subPhone: z.string().min(1, "Phone is required"),
-//   subEmail: z.string().email("Invalid email format"),
-// });
+// const exampleRote = {
+//   arrivalDate: " Fri Mar 14 2025 20:00:00 GMT+0100 (Центральная Европа, стандартное время)",
+//   arrivalTo: "Львів",
+//   busNumber: "33456",
+//   coffee: true,
+//   departureDate: "Fri Mar 07 2025 20:15:00 GMT+0100 (Центральная Европа, стандартное время) ",
+//   departureFrom: "New York",
+//   intermediateStops: ["stop1", "stop2"],
+//   power: true,
+//   restRoom: false,
+//   routePrice: "456",
+//   selectBusLayout: 0,
+//   subEmail?: ["RESERVATIONDRIVER@gmail.com", "RESERVATIONDRIVER@gmail.com"],
+//   subFirstName?: ["RESERVATION DRIVER", "RESERVATION DRIVER"],
+//   subLastName?: ["RESERVATION DRIVER", "RESERVATION DRIVER"],
+//   subPhone?: ["476757575700", "476757575700"],
+//   wifi: false,
+// };
 
-const transformDataSchema = z.object({
-  data: z.object({
-    routePrice: z
-      .string()
-      .min(1)
-      .regex(/^[0-9]+$/, "Route price must be a number"),
-    departureDate: z.date().min(new Date(), "Departure date is required"),
-    selectBusLayout: z.string(),
-    intermediateStops: z.array(z.string()).optional(),
-    subFirstName: z.array(z.string()).optional(),
-    subLastName: z.array(z.string()).optional(),
-    subPhone: z.array(z.string()).optional(),
-    subEmail: z.array(z.string()).optional(),
-  }),
-  dataLayoutBus: z.object({
-    modelBus: z.string().min(1, "Model bus is required"),
-    passenger: z.array(
-      z.object({
-        number: z.number(),
-        busSeatStatus: z.string(),
-        passenger: z.number().nullable(),
-      })
-    ),
-  }),
-});
+export const handleChangeVariantBus = (
+  number: number,
+  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>,
+  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>,
+  dataLayoutBus?: IBusSeats[]
+) => {
+  console.log("handleChangeVariantBus+++++++++++++++", number);
+  setIndexSelectVariantBus(number);
+  if (dataLayoutBus) {
+    const selectLayoutsData = layoutsData[number].passenger.map((e) => {
+      const findSeats = dataLayoutBus.find((seat) => seat.number === e.number);
+      return { ...e, busSeatStatus: findSeats?.busSeatStatus || SeatStatusEnum.AVAILABLE, passenger: findSeats?.passenger || null };
+    });
+    setDataLayoutBus({ ...layoutsData[number], passenger: selectLayoutsData });
+  } else {
+    setDataLayoutBus(layoutsData[number]);
+  }
+};
+
+export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
+  res: T,
+  setValue: UseFormSetValue<FormValuesRoute>,
+  setStartStops: React.Dispatch<React.SetStateAction<string[]>>,
+  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>,
+  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>
+) => {
+  setValue("routePrice", String(res.routePrice));
+  setValue("departureFrom", res.departureFrom);
+  setValue("arrivalTo", res.arrivalTo);
+  setValue("busNumber", res.modelBus);
+  setValue("selectBusLayout", res.modelBus);
+  setStartStops(res.intermediateStops.map((e) => e.stopName));
+  const findIndexLayoutsBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
+  handleChangeVariantBus(findIndexLayoutsBus, setDataLayoutBus, setIndexSelectVariantBus, "busSeats" in res ? res.busSeats : undefined);
+};
 
 export const transformData = (data: FormValuesRoute, dataLayoutBus: ILayoutData, sessionUser: UserSession): ISendDataBaseRouteDriver => {
   console.log("data", data);
   console.log("dataLayoutBus", dataLayoutBus);
   console.log("sessionUser", sessionUser);
-  // Валідація даних за допомогою Zod
-  transformDataSchema.parse({ data, dataLayoutBus });
 
   const newFormatPassenger = dataLayoutBus.passenger.map(({ number, busSeatStatus, passenger }) => ({
     number,
@@ -56,27 +79,16 @@ export const transformData = (data: FormValuesRoute, dataLayoutBus: ILayoutData,
     idPassenger: Number(sessionUser?.id),
   };
 
-  if (
-    data.subFirstName &&
-    data.subLastName &&
-    data.subPhone &&
-    data.subEmail &&
-    Array.isArray(data.subFirstName) &&
-    Array.isArray(data.subLastName) &&
-    Array.isArray(data.subPhone) &&
-    Array.isArray(data.subEmail) &&
-    data.subFirstName.length === data.subLastName.length &&
-    data.subLastName.length === data.subPhone.length &&
-    data.subPhone.length === data.subEmail.length
-  ) {
-    const subPassengersList = data.subFirstName.map((_, index) => ({
-      subFirstName: data.subFirstName ? data.subFirstName[index] : "",
-      subLastName: data.subLastName ? data.subLastName[index] : "",
-      subPhone: data.subPhone ? data.subPhone[index] : "",
-      subEmail: data.subEmail ? data.subEmail[index] : "",
-    }));
-
-    passengersSeatsList.subPassengersList = subPassengersList;
+  if (data?.subFirstName && data?.subLastName && data?.subPhone && data?.subEmail) {
+    if (data?.subFirstName && data.subFirstName.length > 0) {
+      const subPassengersList = data.subFirstName?.map((_, index) => ({
+        subFirstName: data.subFirstName ? data.subFirstName[index] : "",
+        subLastName: data.subLastName ? data.subLastName[index] : "",
+        subPhone: data.subPhone ? data.subPhone[index] : "",
+        subEmail: data.subEmail ? data.subEmail[index] : "",
+      }));
+      passengersSeatsList.subPassengersList = subPassengersList;
+    }
   }
 
   return {

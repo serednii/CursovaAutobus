@@ -4,8 +4,6 @@ export interface FormValuesRoute extends SubPassengerGroup, IDateISO, IServiceBu
   intermediateStops: string[];
   busNumber: string;
   routePrice: string;
-  busSeats: any;
-  passengersListId: number[];
   driverId: number;
   selectBusLayout: string;
 }

@@ -57,7 +57,6 @@ const SearchDataPicker = ({ name, title, control, errors, className, watch, high
       return false;
     });
 
-    // console.log("isHighlighted", isHighlighted);
     return isHighlighted ? "highlighted-day" : ""; // Додаємо клас, якщо дата підсвічена
   };
 
@@ -78,7 +77,7 @@ const SearchDataPicker = ({ name, title, control, errors, className, watch, high
             />
             <DatePicker
               className="w-[100%]  border border-gray-300"
-              selected={field.value}
+              selected={field.value instanceof Date ? field.value : null}
               onChange={(date: Date | null) => {
                 setSelectedDate(date);
                 field.onChange(date);
@@ -93,9 +92,9 @@ const SearchDataPicker = ({ name, title, control, errors, className, watch, high
               customInput={
                 <TextField
                   label={title}
-                  value={field.value || ""}
-                  onChange={field.onChange}
-                  // error={!!errors[name]}
+                  value={field.value instanceof Date ? field.value.toLocaleDateString() : ""}
+                  onChange={() => {}}
+                  error={!!errors[name]}
                   InputLabelProps={{
                     style: { top: "-20px", fontWeight: "bold", zIndex: 10, fontSize: "20px" },
                   }}

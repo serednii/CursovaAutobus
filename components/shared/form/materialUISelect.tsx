@@ -23,11 +23,11 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
     setSelectedValue(event.target.value); // Оновлюємо локальний стан
     handleChangeVariantBus(value); // Викликаємо зовнішню функцію-обробник
   };
+
   useEffect(() => {
-    if (indexSelectVariantBus !== null) {
-      setSelectedValue(String(indexSelectVariantBus)); // Оновлюємо локальний стан з indexSelectVariantBus
-    }
+    setSelectedValue(String(indexSelectVariantBus || "")); // Оновлюємо локальний стан з indexSelectVariantBus
   }, [indexSelectVariantBus]);
+
   console.log("indexSelectVariantBus+++++++++++++", indexSelectVariantBus);
 
   return (

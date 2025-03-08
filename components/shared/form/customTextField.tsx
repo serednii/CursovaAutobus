@@ -20,7 +20,13 @@ export default function CustomTextField({ register, errors, name, title, classNa
       </label>
       <TextField
         id={name}
-        {...register(name)}
+        {...register(name, {
+          required: "This field is required.",
+          minLength: {
+            value: 1,
+            message: `Minimum 1 symbol license`,
+          },
+        })}
         variant="outlined"
         fullWidth
         InputProps={{
