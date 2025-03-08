@@ -15,7 +15,7 @@ import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import MyScaleLoader from "@/components/ui/MyScaleLoader";
 import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
-import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders";
+import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders/SubPassengersOrders";
 
 import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";

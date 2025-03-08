@@ -4,7 +4,7 @@ import LayoutBus from "../layoutBus/LayuotBus";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { useSession } from "next-auth/react";
 import { Button } from "@mui/material";
-import SubPassengersOrders from "../form/SubPassengersOrders";
+import SubPassengersOrders from "../form/SubPassengersOrders/SubPassengersOrders";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ISubPassengersList } from "@/types/interface";
 import { FormValuesRoute, SubPassengerGroup } from "@/types/form.types";
