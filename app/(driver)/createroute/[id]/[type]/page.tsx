@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useSession } from "next-auth/react";
@@ -24,17 +24,15 @@ import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
-import { IGetRouteAgain, IGetRouteUpdate, IGetSearchRouteAgainOption, IGetSearchRouteUpdateOption } from "@/fetchFunctions/fetchGetRoutesById";
-import { IBusSeats } from "@/types/interface";
 
 import { handleChangeVariantBus, transformData, updateValues } from "./action";
 import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
-import { fetchGetRoutesByIdAgain, fetchGetRoutesByIdUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
 import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodBase";
 import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
+import { useFetchRoute } from "./useFetchRoute";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -66,7 +64,7 @@ export default function CreateRoute() {
 
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
-  const [route, setRoute] = useState<IGetRouteUpdate | IGetRouteAgain | null>(null);
+  // const [route, setRoute] = useState<IGetRouteUpdate | IGetRouteAgain | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
 
   const renderRef = useRef(0);
@@ -76,7 +74,7 @@ export default function CreateRoute() {
   const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
   const userIdSession = Number(sessionUser?.id);
 
-  console.log("CreateRoute params id", id, type, route);
+  console.log("CreateRoute params id", id, type);
   console.log("CreateRoute params watch", watch());
 
   const idOrderPassengers = useMemo(
@@ -91,31 +89,17 @@ export default function CreateRoute() {
   //Кількість пасажирів в кожному автобусі
   const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
 
-  useEffect(() => {
-    if (id !== 0) {
-      if (type === "change") {
-        fetchGetRoutesByIdUpdate<IGetSearchRouteUpdateOption, IGetRouteUpdate[]>([Number(id)], selectRouteUpdate).then(
-          (result: IGetRouteUpdate[]) => {
-            const res = result[0];
-            updateValues<IGetRouteUpdate>(res, setValue, setStartStops, setDataLayoutBus, setIndexSelectVariantBus);
-            setValue("departureDate", new Date(res.departureDate));
-            setValue("arrivalDate", new Date(res.arrivalDate));
-            setValue("wifi", res.wifi);
-            setValue("coffee", res.coffee);
-            setValue("power", res.power);
-            setValue("restRoom", res.restRoom);
-            setRoute(res);
-          }
-        );
-      } else if (type === "again") {
-        fetchGetRoutesByIdAgain<IGetSearchRouteAgainOption, IGetRouteAgain[]>([Number(id)], selectRouteAgain).then((result: IGetRouteAgain[]) => {
-          const res = result[0];
-          updateValues<IGetRouteAgain>(res, setValue, setStartStops, setDataLayoutBus, setIndexSelectVariantBus);
-          setRoute(res);
-        });
-      }
-    }
-  }, [id, type]);
+  const { route } = useFetchRoute({
+    id,
+    type,
+    selectRouteUpdate,
+    selectRouteAgain,
+    setValue,
+    updateValues,
+    setStartStops,
+    setDataLayoutBus,
+    setIndexSelectVariantBus,
+  });
 
   console.log("idOrderPassengers", idOrderPassengers);
 
