@@ -18,14 +18,11 @@ export default async function SeatSelection({ params }: Props) {
   const session = await getServerSession(authConfig);
   const driverId: string | undefined = session?.user.id;
 
-  const routeArray = await fetchGetRoutesByIdSeatSelection<IGetSearchRouteSeatSelectionOption, IGetRouteSeatSelection[]>(
-    [Number(id)],
-    selectSeatSelection
-  );
+  const routeArray = await fetchGetRoutesByIdSeatSelection([Number(id)], selectSeatSelection);
 
-  const route = routeArray && routeArray[0];
+  const route = routeArray ? routeArray[0] : null;
 
-  if (route.busSeats) {
+  if (route && route.busSeats) {
     const updatedPassengers = route.busSeats.map((e) => {
       if (e.passenger === Number(driverId) && e.busSeatStatus === SeatStatusEnum.RESERVED) {
         return { ...e, busSeatStatus: SeatStatusEnum.SELECTED };
@@ -39,7 +36,7 @@ export default async function SeatSelection({ params }: Props) {
     <Container className="pt-4">
       <SelectedBusInfo route={route} />
       <OrderSeatsBus key={Math.random()} route={route} />
-      MyBookings Driver Id {route.driverId} Session user.id {session?.user.id}
+      MyBookings Driver Id {route?.driverId} Session user.id {session?.user.id}
     </Container>
   );
 }

@@ -20,7 +20,7 @@ import { zodSchemaUpdateRouteIn } from "@/zod_shema/zodGetUpdateRoute";
 import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
 
 interface Props {
-  route: IGetRouteSeatSelection;
+  route: IGetRouteSeatSelection | null;
 }
 const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 
@@ -106,12 +106,7 @@ export default function OrderSeatsBus({ route }: Props) {
   const userIdSession = Number(sessionUser?.id);
   const idOrderPassengers = dataLayoutBus && dataLayoutBus.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
 
-  console.log("RENDER OrderSeatsBus **********************************************");
-  console.log("OrderSeatsBus--idOrderPassengers", idOrderPassengers, renderRef.current);
-  // console.log("OrderSeatsBus route", route);
-  // console.log("OrderSeatsBus--dataLayoutBus", dataLayoutBus);
-
-  const myListPassengers = useMemo(() => route.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route, userIdSession]);
+  const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route, userIdSession]);
 
   console.log("OrderSeatsBus myListPassenger", myListPassengers);
 
@@ -180,7 +175,7 @@ export default function OrderSeatsBus({ route }: Props) {
             dataLayoutBus={dataLayoutBus}
             setDataLayoutBus={setDataLayoutBus}
             action={RoleEnum.PASSENGER}
-            driverId={route.driverId}
+            driverId={route?.driverId}
           />
         )}
 
@@ -208,7 +203,7 @@ export default function OrderSeatsBus({ route }: Props) {
         </Button>
       </form>
       <p>
-        RouteDriverId {route.driverId} UserId {sessionUser?.id}
+        RouteDriverId {route?.driverId} UserId {sessionUser?.id}
       </p>
     </>
   );

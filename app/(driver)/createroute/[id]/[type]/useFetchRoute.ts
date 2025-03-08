@@ -45,23 +45,21 @@ export const useFetchRoute = ({
   useEffect(() => {
     if (id !== 0) {
       if (type === "change") {
-        fetchGetRoutesByIdUpdate<IGetSearchRouteUpdateOption, IGetRouteUpdate[]>([Number(id)], selectRouteUpdate).then(
-          (result: IGetRouteUpdate[]) => {
-            if (result.length === 0) return;
-            const res = result[0];
-            updateValues(res, setValue, setStartStops, setDataLayoutBus, setIndexSelectVariantBus);
-            setValue("departureDate", new Date(res.departureDate));
-            setValue("arrivalDate", new Date(res.arrivalDate));
-            setValue("wifi", res.wifi);
-            setValue("coffee", res.coffee);
-            setValue("power", res.power);
-            setValue("restRoom", res.restRoom);
-            setRoute(res);
-          }
-        );
+        fetchGetRoutesByIdUpdate([Number(id)], selectRouteUpdate).then((result: IGetRouteUpdate[] | null) => {
+          if (result === null || result.length === 0) return;
+          const res = result[0];
+          updateValues(res, setValue, setStartStops, setDataLayoutBus, setIndexSelectVariantBus);
+          setValue("departureDate", new Date(res.departureDate));
+          setValue("arrivalDate", new Date(res.arrivalDate));
+          setValue("wifi", res.wifi);
+          setValue("coffee", res.coffee);
+          setValue("power", res.power);
+          setValue("restRoom", res.restRoom);
+          setRoute(res);
+        });
       } else if (type === "again") {
-        fetchGetRoutesByIdAgain<IGetSearchRouteAgainOption, IGetRouteAgain[]>([Number(id)], selectRouteAgain).then((result: IGetRouteAgain[]) => {
-          if (result.length === 0) return;
+        fetchGetRoutesByIdAgain([Number(id)], selectRouteAgain).then((result: IGetRouteAgain[] | null) => {
+          if (result === null || result.length === 0) return;
           const res = result[0];
           updateValues(res, setValue, setStartStops, setDataLayoutBus, setIndexSelectVariantBus);
           setRoute(res);

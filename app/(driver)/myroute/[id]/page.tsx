@@ -15,10 +15,7 @@ interface Props {
 export default async function MyRoute({ params }: Props) {
   const { id } = await params;
 
-  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesByIdMyRoute<IGetSearchRouteMyRouteOption, IGetRouteMyRoute[]>(
-    [Number(id)],
-    selectRoute
-  );
+  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesByIdMyRoute([Number(id)], selectRoute);
 
   const [route] = formatDate(routeRaw);
 

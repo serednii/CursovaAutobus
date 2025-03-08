@@ -1,10 +1,8 @@
 "use client";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
-import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { cn } from "@/lib/utils";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
-import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -15,7 +13,7 @@ interface Props {
   setDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
   action: RoleEnum;
-  driverId: number;
+  driverId: number | null | undefined;
 }
 
 export default function PassengerSeat(props: Props) {
@@ -35,10 +33,6 @@ export default function PassengerSeat(props: Props) {
   useEffect(() => {
     params.busSeatStatus = changeStatus.busSeatStatus;
     params.passenger = changeStatus.passenger;
-
-    // console.log(params, dataPassenger);
-    // console.log("PassengerSeat ************************** ----", dataLayoutBus);
-
     setDataLayoutBus({ ...dataLayoutBus });
   }, [changeStatus.busSeatStatus]);
 
@@ -58,24 +52,18 @@ export default function PassengerSeat(props: Props) {
       let updatedStatus: SeatStatusEnum = SeatStatusEnum.AVAILABLE;
       if ((user === RoleEnum.DRIVER && Number(sessionUser?.id) === driverId) || driverId === 0) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.RESERVEDEMPTY : SeatStatusEnum.AVAILABLE;
-        // updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
-        // if (action === RoleEnum.PASSENGER) {
-        // } else if (action === RoleEnum.DRIVER) {
-        // }
       } else if (user === RoleEnum.DRIVER && sessionUserId !== driverId) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
       } else if (user === RoleEnum.PASSENGER) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
       }
 
-      // console.log(updatedStatus);
-
       const res = {
         ...prevParams, // Зберігаємо всі інші властивості без змін
         busSeatStatus: updatedStatus, // Оновлюємо статус сидіння
         passenger: updatedStatus === SeatStatusEnum.AVAILABLE ? null : sessionUserId, // Оновлюємо пасажира
       };
-      // Повертаємо новий об'єкт params з оновленими значеннями
+
       return res;
     });
   };

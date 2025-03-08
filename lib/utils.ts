@@ -39,7 +39,8 @@ export const firstLetterUpperCase = (string: string | undefined): string | undef
   );
 };
 
-export const formatDate = <T extends { arrivalDate: string; departureDate: string }>(dateArray: T[]): T[] => {
+export const formatDate = <T extends { arrivalDate: string; departureDate: string }>(dateArray: T[] | null): T[] => {
+  if (!dateArray) return [];
   return dateArray.map((route: T) => {
     return {
       ...route,

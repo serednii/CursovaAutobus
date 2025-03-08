@@ -16,7 +16,7 @@ interface Props {
   setDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
   action: RoleEnum;
-  driverId: number;
+  driverId: number | undefined | null;
 }
 
 export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser, action, driverId }: Props) {

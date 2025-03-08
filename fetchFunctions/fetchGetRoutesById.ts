@@ -6,6 +6,7 @@ import {
   ZodFetchGetRoutesByIdSeatSelection,
   ZodFetchGetRoutesByIdUpdate,
 } from "@/zod_shema/zodGetRoutesById";
+import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -81,7 +82,7 @@ export type IGetRouteAgain = GenerateType<IRouteDataBase, Exclude<selectRouteAga
 
 //********************************************************** */
 
-export default async function fetchGetRoutesById<TResult, TSelect>(id: number[], select: TSelect): Promise<TResult> {
+export default async function fetchGetRoutesById<TResult, TSelect>(id: number[], select: TSelect): Promise<TResult | null> {
   try {
     // console.log("Відправка запиту:", id, select);
 
@@ -92,8 +93,6 @@ export default async function fetchGetRoutesById<TResult, TSelect>(id: number[],
       },
       body: JSON.stringify({ id, select }),
     });
-
-    // console.log("Отримано відповідь:", response.status, response.statusText);
 
     if (!response.ok) {
       throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
@@ -112,101 +111,123 @@ export default async function fetchGetRoutesById<TResult, TSelect>(id: number[],
   }
 }
 
-export const fetchGetRoutesByIdSeatSelection = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteSeatSelection[]> => {
-  try {
-    const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
-
-    if (!res) {
-      throw new Error("Помилка: отримано null або undefined");
-    }
-
-    console.log("res1111", res);
+const createFetchGetRoutesByIdFetcher = <TResult, TSelect>(schema: z.ZodSchema<TResult>) => {
+  return async (id: number[], select: TSelect): Promise<TResult | null> => {
     try {
-      const parsedData = ZodFetchGetRoutesByIdSeatSelection.parse(res);
-      return parsedData;
+      const result = await fetchGetRoutesById<TResult, TSelect>(id, select);
+      if (!result) {
+        throw new Error("Помилка: отримано null або undefined");
+      }
+      return schema.parse(result);
     } catch (parseError) {
       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
     }
-  } catch (error) {
-    console.error("Помилка при отриманні або парсингу:", error);
-    throw error;
-  }
+  };
 };
 
-export const fetchGetRoutesByIdMyRoute = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteMyRoute[]> => {
-  try {
-    const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
+export const fetchGetRoutesByIdSeatSelection = createFetchGetRoutesByIdFetcher<IGetRouteSeatSelection[], IGetSearchRouteSeatSelectionOption>(
+  ZodFetchGetRoutesByIdSeatSelection
+);
 
-    // console.log("res2222", res);
+// export const fetchGetRoutesByIdSeatSelection = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteSeatSelection[]> => {
+//   try {
+//     const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
 
-    if (!res) {
-      throw new Error("Помилка: отримано null або undefined");
-    }
+//     if (!res) {
+//       throw new Error("Помилка: отримано null або undefined");
+//     }
 
-    // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
+//     console.log("res1111", res);
+//     try {
+//       const parsedData = ZodFetchGetRoutesByIdSeatSelection.parse(res);
+//       return parsedData;
+//     } catch (parseError) {
+//       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
+//     }
+//   } catch (error) {
+//     console.error("Помилка при отриманні або парсингу:", error);
+//     throw error;
+//   }
+// };
 
-    try {
-      const parsedData = ZodFetchGetRoutesByIdMyRoute.parse(res);
-      return parsedData;
-    } catch (parseError) {
-      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
-    }
+export const fetchGetRoutesByIdMyRoute = createFetchGetRoutesByIdFetcher<IGetRouteMyRoute[], IGetSearchRouteMyRouteOption>(
+  ZodFetchGetRoutesByIdMyRoute
+);
+// export const fetchGetRoutesByIdMyRoute1 = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteMyRoute[]> => {
+//   try {
+//     const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
 
-    // return res;
-  } catch (error) {
-    console.error("Помилка при отриманні або парсингу:", error);
-    throw error;
-  }
-};
+//     // console.log("res2222", res);
 
-export const fetchGetRoutesByIdUpdate = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteUpdate[]> => {
-  try {
-    const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
+//     if (!res) {
+//       throw new Error("Помилка: отримано null або undefined");
+//     }
 
-    // console.log("res2222", res);
+//     // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
 
-    if (!res) {
-      throw new Error("Помилка: отримано null або undefined");
-    }
+//     try {
+//       const parsedData = ZodFetchGetRoutesByIdMyRoute.parse(res);
+//       return parsedData;
+//     } catch (parseError) {
+//       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
+//     }
 
-    // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
+//     // return res;
+//   } catch (error) {
+//     console.error("Помилка при отриманні або парсингу:", error);
+//     throw error;
+//   }
+// };
 
-    try {
-      const parsedData = ZodFetchGetRoutesByIdUpdate.parse(res);
-      return parsedData;
-    } catch (parseError) {
-      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
-    }
+export const fetchGetRoutesByIdUpdate = createFetchGetRoutesByIdFetcher<IGetRouteUpdate[], IGetSearchRouteUpdateOption>(ZodFetchGetRoutesByIdUpdate);
+// export const fetchGetRoutesByIdUpdate = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteUpdate[]> => {
+//   try {
+//     const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
 
-    // return res;
-  } catch (error) {
-    console.error("Помилка при отриманні або парсингу:", error);
-    throw error;
-  }
-};
+//     // console.log("res2222", res);
 
-export const fetchGetRoutesByIdAgain = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteAgain[]> => {
-  try {
-    const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
+//     if (!res) {
+//       throw new Error("Помилка: отримано null або undefined");
+//     }
 
-    console.log("res2222", res);
+//     // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
 
-    if (!res) {
-      throw new Error("Помилка: отримано null або undefined");
-    }
+//     try {
+//       const parsedData = ZodFetchGetRoutesByIdUpdate.parse(res);
+//       return parsedData;
+//     } catch (parseError) {
+//       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
+//     }
 
-    // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
+//     // return res;
+//   } catch (error) {
+//     console.error("Помилка при отриманні або парсингу:", error);
+//     throw error;
+//   }
+// };
+export const fetchGetRoutesByIdAgain = createFetchGetRoutesByIdFetcher<IGetRouteAgain[], IGetSearchRouteAgainOption>(ZodFetchGetRoutesByIdAgain);
+// export const fetchGetRoutesByIdAgain = async <TSelect, TResult>(id: number[], data: TSelect): Promise<IGetRouteAgain[]> => {
+//   try {
+//     const res = await fetchGetRoutesById<TResult, TSelect>(id, data);
 
-    try {
-      const parsedData = ZodFetchGetRoutesByIdAgain.parse(res);
-      return parsedData;
-    } catch (parseError) {
-      throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
-    }
+//     console.log("res2222", res);
 
-    // return res;
-  } catch (error) {
-    console.error("Помилка при отриманні або парсингу:", error);
-    throw error;
-  }
-};
+//     if (!res) {
+//       throw new Error("Помилка: отримано null або undefined");
+//     }
+
+//     // Якщо потрібно валідувати через Zod, раскоментуйте цей рядок:
+
+//     try {
+//       const parsedData = ZodFetchGetRoutesByIdAgain.parse(res);
+//       return parsedData;
+//     } catch (parseError) {
+//       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
+//     }
+
+//     // return res;
+//   } catch (error) {
+//     console.error("Помилка при отриманні або парсингу:", error);
+//     throw error;
+//   }
+// };
