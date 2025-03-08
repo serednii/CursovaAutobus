@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Typography } from "@mui/material";
 
@@ -8,7 +8,6 @@ import CustomTextField from "@/components/shared/form/CustomTextField";
 
 import { FormValuesRoute } from "@/types/form.types";
 import "react-datepicker/dist/react-datepicker.css";
-import { useSession } from "next-auth/react";
 import SearchDataPicker from "@/components/shared/form/searchDataPicker/SearchDataPicker";
 import TableSearchRoutes from "@/components/shared/passenger/TableSearchRoutes";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
@@ -29,10 +28,6 @@ export default function FindRoute({ className }: { className?: string }) {
   const [highlightedDates, setHighlightedDates] = useState<Date[] | []>([]);
   const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);
   const [isLoadingOne, setIsLoadingOne] = useState(false);
-  const [idRoute, setIdRoute] = useState<string | null>(null);
-  const [transition, setTransition] = useState<string | null>(null);
-  // const { data: session, status } = useSession();
-  // const sessionIdUser = Number(session?.user.id);
 
   const {
     register,
@@ -43,20 +38,6 @@ export default function FindRoute({ className }: { className?: string }) {
     mode: "onChange",
   });
   const { sessionIdUser, status } = useFindRouteSession();
-  // useEffect(() => {
-  //   if (idRoute && transition === "seatselection" && status === "authenticated") {
-  //     sessionStorage.removeItem("idRoute");
-  //     sessionStorage.removeItem("transition");
-  //     router.push(`/seatselection/${idRoute}`);
-  //   }
-  // }, [idRoute, transition, status, router]);
-
-  // useEffect(() => {
-  //   const routeId = sessionStorage.getItem("idRoute");
-  //   const trans = sessionStorage.getItem("transition");
-  //   setIdRoute(routeId);
-  //   setTransition(trans);
-  // }, []);
 
   useSearchRouteMany({
     setIsLoadingOne,

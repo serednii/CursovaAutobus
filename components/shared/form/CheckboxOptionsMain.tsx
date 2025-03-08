@@ -11,54 +11,29 @@ interface Props {
   watch: UseFormWatch<FormValuesRoute>;
   className?: string;
 }
+const options = [
+  { name: "wifi", label: "Wi-Fi", icon: IoIosWifi },
+  { name: "coffee", label: "Coffee/Tea", icon: CgCoffee },
+  { name: "power", label: "Power Outlets", icon: MdOutlinePower },
+  { name: "restRoom", label: "RestRoom", icon: FaRestroom },
+];
 
 export default function CheckboxOptionsMain({ register, watch }: Props) {
   return (
     <div className="w-full grid grid-cols-1 justify-self-center min-[900px]:justify-self-start min-[500px]:grid-cols-2 min-[900px]:grid-cols-4 gap-4">
-      <FormControlLabel
-        className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
-        control={<Checkbox {...register("wifi")} />}
-        checked={watch("wifi") || false}
-        label={
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IoIosWifi style={{ marginRight: "8px", fontSize: "24px" }} />
-            Wi-Fi
-          </div>
-        }
-      />
-      <FormControlLabel
-        className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
-        control={<Checkbox {...register("coffee")} />}
-        checked={watch("coffee") || false}
-        label={
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CgCoffee style={{ marginRight: "8px", fontSize: "24px" }} />
-            Coffee/Tea
-          </div>
-        }
-      />
-      <FormControlLabel
-        className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
-        control={<Checkbox {...register("power")} />}
-        checked={watch("power") || false}
-        label={
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <MdOutlinePower style={{ marginRight: "8px", fontSize: "24px" }} />
-            Power Outlets
-          </div>
-        }
-      />
-      <FormControlLabel
-        className="pl-[10%] min-[300px]:pl-[20%] min-[900px]:pl-0"
-        control={<Checkbox {...register("restRoom")} />}
-        checked={watch("restRoom") || false}
-        label={
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <FaRestroom style={{ marginRight: "8px", fontSize: "24px" }} />
-            RestRoom
-          </div>
-        }
-      />
+      {options.map(({ name, label, icon: Icon }) => (
+        <FormControlLabel
+          key={name}
+          control={<Checkbox {...register(name as keyof FormValuesRoute)} />}
+          checked={watch(name as "power" | "restRoom") || false}
+          label={
+            <div className="flex items-center">
+              <Icon className="mr-2 text-xl" />
+              {label}
+            </div>
+          }
+        />
+      ))}
     </div>
   );
 }
