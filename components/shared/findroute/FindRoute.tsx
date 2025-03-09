@@ -13,7 +13,6 @@ import TableSearchRoutes from "@/components/shared/passenger/TableSearchRoutes";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
 import { cn } from "@/lib/utils";
 
-import { useRouter } from "next/navigation";
 import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
 import MyScaleLoader from "@/components/ui/MyScaleLoader";
 import { FindRouteContext } from "./findRouteContext";
@@ -22,8 +21,6 @@ import { useSearchRouteMany } from "./useSearchRouteMany";
 import { useFindRouteSession } from "./useFindRouteSession";
 
 export default function FindRoute({ className }: { className?: string }) {
-  const router = useRouter();
-
   const highlightedDatesRef = useRef<Date[] | []>([]);
   const [highlightedDates, setHighlightedDates] = useState<Date[] | []>([]);
   const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);

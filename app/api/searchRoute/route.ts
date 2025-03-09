@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       restRoom?: boolean;
     } = await req.json();
 
+    console.log("services search select", departureSearch, arrivalToSearch, select, startOfDay, endOfDay, wifi, coffee, power, restRoom, limit);
     // Формуємо діапазон часу для конкретного дня
     let dateFilter = {};
     if (startOfDay && endOfDay) {
@@ -45,25 +46,10 @@ export async function POST(req: NextRequest) {
         },
       };
     }
-    console.log("services search ", wifi, coffee, power, restRoom);
-    // Виконуємо пошук у базі даних
-    // const routes = await prisma.routeDriver.findMany({
-    //   where: {
-    //     departureFrom: departureSearch,
-    //     arrivalTo: arrivalToSearch,
-    //     wifi,
-    //     arrivalDate: {
-    //       gt: new Date(),
-    //     },
-    //     ...dateFilter, // Додаємо фільтр за конкретним днем, якщо є
-    //   },
-    //   take: limit,
-    //   select: select, // Вкажіть, які поля потрібні
-    // });
+
     const where: any = {
       departureFrom: {
         contains: departureSearch ?? "",
-        // mode: "insensitive",
       },
       arrivalTo: {
         contains: arrivalToSearch ?? "",
@@ -78,12 +64,15 @@ export async function POST(req: NextRequest) {
     if (wifi) {
       where.wifi = wifi;
     }
+
     if (coffee) {
       where.coffee = coffee;
     }
+
     if (power) {
       where.power = power;
     }
+
     if (restRoom) {
       where.restRoom = restRoom;
     }
@@ -91,7 +80,7 @@ export async function POST(req: NextRequest) {
     const routes = await prisma.routeDriver.findMany({
       where,
       take: limit,
-      select: select,
+      select,
     });
 
     //   const routes: RouteDriver[] | null = await prisma.$queryRaw<RouteDriver[]>`
@@ -103,7 +92,7 @@ export async function POST(req: NextRequest) {
     //   LIMIT ${limit}
     // `;
 
-    // console.log("routes****************", routes);
+    console.log("routes****************", routes);
 
     const safeRoutes = Array.isArray(routes) ? routes : []; // Гарантуємо, що це масив
 

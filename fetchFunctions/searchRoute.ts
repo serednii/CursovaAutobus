@@ -34,6 +34,7 @@ export type IGetSearchRouteOneOption = GenerateBooleanType<selectRouteOneKeys>;
 export type IGetSearchRouteOne = GenerateType<IRouteDataBase, selectRouteOneKeys>;
 
 const searchRoute = async <T, K>(data: T): Promise<K | null> => {
+  console.log("data searchRoute", data);
   try {
     const response = await fetch(`${API_URL}/api/searchRoute`, {
       cache: "no-cache",
@@ -60,7 +61,9 @@ export default searchRoute;
 // Фабрика для створення запитів із перевіркою даних  Патерн "Фабрика запитів" (Request Factory)
 const createSearchRouteFetcher = <T, K>(schema: z.ZodSchema<K>) => {
   return async (data: T): Promise<K | null> => {
+    console.log("data", data);
     const result = await searchRoute<T, K>(data);
+    console.log("result", result);
     try {
       return schema.parse(result);
     } catch (parseError) {
