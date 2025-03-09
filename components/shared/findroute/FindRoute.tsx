@@ -68,8 +68,9 @@ export default function FindRoute({ className }: { className?: string }) {
               name={"departureFrom"}
               title={"Departure From"}
               className="grow"
+              isList
             />
-            <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" />
+            <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" isList />
             <SearchDataPicker
               title="Departure Date"
               name="departureDate"
