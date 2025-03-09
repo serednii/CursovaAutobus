@@ -49,16 +49,15 @@ export default function OrderSeatsBus({ route }: Props) {
   });
   let sessionUser: UserSession | null = null;
   const { dataLayoutBus, setDataLayoutBus } = useBusLayoutData(route);
-  const { onSubmit } = useSubmitOrder(route?.id, dataLayoutBus, sessionUser);
-
   if (status === "authenticated") {
     sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   }
+  const { onSubmit } = useSubmitOrder(route?.id, dataLayoutBus, sessionUser);
 
   const userIdSession = Number(sessionUser?.id);
 
   const idOrderPassengers = dataLayoutBus && dataLayoutBus.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
-
+  console.log("iorderpassengers", idOrderPassengers);
   const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route, userIdSession]);
 
   return (
