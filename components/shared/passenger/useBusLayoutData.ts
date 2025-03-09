@@ -3,7 +3,7 @@ import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 
-const useBusLayoutData = (route: IGetRouteSeatSelection | null) => {
+const useBusLayoutData = (route: IGetRouteSeatSelection | undefined) => {
   const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
 
   useEffect(() => {

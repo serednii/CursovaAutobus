@@ -1,30 +1,21 @@
 "use client";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
-import { ILayoutData } from "@/types/layoutbus.types";
 import { useSession } from "next-auth/react";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders/SubPassengersOrders";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { ISubPassengersList } from "@/types/interface";
-import { FormValuesRoute, SubPassengerGroup } from "@/types/form.types";
-import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
-import { IUpdateRoute } from "@/types/route-passenger.types";
+import { useForm } from "react-hook-form";
+import { FormValuesRoute } from "@/types/form.types";
+import { RoleEnum } from "@/enum/shared.enums";
 import { useRouter } from "next/navigation";
-import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
-import toast from "react-hot-toast";
 import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
-import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
-import { zodSchemaUpdateRouteIn } from "@/zod_shema/zodGetUpdateRoute";
-import { MyDialogInfo } from "@/components/ui/MyDialogInfo/MyDialogInfo";
 import useBusLayoutData from "./useBusLayoutData";
 import useSubmitOrder from "./useSubmitOrder";
 
 interface Props {
-  route: IGetRouteSeatSelection | null;
+  route: IGetRouteSeatSelection | undefined;
 }
-const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 
 export default function OrderSeatsBus({ route }: Props) {
   const router = useRouter();

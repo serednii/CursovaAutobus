@@ -3,8 +3,7 @@ import { UseFormSetValue } from "react-hook-form";
 
 import { FormValuesRoute } from "@/types/form.types";
 import {
-  fetchGetRoutesByIdAgain,
-  fetchGetRoutesByIdUpdate,
+  fetchGetRoutesById,
   IGetRouteAgain,
   IGetRouteUpdate,
   IGetSearchRouteAgainOption,
@@ -45,7 +44,8 @@ export const useFetchRoute = ({
   useEffect(() => {
     if (id !== 0) {
       if (type === "change") {
-        fetchGetRoutesByIdUpdate([Number(id)], selectRouteUpdate).then((result: IGetRouteUpdate[] | null) => {
+        fetchGetRoutesById.strategySearchRoute([Number(id)], selectRouteUpdate, "ByIdUpdate").then((value) => {
+          const result = value as IGetRouteUpdate[] | null;
           if (result === null || result.length === 0) return;
           const res = result[0];
           updateValues(res, setValue, setStartStops, setDataLayoutBus, setIndexSelectVariantBus);
@@ -58,7 +58,8 @@ export const useFetchRoute = ({
           setRoute(res);
         });
       } else if (type === "again") {
-        fetchGetRoutesByIdAgain([Number(id)], selectRouteAgain).then((result: IGetRouteAgain[] | null) => {
+        fetchGetRoutesById.strategySearchRoute([Number(id)], selectRouteAgain, "byIdAgain").then((value) => {
+          const result = value as IGetRouteAgain[] | null;
           if (result === null || result.length === 0) return;
           const res = result[0];
           updateValues(res, setValue, setStartStops, setDataLayoutBus, setIndexSelectVariantBus);

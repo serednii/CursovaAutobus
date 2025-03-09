@@ -1,4 +1,4 @@
-import { IGetSearchRouteOne, IGetSearchRouteOneOption, searchRouteOne, strategySearchRoute } from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteOne, IGetSearchRouteOneOption, searchRoute } from "@/fetchFunctions/searchRoute";
 import { selectOne } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
 import { useEffect, useState } from "react";
@@ -24,22 +24,24 @@ export const useClickToDate = ({
   useEffect(() => {
     if (clickToDate) {
       setIsLoadingOne(true);
-      strategySearchRoute(data, "one").then((value) => {
-        const route = value as IGetSearchRouteOne[] | null;
-        if (route) {
-          console.log("response", route);
-          const dates: Date[] = route
-            .filter((item) => item.driverId !== sessionIdUser)
-            .map((route: { departureDate: string }) => new Date(route.departureDate));
-          //update list date routes
-          setHighlightedDates(dates);
-          highlightedDatesRef.current = dates;
-        } else {
-          console.log("No data received or an error occurred.");
-        }
-      });
-      // .catch((err) => console.error("Fetch failed:", err))
-      // .finally(() => setIsLoadingOne(false));
+      searchRoute
+        .strategySearchRoute(data, "one")
+        .then((value) => {
+          const route = value as IGetSearchRouteOne[] | null;
+          if (route) {
+            console.log("response", route);
+            const dates: Date[] = route
+              .filter((item) => item.driverId !== sessionIdUser)
+              .map((route: { departureDate: string }) => new Date(route.departureDate));
+            //update list date routes
+            setHighlightedDates(dates);
+            highlightedDatesRef.current = dates;
+          } else {
+            console.log("No data received or an error occurred.");
+          }
+        })
+        .catch((err) => console.error("Fetch failed:", err))
+        .finally(() => setIsLoadingOne(false));
     }
   }, [clickToDate]);
   // }, [clickToDate, setIsLoadingOne, setHighlightedDates, highlightedDatesRef, sessionIdUser]);

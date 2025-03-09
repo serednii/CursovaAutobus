@@ -4,7 +4,7 @@ import TablePassengerDetails from "@/components/shared/driver/TablePassengerDeta
 import { getPassengerDetails, getPassengersId } from "./action";
 import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
 import { ISubPassengersList } from "@/types/interface";
-import { fetchGetRoutesByIdMyRoute, IGetRouteMyRoute, IGetSearchRouteMyRouteOption } from "@/fetchFunctions/fetchGetRoutesById";
+import { fetchGetRoutesById, IGetRouteMyRoute } from "@/fetchFunctions/fetchGetRoutesById";
 import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { formatDate } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ interface Props {
 export default async function MyRoute({ params }: Props) {
   const { id } = await params;
 
-  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesByIdMyRoute([Number(id)], selectRoute);
+  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.strategySearchRoute([Number(id)], selectRoute, "byIdMyRoute");
 
   const [route] = formatDate(routeRaw);
 

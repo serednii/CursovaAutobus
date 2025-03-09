@@ -2,7 +2,7 @@ import React from "react";
 import OrderSeatsBus from "@/components/shared/passenger/OrderseatsBus";
 import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
-import { fetchGetRoutesByIdSeatSelection, IGetRouteSeatSelection, IGetSearchRouteSeatSelectionOption } from "@/fetchFunctions/fetchGetRoutesById";
+import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import { authConfig } from "@/configs/auth";
 import { getServerSession } from "next-auth/next";
@@ -18,9 +18,11 @@ export default async function SeatSelection({ params }: Props) {
   const session = await getServerSession(authConfig);
   const driverId: string | undefined = session?.user.id;
 
-  const routeArray = await fetchGetRoutesByIdSeatSelection([Number(id)], selectSeatSelection);
+  const routeArray = await fetchGetRoutesById.strategySearchRoute([Number(id)], selectSeatSelection, "seatSelection");
 
-  const route = routeArray ? routeArray[0] : null;
+  const routes = routeArray as IGetRouteSeatSelection[] | null;
+
+  const route = routes?.[0];
 
   if (route && route.busSeats) {
     const updatedPassengers = route.busSeats.map((e) => {
