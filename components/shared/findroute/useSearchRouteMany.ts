@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { debounce } from "lodash";
-import { IGetSearchRouteMany, IGetSearchRouteManyOption, searchRouteMany } from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteMany, IGetSearchRouteManyOption, searchRouteMany, strategySearchRoute } from "@/fetchFunctions/searchRoute";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
@@ -71,16 +71,17 @@ export const useSearchRouteMany = ({
 
       if (departureFrom || arrivalTo || departureDate) {
         setIsLoadingOne(true);
-        searchRouteMany(data)
-          .then((response: IGetSearchRouteMany[] | null) => {
-            if (response) {
-              console.log("response", response);
-              const filterHighlightedDates = response.map((item: IGetSearchRouteMany) => new Date(item.departureDate));
+        strategySearchRoute(data, "many")
+          .then((value) => {
+            const routes = value as IGetSearchRouteMany[] | null;
+            if (routes) {
+              console.log("response", routes);
+              const filterHighlightedDates = routes.map((item: IGetSearchRouteMany) => new Date(item.departureDate));
               //update list date routes
               setHighlightedDates(
                 (departureFrom || arrivalTo) && filterHighlightedDates.length > 0 ? filterHighlightedDates : highlightedDatesRef.current
               );
-              const newSearchDates: TypeBaseRoute[] | [] = response.map((item) => {
+              const newSearchDates: TypeBaseRoute[] | [] = routes.map((item) => {
                 const isReservation = item.busSeats.some(
                   (busSeat) => busSeat.passenger === sessionIdUser && busSeat.busSeatStatus === SeatStatusEnum.RESERVED
                 ); //if there is a reserved user on this route

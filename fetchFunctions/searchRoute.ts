@@ -77,6 +77,18 @@ export const searchRouteMany = createSearchRouteFetcher<IGetSearchRouteManyOptio
 
 export const searchRouteOne = createSearchRouteFetcher<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(ZodSchemaSearchRouteOne.array());
 
+export const strategySearchRoute = (
+  data: IGetSearchRouteManyOptionData | IGetSearchRouteOneOptionData,
+  type: "many" | "one"
+): Promise<IGetSearchRouteMany[] | IGetSearchRouteOne[] | null> => {
+  if (type === "many") {
+    return searchRouteMany(data as IGetSearchRouteManyOptionData);
+  } else if (type === "one") {
+    return searchRouteOne(data as IGetSearchRouteOneOptionData);
+  }
+  return Promise.resolve(null);
+};
+
 // export const searchRouteMany = async <T, K extends IGetSearchRouteMany[]>(data: T): Promise<K | null> =>
 //   searchRoute<T, K>(data).then((res: unknown) => {
 //     console.log("search route many", data);
