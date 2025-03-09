@@ -24,7 +24,7 @@ export const useClickToDate = ({
   useEffect(() => {
     if (clickToDate) {
       setIsLoadingOne(true);
-      searchRouteOne([data])
+      searchRouteOne(data)
         .then((response: IGetSearchRouteOne[] | null) => {
           if (response) {
             console.log("response", response);

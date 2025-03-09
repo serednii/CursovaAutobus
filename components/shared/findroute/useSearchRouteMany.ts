@@ -71,7 +71,7 @@ export const useSearchRouteMany = ({
 
       if (departureFrom || arrivalTo || departureDate) {
         setIsLoadingOne(true);
-        searchRouteMany([data])
+        searchRouteMany(data)
           .then((response: IGetSearchRouteMany[] | null) => {
             if (response) {
               console.log("response", response);

@@ -73,9 +73,9 @@ const createSearchRouteFetcher = <T, K>(schema: z.ZodSchema<K>) => {
 };
 
 // Використання фабрики для конкретних запитів
-export const searchRouteMany = createSearchRouteFetcher<IGetSearchRouteManyOptionData[], IGetSearchRouteMany[]>(ZodSchemaSearchRouteMany.array());
+export const searchRouteMany = createSearchRouteFetcher<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(ZodSchemaSearchRouteMany.array());
 
-export const searchRouteOne = createSearchRouteFetcher<IGetSearchRouteOneOptionData[], IGetSearchRouteOne[]>(ZodSchemaSearchRouteOne.array());
+export const searchRouteOne = createSearchRouteFetcher<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(ZodSchemaSearchRouteOne.array());
 
 // export const searchRouteMany = async <T, K extends IGetSearchRouteMany[]>(data: T): Promise<K | null> =>
 //   searchRoute<T, K>(data).then((res: unknown) => {
