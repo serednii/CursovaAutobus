@@ -8,7 +8,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-const paginationModel = { page: 0, pageSize: 5 };
 const colorCombinations = [
   // { text: "#000000", background: "#FFFFFF" }, // Чорний текст на білому
   // { text: "#FFFFFF", background: "#000000" }, // Білий текст на чорному

@@ -7,7 +7,6 @@ import SubPassengersOrders from "../form/SubPassengersOrders/SubPassengersOrders
 import { useForm } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 import { RoleEnum } from "@/enum/shared.enums";
-import { useRouter } from "next/navigation";
 import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import useBusLayoutData from "./useBusLayoutData";
@@ -18,7 +17,6 @@ interface Props {
 }
 
 export default function OrderSeatsBus({ route }: Props) {
-  const router = useRouter();
   const { data: session, status } = useSession();
   // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
   const renderRef = useRef(0);

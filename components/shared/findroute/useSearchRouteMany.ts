@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { debounce } from "lodash";
-import { IGetSearchRouteMany, IGetSearchRouteManyOption, searchRoute } from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteMany, searchRoute } from "@/fetchFunctions/searchRoute";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
-import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 import { UseFormWatch } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
-import { selectMany, selectOne } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+import { selectMany } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import { IGetSearchRouteManyOptionData } from "@/types/searchRoute.types";

@@ -1,4 +1,3 @@
-import { GetRoutesByPassengerId, IRoutesByIdDriver, IRoutesTable } from "@/types/route-passenger.types";
 import TableMyBookings from "./TableMyBookings";
 
 interface Props<T> {

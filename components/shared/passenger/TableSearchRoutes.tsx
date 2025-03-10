@@ -1,13 +1,11 @@
 "use client";
 import * as React from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
 import { useRouter } from "next/navigation";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
-
-// const paginationModel = { page: 0, pageSize: 5 };
 
 interface Props {
   routes: TypeBaseRoute[];
@@ -86,7 +84,7 @@ export default function TableSearchRoutes({ routes, status }: Props) {
   ];
 
   // Функція для зміни класу рядка за умовою isReservation
-  const getRowClassName = (params: any) => {
+  const getRowClassName = (params: GridRowParams<TypeBaseRoute>) => {
     return params.row.isReservation ? "reservation-row" : "";
   };
 

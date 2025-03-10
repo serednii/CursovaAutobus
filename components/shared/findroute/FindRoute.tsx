@@ -25,7 +25,6 @@ export default function FindRoute({ className }: { className?: string }) {
   const [highlightedDates, setHighlightedDates] = useState<Date[] | []>([]);
   const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);
   const [isLoadingOne, setIsLoadingOne] = useState(false);
-
   const {
     register,
     formState: { errors },
@@ -47,13 +46,8 @@ export default function FindRoute({ className }: { className?: string }) {
 
   const { clickToDate, setClickToDate } = useClickToDate({ setIsLoadingOne, setHighlightedDates, highlightedDatesRef, sessionIdUser });
 
-  if (status === "loading")
-    return (
-      <>
-        FindRoute
-        <MyScaleLoader />
-      </>
-    );
+  // if (status === "loading") return <MyScaleLoader />;
+  // if (status === "loading") return <h1>Loading...</h1>;
 
   return (
     <FindRouteContext.Provider value={{ isLoadingOne, setIsLoadingOne }}>

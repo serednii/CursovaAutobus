@@ -1,8 +1,7 @@
 import { prisma } from "@/prisma/prisma-client";
 import { IBusSeats } from "@/types/interface";
-import { NextResponse } from "next/server";
 
-export async function updatedBusSeats(busSeats: IBusSeats[], idRoute: number): Promise<any> {
+export async function updatedBusSeats(busSeats: IBusSeats[], idRoute: number) {
   try {
     const updatedBusSeats = await Promise.all(
       busSeats.map(async (busSeat) => {

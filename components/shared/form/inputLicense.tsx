@@ -17,7 +17,7 @@ export default function InputLicense({ register, errors, className, watch }: Pro
   return (
     <div className={cn("mb-4 relative", className)}>
       <label htmlFor="license" className="block text-sm font-medium text-gray-700">
-        Driver's License Number
+        Drivers License Number
       </label>
       <input
         {...register("license", {

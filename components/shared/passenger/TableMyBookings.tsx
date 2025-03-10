@@ -9,7 +9,6 @@ import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDel
 import { MyDialogDetailsRoute } from "@/components/ui/MyDialogDetailsRoute/MyDialogDetailsRoute";
 import { ISubPassengersList } from "@/types/interface";
 import { ContainerViewCenter } from "@/components/ui/ContainerViewCenter";
-import { Container } from "@/components/ui/Container";
 
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props<T> {
@@ -28,17 +27,10 @@ export default function TableMyBookings<T>({ routes, isRouteAgain, removeRoutePa
   const handleCancelOrderRoute = (route: IRoutesTable) => {
     setOpen(true);
     setRoute(route);
-    // removeRoutePassenger(route.id);
-    // router.push(`/myroute/${route.id}`);
-    // alert(`Viewing route from ${route.id}`);
   };
 
   const handleChangeOrderRoute = (route: IRoutesTable) => {
-    // setOpen(true);
-    // setRoute(route);
-    // removeRoutePassenger(route.id);
     router.push(`/seatselection/${route.id}`);
-    // alert(`Viewing route from ${route.id}`);
   };
 
   const handleDetailOrderRoute = (route: IRoutesTable) => {

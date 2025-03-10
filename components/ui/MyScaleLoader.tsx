@@ -1,4 +1,3 @@
-import { ClassNames, CSSObject } from "@emotion/react";
 import React from "react";
 import { ScaleLoader } from "react-spinners";
 import { LoaderHeightWidthRadiusProps } from "react-spinners/helpers/props";

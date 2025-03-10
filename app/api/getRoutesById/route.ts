@@ -1,19 +1,20 @@
+import { IGetSearchRouteUpdateOption } from "@/fetchFunctions/fetchGetRoutesById";
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
 type TypeGetRoutesById = {
   id: number[];
-  select?: any;
+  select?: IGetSearchRouteUpdateOption;
 };
 
 export async function POST(req: NextRequest) {
   try {
     const middlewareResponse = await middleware(req);
     console.log("middlewareResponse", middlewareResponse);
-    // if (middlewareResponse.status !== 200) {
-    //   return middlewareResponse;
-    // }
+    if (middlewareResponse.status !== 200) {
+      return middlewareResponse;
+    }
     // Отримуємо дані з тіла запиту
     const body: TypeGetRoutesById = await req.json();
     const { id, select } = body;
@@ -24,21 +25,16 @@ export async function POST(req: NextRequest) {
     if (!Array.isArray(id) || id.length === 0) {
       return NextResponse.json({ error: "Поле 'id' має бути непорожнім масивом чисел!" }, { status: 400 });
     }
-
-    // console.log("Валідація `id пройшла успішно  ", id, select);
     // Валідація `select`
     if (!select || typeof select !== "object") {
       return NextResponse.json({ error: "Некоректне поле 'select'!" }, { status: 400 });
     }
-    // console.log("Валідація `select пройшла успішно", id, select);
 
     // Запит до бази даних
     const routes = await prisma.routeDriver.findMany({
       where: { id: { in: id } },
       select: select,
     });
-
-    // console.log("Найдені маршрути:", routes);
 
     // Перевірка на порожній результат
     if (routes.length === 0) {

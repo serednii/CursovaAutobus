@@ -3,7 +3,7 @@ import { IoIosWifi } from "react-icons/io";
 import { CgCoffee } from "react-icons/cg";
 import { MdOutlinePower } from "react-icons/md";
 import { FaRestroom } from "react-icons/fa";
-import { UseFormRegister, UseFormReset, UseFormWatch } from "react-hook-form";
+import { UseFormRegister,  UseFormWatch } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 
 interface Props {

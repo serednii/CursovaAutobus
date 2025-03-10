@@ -13,17 +13,17 @@ interface Props {
 }
 
 export default async function MyRoute({ params }: Props) {
-  const { id } = await params;
+  const { id } = params;
 
-  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.strategySearchRoute([Number(id)], selectRoute, "byIdMyRoute");
+  const idArray = [Number(id)];
+
+  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.strategySearchRoute(idArray, selectRoute, "byIdMyRoute");
 
   const [route] = formatDate(routeRaw);
 
   const passengersSeatsList: ISubPassengersList[] = cloneDeep(route.passengersSeatsList);
 
   const uniquePassengersId = Array.from(new Set(getPassengersId(route)));
-
-  // const isPassengersIds = uniquePassengersId && uniquePassengersId.length > 0;
 
   const users = await getUsersFetchByIdsBySelect(uniquePassengersId, selectUser);
 

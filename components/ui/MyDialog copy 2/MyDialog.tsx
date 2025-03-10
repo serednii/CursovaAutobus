@@ -8,7 +8,7 @@ interface DialogProps {
   // content: ReactNode;
   open: boolean;
   setOpen: (value: boolean) => void;
-  setOk: any;
+  setOk: (value: boolean) => void;
 }
 export const MyDialog = ({
   title,

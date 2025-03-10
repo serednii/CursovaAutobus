@@ -23,7 +23,7 @@ import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 
-import { handleChangeVariantBus, updateValues } from "./action";
+import { handleChangeVariantBus } from "./action";
 import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
@@ -34,7 +34,6 @@ import { CreateRouteContext } from "./createRouteContext";
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
 }
-const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 
 export default function CreateRoute() {
   const {
@@ -42,7 +41,6 @@ export default function CreateRoute() {
     unregister,
     formState: { errors, isValid },
     handleSubmit,
-    reset,
     watch,
     control,
     setValue,
@@ -88,7 +86,6 @@ export default function CreateRoute() {
     selectRouteUpdate,
     selectRouteAgain,
     setValue,
-    updateValues,
     setStartStops,
     setDataLayoutBus,
     setIndexSelectVariantBus,
