@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
+import { updateValues } from "./action";
 
 import { FormValuesRoute } from "@/types/form.types";
 import {
@@ -9,6 +10,7 @@ import {
   IGetSearchRouteAgainOption,
   IGetSearchRouteUpdateOption,
 } from "@/fetchFunctions/fetchGetRoutesById";
+import { ILayoutData } from "@/types/layoutbus.types";
 
 interface UseFetchRouteProps {
   id: number;
@@ -16,16 +18,9 @@ interface UseFetchRouteProps {
   selectRouteUpdate: IGetSearchRouteUpdateOption;
   selectRouteAgain: IGetSearchRouteAgainOption;
   setValue: UseFormSetValue<FormValuesRoute>;
-  updateValues: (
-    res: any,
-    setValue: UseFormSetValue<FormValuesRoute>,
-    setStartStops: any,
-    setDataLayoutBus: any,
-    setIndexSelectVariantBus: any
-  ) => void;
-  setStartStops: (stops: string[]) => void;
-  setDataLayoutBus: (data: any) => void;
-  setIndexSelectVariantBus: (index: number) => void;
+  setStartStops: React.Dispatch<React.SetStateAction<string[]>>;
+  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>;
+  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export const useFetchRoute = ({
@@ -34,7 +29,6 @@ export const useFetchRoute = ({
   selectRouteUpdate,
   selectRouteAgain,
   setValue,
-  updateValues,
   setStartStops,
   setDataLayoutBus,
   setIndexSelectVariantBus,

@@ -2,7 +2,7 @@ import { middleware } from "@/middleware";
 import { NextRequest, NextResponse } from "@/node_modules/next/server";
 import { prisma } from "@/prisma/prisma-client";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     // Викликаємо middleware для перевірки авторизації
     const middlewareResponse = await middleware(req);

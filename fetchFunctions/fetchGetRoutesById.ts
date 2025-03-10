@@ -80,65 +80,6 @@ export type IGetRouteAgain = GenerateType<IRouteDataBase, Exclude<selectRouteAga
   intermediateStops: IIntermediateStops[];
 };
 
-//********************************************************** */
-
-// export default async function fetchGetRoutesById<TResult, TSelect>(id: number[], select: TSelect): Promise<TResult | null> {
-//   try {
-//     // console.log("Відправка запиту:", id, select);
-
-//     const response = await fetch(`${API_URL}/api/getRoutesById`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ id, select }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
-//     }
-
-//     // Перевірка на порожню відповідь
-//     if (response.headers.get("Content-Length") === "0" || response.status === 204) {
-//       throw new Error("Сервер повернув порожню відповідь.");
-//     }
-
-//     const data: TResult = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error("Помилка під час виконання запиту:", error);
-//     throw error; // Відхиляємо проміс, щоб `.catch()` його обробив
-//   }
-// }
-
-// const createFetchGetRoutesByIdFetcher = <TResult, TSelect>(schema: z.ZodSchema<TResult>) => {
-//   return async (id: number[], select: TSelect): Promise<TResult | null> => {
-//     try {
-//       const result = await fetchGetRoutesById<TResult, TSelect>(id, select);
-//       if (!result) {
-//         throw new Error("Помилка: отримано null або undefined");
-//       }
-//       return schema.parse(result);
-//     } catch (parseError) {
-//       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
-//     }
-//   };
-// };
-
-// export const fetchGetRoutesByIdSeatSelection = createFetchGetRoutesByIdFetcher<IGetRouteSeatSelection[], IGetSearchRouteSeatSelectionOption>(
-//   ZodFetchGetRoutesByIdSeatSelection
-// );
-
-// export const fetchGetRoutesByIdMyRoute = createFetchGetRoutesByIdFetcher<IGetRouteMyRoute[], IGetSearchRouteMyRouteOption>(
-//   ZodFetchGetRoutesByIdMyRoute
-// );
-
-// export const fetchGetRoutesByIdUpdate = createFetchGetRoutesByIdFetcher<IGetRouteUpdate[], IGetSearchRouteUpdateOption>(ZodFetchGetRoutesByIdUpdate);
-
-// export const fetchGetRoutesByIdAgain = createFetchGetRoutesByIdFetcher<IGetRouteAgain[], IGetSearchRouteAgainOption>(ZodFetchGetRoutesByIdAgain);
-
-//******************************************************* */
-
 interface TypeObject<T, K> {
   type: string;
   schema: z.ZodSchema<K>;
@@ -193,15 +134,3 @@ fetchGetRoutesById.addType<IGetSearchRouteSeatSelectionOption, IGetRouteSeatSele
 fetchGetRoutesById.addType<IGetSearchRouteMyRouteOption, IGetRouteMyRoute[]>("byIdMyRoute", ZodFetchGetRoutesByIdMyRoute.array());
 fetchGetRoutesById.addType<IGetSearchRouteUpdateOption, IGetRouteUpdate[]>("ByIdUpdate", ZodFetchGetRoutesByIdUpdate.array());
 fetchGetRoutesById.addType<IGetSearchRouteAgainOption, IGetRouteAgain[]>("byIdAgain", ZodFetchGetRoutesByIdAgain.array());
-
-// export const fetchGetRoutesByIdSeatSelection = createFetchGetRoutesByIdFetcher<IGetRouteSeatSelection[], IGetSearchRouteSeatSelectionOption>(
-//   ZodFetchGetRoutesByIdSeatSelection
-// );
-
-// export const fetchGetRoutesByIdMyRoute = createFetchGetRoutesByIdFetcher<IGetRouteMyRoute[], IGetSearchRouteMyRouteOption>(
-//   ZodFetchGetRoutesByIdMyRoute
-// );
-
-// export const fetchGetRoutesByIdUpdate = createFetchGetRoutesByIdFetcher<IGetRouteUpdate[], IGetSearchRouteUpdateOption>(ZodFetchGetRoutesByIdUpdate);
-
-// export const fetchGetRoutesByIdAgain = createFetchGetRoutesByIdFetcher<IGetRouteAgain[], IGetSearchRouteAgainOption>(ZodFetchGetRoutesByIdAgain);

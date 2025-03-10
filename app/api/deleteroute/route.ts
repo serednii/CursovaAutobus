@@ -1,5 +1,6 @@
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {
@@ -23,14 +24,19 @@ export async function DELETE(req: NextRequest) {
     });
 
     return NextResponse.json(deletedRoute, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Помилка видалення маршруту:", error);
-
-    // Обробка помилки, якщо маршрут не знайдено
-    if (error.code === "P2025") {
-      return NextResponse.json({ error: "Маршрут із зазначеним 'routeId' не знайдено" }, { status: 404 });
+  
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return NextResponse.json(
+        { error: "Маршрут із зазначеним 'routeId' не знайдено" },
+        { status: 404 }
+      );
     }
-
-    return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
+  
+    return NextResponse.json(
+      { error: "Внутрішня помилка сервера" },
+      { status: 500 }
+    );
   }
 }

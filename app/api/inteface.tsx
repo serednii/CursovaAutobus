@@ -1,4 +1,5 @@
 import { RoleEnum } from "@/enum/shared.enums";
+import { IBusSeats } from "@/types/interface";
 
 export interface User {
   id: number;
@@ -28,7 +29,7 @@ export interface RouteDriver {
   coffee: boolean;
   power: boolean;
   restRoom: boolean;
-  busSeats: Record<string, any>;
+  busSeats: IBusSeats[];
   intermediateStops: string[];
   passengersListId: number[];
   orders?: OrderedRoute[];
