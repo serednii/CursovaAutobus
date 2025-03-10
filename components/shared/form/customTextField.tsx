@@ -17,14 +17,22 @@ interface Props {
 
 export default function CustomTextField({ register, errors, name, title, className, isList = false }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [zIndex, setZIndex] = useState<any>({ zIndex: "auto" });
   const handleOpenList = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => {
+      if (prev) {
+        setZIndex({ zIndex: "auto" });
+        return false;
+      } else {
+        setZIndex({ zIndex: "150" });
+        return true;
+      }
+    });
   };
 
   return (
     <div className={cn("", className)}>
-      <div className="relative z-[150]">
+      <div style={zIndex} className="relative">
         <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-2">
           {title}
         </label>
@@ -49,7 +57,13 @@ export default function CustomTextField({ register, errors, name, title, classNa
         />
         {isList && isOpen && (
           <>
-            <div className="fixed w-full h-full top-0 left-0 right-0 bottom-0  z-[100]" onClick={() => setIsOpen(false)}></div>
+            <div
+              className="fixed w-full h-full top-0 left-0 right-0 bottom-0  z-[100]"
+              onClick={() => {
+                setZIndex({ zIndex: "auto" });
+                setIsOpen(false);
+              }}
+            ></div>
             <div className="absolute top-[70px] left-0  bg-white h-[162px] w-full z-[150]  overflow-auto  text-[1rem] border-2  border-sky-500 p-3">
               <ul className="">
                 <li className="h-[20px]">1</li>
