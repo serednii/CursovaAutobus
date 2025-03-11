@@ -24,8 +24,14 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
     handleChangeVariantBus(value); // Викликаємо зовнішню функцію-обробник
   };
 
+  // useEffect(() => {
+  //   setSelectedValue(String(indexSelectVariantBus || "")); // Оновлюємо локальний стан з indexSelectVariantBus
+  // }, [indexSelectVariantBus]);
+
   useEffect(() => {
-    setSelectedValue(String(indexSelectVariantBus || "")); // Оновлюємо локальний стан з indexSelectVariantBus
+    if (indexSelectVariantBus !== null) {
+      setSelectedValue(String(indexSelectVariantBus)); // Оновлюємо локальний стан з indexSelectVariantBus
+    }
   }, [indexSelectVariantBus]);
 
   console.log("indexSelectVariantBus+++++++++++++", indexSelectVariantBus);
