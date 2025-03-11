@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { IRoutesByIdDriver } from "@/types/route-passenger.types";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
+import TableRoutesUI from "@/components/ui/TableRoutesUI";
 
 const paginationModel = { page: 0, pageSize: 5 };
 
@@ -75,21 +76,14 @@ export default function TableRoutes({ routes, isRouteAgain, setOk }: Props) {
       ]
     : [
         createColumnButton("changeRoute", "Change Route", 150, handleChangeRoute, "Change Route"),
+        createColumnButton("newRoute", "New Route", 130, handleAgainRoute, "New Route"),
         createColumnButton("cancelRoute", "Cancel Route", 130, handleCancelRoute, "Cancel Route"),
       ];
 
   return (
     <>
       <MyDialogIsDelete title="You really want to delete the route?" setOpen={setOpen} open={open} setOk={handleOkDeleteRoute} />
-      <Paper sx={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={routes}
-          columns={[...baseColumns, ...extraColumns]}
-          initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[5, 10]}
-          sx={{ border: 0 }}
-        />
-      </Paper>
+      <TableRoutesUI routes={routes} columns={[...baseColumns, ...extraColumns]} />
     </>
   );
 }

@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 
 import { useRouter } from "next/navigation";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
+import TableRoutesUI from "@/components/ui/TableRoutesUI";
 
 interface Props {
   routes: TypeBaseRoute[];
@@ -94,16 +95,5 @@ export default function TableSearchRoutes({ routes, status }: Props) {
   }
   // Додаємо колонку againRouter, якщо isRouteAgain === true
 
-  return (
-    <Paper sx={{ width: "100%" }}>
-      <DataGrid
-        rows={routes}
-        columns={columns}
-        // initialState={{ pagination: { paginationModel } }}
-        // pageSizeOptions={[5, 10]}
-        getRowClassName={getRowClassName} // Додаємо клас до рядків
-        sx={{ border: 0 }}
-      />
-    </Paper>
-  );
+  return <TableRoutesUI routes={routes} columns={columns} />;
 }

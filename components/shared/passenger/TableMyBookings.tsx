@@ -9,6 +9,7 @@ import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDel
 import { MyDialogDetailsRoute } from "@/components/ui/MyDialogDetailsRoute/MyDialogDetailsRoute";
 import { ISubPassengersList } from "@/types/interface";
 import { ContainerViewCenter } from "@/components/ui/ContainerViewCenter";
+import TableRoutesUI from "@/components/ui/TableRoutesUI";
 
 const paginationModel = { page: 0, pageSize: 5 };
 interface Props<T> {
@@ -128,9 +129,7 @@ export default function TableMyBookings<T>({ routes, isRouteAgain, removeRoutePa
         </ContainerViewCenter>
       )}
 
-      <Paper sx={{ height: 400, width: "100%" }}>
-        <DataGrid rows={routes} columns={columns} initialState={{ pagination: { paginationModel } }} pageSizeOptions={[5, 10]} sx={{ border: 0 }} />
-      </Paper>
+      <TableRoutesUI routes={routes} columns={columns} />
     </>
   );
 }

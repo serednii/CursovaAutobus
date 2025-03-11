@@ -3,6 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import "./dialog.css";
 import { useRef } from "react";
+import TableRoutesUI from "../TableRoutesUI";
 
 interface DialogProps {
   passengersSeatsList: ISubPassengersList;
@@ -32,16 +33,5 @@ export const MyDialogDetailsRoute = ({ passengersSeatsList }: DialogProps) => {
     },
   ];
 
-  return (
-    <Paper sx={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={subPassengersList}
-        getRowId={() => `MyDialogDetailsRoute${useIdRef.current++}`} //
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
-        sx={{ border: 0 }}
-      />
-    </Paper>
-  );
+  return <TableRoutesUI routes={subPassengersList} columns={columns} />;
 };
