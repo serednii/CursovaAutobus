@@ -123,5 +123,19 @@ export const useSearchRouteMany = ({
     };
 
     // Виконайте додаткову логіку тут
-  }, [departureFrom, arrivalTo, departureDate, wifi, coffee, power, restRoom]);
+    // }, [departureFrom, arrivalTo, departureDate, wifi, coffee, power, restRoom]);
+  }, [
+    departureFrom,
+    arrivalTo,
+    departureDate,
+    wifi,
+    coffee,
+    power,
+    restRoom,
+    highlightedDatesRef,
+    sessionIdUser,
+    setHighlightedDates,
+    setIsLoadingOne,
+    setSearchDates,
+  ]);
 };

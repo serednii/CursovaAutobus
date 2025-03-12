@@ -55,7 +55,6 @@ export default function OrderSeatsBus({ route }: Props) {
         {dataLayoutBus && (
           <LayoutBus
             sessionUser={sessionUser}
-            className="flex justify-center"
             dataLayoutBus={dataLayoutBus}
             setDataLayoutBus={setDataLayoutBus}
             action={RoleEnum.PASSENGER}

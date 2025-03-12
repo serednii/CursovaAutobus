@@ -18,17 +18,12 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./*"],
       "@mui/*": ["node_modules/@mui/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "zod_shema"
-, "app/api/testuser"  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "zod_shema", "app/api/testuser"],
   "exclude": ["node_modules"]
 }

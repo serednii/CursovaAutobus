@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
     console.log("services search select", departureSearch, arrivalToSearch, select, startOfDay, endOfDay, wifi, coffee, power, restRoom, limit);
     // Формуємо діапазон часу для конкретного дня
     let dateFilter = {};
+
     if (startOfDay && endOfDay) {
       dateFilter = {
         departureDate: {
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
       };
     }
 
-    const where: any = {
+    const where: Record<string, unknown> = {
       departureFrom: {
         contains: departureSearch ?? "",
       },

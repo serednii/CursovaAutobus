@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { GridColDef, GridRowParams } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
@@ -95,5 +95,5 @@ export default function TableSearchRoutes({ routes, status }: Props) {
   }
   // Додаємо колонку againRouter, якщо isRouteAgain === true
 
-  return <TableRoutesUI routes={routes} columns={columns} />;
+  return <TableRoutesUI routes={routes} columns={columns} getRowClassName={getRowClassName} />;
 }

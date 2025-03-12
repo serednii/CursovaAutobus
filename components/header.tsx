@@ -43,8 +43,6 @@ export default function Header() {
     menulist = [...menuDriver, ...menuPassenger];
   }
 
-  console.log("Header", session);
-
   return (
     <Container className="header-gradient flex justify-between gap-3 relative  flex-wrap z-[100]  rounded-lg py-2 w-full">
       {session.status === "loading" && <CircularProgress className="absolute top-2 left-1/2 color-[#94f07c] z-10" size={30} />}

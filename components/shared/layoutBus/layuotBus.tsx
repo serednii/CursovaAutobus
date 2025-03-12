@@ -57,8 +57,8 @@ export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, 
   };
 
   return (
-    <div className={cn("", className)}>
-      <div style={styleBus} className="relative  rounded-l-[50px] rounded-r-[25px] bg-[#ccd0d7]  border-2 border-[#000000]">
+    <div className={cn("overflow-auto", className)}>
+      <div style={styleBus} className="relative m-auto  rounded-l-[50px] rounded-r-[25px] bg-[#ccd0d7]  border-2 border-[#000000]">
         <DriverSeat style={styleDriverSeat} className="left-[80px] bottom-[20px]" />
         <Stairs style={styleStairs_0} className="right-[100px] top-[0px]" />
         {styleStairs_1 && <Stairs style={styleStairs_1 || {}} className="left-[50px] top-[0px]" />}

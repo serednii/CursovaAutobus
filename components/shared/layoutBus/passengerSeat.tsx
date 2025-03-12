@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { useEffect, useState } from "react";
+// import SeatButton from "./SeatButton";
 
 interface Props {
   className?: string;
@@ -22,20 +23,21 @@ export default function PassengerSeat(props: Props) {
   const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
   const keys = Object.keys(params) as (keyof typeof params)[];
   const styles: React.CSSProperties = {};
-  const sessionUserId = Number(sessionUser?.id);
-
+  const sessionUserId = Number(sessionUser?.id) as number;
+  console.log("sessionUserId === driverId", sessionUserId, driverId);
   //add styles top, bottom, left, right
   keys.forEach((key) => {
     if (params[key] && key !== "number" && key !== "busSeatStatus" && key !== "passenger") {
       styles[key] = typeof params[key] === "number" ? `${params[key]}px` : params[key];
     }
   });
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     params.busSeatStatus = changeStatus.busSeatStatus;
     params.passenger = changeStatus.passenger;
     setDataLayoutBus({ ...dataLayoutBus });
-  }, [changeStatus.busSeatStatus]);
+  // }, [changeStatus.busSeatStatus, changeStatus.passenger, dataLayoutBus, params, setDataLayoutBus]);
+  }, [changeStatus.busSeatStatus, changeStatus.passenger,  params, setDataLayoutBus]);
 
   // Змінюємо колір залежно від статусу місця
   const statusColor = {
@@ -81,5 +83,15 @@ export default function PassengerSeat(props: Props) {
         <div className="absolute right-[2px] top-[0px] rounded-t-md rounded-b-xl w-[15px] h-[40px] bg-[#5a8950]"></div>
       </div>
     </button>
+    // <SeatButton
+    //   number={number}
+    //   changeStatus={changeStatus}
+    //   action={action}
+    //   driverId={driverId}
+    //   sessionUserId={sessionUserId}
+    //   handleClick={handleClick}
+    //   className={className}
+    //   statusColor={statusColor}
+    // />
   );
 }

@@ -8,12 +8,9 @@ import { fetchGetRoutesById, IGetRouteMyRoute } from "@/fetchFunctions/fetchGetR
 import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { formatDate } from "@/lib/utils";
 
-interface Props {
-  params: { id: string };
-}
-
-export default async function MyRoute({ params }: Props) {
-  const { id } = params;
+export type paramsType = Promise<{ id: string }>;
+export default async function MyRoute(props: { params: paramsType }) {
+  const { id } = await props.params;
 
   const idArray = [Number(id)];
 
@@ -28,18 +25,22 @@ export default async function MyRoute({ params }: Props) {
   const users = await getUsersFetchByIdsBySelect(uniquePassengersId, selectUser);
 
   const passengerDetails = getPassengerDetails(route, users, passengersSeatsList);
+  // console.log(passengerDetails);
 
   return (
     <Container>
-      <header className="h-[150px] flex flex-col justify-center">
-        <h1 className="text-3xl font-bold">View Сhosen route</h1>
-        <p>Route: {`${route.departureFrom} ${route.departureDate} to ${route.arrivalTo} ${route.arrivalDate}`}</p>
-      </header>
-      <main>
-        <h2 className="text-2xl font-bold h-[80px] bg-white flex items-center pl-5">Passenger Details</h2>
-        <TablePassengerDetails passengerDetails={passengerDetails || []} />
-      </main>
-      <footer>route {id}</footer>
+      <>
+        <header className="h-[150px] flex flex-col justify-center">
+          <h1 className="text-3xl font-bold">View Сhosen route</h1>
+          <p>Route: {`${route.departureFrom} ${route.departureDate} to ${route.arrivalTo} ${route.arrivalDate}`}</p>
+        </header>
+
+        <main>
+          <h2 className="text-2xl font-bold h-[80px] bg-white flex items-center pl-5">Passenger Details</h2>
+          <TablePassengerDetails passengerDetails={passengerDetails || []} />
+        </main>
+        <footer>route {id}</footer>
+      </>
     </Container>
   );
 }

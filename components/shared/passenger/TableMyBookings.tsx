@@ -1,7 +1,7 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
+import React, { useState } from "react";
+import { GridColDef } from "@mui/x-data-grid";
+
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { IRoutesTable } from "@/types/route-passenger.types";
@@ -11,19 +11,18 @@ import { ISubPassengersList } from "@/types/interface";
 import { ContainerViewCenter } from "@/components/ui/ContainerViewCenter";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
 
-const paginationModel = { page: 0, pageSize: 5 };
 interface Props<T> {
   routes: T[];
   isRouteAgain?: boolean;
   removeRoutePassenger?: (route: number) => void;
 }
 
-export default function TableMyBookings<T>({ routes, isRouteAgain, removeRoutePassenger }: Props<T>) {
+export default function TableMyBookings<T extends { id: string | number }>({ routes, isRouteAgain, removeRoutePassenger }: Props<T>) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState({} as IRoutesTable);
   const [openDetails, setOpenDetails] = useState(false);
-  const routeDetails = useRef({} as ISubPassengersList);
+  const [routeDetails, setRouteDetails] = useState<ISubPassengersList>();
 
   const handleCancelOrderRoute = (route: IRoutesTable) => {
     setOpen(true);
@@ -35,7 +34,7 @@ export default function TableMyBookings<T>({ routes, isRouteAgain, removeRoutePa
   };
 
   const handleDetailOrderRoute = (route: IRoutesTable) => {
-    route.passengersSeatsList && (routeDetails.current = route.passengersSeatsList);
+    setRouteDetails(route.passengersSeatsList);
     setOpenDetails(true);
     console.log("Route Details", route);
   };
@@ -125,7 +124,7 @@ export default function TableMyBookings<T>({ routes, isRouteAgain, removeRoutePa
 
       {openDetails && (
         <ContainerViewCenter className="mx-auto max-w-[1280px] px-4" setOpen={setOpenDetails}>
-          <MyDialogDetailsRoute passengersSeatsList={routeDetails.current} />
+          <MyDialogDetailsRoute passengersSeatsList={routeDetails} />
         </ContainerViewCenter>
       )}
 

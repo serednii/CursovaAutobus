@@ -3,7 +3,7 @@ import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { cn } from "@/lib/utils";
 import { FormValuesRoute } from "@/types/form.types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
@@ -17,7 +17,7 @@ interface Props {
 
 export default function CustomTextField({ register, errors, name, title, className, isList = false }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [zIndex, setZIndex] = useState<any>({ zIndex: "auto" });
+  const [zIndex, setZIndex] = useState<{ zIndex: string }>({ zIndex: "auto" });
   const handleOpenList = () => {
     setIsOpen((prev) => {
       if (prev) {

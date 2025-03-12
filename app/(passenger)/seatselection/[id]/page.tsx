@@ -1,5 +1,5 @@
 import React from "react";
-import OrderSeatsBus from "@/components/shared/passenger/OrderseatsBus";
+import OrderSeatsBus from "@/components/shared/passenger/OrderSeatsBus";
 import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
 import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
@@ -8,13 +8,11 @@ import { authConfig } from "@/configs/auth";
 import { getServerSession } from "next-auth/next";
 import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 
-interface Props {
-  params: { id: string };
-}
+export type paramsType = Promise<{ id: string }>;
 
-export default async function SeatSelection({ params }: Props) {
+export default async function SeatSelection(props: { params: paramsType }) {
   console.log("Rendering SeatSelection");
-  const { id } = (await params) || undefined;
+  const { id } = await props.params;
   const session = await getServerSession(authConfig);
   const driverId: string | undefined = session?.user.id;
 
@@ -22,7 +20,7 @@ export default async function SeatSelection({ params }: Props) {
 
   const routes = routeArray as IGetRouteSeatSelection[] | null;
 
-  const route = routes?.[0];
+  const route = routes?.[0] as IGetRouteSeatSelection;
 
   if (route && route.busSeats) {
     const updatedPassengers = route.busSeats.map((e) => {

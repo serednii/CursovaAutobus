@@ -21,6 +21,7 @@ export const useClickToDate = ({
   sessionIdUser,
 }: IUseClickToDate): { clickToDate: number; setClickToDate: React.Dispatch<React.SetStateAction<number>> } => {
   const [clickToDate, setClickToDate] = useState(0);
+
   useEffect(() => {
     if (clickToDate) {
       setIsLoadingOne(true);
@@ -43,8 +44,8 @@ export const useClickToDate = ({
         .catch((err) => console.error("Fetch failed:", err))
         .finally(() => setIsLoadingOne(false));
     }
-  }, [clickToDate]);
-  // }, [clickToDate, setIsLoadingOne, setHighlightedDates, highlightedDatesRef, sessionIdUser]);
+    // }, [clickToDate]);
+  }, [clickToDate, setIsLoadingOne, setHighlightedDates, highlightedDatesRef, sessionIdUser]);
 
   return { clickToDate, setClickToDate };
 };

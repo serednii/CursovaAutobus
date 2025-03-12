@@ -61,7 +61,9 @@ export const useFetchRoute = ({
         });
       }
     }
-  }, [id, type]);
+  }, [id, type, selectRouteAgain, selectRouteUpdate, setDataLayoutBus, setIndexSelectVariantBus, setStartStops, setValue]);
+
+  // }, [id, type]);
 
   return { route };
 };
