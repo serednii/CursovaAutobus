@@ -31,13 +31,13 @@ export default function PassengerSeat(props: Props) {
       styles[key] = typeof params[key] === "number" ? `${params[key]}px` : params[key];
     }
   });
-// eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     params.busSeatStatus = changeStatus.busSeatStatus;
     params.passenger = changeStatus.passenger;
     setDataLayoutBus({ ...dataLayoutBus });
-  // }, [changeStatus.busSeatStatus, changeStatus.passenger, dataLayoutBus, params, setDataLayoutBus]);
-  }, [changeStatus.busSeatStatus, changeStatus.passenger,  params, setDataLayoutBus]);
+    // }, [changeStatus.busSeatStatus, changeStatus.passenger, dataLayoutBus, params, setDataLayoutBus]);
+  }, [changeStatus.busSeatStatus, changeStatus.passenger, params, setDataLayoutBus]);
 
   // Змінюємо колір залежно від статусу місця
   const statusColor = {

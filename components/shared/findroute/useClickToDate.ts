@@ -26,7 +26,7 @@ export const useClickToDate = ({
     if (clickToDate) {
       setIsLoadingOne(true);
       searchRoute
-        .strategySearchRoute(data, "one")
+        .searchRoute(data, "one")
         .then((value) => {
           const route = value as IGetSearchRouteOne[] | null;
           if (route) {

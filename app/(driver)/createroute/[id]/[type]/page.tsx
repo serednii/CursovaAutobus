@@ -23,12 +23,12 @@ import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 
 import { handleChangeVariantBus } from "./action";
-import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFetchRoute } from "./useFetchRoute";
 import { handleRouteSubmit } from "./handleRouteSubmit";
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
+import { useFetchRoutesCity } from "./useFetchRoutesCity";
 // import { CreateRouteContext } from "./createRouteContext";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
@@ -68,6 +68,7 @@ export default function CreateRoute() {
   const type = params.type ? params.type : "";
   const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
   const userIdSession = Number(sessionUser?.id);
+  const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
   const idOrderPassengers = useMemo(
     () =>
@@ -83,8 +84,6 @@ export default function CreateRoute() {
   const { route } = useFetchRoute({
     id,
     type,
-    selectRouteUpdate,
-    selectRouteAgain,
     setValue,
     setStartStops,
     setDataLayoutBus,
@@ -104,38 +103,37 @@ export default function CreateRoute() {
       </header>
 
       <main className="px-4 bg-[white] rounded-xl ">
-        {/* Форму тепер обгортаємо в onSubmit */}
-        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
         <form onSubmit={handleSubmit(handleRouteSubmit(type, id, dataLayoutBus, sessionUser, router))}>
-          {/* TextField з react-hook-form */}
-
-          {/* Додавання CustomDatePicker */}
-
           <div className="flex gap-5 mb-5 flex-wrap">
-            <CustomDatePicker
-              title="Departure Date"
-              name="departureDate"
-              register={register}
-              errors={errors}
-              control={control} // Передаємо control
-            />
-            <CustomDatePicker
-              title="Arrival Date"
-              name="arrivalDate"
-              register={register}
-              errors={errors}
-              watch={watch}
-              control={control} // Передаємо control
-            />
+            <CustomDatePicker title="Departure Date" name="departureDate" register={register} errors={errors} control={control} />
+            <CustomDatePicker title="Arrival Date" name="arrivalDate" register={register} errors={errors} watch={watch} control={control} />
           </div>
           <div className="flex gap-5  mb-5 flex-wrap">
-            <CustomTextField register={register} errors={errors} name={"departureFrom"} title={"Departure From"} className="grow" />
-            <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" />
+            <CustomTextField
+              register={register}
+              action="createRoute"
+              listCity={departureFromCity}
+              setValue={setValue}
+              errors={errors}
+              name={"departureFrom"}
+              title={"Departure From"}
+              className="grow"
+            />
+            <CustomTextField
+              register={register}
+              action="createRoute"
+              setValue={setValue}
+              listCity={arrivalToCity}
+              errors={errors}
+              name={"arrivalTo"}
+              title={"Arrival To"}
+              className="grow"
+            />
           </div>
 
           <IntermediateStops startStops={startStops} unregister={unregister} register={register} errors={errors} />
 
-          <CustomTextField register={register} errors={errors} name={"busNumber"} title={"Bus Number"} className="mb-5" />
+          <CustomTextField register={register} action="createRoute" errors={errors} name={"busNumber"} title={"Bus Number"} className="mb-5" />
 
           <div>
             <h2>Bus Layout</h2>
@@ -174,7 +172,7 @@ export default function CreateRoute() {
             />
           )}
 
-          <CustomTextField register={register} errors={errors} name={"routePrice"} title={"Route Price"} className="mb-5" />
+          <CustomTextField register={register} action="createRoute" errors={errors} name={"routePrice"} title={"Route Price"} className="mb-5" />
 
           <div className="flex justify-between items-center flex-wrap">
             <div className="grow">
@@ -189,7 +187,7 @@ export default function CreateRoute() {
                 color="primary"
                 type="submit"
                 // onClick={handleSubmit(onSubmit)}
-                disabled={!isValid} // Вимикає кнопку, якщо форма не валідна
+                disabled={!isValid}
               >
                 {type === "change" ? "Update Route" : "Create Route"}
               </Button>

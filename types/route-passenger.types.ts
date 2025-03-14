@@ -7,6 +7,8 @@ export interface TypeBaseRoute extends IDateString, IFromTo {
   routePrice: number; // Залишаємо це поле
   availableSeats: number;
   isReservation: boolean; //якщо на даному маршруті заброрньований користувач
+  departureFromCity?: string;
+  arrivalToCity?: string;
 }
 
 export interface GetSearchRoutePassengers extends Omit<TypeBaseRoute, "AvailableSeats">, IServiceBus {

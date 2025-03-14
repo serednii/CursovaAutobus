@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { debounce } from "lodash";
-import { IGetSearchRouteMany, searchRoute } from "@/fetchFunctions/searchRoute";
+import { IGetRouteCity, IGetSearchRouteMany, searchRoute } from "@/fetchFunctions/searchRoute";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
@@ -40,6 +40,9 @@ export const useSearchRouteMany = ({
   setHighlightedDates,
   setSearchDates,
 }: IUseSearchRouteMany) => {
+  // const [routesCity, setRoutesCity] = useState<IGetRouteCity[] | []>([]);
+  // const [routesCity, setRoutesCity] = useState<IGetRouteCity[] | []>([]);
+
   const departureFrom = watch("departureFrom")?.trim();
   const arrivalTo = watch("arrivalTo")?.trim();
   const departureDate = watch("departureDate");
@@ -50,12 +53,16 @@ export const useSearchRouteMany = ({
 
   useEffect(() => {
     const debouncedSearchTerm = debounce(() => {
+      console.log("*******************************");
+
       const newDate =
         departureDate &&
         `${departureDate.getFullYear()}-${String(departureDate.getMonth() + 1).padStart(2, "0")}-${String(departureDate.getDate()).padStart(2, "0")}`;
       const startOfDay = new Date(`${newDate}T00:00:00`);
 
       const endOfDay = new Date(`${newDate}T23:59:59`);
+      console.log("newDate", newDate, "startOfDay", startOfDay, "endOfDay", endOfDay);
+
       const data: IGetSearchRouteManyOptionData = {
         departureSearch: firstLetterUpperCase(departureFrom),
         arrivalToSearch: firstLetterUpperCase(arrivalTo),
@@ -71,7 +78,7 @@ export const useSearchRouteMany = ({
       if (departureFrom || arrivalTo || departureDate) {
         setIsLoadingOne(true);
         searchRoute
-          .strategySearchRoute(data, "many")
+          .searchRoute(data, "many")
           .then((value) => {
             const routes = value as IGetSearchRouteMany[] | null;
             if (routes) {
@@ -98,6 +105,8 @@ export const useSearchRouteMany = ({
                   routePrice: item.routePrice,
                   availableSeats: item.maxSeats - item.bookedSeats,
                   isReservation,
+                  departureFromCity: item.departureFromCity,
+                  arrivalToCity: item.arrivalToCity,
                 };
                 return newItem;
               });

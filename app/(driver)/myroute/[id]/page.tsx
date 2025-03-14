@@ -14,7 +14,7 @@ export default async function MyRoute(props: { params: paramsType }) {
 
   const idArray = [Number(id)];
 
-  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.strategySearchRoute(idArray, selectRoute, "byIdMyRoute");
+  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.searchRoute(idArray, selectRoute, "byIdMyRoute");
 
   const [route] = formatDate(routeRaw);
 

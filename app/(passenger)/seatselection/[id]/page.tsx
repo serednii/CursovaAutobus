@@ -16,7 +16,7 @@ export default async function SeatSelection(props: { params: paramsType }) {
   const session = await getServerSession(authConfig);
   const driverId: string | undefined = session?.user.id;
 
-  const routeArray = await fetchGetRoutesById.strategySearchRoute([Number(id)], selectSeatSelection, "seatSelection");
+  const routeArray = await fetchGetRoutesById.searchRoute([Number(id)], selectSeatSelection, "seatSelection");
 
   const routes = routeArray as IGetRouteSeatSelection[] | null;
 

@@ -11,6 +11,8 @@ export const ZodSchemaSearchRouteMany: z.ZodType<IGetSearchRouteMany> = z.object
   maxSeats: z.number(),
   bookedSeats: z.number(),
   driverId: z.number(),
+  departureFromCity: z.string().optional(),
+  arrivalToCity: z.string().optional(),
   busSeats,
   passengersSeatsList,
 });

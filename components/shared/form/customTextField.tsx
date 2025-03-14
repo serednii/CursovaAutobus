@@ -1,5 +1,5 @@
 "use client";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { cn } from "@/lib/utils";
 import { FormValuesRoute } from "@/types/form.types";
@@ -9,15 +9,18 @@ interface Props {
   register: UseFormRegister<FormValuesRoute>;
   errors: FieldErrors<FormValuesRoute>;
   name: keyof FormValuesRoute;
+  setValue?: UseFormSetValue<FormValuesRoute>;
   title: string;
   // handleSearch?: () => void;
   className?: string;
-  isList?: boolean;
+  listCity?: string[] | undefined;
+  action: "createRoute" | "searchRoute";
 }
 
-export default function CustomTextField({ register, errors, name, title, className, isList = false }: Props) {
+export default function CustomTextField({ register, errors, setValue, name, title, className, listCity, action }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [zIndex, setZIndex] = useState<{ zIndex: string }>({ zIndex: "auto" });
+
   const handleOpenList = () => {
     setIsOpen((prev) => {
       if (prev) {
@@ -29,6 +32,23 @@ export default function CustomTextField({ register, errors, name, title, classNa
       }
     });
   };
+  const isRequired =
+    action === "createRoute"
+      ? {
+          required: "This field is required.",
+          minLength: {
+            value: 1,
+            message: `Minimum 1 symbol license`,
+          },
+        }
+      : {};
+  const changeCity = (event: React.MouseEvent<HTMLLIElement>) => {
+    const city = event.currentTarget.textContent;
+    if (city && setValue) {
+      setValue(name, city);
+      setIsOpen(false); // Закриваємо список
+    }
+  };
 
   return (
     <div className={cn("", className)}>
@@ -38,24 +58,18 @@ export default function CustomTextField({ register, errors, name, title, classNa
         </label>
         <TextField
           id={name}
-          {...register(name, {
-            required: "This field is required.",
-            minLength: {
-              value: 1,
-              message: `Minimum 1 symbol license`,
-            },
-          })}
+          {...register(name, isRequired)}
           variant="outlined"
           fullWidth
           InputProps={{
             style: { height: "42px" },
           }}
           error={!!errors?.[name]}
-          // autoComplete="off"
+          autoComplete="off"
           onClick={handleOpenList}
           helperText={errors?.[name] ? String(errors?.[name]?.message) : ""}
         />
-        {isList && isOpen && (
+        {listCity && isOpen && (
           <>
             <div
               className="fixed w-full h-full top-0 left-0 right-0 bottom-0  z-[100]"
@@ -65,24 +79,12 @@ export default function CustomTextField({ register, errors, name, title, classNa
               }}
             ></div>
             <div className="absolute top-[70px] left-0  bg-white h-[162px] w-full z-[150]  overflow-auto  text-[1rem] border-2  border-sky-500 p-3">
-              <ul className="">
-                <li className="h-[20px]">1</li>
-                <li className="h-[20px]">2</li>
-                <li className="h-[20px]">3</li>
-                <li className="h-[20px]">4</li>
-                <li className="h-[20px]">5</li>
-                <li className="h-[20px]">6</li>
-                <li className="h-[20px]">7</li>
-                <li className="h-[20px]">8</li>
-                <li className="h-[20px]">9</li>
-                <li className="h-[20px]">10</li>
-                <li className="h-[20px]">11</li>
-                <li className="h-[20px]">12</li>
-                <li className="h-[20px]">13</li>
-                <li className="h-[20px]">14</li>
-                <li className="h-[20px]">15</li>
-                <li className="h-[20px]">16</li>
-                <li className="h-[20px]">17</li>
+              <ul>
+                {listCity.map((city: string) => (
+                  <li key={city} className="h-[1.5rem] leading-[1.5rem] cursor-pointer hover:bg-gray-200 transition-colors px-1" onClick={changeCity}>
+                    {city}
+                  </li>
+                ))}
               </ul>
             </div>
           </>

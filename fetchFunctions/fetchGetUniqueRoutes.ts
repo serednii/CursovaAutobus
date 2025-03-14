@@ -7,8 +7,6 @@ import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-type IRouteDataBaseWithCity = IRouteDataBase & { departureFromCity?: string; arrivalToCity?: string };
-
 type selectRouteManyKeys = (
   | "id"
   | "driverId"
@@ -24,22 +22,20 @@ type selectRouteManyKeys = (
   | "busSeats"
   | "passengersSeatsList"
 ) &
-  keyof IRouteDataBaseWithCity;
+  keyof IRouteDataBase;
 
 type selectRouteOneKeys = ("departureDate" | "driverId") & keyof IRouteDataBase;
 
 export type IGetSearchRouteManyOption = GenerateBooleanType<selectRouteManyKeys>;
 
-export type IGetSearchRouteMany = GenerateType<IRouteDataBaseWithCity, selectRouteManyKeys | ("departureFromCity" | "arrivalToCity")>;
+export type IGetSearchRouteMany = GenerateType<IRouteDataBase, selectRouteManyKeys>;
 
 export type IGetSearchRouteOneOption = GenerateBooleanType<selectRouteOneKeys>;
 
 export type IGetSearchRouteOne = GenerateType<IRouteDataBase, selectRouteOneKeys>;
 
 type selectRouteCityKeys = ("departureFrom" | "arrivalTo") & keyof IRouteDataBase;
-
 export type IGetSearchRouteCityOption = GenerateBooleanType<selectRouteCityKeys>;
-
 export type IGetRouteCity = GenerateType<IRouteDataBase, selectRouteCityKeys>;
 
 //********************************************************** */
@@ -50,7 +46,7 @@ interface TypeObject<T, K> {
   search: (data: T) => Promise<K | null>;
 }
 
-class SearchRoute {
+class FetchGetUniqueRoutes {
   private types: TypeObject<any, any>[] = [];
 
   addType<T, K>(type: string, schema: z.ZodSchema<K>) {
@@ -60,7 +56,7 @@ class SearchRoute {
       search: async (data: T): Promise<K | null> => {
         console.log("data searchRoute", data);
         try {
-          const response = await fetch(`${API_URL}/api/searchRoute`, {
+          const response = await fetch(`${API_URL}/api/getUniqueRoutes`, {
             cache: "no-cache",
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -70,8 +66,7 @@ class SearchRoute {
           if (!response.ok) throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
 
           const result = await response.json();
-          return result; // Перевірка через Zod перед поверненням
-          // return schema.parse(result); // Перевірка через Zod перед поверненням
+          return schema.parse(result); // Перевірка через Zod перед поверненням
         } catch (error) {
           console.error("Error fetching data:", (error as Error).message);
           return null;
@@ -90,8 +85,6 @@ class SearchRoute {
   }
 }
 
-export const searchRoute = new SearchRoute();
+export const fetchGetUniqueRoutes = new FetchGetUniqueRoutes();
 
-searchRoute.addType<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>("many", ZodSchemaSearchRouteMany.array());
-searchRoute.addType<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>("one", ZodSchemaSearchRouteOne.array());
-// searchRoute.addType<IGetSearchRouteCityOption, IGetRouteCity[]>("byCity", ZodFetchGetRoutesByICity.array());
+fetchGetUniqueRoutes.addType<IGetSearchRouteCityOption, IGetRouteCity[]>("byCity", ZodFetchGetRoutesByICity.array());

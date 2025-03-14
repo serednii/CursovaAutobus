@@ -1,4 +1,4 @@
-import { IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteCityOption, IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/searchRoute";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 
 const busSeats = {
@@ -107,6 +107,11 @@ export const selectRouteAgain: IGetSearchRouteAgainOption = {
   routePrice: true, // Залишаємо це поле
   modelBus: true,
   intermediateStops: true,
+};
+
+export const selectRouteCity: IGetSearchRouteCityOption = {
+  departureFrom: true, // Залишаємо це поле
+  arrivalTo: true, // Залишаємо це поле
 };
 
 export const selectUser: IGetUsersByIdBySelectOption = {

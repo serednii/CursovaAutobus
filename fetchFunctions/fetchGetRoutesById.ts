@@ -116,7 +116,7 @@ class GetRoutesById {
     });
   }
 
-  async strategySearchRoute<T, K>(id: number[], data: T, type: string): Promise<K | null> {
+  async searchRoute<T, K>(id: number[], data: T, type: string): Promise<K | null> {
     const foundType = this.types.find((item) => item.type === type);
 
     if (!foundType) {

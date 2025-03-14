@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Typography } from "@mui/material";
 
@@ -19,6 +19,7 @@ import { FindRouteContext } from "./findRouteContext";
 import { useClickToDate } from "./useClickToDate";
 import { useSearchRouteMany } from "./useSearchRouteMany";
 import { useFindRouteSession } from "./useFindRouteSession";
+import { useFetchRoutesCity } from "@/app/(driver)/createroute/[id]/[type]/useFetchRoutesCity";
 
 export default function FindRoute({ className }: { className?: string }) {
   const highlightedDatesRef = useRef<Date[] | []>([]);
@@ -29,11 +30,17 @@ export default function FindRoute({ className }: { className?: string }) {
     register,
     formState: { errors },
     watch,
+    setValue,
     control,
   } = useForm<FormValuesRoute>({
     mode: "onChange",
   });
+
+  const departureFrom = watch("departureFrom")?.toLowerCase();
+  const arrivalTo = watch("arrivalTo")?.toLowerCase();
+
   const { sessionIdUser, status } = useFindRouteSession();
+  const { departureFromCity, setDepartureFromCity, arrivalToCity, setArrivalToCity, fullDepartureFromCity, fullArrivalToCity } = useFetchRoutesCity();
 
   useSearchRouteMany({
     setIsLoadingOne,
@@ -44,7 +51,20 @@ export default function FindRoute({ className }: { className?: string }) {
     setSearchDates,
   });
 
+  useEffect(() => {
+    if (searchDates && searchDates.length === 0) return;
+    if (departureFrom || arrivalTo) {
+      setDepartureFromCity(Array.from(new Set(searchDates.map((item) => item?.departureFromCity || ""))));
+      setArrivalToCity(Array.from(new Set(searchDates.map((item) => item?.arrivalToCity || ""))));
+    } else {
+      setDepartureFromCity(fullDepartureFromCity.current);
+      setArrivalToCity(fullArrivalToCity.current);
+    }
+    // }, [searchDates, departureFrom, arrivalTo]);
+  }, [searchDates, departureFrom, arrivalTo, fullArrivalToCity, fullDepartureFromCity, setArrivalToCity, setDepartureFromCity]);
   const { clickToDate, setClickToDate } = useClickToDate({ setIsLoadingOne, setHighlightedDates, highlightedDatesRef, sessionIdUser });
+
+  console.log("watch", watch());
 
   // if (status === "loading") return <MyScaleLoader />;
   // if (status === "loading") return <h1>Loading...</h1>;
@@ -57,14 +77,25 @@ export default function FindRoute({ className }: { className?: string }) {
           <div className="flex gap-5 mb-5 flex-wrap">
             <CustomTextField
               register={register}
+              setValue={setValue}
               errors={errors}
               // handleSearch={handleSearch}
               name={"departureFrom"}
               title={"Departure From"}
               className="grow"
-              isList
+              listCity={departureFromCity}
+              action="searchRoute"
             />
-            <CustomTextField register={register} errors={errors} name={"arrivalTo"} title={"Arrival To"} className="grow" isList />
+            <CustomTextField
+              register={register}
+              setValue={setValue}
+              errors={errors}
+              name={"arrivalTo"}
+              title={"Arrival To"}
+              className="grow"
+              listCity={arrivalToCity}
+              action="searchRoute"
+            />
             <SearchDataPicker
               title="Departure Date"
               name="departureDate"
