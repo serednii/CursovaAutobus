@@ -74,6 +74,7 @@ import { MdOutlinePower } from "react-icons/md";
 import { FaRestroom } from "react-icons/fa";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
+import { memo } from "react";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
@@ -89,7 +90,7 @@ const options2 = [
   { name: "restRoom", label: "RestRoom", icon: FaRestroom },
 ];
 
-export default function CheckboxOptionsDriver({ register, watch }: Props) {
+export default memo(function CheckboxOptionsDriver({ register, watch }: Props) {
   return (
     <div className="flex justify-between flex-wrap">
       <FormGroup>
@@ -124,4 +125,4 @@ export default function CheckboxOptionsDriver({ register, watch }: Props) {
       </FormGroup>
     </div>
   );
-}
+});

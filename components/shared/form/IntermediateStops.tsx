@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
@@ -79,4 +79,4 @@ const IntermediateStops = ({ register, unregister, errors, startStops }: Props) 
   );
 };
 
-export default IntermediateStops;
+export default memo(IntermediateStops);

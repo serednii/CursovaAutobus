@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { TextField, InputAdornment } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DatePicker from "react-datepicker";
@@ -89,7 +89,7 @@ const CustomDatePicker = ({
   );
 };
 
-export default CustomDatePicker;
+export default memo(CustomDatePicker);
 
 // "use client";
 // import React, { useState } from "react";

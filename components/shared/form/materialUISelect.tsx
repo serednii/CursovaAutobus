@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from "@mui/material";
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
@@ -77,4 +77,4 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
   );
 };
 
-export default MaterialUISelect;
+export default memo(MaterialUISelect);
