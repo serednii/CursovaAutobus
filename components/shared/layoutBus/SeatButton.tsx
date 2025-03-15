@@ -1,17 +1,19 @@
-import React from "react";
-import cn from "classnames";
-import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
+import { SeatStatusEnum, RoleEnum } from "@/enum/shared.enums";
+import { cn } from "@/lib/utils";
+import { BusSeatInfo } from "@/types/layoutbus.types";
+import { UserSession } from "@/types/next-auth";
+import React, { memo, useState } from "react";
 
 interface SeatButtonProps {
   number: number;
-  changeStatus: { busSeatStatus: SeatStatusEnum };
+  changeStatus: BusSeatInfo;
   action: RoleEnum;
-  sessionUserId: string;
-  driverId: string;
-  handleClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  sessionUserId: number;
+  driverId: number | null | undefined;
+  statusColor: string;
+  styles?: React.CSSProperties;
   className?: string;
-  statusColor?: string;
-  sizeFactor?: number; // Коефіцієнт масштабу
+  handleClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const SeatButton: React.FC<SeatButtonProps> = ({
@@ -20,30 +22,25 @@ const SeatButton: React.FC<SeatButtonProps> = ({
   action,
   sessionUserId,
   driverId,
-  handleClick,
-  className,
   statusColor,
-  sizeFactor = 1, // За замовчуванням 100%
+  styles,
+  className,
+  handleClick,
 }) => {
-  const isDisabled = changeStatus.busSeatStatus === SeatStatusEnum.RESERVED || (action === RoleEnum.PASSENGER && sessionUserId === driverId);
-
-  // Динамічні розміри
-  const width = 60 * sizeFactor;
-  const height = 40 * sizeFactor;
-  const numberFontSize = 1.5 * sizeFactor + "rem";
-  const sideWidth = 15 * sizeFactor;
-  const sideHeight = height;
-
+  // console.log("SeatButton RENDER");
   return (
-    <button disabled={isDisabled} onClick={handleClick} className={cn("absolute disabled:cursor-not-allowed", className)}>
-      <div className={cn("relative flex justify-center items-center rounded-t-lg rounded-b-md", statusColor)} style={{ width, height }}>
-        <p className="text-white" style={{ fontSize: numberFontSize, transform: "translateX(-5px)" }}>
-          {number}
-        </p>
-        <div className="absolute right-[2px] top-[0px] rounded-t-md rounded-b-xl bg-[#5a8950]" style={{ width: sideWidth, height: sideHeight }}></div>
+    <button
+      disabled={changeStatus.busSeatStatus === SeatStatusEnum.RESERVED || (action === RoleEnum.PASSENGER && sessionUserId === driverId)}
+      onClick={handleClick}
+      style={styles}
+      className={cn("absolute disabled:cursor-not-allowed", className)}
+    >
+      <div className={cn("relative w-[60px] h-[40px] rounded-t-lg rounded-b-md flex justify-center items-center", statusColor)}>
+        <p className="text-white text-[1.5rem] translate-x-[-5px]">{number}</p>
+        <div className="absolute right-[2px] top-[0px] rounded-t-md rounded-b-xl w-[15px] h-[40px] bg-[#5a8950]"></div>
       </div>
     </button>
   );
 };
 
-export default SeatButton;
+export default memo(SeatButton);
