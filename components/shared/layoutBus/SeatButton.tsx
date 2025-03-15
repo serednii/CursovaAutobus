@@ -1,8 +1,7 @@
 import { SeatStatusEnum, RoleEnum } from "@/enum/shared.enums";
 import { cn } from "@/lib/utils";
 import { BusSeatInfo } from "@/types/layoutbus.types";
-import { UserSession } from "@/types/next-auth";
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 
 interface SeatButtonProps {
   number: number;

@@ -2,7 +2,7 @@ import { IGetSearchRouteManyOption } from "@/fetchFunctions/searchRoute";
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 // import { UserSelect } from "@/types/next-auth";
-import { ca } from "date-fns/locale";
+// import { ca } from "date-fns/locale";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

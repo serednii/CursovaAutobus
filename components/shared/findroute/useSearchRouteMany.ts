@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { debounce } from "lodash";
-import { IGetRouteCity, IGetSearchRouteMany, searchRoute } from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteMany, searchRoute } from "@/fetchFunctions/searchRoute";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
