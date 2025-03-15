@@ -1,8 +1,8 @@
 "use client";
 import { cn } from "@/lib/utils";
-import DriverSeat from "./SSSriverSeat";
+import DriverSeat from "./DriverSeat";
 
-import PassengerSeat from "./PPPassengerSeat";
+import PassengerSeat from "./PassengerSeat";
 import Stairs from "./ssStairs";
 
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";

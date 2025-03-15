@@ -1,6 +1,6 @@
 import React from "react";
 import OrderSeatsBus from "@/components/shared/passenger/OrderSeatsBus";
-import SelectedBusInfo from "@/components/shared/passenger/SSSelectedBusInfo";
+import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
 import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { SeatStatusEnum } from "@/enum/shared.enums";
