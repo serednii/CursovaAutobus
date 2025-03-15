@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import DriverSeat from "./DriverSeat";
 
 import PassengerSeat from "./PassengerSeat";
-import Stairs from "./ssStairs";
+import Stairs from "./Stairs";
 
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
