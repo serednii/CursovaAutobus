@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
+import { layoutsData } from "@/components/shared/layoutBus/OOLayoutData";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 
