@@ -5,7 +5,7 @@ import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { UseFormSetValue } from "react-hook-form";
 import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
-import { layoutsData } from "@/components/shared/layoutBus/OOLayoutData";
+import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 
 // const exampleRote = {
