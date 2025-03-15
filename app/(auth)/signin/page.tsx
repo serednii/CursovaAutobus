@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaBusAlt } from "react-icons/fa";
 import "../style.scss";
-import { Overlay } from "@/components/shared/OOOverlay";
+import { Overlay } from "@/components/shared/Overlay";
 import SingInComponent from "@/components/shared/singInComponent/SingInComponent";
 
 export default function SignIn() {

@@ -6,7 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import "../style.scss";
 import "./style.scss";
 
-import { Overlay } from "@/components/shared/OOOverlay";
+import { Overlay } from "@/components/shared/Overlay";
 
 export default function SelectRole() {
   return (
