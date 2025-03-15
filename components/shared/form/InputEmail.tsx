@@ -2,7 +2,7 @@ import { FormValues } from "@/app/(auth)/interface";
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { AiTwotoneMail } from "react-icons/ai";
-import FormError from "./DFFormError";
+import FormError from "./FormError";
 
 interface Props {
   register: UseFormRegister<FormValues>;

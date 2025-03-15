@@ -1,7 +1,7 @@
 import { FormValues } from "@/app/(auth)/interface";
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import FormError from "./DFFormError";
+import FormError from "./FormError";
 
 interface Props {
   name: keyof FormValues;
