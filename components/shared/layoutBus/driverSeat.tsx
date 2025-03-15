@@ -1,12 +1,8 @@
 import { cn } from "@/lib/utils";
+import { memo } from "react";
 
-export default function DriverSeat({
-  className,
-  style,
-}: {
-  className?: string;
-  style?: React.CSSProperties;
-}) {
+export default memo(function DriverSeat({ className, style }: { className?: string; style?: React.CSSProperties }) {
+  console.log("DriverSeat RENDER");
   return (
     <div style={style} className={cn("absolute", className)}>
       <div className="relative bg-[#1da04d] w-[60px] h-[40px] rounded-t-lg rounded-b-md">
@@ -17,4 +13,4 @@ export default function DriverSeat({
       </div>
     </div>
   );
-}
+});

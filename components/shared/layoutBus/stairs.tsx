@@ -1,12 +1,8 @@
 import { cn } from "@/lib/utils";
+import { memo } from "react";
 
-export default function Stairs({
-  className,
-  style,
-}: {
-  className?: string;
-  style?: React.CSSProperties;
-}) {
+export default memo(function Stairs({ className, style }: { className?: string; style?: React.CSSProperties }) {
+  console.log("Stairs RENDER");
   return (
     <div style={style} className={cn("absolute", className)}>
       <div className="relative bg-[gray] size-[50px] border-4 border-[#000000] rounded-[4px]">
@@ -14,4 +10,4 @@ export default function Stairs({
       </div>
     </div>
   );
-}
+});

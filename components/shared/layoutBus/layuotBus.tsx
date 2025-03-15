@@ -8,6 +8,7 @@ import Stairs from "./Stairs";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
+import { memo } from "react";
 
 interface Props {
   className?: string;
@@ -18,9 +19,9 @@ interface Props {
   driverId: number | undefined | null;
 }
 
-export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser, action, driverId }: Props) {
+export default memo(function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser, action, driverId }: Props) {
   const user = sessionUser?.role;
-  // console.log("user session", sessionUser);
+  console.log("LayoutBus RENDER");
   if (dataLayoutBus?.passenger.length === 0) {
     return null;
   }
@@ -80,4 +81,4 @@ export default function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, 
       </div>
     </div>
   );
-}
+});

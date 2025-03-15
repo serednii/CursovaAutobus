@@ -66,7 +66,7 @@ interface Props {
   isRouteAgain?: boolean;
 }
 
-export default function TablePassengerDetails({ passengerDetails }: Props) {
+export default React.memo(function TablePassengerDetails({ passengerDetails }: Props) {
   console.log(passengerDetails);
   return (
     <Paper sx={{ width: "100%" }}>
@@ -105,4 +105,4 @@ export default function TablePassengerDetails({ passengerDetails }: Props) {
       </TableContainer>
     </Paper>
   );
-}
+});

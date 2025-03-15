@@ -29,6 +29,7 @@ import { useFetchRoute } from "./useFetchRoute";
 import { handleRouteSubmit } from "./handleRouteSubmit";
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
 import { useFetchRoutesCity } from "./useFetchRoutesCity";
+import { cond } from "lodash";
 // import { CreateRouteContext } from "./createRouteContext";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
@@ -36,6 +37,7 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 }
 
 export default function CreateRoute() {
+  console.log("CreateRoute RENDER");
   const {
     register,
     unregister,
