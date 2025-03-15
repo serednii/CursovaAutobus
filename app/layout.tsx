@@ -1,4 +1,4 @@
-import { Providers } from "@/components/shared/Providers";
+import { Providers } from "@/components/shared/PPProviders";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";

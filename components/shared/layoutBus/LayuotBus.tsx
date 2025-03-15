@@ -1,9 +1,9 @@
 "use client";
 import { cn } from "@/lib/utils";
-import DriverSeat from "./DriverSeat";
+import DriverSeat from "./SSSriverSeat";
 
-import PassengerSeat from "./PassengerSeat";
-import Stairs from "./Stairs";
+import PassengerSeat from "./PPPassengerSeat";
+import Stairs from "./ssStairs";
 
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { SessionProvider } from "next-auth/react";
-import Header from "../Header";
+import Header from "../HHHeader";
 import Footer from "../Footer";
 import Main from "../Main";
 

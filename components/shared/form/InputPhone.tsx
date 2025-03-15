@@ -2,7 +2,7 @@ import { FormValues } from "@/app/(auth)/interface";
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FaPhoneAlt } from "react-icons/fa";
-import FormError from "./FormError";
+import FormError from "./DFFormError";
 
 interface Props {
   register: UseFormRegister<FormValues>;
