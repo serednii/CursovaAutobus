@@ -1,8 +1,8 @@
 "use client";
-import InputEmail from "@/components/shared/form/InputEmail";
-import InputPassword from "@/components/shared/form/InputPasswords";
-import InputPhone from "@/components/shared/form/InputPhone";
-import InputText from "@/components/shared/form/InputText";
+import InputEmail from "@/components/shared/form/CCnputEmail";
+import InputPassword from "@/components/shared/form/CCnputPasswords";
+import InputPhone from "@/components/shared/form/CCnputPhone";
+import InputText from "@/components/shared/form/CCnputText";
 import { Overlay } from "@/components/shared/Overlay";
 import { RoleEnum } from "@/enum/shared.enums";
 import { useForm } from "react-hook-form";
