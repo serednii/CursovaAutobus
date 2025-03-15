@@ -8,7 +8,7 @@ import CustomTextField from "@/components/shared/form/CustomTextField";
 
 import { FormValuesRoute } from "@/types/form.types";
 import "react-datepicker/dist/react-datepicker.css";
-import SearchDataPicker from "@/components/shared/form/searchDataPicker/DDearchDataPicker";
+import SearchDataPicker from "@/components/shared/form/searchDataPicker/SearchDataPicker";
 import TableSearchRoutes from "@/components/shared/passenger/TableSearchRoutes";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
 import { cn } from "@/lib/utils";
