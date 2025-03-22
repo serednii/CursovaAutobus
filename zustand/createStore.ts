@@ -43,15 +43,19 @@ const useStore = create<BearState>((set, get) => ({
     // set({ idOrderPassengers: newIdOrderPassengers });
   },
 
-  setDataLayoutBusMap: (value) =>
+  setDataLayoutBusMap: (value) => {
+    console.log("value", value);
     set((state) => ({
       dataLayoutBusMap: typeof value === "function" ? value(state.dataLayoutBusMap) : value ?? null,
-    })),
+    }));
+  },
 
-  setDataLayoutBus: (value) =>
+  setDataLayoutBus: (value) => {
+    console.log("value", value);
     set((state) => ({
       dataLayoutBus: typeof value === "function" ? value(state.dataLayoutBus) : value ?? null,
-    })),
+    }));
+  },
 }));
 
 export default useStore;

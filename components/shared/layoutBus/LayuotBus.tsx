@@ -40,6 +40,7 @@ export default function LayoutBus({ className, sessionUser, action, driverId, us
 
   const dataLayoutBusMap = useStore((state) => state.dataLayoutBusMap);
   // console.log("dataLayoutBusMap LayoutBus", dataLayoutBusMap);
+
   if (dataLayoutBusMap === null || dataLayoutBusMap === undefined) {
     return null;
   }

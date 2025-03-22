@@ -1,25 +1,32 @@
 "use client";
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
 import { useSession } from "next-auth/react";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders/SubPassengersOrders";
 import { useForm } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
-import { RoleEnum } from "@/enum/shared.enums";
+import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import useBusLayoutData from "./useBusLayoutData";
 import useSubmitOrder from "./useSubmitOrder";
 import useStore from "@/zustand/createStore";
+import { cloneDeep } from "lodash";
+import { layoutsData } from "../layoutBus/LayoutData";
+import { BusSeatInfo } from "@/types/layoutbus.types";
 
 interface Props {
   route: IGetRouteSeatSelection | undefined;
 }
 
 export default function OrderSeatsBus({ route }: Props) {
+  const cloneRoute = cloneDeep(route);
   const { data: session, status } = useSession();
+  const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
+  const setDataLayoutBusMap = useStore((state) => state.setDataLayoutBusMap);
   const renderRef = useRef(0);
+  const counterRender = useRef(0);
   const {
     register,
     unregister,
@@ -42,18 +49,80 @@ export default function OrderSeatsBus({ route }: Props) {
   if (status === "authenticated") {
     sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   }
+  console.log("route ordreBusSeats", cloneRoute);
   //В модель автобуса layoutsData добавляємо дані про пасажирів із маршруту route
-  useBusLayoutData(route);
+  // useBusLayoutData(cloneDeep(route)); //cloneDeep(route);
+  // const updateIdOrderPassengers = useStore((state) => state.updateIdOrderPassengers);
+
+  //В модель автобуса layoutsData добавляємо дані про пасажирів із маршруту route
+  useEffect(() => {
+    if (cloneRoute && counterRender.current < 2) {
+      counterRender.current++;
+      // console.log("route", route);
+      //Находимо модель автобуса яка використовується
+      const filteredData = cloneDeep(layoutsData).find((item) => item.modelBus === cloneRoute.modelBus);
+      console.log("filteredData", cloneRoute, filteredData);
+
+      if (!filteredData) {
+        console.error("Name Bus not found in layoutsData");
+        throw new Error("Name Bus not found in layoutsData");
+      }
+
+      let transformData11: BusSeatInfo[] = [];
+      cloneDeep(filteredData.passenger).forEach((e) => {
+        const { number, busSeatStatus, ...rest } = e;
+        const findBusSeat = cloneRoute.busSeats?.find((item) => item.number === number);
+        findBusSeat?.busSeatStatus === SeatStatusEnum.SELECTED && console.log("findBusSeatStatus", findBusSeat);
+
+        const findBusSeatStatus = {
+          ...rest,
+          number,
+          busSeatStatus: findBusSeat?.busSeatStatus ?? busSeatStatus,
+          passenger: findBusSeat?.passenger ?? e.passenger,
+        };
+        findBusSeat?.busSeatStatus === SeatStatusEnum.SELECTED && console.log("findBusSeatStatus +++++", findBusSeatStatus);
+        transformData11.push(findBusSeatStatus);
+      });
+
+      // const transformData = cloneDeep(filteredData.passenger).map((e) => {
+      //   const { number, busSeatStatus, ...rest } = e;
+      //   const findBusSeat = cloneRoute.busSeats?.find((item) => item.number === number);
+      //   findBusSeat?.busSeatStatus === SeatStatusEnum.SELECTED && console.log("findBusSeatStatus", findBusSeat);
+
+      //   const findBusSeatStatus = {
+      //     ...rest,
+      //     number,
+      //     busSeatStatus: findBusSeat?.busSeatStatus ?? busSeatStatus,
+      //     passenger: findBusSeat?.passenger ?? e.passenger,
+      //   };
+
+      //   findBusSeat?.busSeatStatus === SeatStatusEnum.SELECTED && console.log("findBusSeatStatus +++++", findBusSeatStatus);
+
+      //   return findBusSeatStatus;
+      // });
+
+      console.log("transformDatanew", transformData11);
+
+      const filteredDataModified = { ...filteredData, passenger: transformData11 };
+      console.log("transformData", filteredDataModified);
+
+      setDataLayoutBus(filteredDataModified);
+      setDataLayoutBusMap(filteredDataModified);
+    }
+  }, [cloneRoute, setDataLayoutBusMap, setDataLayoutBus, layoutsData]);
   const userIdSession = sessionUser?.id;
 
   console.log("userIdSession", userIdSession);
 
-  const { onSubmit } = useSubmitOrder(route?.id, sessionUser);
+  const { onSubmit } = useSubmitOrder(cloneRoute?.id, sessionUser);
   const idOrderPassengers = useStore((state) => state.idOrderPassengers);
   const dataLayoutBusMap = useStore((state) => state.dataLayoutBusMap);
   const dataLayoutBus = useStore((state) => state.dataLayoutBus);
 
-  const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === Number(userIdSession)), [route, userIdSession]);
+  const myListPassengers = useMemo(
+    () => cloneRoute?.passengersSeatsList.find((obj) => obj.idPassenger === Number(userIdSession)),
+    [cloneRoute, userIdSession]
+  );
 
   console.log("idOderPassengers ----------- ----------- ", idOrderPassengers);
   console.log("myListPassengers ----------- ----------- ", myListPassengers);
@@ -63,7 +132,7 @@ export default function OrderSeatsBus({ route }: Props) {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <LayoutBus sessionUser={sessionUser} action={RoleEnum.PASSENGER} driverId={route?.driverId} userIdSession={Number(userIdSession)} />
+        <LayoutBus sessionUser={sessionUser} action={RoleEnum.PASSENGER} driverId={cloneRoute?.driverId} userIdSession={Number(userIdSession)} />
 
         <SubPassengersOrders
           register={register}
@@ -86,7 +155,7 @@ export default function OrderSeatsBus({ route }: Props) {
         </Button>
       </form>
       <p>
-        RouteDriverId {route?.driverId} UserId {sessionUser?.id}
+        RouteDriverId {cloneRoute?.driverId} UserId {sessionUser?.id}
       </p>
     </>
   );
