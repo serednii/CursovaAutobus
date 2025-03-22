@@ -3,13 +3,12 @@ import { IoIosWifi } from "react-icons/io";
 import { CgCoffee } from "react-icons/cg";
 import { MdOutlinePower } from "react-icons/md";
 import { FaRestroom } from "react-icons/fa";
-import { UseFormRegister,  UseFormWatch } from "react-hook-form";
+import { UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   watch: UseFormWatch<FormValuesRoute>;
-  className?: string;
 }
 const options = [
   { name: "wifi", label: "Wi-Fi", icon: IoIosWifi },
@@ -25,7 +24,7 @@ export default function CheckboxOptionsMain({ register, watch }: Props) {
         <FormControlLabel
           key={name}
           control={<Checkbox {...register(name as keyof FormValuesRoute)} />}
-          checked={watch(name as "power" | "restRoom") || false}
+          checked={watch(name as "wifi" | "coffee" | "power" | "restRoom") || false}
           label={
             <div className="flex items-center">
               <Icon className="mr-2 text-xl" />

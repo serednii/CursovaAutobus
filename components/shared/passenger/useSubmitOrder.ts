@@ -8,11 +8,13 @@ import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { transformData } from "./transformData";
+import useStore from "@/zustand/createStore";
 
 const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 
-export default function useSubmitOrder(routeId: number | undefined, dataLayoutBus: ILayoutData | null, sessionUser: UserSession | null) {
+export default function useSubmitOrder(routeId: number | undefined, sessionUser: UserSession | null) {
   const router = useRouter();
+  const dataLayoutBus = useStore((state) => state.dataLayoutBus);
 
   const onSubmit: SubmitHandler<FormValuesRoute> = async (data) => {
     if (!dataLayoutBus || !sessionUser || routeId === undefined) return;

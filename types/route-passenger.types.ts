@@ -61,4 +61,6 @@ export interface IRoutesByIdDriver extends IDateString, IFromTo {
   bookedSeats: number;
   maxSeats: number;
   routePrice: number;
+  driverId: number;
+  busSeats: IBusSeats[];
 }

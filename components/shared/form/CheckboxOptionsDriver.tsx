@@ -90,7 +90,7 @@ const options2 = [
   { name: "restRoom", label: "RestRoom", icon: FaRestroom },
 ];
 
-export default memo(function CheckboxOptionsDriver({ register, watch }: Props) {
+export default function CheckboxOptionsDriver({ register, watch }: Props) {
   return (
     <div className="flex justify-between flex-wrap">
       <FormGroup>
@@ -125,4 +125,4 @@ export default memo(function CheckboxOptionsDriver({ register, watch }: Props) {
       </FormGroup>
     </div>
   );
-});
+}

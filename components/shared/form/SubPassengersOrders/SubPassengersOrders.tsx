@@ -1,20 +1,22 @@
 "use client";
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormUnregister, UseFormWatch } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
-import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 import { useSubPassengers } from "./useSubPassengers";
 import SubPassengerFields from "./SubPassengerFields";
+import useStore from "@/zustand/createStore";
+import IsShowSubPassengerFields from "./isShowSubPassengerFields";
+import { shallow } from "zustand/shallow";
+import SubPassengersOrdersMap from "./SubPassengersOrdersMap";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   unregister: UseFormUnregister<FormValuesRoute>;
   errors: FieldErrors<FormValuesRoute>;
   setValue: UseFormSetValue<FormValuesRoute>;
-  idOrderPassengers: NullableNumber[];
   myListPassengers?: ISubPassengersList;
   renderRef: React.RefObject<number>;
   watch: UseFormWatch<FormValuesRoute>;
@@ -28,14 +30,16 @@ export default memo(function SubPassengersOrders({
   unregister,
   errors,
   setValue,
-  idOrderPassengers,
   myListPassengers,
   renderRef,
   watch,
   action,
 }: Props) {
-  const { subPassengers, setSubPassengers } = useSubPassengers({
-    idOrderPassengers,
+  // console.log("SubPassengersOrders RENDER");
+  const dataLayoutBusMap = useStore((state) => state.dataLayoutBusMap);
+  // console.log("dataLayoutBusMap", dataLayoutBusMap);
+
+  useSubPassengers({
     myListPassengers,
     renderRef,
     unregister,
@@ -45,28 +49,26 @@ export default memo(function SubPassengersOrders({
     action,
   });
 
-  const handleChange = (index: number, value: string, field: "subFirstName" | "subLastName" | "subPhone" | "subEmail") => {
-    setValue(`${field}.${index}`, value);
-    setSubPassengers((prev) => prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)));
-  };
+  const fullSubPassengers = useMemo(() => {
+    const passengerLength = dataLayoutBusMap?.passengerLength ?? 0;
 
-  if (subPassengers.length === 0) return null;
+    return Array.from({ length: passengerLength }, () => ({
+      subFirstName: action === RoleEnum.DRIVER ? "RESERVATION DRIVER" : "",
+      subLastName: action === RoleEnum.DRIVER ? "RESERVATION DRIVER" : "",
+      subPhone: action === RoleEnum.DRIVER ? sessionUser?.phone || "" : "",
+      subEmail: action === RoleEnum.DRIVER ? "RESERVATIONDRIVER@gmail.com" : "",
+    }));
+  }, [action, dataLayoutBusMap?.passengerLength, sessionUser]);
+
+  // console.log("fullSubPassengers", fullSubPassengers);
 
   return (
-    <div className="bg-white p-4 mb-4">
-      <h3 className="mb-4">Add Sub Passengers</h3>
-      {subPassengers.map((subPassenger, index) => (
-        <SubPassengerFields
-          key={index}
-          index={index}
-          subPassenger={subPassenger}
-          register={register}
-          // setValue={setValue}
-          errors={errors}
-          handleChange={handleChange}
-        />
-      ))}
-    </div>
+    <>
+      <div className="bg-white p-4 mb-4">
+        <h3 className="mb-4">Add Sub Passengers</h3>
+        <SubPassengersOrdersMap fullSubPassengers={fullSubPassengers} register={register} setValue={setValue} errors={errors} watch={watch} />
+      </div>
+    </>
   );
 });
 

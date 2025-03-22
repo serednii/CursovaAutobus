@@ -7,11 +7,13 @@ import { SeatStatusEnum } from "@/enum/shared.enums";
 import { authConfig } from "@/configs/auth";
 import { getServerSession } from "next-auth/next";
 import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+import { cloneDeep } from "lodash";
 
 export type paramsType = Promise<{ id: string }>;
 
 export default async function SeatSelection(props: { params: paramsType }) {
   console.log("Rendering SeatSelection");
+
   const { id } = await props.params;
   const session = await getServerSession(authConfig);
   const driverId: string | undefined = session?.user.id;
@@ -21,7 +23,8 @@ export default async function SeatSelection(props: { params: paramsType }) {
   const routes = routeArray as IGetRouteSeatSelection[] | null;
 
   const route = routes?.[0] as IGetRouteSeatSelection;
-
+  console.log("route before", cloneDeep(route));
+  //Якщо в маршруті id  пасажира дорівнює id user  то змінюємо статус на SELECTED щоб можна було поміняти
   if (route && route.busSeats) {
     const updatedPassengers = route.busSeats.map((e) => {
       if (e.passenger === Number(driverId) && e.busSeatStatus === SeatStatusEnum.RESERVED) {
@@ -31,7 +34,7 @@ export default async function SeatSelection(props: { params: paramsType }) {
     });
     route.busSeats = updatedPassengers;
   }
-
+  console.log("route after", route);
   return (
     <Container className="pt-4">
       <SelectedBusInfo route={route} />

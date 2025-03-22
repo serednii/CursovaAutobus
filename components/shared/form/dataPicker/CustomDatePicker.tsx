@@ -13,10 +13,10 @@ interface Props {
   name: keyof FormValuesRoute;
   title: string;
   register: UseFormRegister<FormValuesRoute>;
+  watch?: UseFormWatch<FormValuesRoute>;
   control: Control<FormValuesRoute>;
   errors: FieldErrors<FormValuesRoute>;
   className?: string;
-  watch?: UseFormWatch<FormValuesRoute>;
 }
 
 const CustomDatePicker = ({
@@ -89,7 +89,7 @@ const CustomDatePicker = ({
   );
 };
 
-export default memo(CustomDatePicker);
+export default CustomDatePicker;
 
 // "use client";
 // import React, { useState } from "react";

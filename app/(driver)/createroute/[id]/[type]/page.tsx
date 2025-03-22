@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { Container } from "@/components/ui/Container";
 import CustomDatePicker from "@/components/shared/form/dataPicker/CustomDatePicker";
@@ -17,19 +17,22 @@ import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDrive
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders/SubPassengersOrders";
 
 import { FormValuesRoute } from "@/types/form.types";
-import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
-import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
-
-import { handleChangeVariantBus } from "./action";
-import { useRouter } from "next/navigation";
+import { RoleEnum } from "@/enum/shared.enums";
+import { handleRouteSubmit } from "./handleRouteSubmit";
+// import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFetchRoute } from "./useFetchRoute";
-import { handleRouteSubmit } from "./handleRouteSubmit";
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
 import { useFetchRoutesCity } from "./useFetchRoutesCity";
 import useStore from "@/zustand/createStore";
+import { ILayoutData } from "@/types/layoutbus.types";
+import { useUpdateValues } from "./useUpdateValues";
+import { useHandleChangeVariantBus } from "./useHandleChangeVariantBus";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
+import CheckboxOptionsMain from "@/components/shared/form/CheckboxOptionsMain";
+
 // import { cond } from "lodash";
 // import { CreateRouteContext } from "./createRouteContext";
 
@@ -37,9 +40,13 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
   id: number;
 }
 
+const passengersLength: number[] = layoutsData.map((e) => e.passengerLength);
+
 export default function CreateRoute() {
-  const bears = useStore((state) => state.bears);
-  console.log("CreateRoute RENDER", bears);
+  const params = useParams();
+  const id = params.id ? Number(params.id) : 0;
+  const type = params.type ? params.type : "";
+
   const {
     register,
     unregister,
@@ -58,41 +65,51 @@ export default function CreateRoute() {
     },
   });
 
+  console.log("CreateRoute RENDER", watch());
+  const { handleChangeVariantBus } = useHandleChangeVariantBus();
+
   const router = useRouter();
   const { data: session, status } = useSession();
-  const params = useParams();
 
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
-  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
+  // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
+  const dataLayoutBus = useStore((state) => state.dataLayoutBus);
 
   const renderRef = useRef(0);
-
-  const id = params.id ? Number(params.id) : 0;
-  const type = params.type ? params.type : "";
   const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
   const userIdSession = Number(sessionUser?.id);
   const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
-  const idOrderPassengers = useMemo(
-    () =>
-      dataLayoutBus?.passenger
-        .filter((e) => e.passenger === userIdSession && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
-        .map((e) => e.passenger),
-    [dataLayoutBus, userIdSession]
-  );
-
   //Кількість пасажирів в кожному автобусі
-  const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
 
   const { route } = useFetchRoute({
     id,
     type,
+  });
+
+  console.log("route page", route, dataLayoutBus, id, type);
+
+  useUpdateValues({
+    userIdSession,
+    type,
+    route,
     setValue,
     setStartStops,
-    setDataLayoutBus,
-    setIndexSelectVariantBus,
   });
+
+  const findIndexLayoutsBus = useMemo(() => route && layoutsData.findIndex((e) => e.modelBus === route?.modelBus), [route?.modelBus]);
+
+  // console.log("findIndexLayoutsBus", findIndexLayoutsBus, indexSelectVariantBus);
+  useMemo(
+    () =>
+      handleChangeVariantBus({
+        number: findIndexLayoutsBus,
+        setIndexSelectVariantBus,
+        dataLayoutBus: route && "busSeats" in route ? route.busSeats : undefined,
+      }),
+    [findIndexLayoutsBus, route]
+  );
 
   if (status === "loading") return <MyScaleLoader />;
 
@@ -107,6 +124,7 @@ export default function CreateRoute() {
       </header>
 
       <main className="px-4 bg-[white] rounded-xl ">
+        {/* <form onSubmit={handleSubmit ? handleSubmit((data) => console.log(data)) : undefined}> */}
         <form onSubmit={handleSubmit(handleRouteSubmit(type, id, dataLayoutBus, sessionUser, router))}>
           <div className="flex gap-5 mb-5 flex-wrap">
             <CustomDatePicker title="Departure Date" name="departureDate" register={register} errors={errors} control={control} />
@@ -143,38 +161,27 @@ export default function CreateRoute() {
             <h2>Bus Layout</h2>
             <MaterialUISelect
               passengersLength={passengersLength}
-              handleChangeVariantBus={(value) => handleChangeVariantBus(value, setDataLayoutBus, setIndexSelectVariantBus, undefined)}
+              handleChangeVariantBus={(number) => handleChangeVariantBus({ number, setIndexSelectVariantBus, dataLayoutBus: undefined })}
               register={register}
               errors={errors}
               indexSelectVariantBus={indexSelectVariantBus}
               className="mb-5"
             />
 
-            {dataLayoutBus && (
-              <LayoutBus
-                sessionUser={sessionUser}
-                dataLayoutBus={dataLayoutBus}
-                setDataLayoutBus={setDataLayoutBus}
-                action={RoleEnum.DRIVER}
-                driverId={route?.driverId || 0}
-              />
-            )}
+            <LayoutBus sessionUser={sessionUser} userIdSession={userIdSession} action={RoleEnum.DRIVER} driverId={route?.driverId || 0} />
           </div>
 
-          {idOrderPassengers && idOrderPassengers.length > 0 && (
-            <SubPassengersOrders
-              register={register}
-              errors={errors}
-              unregister={unregister}
-              setValue={setValue}
-              myListPassengers={undefined}
-              idOrderPassengers={idOrderPassengers}
-              renderRef={renderRef}
-              watch={watch}
-              sessionUser={sessionUser}
-              action={RoleEnum.DRIVER}
-            />
-          )}
+          <SubPassengersOrders
+            register={register}
+            errors={errors}
+            unregister={unregister}
+            setValue={setValue}
+            myListPassengers={undefined}
+            renderRef={renderRef}
+            watch={watch}
+            sessionUser={sessionUser}
+            action={RoleEnum.DRIVER}
+          />
 
           <CustomTextField register={register} action="createRoute" errors={errors} name={"routePrice"} title={"Route Price"} className="mb-5" />
 
@@ -199,14 +206,29 @@ export default function CreateRoute() {
           </div>
         </form>
       </main>
-      <p>
-        RouteDriverId {route?.driverId} UserId-- {sessionUser?.id}
-      </p>
+      <p>{/* RouteDriverId {route?.driverId} UserId-- {sessionUser?.id} */}</p>
       <div className="footer"></div>
     </Container>
     // </CreateRouteContext.Provider>
   );
 }
+
+// const {
+//   // storeRegister,
+//   // storeUnregister,
+//   // storeSetValue,
+//   // storeSetRegister,
+//   // storeSetUnregister,
+//   // storeSetSetValue,
+//   register,
+//   unregister,
+//   setValue,
+//   watch,
+//   control,
+//   handleSubmit,
+//   errors,
+//   isValid,
+// } = useFormStore();
 
 //   const IGetRouteUpdate: {
 //     routePrice: number;

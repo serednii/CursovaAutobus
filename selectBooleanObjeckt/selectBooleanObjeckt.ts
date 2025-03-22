@@ -1,7 +1,7 @@
 import { IGetSearchRouteCityOption, IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/searchRoute";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 
-const busSeats = {
+export const busSeats = {
   select: {
     id: true,
     passenger: true,

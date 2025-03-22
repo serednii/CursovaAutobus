@@ -1,7 +1,7 @@
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
-
+import { busSeats } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 export async function POST(req: NextRequest) {
   try {
     const middlewareResponse = await middleware(req);
@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
         routePrice: true, // Залишаємо це поле
         bookedSeats: true,
         maxSeats: true,
+        driverId: true,
+        busSeats,
         // Усі інші поля не будуть включені, якщо вони не вказані як `true`
       },
     });

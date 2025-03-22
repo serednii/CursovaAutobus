@@ -5,9 +5,9 @@ import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
+import useStore from "@/zustand/createStore";
 
 interface UseSubPassengersProps {
-  idOrderPassengers: NullableNumber[];
   myListPassengers?: ISubPassengersList;
   renderRef: React.RefObject<number>;
   unregister: UseFormUnregister<FormValuesRoute>;
@@ -17,8 +17,13 @@ interface UseSubPassengersProps {
   action: RoleEnum;
 }
 
-export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRef, unregister, action, sessionUser }: UseSubPassengersProps) {
-  const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[]>([]);
+export function useSubPassengers({ myListPassengers, renderRef, unregister, action, sessionUser }: UseSubPassengersProps) {
+  // const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[]>([]);
+  const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+  const subPassengers = useStore((state) => state.subPassengers);
+  const setSubPassengers = useStore((state) => state.setSubPassengers);
+  // const dataLayoutBusMap = useStore((state) => state.setDataLayoutBusMap);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!myListPassengers) renderRef.current = 4;
@@ -30,11 +35,11 @@ export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRe
       let updatedPassengers = [...subPassengers];
 
       // Очистка полів у react-hook-form
-      updatedPassengers.forEach((_, index) => {
-        (["subFirstName", "subLastName", "subPhone", "subEmail"] as const).forEach((field) => {
-          unregister(`${field}.${index}`);
-        });
-      });
+      // updatedPassengers.forEach((_, index) => {
+      //   (["subFirstName", "subLastName", "subPhone", "subEmail"] as const).forEach((field) => {
+      //     unregister(`${field}.${index}`);
+      //   });
+      // });
 
       // Додаємо нові поля, якщо потрібно
       const delta = idOrderPassengers.length - updatedPassengers.length;
@@ -55,6 +60,7 @@ export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRe
     }
 
     renderRef.current++;
+
     // }, [idOrderPassengers.length, myListPassengers]);
     // }, [idOrderPassengers.length, myListPassengers, action, renderRef, sessionUser?.phone, subPassengers, unregister]);
   }, [idOrderPassengers.length, myListPassengers, action, renderRef, sessionUser?.phone, unregister]);

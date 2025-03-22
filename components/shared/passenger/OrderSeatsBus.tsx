@@ -11,6 +11,7 @@ import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import useBusLayoutData from "./useBusLayoutData";
 import useSubmitOrder from "./useSubmitOrder";
+import useStore from "@/zustand/createStore";
 
 interface Props {
   route: IGetRouteSeatSelection | undefined;
@@ -18,7 +19,6 @@ interface Props {
 
 export default function OrderSeatsBus({ route }: Props) {
   const { data: session, status } = useSession();
-  // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
   const renderRef = useRef(0);
   const {
     register,
@@ -36,45 +36,45 @@ export default function OrderSeatsBus({ route }: Props) {
       restRoom: true,
     },
   });
+
   let sessionUser: UserSession | null = null;
-  const { dataLayoutBus, setDataLayoutBus } = useBusLayoutData(route);
+
   if (status === "authenticated") {
     sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   }
-  const { onSubmit } = useSubmitOrder(route?.id, dataLayoutBus, sessionUser);
+  //В модель автобуса layoutsData добавляємо дані про пасажирів із маршруту route
+  useBusLayoutData(route);
+  const userIdSession = sessionUser?.id;
 
-  const userIdSession = Number(sessionUser?.id);
+  console.log("userIdSession", userIdSession);
 
-  const idOrderPassengers = dataLayoutBus && dataLayoutBus.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
-  console.log("iorderpassengers", idOrderPassengers);
-  const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route, userIdSession]);
+  const { onSubmit } = useSubmitOrder(route?.id, sessionUser);
+  const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+  const dataLayoutBusMap = useStore((state) => state.dataLayoutBusMap);
+  const dataLayoutBus = useStore((state) => state.dataLayoutBus);
+
+  const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === Number(userIdSession)), [route, userIdSession]);
+
+  console.log("idOderPassengers ----------- ----------- ", idOrderPassengers);
+  console.log("myListPassengers ----------- ----------- ", myListPassengers);
+  console.log("dataLayoutBusMap ----------- ----------- ", dataLayoutBusMap);
+  console.log("dataLayoutBus ----------- ----------- ", dataLayoutBus);
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {dataLayoutBus && (
-          <LayoutBus
-            sessionUser={sessionUser}
-            dataLayoutBus={dataLayoutBus}
-            setDataLayoutBus={setDataLayoutBus}
-            action={RoleEnum.PASSENGER}
-            driverId={route?.driverId}
-          />
-        )}
+        <LayoutBus sessionUser={sessionUser} action={RoleEnum.PASSENGER} driverId={route?.driverId} userIdSession={Number(userIdSession)} />
 
-        {idOrderPassengers && idOrderPassengers.length > 0 && (
-          <SubPassengersOrders
-            register={register}
-            errors={errors}
-            unregister={unregister}
-            setValue={setValue}
-            myListPassengers={myListPassengers}
-            idOrderPassengers={idOrderPassengers.slice(1)}
-            renderRef={renderRef}
-            watch={watch}
-            action={RoleEnum.PASSENGER}
-          />
-        )}
+        <SubPassengersOrders
+          register={register}
+          errors={errors}
+          unregister={unregister}
+          setValue={setValue}
+          myListPassengers={myListPassengers}
+          renderRef={renderRef}
+          watch={watch}
+          action={RoleEnum.PASSENGER}
+        />
 
         <Button
           variant="contained"

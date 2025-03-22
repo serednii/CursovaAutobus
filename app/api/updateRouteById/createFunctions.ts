@@ -2,9 +2,15 @@ import handleError from "@/lib/handleError";
 import { prisma } from "@/prisma/prisma-client";
 import { IBusSeats, IPassengersSeatsList } from "@/types/interface";
 
-export async function createIntermediateStops(intermediateStops: string[], routeId: number) {
+export async function updateIntermediateStops(intermediateStops: string[], routeId: number) {
   try {
-    const results = await Promise.all(
+    // Видаляємо всі старі зупинки для маршруту
+    await prisma.intermediateStop.deleteMany({
+      where: { routeId },
+    });
+
+    // Додаємо нові зупинки
+    const newStops = await Promise.all(
       intermediateStops.map((stop) =>
         prisma.intermediateStop.create({
           data: {
@@ -15,30 +21,40 @@ export async function createIntermediateStops(intermediateStops: string[], route
       )
     );
 
-    return results;
+    return newStops; // Повертаємо масив створених об'єктів
   } catch (error) {
-    handleError(error, "Error creating intermediate stops");
+    console.error("Error updating intermediate stops:", error);
+    return null;
   }
 }
 
-export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
+export async function updatedBusSeats(busSeats: IBusSeats[], idRoute: number) {
+  // console.log("busSeats id route", idRoute);
+
   try {
-    const results = await Promise.all(
-      busSeats.map((seat) =>
+    // Видаляємо всі старі записи для цього маршруту
+    await prisma.busSeat.deleteMany({
+      where: { routeDriverId: idRoute },
+    });
+
+    // Створюємо нові записи та повертаємо їх
+    const newSeats = await Promise.all(
+      busSeats.map((busSeat) =>
         prisma.busSeat.create({
           data: {
-            passenger: seat.passenger,
-            number: seat.number,
-            busSeatStatus: seat.busSeatStatus,
-            routeDriverId: routeId,
+            routeDriverId: idRoute,
+            number: busSeat.number,
+            passenger: busSeat.passenger,
+            busSeatStatus: busSeat.busSeatStatus,
           },
         })
       )
     );
 
-    return results;
+    return newSeats; // Масив об'єктів
   } catch (error) {
-    handleError(error, "Error creating bus seats");
+    console.error("Error updating bus seats:", error);
+    return null;
   }
 }
 

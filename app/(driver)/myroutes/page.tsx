@@ -8,6 +8,7 @@ import LoadingComponent from "@/components/LoadingComponent";
 import { getPastRoutesAndAvailableRoutes } from "@/lib/utils";
 import { useFetchDriverRoutes } from "./useFetchDriverRoutes";
 import { useDeleteRoute } from "./useDeleteRoute";
+import { SeatStatusEnum } from "@/enum/shared.enums";
 
 export default function MyRoutes() {
   const { routes, loading } = useFetchDriverRoutes();
@@ -17,7 +18,15 @@ export default function MyRoutes() {
     return <LoadingComponent />;
   }
 
-  const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(routes);
+  const modRoutes = routes.map((route) => {
+    const reserveSeats = route.busSeats.reduce((acc, seat) => (seat.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY ? acc + 1 : acc), 0);
+    return {
+      ...route,
+      departureFrom: route.id + " * " + route.driverId + " * " + route.departureFrom,
+      arrivalTo: `${reserveSeats} * ${route.arrivalTo}`,
+    };
+  });
+  const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(modRoutes);
 
   return (
     <div>

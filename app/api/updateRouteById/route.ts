@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
-import { updatedBusSeats } from "./updatedBusSeats";
 import { createPassengersSeatsList } from "../createroute/createFunctions";
 import { IUpdateRouteAPI } from "@/types/route-passenger.types";
 import { firstLetterUpperCase } from "@/lib/utils";
@@ -8,6 +7,7 @@ import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenge
 import { IPassengersSeatsList } from "@/types/interface";
 import { middleware } from "@/middleware";
 import { ApiResponse, ErrorResponse } from "@/types/response.types";
+import { updatedBusSeats, updateIntermediateStops } from "./createFunctions";
 
 // API route handler for updating a route
 export async function PATCH(req: Request) {
@@ -29,6 +29,7 @@ export async function PATCH(req: Request) {
       departureDate,
       arrivalDate,
       departureFrom,
+      intermediateStops,
       arrivalTo,
       routePrice,
       modelBus,
@@ -39,7 +40,16 @@ export async function PATCH(req: Request) {
       restRoom,
     }: IUpdateRouteAPI = resData;
 
-    if (!(Array.isArray(passengersSeatsList) && passengersSeatsList.length > 0 && Array.isArray(busSeats) && busSeats.length > 0)) {
+    if (
+      !(
+        Array.isArray(passengersSeatsList) &&
+        passengersSeatsList.length > 0 &&
+        Array.isArray(busSeats) &&
+        busSeats.length > 0 &&
+        intermediateStops &&
+        intermediateStops.length > 0
+      )
+    ) {
       return NextResponse.json({ error: "Поле 'passengersSeatsList' і 'busSeats' є обов'язковим" }, { status: 500 });
     }
 
@@ -79,6 +89,11 @@ export async function PATCH(req: Request) {
     if (!res) {
       console.error("Failed to update route base");
       return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
+    }
+
+    const resultIntermediateStops = await updateIntermediateStops(intermediateStops, id);
+    if (!resultIntermediateStops) {
+      return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
     }
 
     const updatedBusSeatsResult = await updatedBusSeats(busSeats || [], id);

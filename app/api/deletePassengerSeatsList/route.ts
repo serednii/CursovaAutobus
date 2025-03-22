@@ -4,7 +4,7 @@ import { IBusSeats } from "@/types/interface";
 import { ErrorResponse, SuccessResponse } from "@/types/response.types";
 import { Prisma } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
-import { updatedBusSeats } from "../updateRouteById/updatedBusSeats";
+import { updatedBusSeats } from "../updateRouteById/createFunctions";
 
 export async function DELETE(req: NextRequest) {
   try {

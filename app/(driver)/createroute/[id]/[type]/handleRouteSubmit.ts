@@ -1,4 +1,4 @@
-import { SubmitHandler } from "react-hook-form";
+import { SubmitHandler, UseFormWatch } from "react-hook-form";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -21,6 +21,7 @@ const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 
 export const handleRouteSubmit =
   (
+    // watch: UseFormWatch<FormValuesRoute>,
     type: string | string[],
     id: number,
     dataLayoutBus: ILayoutData | null | undefined,
@@ -31,6 +32,7 @@ export const handleRouteSubmit =
     try {
       console.log("Submitting Route Data:", type, dataForm);
       const createRouteDriver: ISendDataBaseRouteDriver = transformData(dataForm, dataLayoutBus as ILayoutData, sessionUser as UserSession);
+      console.log("createRouteDriver", createRouteDriver);
       if (type === "change") {
         await handleUpdateRoute(createRouteDriver, id, router);
       } else {
@@ -45,6 +47,7 @@ export const handleRouteSubmit =
 
 // 🔹 Функція для оновлення маршруту
 const handleUpdateRoute = async (routeData: ISendDataBaseRouteDriver, id: number, router: ReturnType<typeof useRouter>) => {
+  console.log("Updating Route:", { ...routeData, id });
   const parsedData = z.object(zodUpdateRouteAll).parse({ ...routeData, id });
 
   try {

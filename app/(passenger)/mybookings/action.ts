@@ -23,13 +23,14 @@ export const separateRoutesTable = (
       },
       { totalPrice: 0, seatsNumber: [] }
     );
+
     const passengersSeatsList: ISubPassengersList | undefined = route.passengersSeatsList.find((e) => e.idPassenger === passengerId);
 
     return {
       id: route.id,
       departureDate: route.departureDate,
       arrivalDate: route.arrivalDate,
-      departureFrom: route.departureFrom,
+      departureFrom: `${route.id} * ${route.driverId} * ${route.departureFrom}`,
       arrivalTo: route.arrivalTo,
       seatsNumber: getTotalPriceSeatsNumber.seatsNumber.sort((a, b) => a - b).join(", "),
       routeTotalPrice: "$" + getTotalPriceSeatsNumber.totalPrice,
@@ -71,7 +72,7 @@ export const removeRoutePassengerFunction = async (
     idPassenger: passengerId,
     busSeats: busSeatsRaw,
   });
-  
+
   if (!result) {
     //Error delete route passenger
   } else {

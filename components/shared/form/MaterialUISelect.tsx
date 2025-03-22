@@ -20,6 +20,7 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = Number(event.target.value); // Приводимо значення до числа
+    console.log("handleChange value", value);
     setSelectedValue(event.target.value); // Оновлюємо локальний стан
     handleChangeVariantBus(value); // Викликаємо зовнішню функцію-обробник
   };
@@ -34,7 +35,7 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
     }
   }, [indexSelectVariantBus]);
 
-  console.log("indexSelectVariantBus+++++++++++++", indexSelectVariantBus);
+  // console.log("indexSelectVariantBus+++++++++++++", indexSelectVariantBus);
 
   return (
     <FormControl fullWidth variant="outlined" className={cn("", className)} error={!!errors} style={{ borderColor: "black" }}>
@@ -77,4 +78,4 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
   );
 };
 
-export default memo(MaterialUISelect);
+export default MaterialUISelect;

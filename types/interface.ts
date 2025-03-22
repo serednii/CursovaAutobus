@@ -24,7 +24,7 @@ export interface IServiceBus {
   restRoom: boolean;
 }
 
-interface ISubPassengerList {
+export interface ISubPassengerList {
   subFirstName: string;
   subLastName: string;
   subPhone: string;
