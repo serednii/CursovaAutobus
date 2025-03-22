@@ -129,12 +129,22 @@ export default function OrderSeatsBus({ route }: Props) {
   console.log("dataLayoutBusMap ----------- ----------- ", dataLayoutBusMap);
   console.log("dataLayoutBus ----------- ----------- ", dataLayoutBus);
 
+  // className?: string;
+  // dataLayoutBus: ILayoutData;
+  // setDataLayoutBus: (value: ILayoutData) => void;
+  // sessionUser: UserSession | null;
+  // action: RoleEnum;
+  // driverId: number | undefined | null;
+  // userIdSession: number;
+
+  // className, dataLayoutBus, sessionUser, action, driverId
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <LayoutBus sessionUser={sessionUser} action={RoleEnum.PASSENGER} driverId={cloneRoute?.driverId} userIdSession={Number(userIdSession)} />
 
-        <SubPassengersOrders
+        {/* <SubPassengersOrders
           register={register}
           errors={errors}
           unregister={unregister}
@@ -143,7 +153,7 @@ export default function OrderSeatsBus({ route }: Props) {
           renderRef={renderRef}
           watch={watch}
           action={RoleEnum.PASSENGER}
-        />
+        /> */}
 
         <Button
           variant="contained"

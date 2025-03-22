@@ -5,14 +5,17 @@ import { getKeysStyles } from "./LayuotBus";
 
 export default memo(function DriverSeat({ className }: { className?: string }) {
   const dataLayoutBus = useStore((state) => state.dataLayoutBus);
+
   if (dataLayoutBus === null || dataLayoutBus === undefined) {
     return null;
   }
+
   const keysDriverSeat = Object.keys(dataLayoutBus.driverSeat) as (keyof typeof dataLayoutBus.driverSeat)[];
 
   const styleDriverSeat = getKeysStyles(keysDriverSeat, dataLayoutBus.driverSeat);
 
   console.log("DriverSeat RENDER");
+
   return (
     <div style={styleDriverSeat} className={cn("absolute", className)}>
       <div className="relative bg-[#1da04d] w-[60px] h-[40px] rounded-t-lg rounded-b-md">

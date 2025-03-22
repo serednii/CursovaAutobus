@@ -40,15 +40,15 @@ export default memo(function PassengerSeat(props: Props) {
     }
   });
 
-  useEffect(() => {
-    seat.busSeatStatus = changeStatus.busSeatStatus;
-    seat.passenger = changeStatus.passenger;
-    // const debouncedUpdate = debounce(() => updateIdOrderPassengers(userIdSession, action), 300);
-    updateIdOrderPassengers(userIdSession, action); //update counter reserved seats
-    // return () => {
-    //   debouncedUpdate.cancel();
-    // };
-  }, [changeStatus.busSeatStatus, changeStatus.passenger, seat, setDataLayoutBus]);
+  // useEffect(() => {
+  //   seat.busSeatStatus = changeStatus.busSeatStatus;
+  //   seat.passenger = changeStatus.passenger;
+  //   // const debouncedUpdate = debounce(() => updateIdOrderPassengers(userIdSession, action), 300);
+  //   updateIdOrderPassengers(userIdSession, action); //update counter reserved seats
+  //   // return () => {
+  //   //   debouncedUpdate.cancel();
+  //   // };
+  // }, [changeStatus.busSeatStatus, changeStatus.passenger, seat, setDataLayoutBus]);
 
   // Змінюємо колір залежно від статусу місця
   const statusColor = {
