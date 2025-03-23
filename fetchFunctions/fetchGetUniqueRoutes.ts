@@ -57,7 +57,7 @@ class FetchGetUniqueRoutes {
         console.log("data searchRoute", data);
         try {
           const response = await fetch(`${API_URL}/api/getUniqueRoutes`, {
-            cache: "no-cache",
+            cache: "no-store",
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),

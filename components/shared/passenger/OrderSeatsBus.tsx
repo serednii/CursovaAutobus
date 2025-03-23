@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
 import { useSession } from "next-auth/react";
 import { Button } from "@mui/material";
@@ -11,6 +11,9 @@ import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import useBusLayoutData from "./useBusLayoutData";
 import useSubmitOrder from "./useSubmitOrder";
+import { ILayoutData } from "@/types/layoutbus.types";
+import { NullableNumber } from "@/types/types";
+import useStore from "@/zustand/createStore";
 
 interface Props {
   route: IGetRouteSeatSelection | undefined;
@@ -18,8 +21,13 @@ interface Props {
 
 export default function OrderSeatsBus({ route }: Props) {
   const { data: session, status } = useSession();
+  const setUserIdSession = useStore((state) => state.setUserIdSession);
+  const idOrderPassengers = useStore((state) => state.setUserIdSession);
+
+  // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
   // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
   const renderRef = useRef(0);
+
   const {
     register,
     unregister,
@@ -37,30 +45,34 @@ export default function OrderSeatsBus({ route }: Props) {
     },
   });
   let sessionUser: UserSession | null = null;
-  const { dataLayoutBus, setDataLayoutBus } = useBusLayoutData(route);
+  // const [idOrderPassengers, setIdOrderPassengers] = useState<NullableNumber[]>([]);
+
+  // const handleDataLayoutBus = useMemo(
+  //   () => (data: ILayoutData) => {
+  //     setDataLayoutBus(data);
+  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userIdSession);
+  //   },
+  //   []
+  // );
+
   if (status === "authenticated") {
     sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   }
-  const { onSubmit } = useSubmitOrder(route?.id, dataLayoutBus, sessionUser);
+
+  // const { onSubmit } = useSubmitOrder(route?.id, sessionUser);
 
   const userIdSession = Number(sessionUser?.id);
-
-  const idOrderPassengers = dataLayoutBus && dataLayoutBus.passenger.filter((e) => e.passenger === userIdSession).map((e) => e.passenger);
-  console.log("iorderpassengers", idOrderPassengers);
+  setUserIdSession(userIdSession);
+  useBusLayoutData(route);
+  // console.log("iorderpassengers", idOrderPassengers);
   const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route, userIdSession]);
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {dataLayoutBus && (
-          <LayoutBus
-            sessionUser={sessionUser}
-            dataLayoutBus={dataLayoutBus}
-            setDataLayoutBus={setDataLayoutBus}
-            action={RoleEnum.PASSENGER}
-            driverId={route?.driverId}
-          />
-        )}
+      <form>
+        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+
+        <LayoutBus sessionUser={sessionUser} action={RoleEnum.PASSENGER} driverId={route?.driverId} />
 
         {idOrderPassengers && idOrderPassengers.length > 0 && (
           <SubPassengersOrders
@@ -69,7 +81,7 @@ export default function OrderSeatsBus({ route }: Props) {
             unregister={unregister}
             setValue={setValue}
             myListPassengers={myListPassengers}
-            idOrderPassengers={idOrderPassengers.slice(1)}
+            // idOrderPassengers={idOrderPassengers.slice(1)}
             renderRef={renderRef}
             watch={watch}
             action={RoleEnum.PASSENGER}

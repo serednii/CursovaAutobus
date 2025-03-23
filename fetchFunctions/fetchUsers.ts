@@ -13,6 +13,7 @@ export async function getUsersFetchByIdsBySelect(ids: number[], select: IGetUser
   try {
     if (ids && Array.isArray(ids) && ids.length === 0) return null;
     const response = await fetch(`${API_URL}/api/getUsersByIdBySelect`, {
+      cache: "no-store",
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -19,6 +19,9 @@ interface UseSubPassengersProps {
 
 export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRef, unregister, action, sessionUser }: UseSubPassengersProps) {
   const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[]>([]);
+  // useEffect(() => {
+  //   console.log("subPassengers render", subPassengers);
+  // }, [subPassengers]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!myListPassengers) renderRef.current = 4;

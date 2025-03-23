@@ -98,7 +98,7 @@ class GetRoutesById {
 
         try {
           const response = await fetch(`${API_URL}/api/getRoutesById`, {
-            cache: "no-cache",
+            cache: "no-store",
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id, select }),

@@ -6,7 +6,7 @@ import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { UseFormSetValue } from "react-hook-form";
 import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
-import { SeatStatusEnum } from "@/enum/shared.enums";
+import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 
 // const exampleRote = {
 //   arrivalDate: " Fri Mar 14 2025 20:00:00 GMT+0100 (Центральная Европа, стандартное время)",
@@ -73,7 +73,10 @@ export const transformData = (data: FormValuesRoute, dataLayoutBus: ILayoutData,
 
 export const handleChangeVariantBus = (
   number: number,
-  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>,
+  setDataLayoutBus: (
+    value: ILayoutData | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined) | null | undefined,
+    action: RoleEnum
+  ) => void,
   setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>,
   dataLayoutBus?: IBusSeats[]
 ) => {
@@ -84,9 +87,9 @@ export const handleChangeVariantBus = (
       const findSeats = dataLayoutBus.find((seat) => seat.number === e.number);
       return { ...e, busSeatStatus: findSeats?.busSeatStatus || SeatStatusEnum.AVAILABLE, passenger: findSeats?.passenger || null };
     });
-    setDataLayoutBus({ ...layoutsData[number], passenger: selectLayoutsData });
+    setDataLayoutBus({ ...layoutsData[number], passenger: selectLayoutsData }, RoleEnum.DRIVER);
   } else {
-    setDataLayoutBus(layoutsData[number]);
+    setDataLayoutBus(layoutsData[number], RoleEnum.DRIVER);
   }
 };
 
@@ -94,7 +97,10 @@ export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
   res: T,
   setValue: UseFormSetValue<FormValuesRoute>,
   setStartStops: React.Dispatch<React.SetStateAction<string[]>>,
-  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>,
+  setDataLayoutBus: (
+    value: ILayoutData | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined) | null | undefined,
+    action: RoleEnum
+  ) => void,
   setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>
 ) => {
   setValue("routePrice", String(res.routePrice));

@@ -21,7 +21,7 @@ export default async function SeatSelection(props: { params: paramsType }) {
   const routes = routeArray as IGetRouteSeatSelection[] | null;
 
   const route = routes?.[0] as IGetRouteSeatSelection;
-
+  console.log("route in SeatSelection ", route);
   if (route && route.busSeats) {
     const updatedPassengers = route.busSeats.map((e) => {
       if (e.passenger === Number(driverId) && e.busSeatStatus === SeatStatusEnum.RESERVED) {
@@ -35,7 +35,7 @@ export default async function SeatSelection(props: { params: paramsType }) {
   return (
     <Container className="pt-4">
       <SelectedBusInfo route={route} />
-      <OrderSeatsBus key={Math.random()} route={route} />
+      <OrderSeatsBus route={route} />
       MyBookings Driver Id {route?.driverId} Session user.id {session?.user.id}
     </Container>
   );

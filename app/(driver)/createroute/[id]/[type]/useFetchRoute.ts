@@ -5,18 +5,19 @@ import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/sele
 import { FormValuesRoute } from "@/types/form.types";
 import { fetchGetRoutesById, IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import { ILayoutData } from "@/types/layoutbus.types";
+import useStore from "@/zustand/createStore";
 
 interface UseFetchRouteProps {
   id: number;
   type: string | string[];
   setValue: UseFormSetValue<FormValuesRoute>;
   setStartStops: React.Dispatch<React.SetStateAction<string[]>>;
-  setDataLayoutBus: React.Dispatch<React.SetStateAction<ILayoutData | null | undefined>>;
   setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-export const useFetchRoute = ({ id, type, setValue, setStartStops, setDataLayoutBus, setIndexSelectVariantBus }: UseFetchRouteProps) => {
+export const useFetchRoute = ({ id, type, setValue, setStartStops, setIndexSelectVariantBus }: UseFetchRouteProps) => {
   const [route, setRoute] = useState<IGetRouteUpdate | IGetRouteAgain | null>(null);
+  const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 
   useEffect(() => {
     if (id !== 0) {
@@ -45,8 +46,6 @@ export const useFetchRoute = ({ id, type, setValue, setStartStops, setDataLayout
       }
     }
   }, [id, type, setDataLayoutBus, setIndexSelectVariantBus, setStartStops, setValue]);
-
-  // }, [id, type]);
 
   return { route };
 };

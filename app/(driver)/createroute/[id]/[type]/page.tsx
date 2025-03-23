@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, use, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
@@ -30,6 +30,8 @@ import { handleRouteSubmit } from "./handleRouteSubmit";
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
 import { useFetchRoutesCity } from "./useFetchRoutesCity";
 import useStore from "@/zustand/createStore";
+import { debounce } from "lodash";
+import { NullableNumber } from "@/types/types";
 // import { cond } from "lodash";
 // import { CreateRouteContext } from "./createRouteContext";
 
@@ -37,9 +39,20 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
   id: number;
 }
 
+// export const debouncedSetIdOrderPassengers = debounce((data: ILayoutData, setIdOrderPassengers, userIdSession) => {
+//   const idOrderPassengers = data.passenger
+//     .filter((e) => e.passenger === userIdSession && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
+//     .map((e) => e.passenger);
+//   setIdOrderPassengers(idOrderPassengers);
+// }, 800);
+
 export default function CreateRoute() {
-  const bears = useStore((state) => state.bears);
-  console.log("CreateRoute RENDER", bears);
+  const setUserIdSession = useStore((state) => state.setUserIdSession);
+  const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
+  const dataLayoutBus = useStore((state) => state.dataLayoutBus);
+  const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+
+  // console.log("CreateRoute RENDER", bears);
   const {
     register,
     unregister,
@@ -63,24 +76,35 @@ export default function CreateRoute() {
   const params = useParams();
 
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
-  const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
+  // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
-
+  // const [idOrderPassengers, setIdOrderPassengers] = useState<NullableNumber[]>([]);
   const renderRef = useRef(0);
 
   const id = params.id ? Number(params.id) : 0;
   const type = params.type ? params.type : "";
   const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
   const userIdSession = Number(sessionUser?.id);
+
+  useEffect(() => {
+    setDataLayoutBus(null, RoleEnum.DRIVER);
+  }, [setDataLayoutBus]);
+
+  useEffect(() => {
+    if (userIdSession) {
+      setUserIdSession(userIdSession);
+    }
+  }, [userIdSession, setUserIdSession]);
+
   const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
-  const idOrderPassengers = useMemo(
-    () =>
-      dataLayoutBus?.passenger
-        .filter((e) => e.passenger === userIdSession && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
-        .map((e) => e.passenger),
-    [dataLayoutBus, userIdSession]
-  );
+  // const handleDataLayoutBus = useMemo(
+  //   () => (data: ILayoutData) => {
+  //     setDataLayoutBus(data);
+  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userIdSession);
+  //   },
+  //   []
+  // );
 
   //Кількість пасажирів в кожному автобусі
   const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
@@ -90,7 +114,6 @@ export default function CreateRoute() {
     type,
     setValue,
     setStartStops,
-    setDataLayoutBus,
     setIndexSelectVariantBus,
   });
 
@@ -150,15 +173,15 @@ export default function CreateRoute() {
               className="mb-5"
             />
 
-            {dataLayoutBus && (
-              <LayoutBus
-                sessionUser={sessionUser}
-                dataLayoutBus={dataLayoutBus}
-                setDataLayoutBus={setDataLayoutBus}
-                action={RoleEnum.DRIVER}
-                driverId={route?.driverId || 0}
-              />
-            )}
+            {/* {dataLayoutBus && ( */}
+            <LayoutBus
+              sessionUser={sessionUser}
+              // dataLayoutBus={dataLayoutBus}
+              // handleDataLayoutBus={handleDataLayoutBus}
+              action={RoleEnum.DRIVER}
+              driverId={route?.driverId || 0}
+            />
+            {/* )} */}
           </div>
 
           {idOrderPassengers && idOrderPassengers.length > 0 && (
@@ -168,7 +191,7 @@ export default function CreateRoute() {
               unregister={unregister}
               setValue={setValue}
               myListPassengers={undefined}
-              idOrderPassengers={idOrderPassengers}
+              // idOrderPassengers={idOrderPassengers}
               renderRef={renderRef}
               watch={watch}
               sessionUser={sessionUser}

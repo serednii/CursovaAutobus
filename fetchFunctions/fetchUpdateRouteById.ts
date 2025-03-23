@@ -34,6 +34,7 @@ export type TRouteUpdateResult = GenerateType<IRouteDataBase, TRouteSeatUpdateKe
 async function fetchUpdateRouteById<TResult>(updateRouteById: TResult) {
   try {
     const response = await fetch(`${API_URL}/api/updateRouteById`, {
+      cache: "no-store",
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

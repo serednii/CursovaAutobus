@@ -5,16 +5,17 @@ import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
 import { zodSchemaUpdateRouteIn } from "@/zod_shema/zodGetUpdateRoute";
 import { IUpdateRoute } from "@/types/route-passenger.types";
 import { FormValuesRoute } from "@/types/form.types";
-import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { transformData } from "./transformData";
+import useStore from "@/zustand/createStore";
 
 const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 
-export default function useSubmitOrder(routeId: number | undefined, dataLayoutBus: ILayoutData | null, sessionUser: UserSession | null) {
+export default function useSubmitOrder(routeId: number | undefined, sessionUser: UserSession | null) {
   const router = useRouter();
 
   const onSubmit: SubmitHandler<FormValuesRoute> = async (data) => {
+    const dataLayoutBus = useStore((state) => state.dataLayoutBus);
     if (!dataLayoutBus || !sessionUser || routeId === undefined) return;
 
     const updateRouteDriver: IUpdateRoute = transformData(routeId, data, dataLayoutBus, sessionUser);

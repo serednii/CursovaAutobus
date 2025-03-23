@@ -3,6 +3,7 @@ import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 // import { cn } from "@/lib/utils";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
+import useStore from "@/zustand/createStore";
 import { memo, useEffect, useState } from "react";
 import SeatButton from "./SeatButton";
 // import SeatButton from "./SeatButton";
@@ -12,15 +13,17 @@ interface Props {
   params: BusSeatInfo;
   user: string;
   dataLayoutBus: ILayoutData;
-  setDataLayoutBus: (value: ILayoutData) => void;
+  // handleDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
   action: RoleEnum;
   driverId: number | null | undefined;
 }
 
-export default memo(function PassengerSeat(props: Props) {
+export default function PassengerSeat(props: Props) {
   console.log("PassengerSeat RENDER");
-  const { className, params, user, dataLayoutBus, setDataLayoutBus, sessionUser, action, driverId } = props;
+  const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
+
+  const { className, params, user, dataLayoutBus, sessionUser, action, driverId } = props;
   const { number } = params;
   const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
   const keys = Object.keys(params) as (keyof typeof params)[];
@@ -37,7 +40,8 @@ export default memo(function PassengerSeat(props: Props) {
   useEffect(() => {
     params.busSeatStatus = changeStatus.busSeatStatus;
     params.passenger = changeStatus.passenger;
-    setDataLayoutBus({ ...dataLayoutBus });
+    setDataLayoutBus({ ...dataLayoutBus }, action);
+    // console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
     // }, [changeStatus.busSeatStatus, changeStatus.passenger, dataLayoutBus, params, setDataLayoutBus]);
   }, [changeStatus.busSeatStatus, changeStatus.passenger, params, setDataLayoutBus]);
 
@@ -97,4 +101,4 @@ export default memo(function PassengerSeat(props: Props) {
       handleClick={handleClick}
     />
   );
-});
+}

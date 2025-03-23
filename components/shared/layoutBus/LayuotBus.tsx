@@ -8,21 +8,29 @@ import Stairs from "./Stairs";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
-import { memo } from "react";
+import { memo, useEffect } from "react";
+import useStore from "@/zustand/createStore";
 
 interface Props {
   className?: string;
-  dataLayoutBus: ILayoutData;
-  setDataLayoutBus: (value: ILayoutData) => void;
+  // dataLayoutBus: ILayoutData;
+  // handleDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
   action: RoleEnum;
   driverId: number | undefined | null;
 }
 
-export default memo(function LayoutBus({ className, dataLayoutBus, setDataLayoutBus, sessionUser, action, driverId }: Props) {
+export default function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   const user = sessionUser?.role;
-  console.log("LayoutBus RENDER");
-  if (dataLayoutBus?.passenger.length === 0) {
+  const dataLayoutBus = useStore((state) => state.dataLayoutBus);
+  const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
+
+  useEffect(() => {
+    setDataLayoutBus(null, RoleEnum.DRIVER);
+  }, []);
+
+  console.log("LayoutBus RENDER", dataLayoutBus);
+  if (driverId === null || dataLayoutBus === null || dataLayoutBus?.passenger.length === 0) {
     return null;
   }
 
@@ -70,7 +78,7 @@ export default memo(function LayoutBus({ className, dataLayoutBus, setDataLayout
                 params={item}
                 user={user || ""}
                 dataLayoutBus={dataLayoutBus}
-                setDataLayoutBus={setDataLayoutBus}
+                // handleDataLayoutBus={handleDataLayoutBus}
                 sessionUser={sessionUser}
                 action={action}
                 driverId={driverId}
@@ -81,4 +89,4 @@ export default memo(function LayoutBus({ className, dataLayoutBus, setDataLayout
       </div>
     </div>
   );
-});
+}

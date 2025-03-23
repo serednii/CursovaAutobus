@@ -9,6 +9,7 @@ async function fetchGetRoutesByPassengerId<TSelect>(
 ): Promise<Omit<GetRoutesByPassengerId, "isReservation">[] | null> {
   try {
     const response = await fetch(`${API_URL}/api/getRoutesByPassengerId`, {
+      cache: "no-store",
       method: "POST",
       headers: {
         "Content-Type": "application/json",

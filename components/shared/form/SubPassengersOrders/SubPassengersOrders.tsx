@@ -8,13 +8,14 @@ import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 import { useSubPassengers } from "./useSubPassengers";
 import SubPassengerFields from "./SubPassengerFields";
+import useStore from "@/zustand/createStore";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   unregister: UseFormUnregister<FormValuesRoute>;
   errors: FieldErrors<FormValuesRoute>;
   setValue: UseFormSetValue<FormValuesRoute>;
-  idOrderPassengers: NullableNumber[];
+  // idOrderPassengers: NullableNumber[];
   myListPassengers?: ISubPassengersList;
   renderRef: React.RefObject<number>;
   watch: UseFormWatch<FormValuesRoute>;
@@ -28,12 +29,14 @@ export default memo(function SubPassengersOrders({
   unregister,
   errors,
   setValue,
-  idOrderPassengers,
+  // idOrderPassengers,
   myListPassengers,
   renderRef,
   watch,
   action,
 }: Props) {
+  const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+
   const { subPassengers, setSubPassengers } = useSubPassengers({
     idOrderPassengers,
     myListPassengers,
