@@ -20,7 +20,7 @@ import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
-import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
+import { RoleEnum } from "@/enum/shared.enums";
 
 import { handleChangeVariantBus } from "./action";
 import { useRouter } from "next/navigation";
@@ -29,11 +29,10 @@ import { useFetchRoute } from "./useFetchRoute";
 import { handleRouteSubmit } from "./handleRouteSubmit";
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
 import { useFetchRoutesCity } from "./useFetchRoutesCity";
-import useStore from "@/zustand/createStore";
-import { debounce } from "lodash";
-import { NullableNumber } from "@/types/types";
-// import { cond } from "lodash";
-// import { CreateRouteContext } from "./createRouteContext";
+// import useStore from "@/zustand/createStore";
+
+import { observer } from "mobx-react-lite";
+import busStore from "@/mobx/busStore";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -45,12 +44,25 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 //     .map((e) => e.passenger);
 //   setIdOrderPassengers(idOrderPassengers);
 // }, 800);
+// const setUserIdSession = useStore((state) => state.setUserIdSession);
+// const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
+// const dataLayoutBus = useStore((state) => state.dataLayoutBus);
+// const idOrderPassengers = useStore((state) => state.idOrderPassengers);
 
-export default function CreateRoute() {
-  const setUserIdSession = useStore((state) => state.setUserIdSession);
-  const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
-  const dataLayoutBus = useStore((state) => state.dataLayoutBus);
-  const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+function CreateRoute() {
+  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
+  const [startStops, setStartStops] = useState<string[]>([]);
+
+  const router = useRouter();
+  const renderRef = useRef(0);
+
+  const { data: session, status } = useSession();
+  const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
+  const userIdSession = Number(sessionUser?.id);
+
+  const params = useParams();
+  const id = params.id ? Number(params.id) : 0;
+  const type = params.type ? params.type : "";
 
   // console.log("CreateRoute RENDER", bears);
   const {
@@ -71,30 +83,18 @@ export default function CreateRoute() {
     },
   });
 
-  const router = useRouter();
-  const { data: session, status } = useSession();
-  const params = useParams();
-
-  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
-  const [startStops, setStartStops] = useState<string[]>([]);
   // const [idOrderPassengers, setIdOrderPassengers] = useState<NullableNumber[]>([]);
-  const renderRef = useRef(0);
-
-  const id = params.id ? Number(params.id) : 0;
-  const type = params.type ? params.type : "";
-  const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
-  const userIdSession = Number(sessionUser?.id);
 
   useEffect(() => {
-    setDataLayoutBus(null, RoleEnum.DRIVER);
-  }, [setDataLayoutBus]);
+    busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
+  }, [busStore.setDataLayoutBus]);
 
   useEffect(() => {
     if (userIdSession) {
-      setUserIdSession(userIdSession);
+      busStore.setUserIdSession(userIdSession);
     }
-  }, [userIdSession, setUserIdSession]);
+  }, [userIdSession, busStore.setUserIdSession]);
 
   const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
@@ -130,7 +130,7 @@ export default function CreateRoute() {
       </header>
 
       <main className="px-4 bg-[white] rounded-xl ">
-        <form onSubmit={handleSubmit(handleRouteSubmit(type, id, dataLayoutBus, sessionUser, router))}>
+        <form onSubmit={handleSubmit(handleRouteSubmit(type, id, busStore.dataLayoutBus, sessionUser, router))}>
           <div className="flex gap-5 mb-5 flex-wrap">
             <CustomDatePicker title="Departure Date" name="departureDate" register={register} errors={errors} control={control} />
             <CustomDatePicker title="Arrival Date" name="arrivalDate" register={register} errors={errors} watch={watch} control={control} />
@@ -166,7 +166,7 @@ export default function CreateRoute() {
             <h2>Bus Layout</h2>
             <MaterialUISelect
               passengersLength={passengersLength}
-              handleChangeVariantBus={(value) => handleChangeVariantBus(value, setDataLayoutBus, setIndexSelectVariantBus, undefined)}
+              handleChangeVariantBus={(value) => handleChangeVariantBus(value, setIndexSelectVariantBus, undefined)}
               register={register}
               errors={errors}
               indexSelectVariantBus={indexSelectVariantBus}
@@ -184,7 +184,7 @@ export default function CreateRoute() {
             {/* )} */}
           </div>
 
-          {idOrderPassengers && idOrderPassengers.length > 0 && (
+          {busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0 && (
             <SubPassengersOrders
               register={register}
               errors={errors}
@@ -230,6 +230,7 @@ export default function CreateRoute() {
     // </CreateRouteContext.Provider>
   );
 }
+export default observer(CreateRoute);
 
 //   const IGetRouteUpdate: {
 //     routePrice: number;

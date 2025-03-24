@@ -9,8 +9,9 @@ import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 import { memo, useEffect } from "react";
-import useStore from "@/zustand/createStore";
-
+// import useStore from "@/zustand/createStore";
+import { observer } from "mobx-react-lite";
+import busStore from "@/mobx/busStore";
 interface Props {
   className?: string;
   // dataLayoutBus: ILayoutData;
@@ -20,25 +21,26 @@ interface Props {
   driverId: number | undefined | null;
 }
 
-export default function LayoutBus({ className, sessionUser, action, driverId }: Props) {
-  const user = sessionUser?.role;
-  const dataLayoutBus = useStore((state) => state.dataLayoutBus);
-  const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
+function LayoutBus({ className, sessionUser, action, driverId }: Props) {
+  // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
+  // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 
-  useEffect(() => {
-    setDataLayoutBus(null, RoleEnum.DRIVER);
-  }, []);
+  // useEffect(() => {
+  //   busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
+  // }, []);
 
-  console.log("LayoutBus RENDER", dataLayoutBus);
-  if (driverId === null || dataLayoutBus === null || dataLayoutBus?.passenger.length === 0) {
+  console.log("LayoutBus RENDER", busStore.dataLayoutBus);
+  if (driverId === null || busStore.dataLayoutBus === null || busStore.dataLayoutBus?.passenger.length === 0) {
     return null;
   }
 
-  const keysDriverSeat = Object.keys(dataLayoutBus.driverSeat) as (keyof typeof dataLayoutBus.driverSeat)[];
+  const keysDriverSeat = Object.keys(busStore.dataLayoutBus.driverSeat) as (keyof typeof busStore.dataLayoutBus.driverSeat)[];
 
-  const keysStairs_0 = Object.keys(dataLayoutBus.stairs[0]) as (keyof (typeof dataLayoutBus.stairs)[0])[];
+  const keysStairs_0 = Object.keys(busStore.dataLayoutBus.stairs[0]) as (keyof (typeof busStore.dataLayoutBus.stairs)[0])[];
 
-  const keysStairs_1 = dataLayoutBus.stairs.length === 2 && (Object.keys(dataLayoutBus.stairs[1]) as (keyof (typeof dataLayoutBus.stairs)[1])[]);
+  const keysStairs_1 =
+    busStore.dataLayoutBus.stairs.length === 2 &&
+    (Object.keys(busStore.dataLayoutBus.stairs[1]) as (keyof (typeof busStore.dataLayoutBus.stairs)[1])[]);
 
   type styleKey = ("left" | "bottom" | "right" | "top")[]; // Виправлений тип
 
@@ -55,13 +57,13 @@ export default function LayoutBus({ className, sessionUser, action, driverId }: 
     return styleDriverSeat;
   };
 
-  const styleDriverSeat = getKeysStyles(keysDriverSeat, dataLayoutBus.driverSeat);
-  const styleStairs_0 = getKeysStyles(keysStairs_0, dataLayoutBus.stairs[0]);
-  const styleStairs_1 = (keysStairs_1 && getKeysStyles(keysStairs_1, dataLayoutBus.stairs[1])) || null;
+  const styleDriverSeat = getKeysStyles(keysDriverSeat, busStore.dataLayoutBus.driverSeat);
+  const styleStairs_0 = getKeysStyles(keysStairs_0, busStore.dataLayoutBus.stairs[0]);
+  const styleStairs_1 = (keysStairs_1 && getKeysStyles(keysStairs_1, busStore.dataLayoutBus.stairs[1])) || null;
 
   const styleBus = {
-    width: dataLayoutBus.busWidth,
-    height: dataLayoutBus.busHeight,
+    width: busStore.dataLayoutBus.busWidth,
+    height: busStore.dataLayoutBus.busHeight,
     scale: "0.8",
   };
 
@@ -71,13 +73,13 @@ export default function LayoutBus({ className, sessionUser, action, driverId }: 
         <DriverSeat style={styleDriverSeat} className="left-[80px] bottom-[20px]" />
         <Stairs style={styleStairs_0} className="right-[100px] top-[0px]" />
         {styleStairs_1 && <Stairs style={styleStairs_1 || {}} className="left-[50px] top-[0px]" />}
-        {dataLayoutBus?.passenger.map((item: BusSeatInfo, index: number) => {
+        {busStore.dataLayoutBus?.passenger.map((item: BusSeatInfo, index: number) => {
           return (
             <div key={index}>
               <PassengerSeat
                 params={item}
-                user={user || ""}
-                dataLayoutBus={dataLayoutBus}
+                // user={user || ""}
+                // dataLayoutBus={busStore.dataLayoutBus}
                 // handleDataLayoutBus={handleDataLayoutBus}
                 sessionUser={sessionUser}
                 action={action}
@@ -90,3 +92,4 @@ export default function LayoutBus({ className, sessionUser, action, driverId }: 
     </div>
   );
 }
+export default observer(LayoutBus);

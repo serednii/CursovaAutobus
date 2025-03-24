@@ -1,6 +1,6 @@
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import { SubPassengerDetails } from "./form.types";
-import { NullableNumber, SeatStatus } from "./types";
+import { NullableNumber } from "./types";
 
 export interface IFromTo {
   departureFrom: string; // Залишаємо це поле

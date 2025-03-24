@@ -1,4 +1,5 @@
-import { NullableNumber, SeatStatus } from "./types";
+import { SeatStatusEnum } from "@/enum/shared.enums";
+import { NullableNumber } from "./types";
 
 export type SeatPositionString = {
   left?: string;
@@ -16,7 +17,7 @@ export type SeatPositionNumber = {
 
 export type BusSeatInfo = {
   number: number;
-  busSeatStatus: SeatStatus;
+  busSeatStatus: SeatStatusEnum;
   passenger: NullableNumber;
 } & SeatPositionNumber;
 

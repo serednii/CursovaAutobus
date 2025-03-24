@@ -3,32 +3,36 @@ import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 // import { cn } from "@/lib/utils";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
-import useStore from "@/zustand/createStore";
+// import useStore from "@/zustand/createStore";
 import { memo, useEffect, useState } from "react";
 import SeatButton from "./SeatButton";
 // import SeatButton from "./SeatButton";
+import { observer } from "mobx-react-lite";
+import busStore from "@/mobx/busStore";
+import { runInAction } from "mobx";
 
 interface Props {
   className?: string;
   params: BusSeatInfo;
-  user: string;
-  dataLayoutBus: ILayoutData;
+  // dataLayoutBus: ILayoutData;
   // handleDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
   action: RoleEnum;
   driverId: number | null | undefined;
 }
 
-export default function PassengerSeat(props: Props) {
+function PassengerSeat(props: Props) {
   console.log("PassengerSeat RENDER");
-  const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
+  // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 
-  const { className, params, user, dataLayoutBus, sessionUser, action, driverId } = props;
+  const { className, params, sessionUser, action, driverId } = props;
   const { number } = params;
   const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
   const keys = Object.keys(params) as (keyof typeof params)[];
   const styles: React.CSSProperties = {};
   const sessionUserId = Number(sessionUser?.id) as number;
+  const userRole = sessionUser?.role;
+
   // console.log("sessionUserId === driverId", sessionUserId, driverId);
   //add styles top, bottom, left, right
   keys.forEach((key) => {
@@ -38,12 +42,23 @@ export default function PassengerSeat(props: Props) {
   });
 
   useEffect(() => {
-    params.busSeatStatus = changeStatus.busSeatStatus;
-    params.passenger = changeStatus.passenger;
-    setDataLayoutBus({ ...dataLayoutBus }, action);
-    // console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
-    // }, [changeStatus.busSeatStatus, changeStatus.passenger, dataLayoutBus, params, setDataLayoutBus]);
-  }, [changeStatus.busSeatStatus, changeStatus.passenger, params, setDataLayoutBus]);
+    runInAction(() => {
+      params.busSeatStatus = changeStatus.busSeatStatus;
+      params.passenger = changeStatus.passenger;
+
+      busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
+    });
+  }, [changeStatus.busSeatStatus, changeStatus.passenger, params, busStore]);
+
+  // useEffect(() => {
+  //   params.busSeatStatus = changeStatus.busSeatStatus;
+  //   params.passenger = changeStatus.passenger;
+
+  //   busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
+
+  //   // console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+  //   // }, [changeStatus.busSeatStatus, changeStatus.passenger, dataLayoutBus, params, setDataLayoutBus]);
+  // }, [changeStatus.busSeatStatus, changeStatus.passenger, params, busStore.setDataLayoutBus]);
 
   // Змінюємо колір залежно від статусу місця
   const statusColor = {
@@ -59,11 +74,11 @@ export default function PassengerSeat(props: Props) {
     setChangeStatus((prevParams: BusSeatInfo) => {
       //Якщо являємося водієм і на своєму маршруті
       let updatedStatus: SeatStatusEnum = SeatStatusEnum.AVAILABLE;
-      if ((user === RoleEnum.DRIVER && Number(sessionUser?.id) === driverId) || driverId === 0) {
+      if ((userRole === RoleEnum.DRIVER && Number(sessionUser?.id) === driverId) || driverId === 0) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.RESERVEDEMPTY : SeatStatusEnum.AVAILABLE;
-      } else if (user === RoleEnum.DRIVER && sessionUserId !== driverId) {
+      } else if (userRole === RoleEnum.DRIVER && sessionUserId !== driverId) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
-      } else if (user === RoleEnum.PASSENGER) {
+      } else if (userRole === RoleEnum.PASSENGER) {
         updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
       }
 
@@ -102,3 +117,4 @@ export default function PassengerSeat(props: Props) {
     />
   );
 }
+export default observer(PassengerSeat);

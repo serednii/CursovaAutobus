@@ -7,7 +7,8 @@ import { UseFormSetValue } from "react-hook-form";
 import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
-
+import { observer } from "mobx-react-lite";
+import busStore from "@/mobx/busStore";
 // const exampleRote = {
 //   arrivalDate: " Fri Mar 14 2025 20:00:00 GMT+0100 (Центральная Европа, стандартное время)",
 //   arrivalTo: "Львів",
@@ -73,10 +74,10 @@ export const transformData = (data: FormValuesRoute, dataLayoutBus: ILayoutData,
 
 export const handleChangeVariantBus = (
   number: number,
-  setDataLayoutBus: (
-    value: ILayoutData | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined) | null | undefined,
-    action: RoleEnum
-  ) => void,
+  // setDataLayoutBus: (
+  //   value: ILayoutData | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined) | null | undefined,
+  //   action: RoleEnum
+  // ) => void,
   setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>,
   dataLayoutBus?: IBusSeats[]
 ) => {
@@ -87,9 +88,9 @@ export const handleChangeVariantBus = (
       const findSeats = dataLayoutBus.find((seat) => seat.number === e.number);
       return { ...e, busSeatStatus: findSeats?.busSeatStatus || SeatStatusEnum.AVAILABLE, passenger: findSeats?.passenger || null };
     });
-    setDataLayoutBus({ ...layoutsData[number], passenger: selectLayoutsData }, RoleEnum.DRIVER);
+    busStore.setDataLayoutBus({ ...layoutsData[number], passenger: selectLayoutsData }, RoleEnum.DRIVER);
   } else {
-    setDataLayoutBus(layoutsData[number], RoleEnum.DRIVER);
+    busStore.setDataLayoutBus(layoutsData[number], RoleEnum.DRIVER);
   }
 };
 
@@ -110,5 +111,5 @@ export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
   setValue("selectBusLayout", res.modelBus);
   setStartStops(res.intermediateStops.map((e) => e.stopName));
   const findIndexLayoutsBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
-  handleChangeVariantBus(findIndexLayoutsBus, setDataLayoutBus, setIndexSelectVariantBus, "busSeats" in res ? res.busSeats : undefined);
+  handleChangeVariantBus(findIndexLayoutsBus, setIndexSelectVariantBus, "busSeats" in res ? res.busSeats : undefined);
 };
