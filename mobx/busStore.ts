@@ -31,7 +31,7 @@ class BusStore {
       return;
     }
 
-    const newIdOrderPassengers = value.passenger
+    let newIdOrderPassengers = value.passenger
       .filter(
         (e) =>
           e.passenger === this.userIdSession &&
@@ -40,6 +40,7 @@ class BusStore {
       .map((e) => e.passenger);
 
     console.log("newIdOrderPassengers in busStore", newIdOrderPassengers);
+    if (action === RoleEnum.PASSENGER && newIdOrderPassengers.length > 0) newIdOrderPassengers.pop();
     this.setIdOrderPassengers(newIdOrderPassengers);
   };
 

@@ -68,7 +68,7 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
   //   sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
   // }
 
-  // const { onSubmit } = useSubmitOrder(route?.id, sessionUser);
+  const { onSubmit } = useSubmitOrder(route?.id, sessionUser);
 
   // busStore.setUserIdSession(userIdSession);
   // useBusLayoutData(route);
@@ -77,9 +77,8 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
 
   return (
     <>
-      <form>
-        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-
+      {/* <form> */}
+      <form onSubmit={handleSubmit(onSubmit)}>
         <LayoutBus sessionUser={sessionUser} action={RoleEnum.PASSENGER} driverId={route?.driverId} />
 
         {busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0 && (

@@ -5,9 +5,10 @@ import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
+import busStore from "@/mobx/busStore";
 
 interface UseSubPassengersProps {
-  idOrderPassengers: NullableNumber[];
+  // idOrderPassengers: NullableNumber[];
   myListPassengers?: ISubPassengersList;
   renderRef: React.RefObject<number>;
   unregister: UseFormUnregister<FormValuesRoute>;
@@ -17,7 +18,7 @@ interface UseSubPassengersProps {
   action: RoleEnum;
 }
 
-export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRef, unregister, action, sessionUser }: UseSubPassengersProps) {
+export function useSubPassengers({ myListPassengers, renderRef, unregister, action, sessionUser }: UseSubPassengersProps) {
   const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[]>([]);
   // useEffect(() => {
   //   console.log("subPassengers render", subPassengers);
@@ -40,7 +41,7 @@ export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRe
       });
 
       // Додаємо нові поля, якщо потрібно
-      const delta = idOrderPassengers.length - updatedPassengers.length;
+      const delta = busStore.idOrderPassengers.length - updatedPassengers.length;
       if (delta > 0) {
         for (let i = 0; i < delta; i++) {
           updatedPassengers.push({
@@ -51,7 +52,7 @@ export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRe
           });
         }
       } else {
-        updatedPassengers = updatedPassengers.slice(0, idOrderPassengers.length);
+        updatedPassengers = updatedPassengers.slice(0, busStore.idOrderPassengers.length);
       }
 
       setSubPassengers(updatedPassengers);
@@ -60,7 +61,7 @@ export function useSubPassengers({ idOrderPassengers, myListPassengers, renderRe
     renderRef.current++;
     // }, [idOrderPassengers.length, myListPassengers]);
     // }, [idOrderPassengers.length, myListPassengers, action, renderRef, sessionUser?.phone, subPassengers, unregister]);
-  }, [idOrderPassengers.length, myListPassengers, action, renderRef, sessionUser?.phone, unregister]);
+  }, [busStore.idOrderPassengers.length, myListPassengers, action, renderRef, sessionUser?.phone, unregister]);
 
   return { subPassengers, setSubPassengers };
 }

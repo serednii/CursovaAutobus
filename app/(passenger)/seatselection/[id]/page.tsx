@@ -10,10 +10,11 @@ import { useParams } from "next/navigation";
 import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { cloneDeep } from "lodash";
 import busStore from "@/mobx/busStore";
+import { observer } from "mobx-react-lite";
 import useBusLayoutData from "@/components/shared/passenger/useBusLayoutData";
 import { UserSession } from "@/types/next-auth";
 
-export default function SeatSelection() {
+function SeatSelection() {
   const { data: session } = useSession();
   const params = useParams();
   const id = params.id ? Number(params.id) : 0;
@@ -80,6 +81,8 @@ export default function SeatSelection() {
     </Container>
   );
 }
+
+export default observer(SeatSelection);
 
 // "use client";
 // import React, { useEffect } from "react";

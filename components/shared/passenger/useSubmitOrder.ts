@@ -7,7 +7,8 @@ import { IUpdateRoute } from "@/types/route-passenger.types";
 import { FormValuesRoute } from "@/types/form.types";
 import { UserSession } from "@/types/next-auth";
 import { transformData } from "./transformData";
-import useStore from "@/zustand/createStore";
+// import useStore from "@/zustand/createStore";
+import busStore from "@/mobx/busStore";
 
 const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 
@@ -15,10 +16,10 @@ export default function useSubmitOrder(routeId: number | undefined, sessionUser:
   const router = useRouter();
 
   const onSubmit: SubmitHandler<FormValuesRoute> = async (data) => {
-    const dataLayoutBus = useStore((state) => state.dataLayoutBus);
-    if (!dataLayoutBus || !sessionUser || routeId === undefined) return;
+    // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
+    if (!busStore.dataLayoutBus || !sessionUser || routeId === undefined) return;
 
-    const updateRouteDriver: IUpdateRoute = transformData(routeId, data, dataLayoutBus, sessionUser);
+    const updateRouteDriver: IUpdateRoute = transformData(routeId, data, busStore.dataLayoutBus, sessionUser);
     const updateRouteByIdParsed = zodSchemaUpdateRouteIn.parse(updateRouteDriver);
 
     try {

@@ -8,8 +8,9 @@ import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 import { useSubPassengers } from "./useSubPassengers";
 import SubPassengerFields from "./SubPassengerFields";
-import useStore from "@/zustand/createStore";
-
+// import useStore from "@/zustand/createStore";
+// import busStore from "@/mobx/busStore";
+import { observer } from "mobx-react-lite";
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   unregister: UseFormUnregister<FormValuesRoute>;
@@ -23,7 +24,7 @@ interface Props {
   action: RoleEnum;
 }
 
-export default memo(function SubPassengersOrders({
+function SubPassengersOrders({
   sessionUser,
   register,
   unregister,
@@ -35,10 +36,10 @@ export default memo(function SubPassengersOrders({
   watch,
   action,
 }: Props) {
-  const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+  // const idOrderPassengers = useStore((state) => state.idOrderPassengers);
 
   const { subPassengers, setSubPassengers } = useSubPassengers({
-    idOrderPassengers,
+    // busStore.idOrderPassengers,
     myListPassengers,
     renderRef,
     unregister,
@@ -71,7 +72,9 @@ export default memo(function SubPassengersOrders({
       ))}
     </div>
   );
-});
+}
+
+export default observer(SubPassengersOrders);
 
 // "use client";
 // import React, { memo } from "react";
