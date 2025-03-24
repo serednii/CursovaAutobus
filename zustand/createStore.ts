@@ -6,7 +6,7 @@ import { create } from "zustand";
 import debounce from "lodash/debounce";
 
 export interface BearState {
-  userIdSession: number | null;
+  userSessionId: number | null;
   subPassengers: SubPassengerDetails[];
   setSubPassengers: (value: SubPassengerDetails[] | ((prev: SubPassengerDetails[]) => SubPassengerDetails[])) => void;
   dataLayoutBus: ILayoutData | null;
@@ -34,7 +34,7 @@ const debouncedSet = debounce(
 );
 
 const useStore = create<BearState>((set, get) => ({
-  userIdSession: null,
+  userSessionId: null,
   dataLayoutBus: null,
   // dataLayoutBusMap: null,
   idOrderPassengers: [],
@@ -69,7 +69,7 @@ const useStore = create<BearState>((set, get) => ({
 
   setDataLayoutBus: (value, action: RoleEnum) => {
     const state = get(); // Отримуємо актуальний стан
-    // console.log("value", value, state.userIdSession, action);
+    // console.log("value", value, state.userSessionId, action);
     set((state) => ({
       dataLayoutBus: typeof value === "function" ? value(state.dataLayoutBus) : value,
     }));
@@ -82,7 +82,7 @@ const useStore = create<BearState>((set, get) => ({
     const newIdOrderPassengers = value.passenger
       .filter(
         (e) =>
-          e.passenger === state.userIdSession &&
+          e.passenger === state.userSessionId &&
           e.busSeatStatus === (action === RoleEnum.PASSENGER ? SeatStatusEnum.SELECTED : SeatStatusEnum.RESERVEDEMPTY)
       )
       .map((e) => e.passenger);
@@ -90,7 +90,7 @@ const useStore = create<BearState>((set, get) => ({
     debouncedSet(set, newIdOrderPassengers);
   },
 
-  setUserIdSession: (value) => set({ userIdSession: value }),
+  setUserIdSession: (value) => set({ userSessionId: value }),
 }));
 
 export default useStore;

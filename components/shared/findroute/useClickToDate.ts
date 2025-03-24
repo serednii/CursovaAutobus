@@ -11,14 +11,14 @@ interface IUseClickToDate {
   setIsLoadingOne: React.Dispatch<React.SetStateAction<boolean>>;
   setHighlightedDates: React.Dispatch<React.SetStateAction<Date[] | []>>;
   highlightedDatesRef: React.MutableRefObject<Date[] | []>;
-  sessionIdUser: number;
+  userSessionId: number;
 }
 
 export const useClickToDate = ({
   setIsLoadingOne,
   setHighlightedDates,
   highlightedDatesRef,
-  sessionIdUser,
+  userSessionId,
 }: IUseClickToDate): { clickToDate: number; setClickToDate: React.Dispatch<React.SetStateAction<number>> } => {
   const [clickToDate, setClickToDate] = useState(0);
 
@@ -29,10 +29,10 @@ export const useClickToDate = ({
         .searchRoute(data, "one")
         .then((value) => {
           const route = value as IGetSearchRouteOne[] | null;
+          console.log("response searchRoute", route);
           if (route) {
-            console.log("response", route);
             const dates: Date[] = route
-              .filter((item) => item.driverId !== sessionIdUser)
+              .filter((item) => item.driverId !== userSessionId)
               .map((route: { departureDate: string }) => new Date(route.departureDate));
             //update list date routes
             setHighlightedDates(dates);
@@ -44,8 +44,7 @@ export const useClickToDate = ({
         .catch((err) => console.error("Fetch failed:", err))
         .finally(() => setIsLoadingOne(false));
     }
-    // }, [clickToDate]);
-  }, [clickToDate, setIsLoadingOne, setHighlightedDates, highlightedDatesRef, sessionIdUser]);
+  }, [clickToDate, setIsLoadingOne, setHighlightedDates, highlightedDatesRef, userSessionId]);
 
   return { clickToDate, setClickToDate };
 };

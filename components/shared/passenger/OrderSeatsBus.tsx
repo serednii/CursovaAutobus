@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
-import { useSession } from "next-auth/react";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders/SubPassengersOrders";
 import { useForm } from "react-hook-form";
@@ -27,8 +26,6 @@ interface Props {
 }
 
 function OrderSeatsBus({ route, sessionUser }: Props) {
-  // const { data: session, status } = useSession();
-
   // const setUserIdSession = useStore((state) => state.setUserIdSession);
   // const idOrderPassengers = useStore((state) => state.setUserIdSession);
 
@@ -54,12 +51,12 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
     },
   });
   // let sessionUser: UserSession | null = null;
-  const userIdSession: number = Number(sessionUser?.id);
+  const userSessionId: number = Number(sessionUser?.id);
 
   // const handleDataLayoutBus = useMemo(
   //   () => (data: ILayoutData) => {
   //     setDataLayoutBus(data);
-  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userIdSession);
+  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userSessionId);
   //   },
   //   []
   // );
@@ -70,10 +67,10 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
 
   const { onSubmit } = useSubmitOrder(route?.id, sessionUser);
 
-  // busStore.setUserIdSession(userIdSession);
+  // busStore.setUserIdSession(userSessionId);
   // useBusLayoutData(route);
   // console.log("iorderpassengers", idOrderPassengers);
-  const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === userIdSession), [route, userIdSession]);
+  const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === userSessionId), [route, userSessionId]);
 
   return (
     <>
@@ -105,7 +102,7 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
         </Button>
       </form>
       <p>
-        RouteDriverId {route?.driverId} UserId {userIdSession}
+        RouteDriverId {route?.driverId} UserId {userSessionId}
       </p>
     </>
   );

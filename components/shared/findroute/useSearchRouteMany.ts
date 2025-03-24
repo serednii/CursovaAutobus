@@ -27,7 +27,7 @@ interface IUseSearchRouteMany {
   setIsLoadingOne: React.Dispatch<React.SetStateAction<boolean>>;
   setHighlightedDates: React.Dispatch<React.SetStateAction<Date[] | []>>;
   highlightedDatesRef: React.MutableRefObject<Date[] | []>;
-  sessionIdUser: number;
+  userSessionId: number;
   watch: UseFormWatch<FormValuesRoute>;
   setSearchDates: React.Dispatch<React.SetStateAction<TypeBaseRoute[] | []>>;
 }
@@ -35,7 +35,7 @@ interface IUseSearchRouteMany {
 export const useSearchRouteMany = ({
   setIsLoadingOne,
   watch,
-  sessionIdUser,
+  userSessionId,
   highlightedDatesRef,
   setHighlightedDates,
   setSearchDates,
@@ -90,7 +90,7 @@ export const useSearchRouteMany = ({
               );
               const newSearchDates: TypeBaseRoute[] | [] = routes.map((item) => {
                 const isReservation = item.busSeats.some(
-                  (busSeat) => busSeat.passenger === sessionIdUser && busSeat.busSeatStatus === SeatStatusEnum.RESERVED
+                  (busSeat) => busSeat.passenger === userSessionId && busSeat.busSeatStatus === SeatStatusEnum.RESERVED
                 ); //if there is a reserved user on this route
                 const newItem: TypeBaseRoute = {
                   id: item.id,
@@ -142,7 +142,7 @@ export const useSearchRouteMany = ({
     power,
     restRoom,
     highlightedDatesRef,
-    sessionIdUser,
+    userSessionId,
     setHighlightedDates,
     setIsLoadingOne,
     setSearchDates,

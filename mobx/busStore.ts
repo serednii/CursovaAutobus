@@ -6,7 +6,7 @@ import { NullableNumber } from "@/types/types";
 import debounce from "lodash/debounce";
 
 class BusStore {
-  userIdSession: number | null = null;
+  userSessionId: number | null = null;
   subPassengers: SubPassengerDetails[] = [];
   dataLayoutBus: ILayoutData | null = null;
   idOrderPassengers: NullableNumber[] = [];
@@ -16,7 +16,7 @@ class BusStore {
   }
 
   setUserIdSession = (value: number | null) => {
-    this.userIdSession = value;
+    this.userSessionId = value;
   };
 
   setSubPassengers = (value: SubPassengerDetails[] | ((prev: SubPassengerDetails[]) => SubPassengerDetails[])) => {
@@ -34,7 +34,7 @@ class BusStore {
     let newIdOrderPassengers = value.passenger
       .filter(
         (e) =>
-          e.passenger === this.userIdSession &&
+          e.passenger === this.userSessionId &&
           e.busSeatStatus === (action === RoleEnum.PASSENGER ? SeatStatusEnum.SELECTED : SeatStatusEnum.RESERVEDEMPTY)
       )
       .map((e) => e.passenger);

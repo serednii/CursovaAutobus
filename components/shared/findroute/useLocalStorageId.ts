@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 
-export function useFindRouteSession() {
+export function useLocalStorageId() {
   const router = useRouter();
-  const { data: session, status } = useSession();
-  const sessionIdUser = Number(session?.user?.id);
 
   const [idRoute, setIdRoute] = useState<string | null>(null);
   const [transition, setTransition] = useState<string | null>(null);
@@ -25,5 +22,5 @@ export function useFindRouteSession() {
     }
   }, [idRoute, transition, status, router]);
 
-  return { sessionIdUser, status };
+  return null;
 }

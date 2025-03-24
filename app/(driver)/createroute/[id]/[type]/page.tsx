@@ -3,7 +3,6 @@
 import { useState, useMemo, useRef, use, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 
 import { Container } from "@/components/ui/Container";
@@ -33,14 +32,15 @@ import { useFetchRoutesCity } from "./useFetchRoutesCity";
 
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
+import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
 }
 
-// export const debouncedSetIdOrderPassengers = debounce((data: ILayoutData, setIdOrderPassengers, userIdSession) => {
+// export const debouncedSetIdOrderPassengers = debounce((data: ILayoutData, setIdOrderPassengers, userSessionId) => {
 //   const idOrderPassengers = data.passenger
-//     .filter((e) => e.passenger === userIdSession && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
+//     .filter((e) => e.passenger === userSessionId && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
 //     .map((e) => e.passenger);
 //   setIdOrderPassengers(idOrderPassengers);
 // }, 800);
@@ -56,9 +56,7 @@ function CreateRoute() {
   const router = useRouter();
   const renderRef = useRef(0);
 
-  const { data: session, status } = useSession();
-  const sessionUser = status === "authenticated" ? (session?.user as UserSession) : null;
-  const userIdSession = Number(sessionUser?.id);
+  const { sessionUser, userSessionId, status } = useGetSessionParams();
 
   const params = useParams();
   const id = params.id ? Number(params.id) : 0;
@@ -91,17 +89,17 @@ function CreateRoute() {
   }, [busStore.setDataLayoutBus]);
 
   useEffect(() => {
-    if (userIdSession) {
-      busStore.setUserIdSession(userIdSession);
+    if (userSessionId) {
+      busStore.setUserIdSession(userSessionId);
     }
-  }, [userIdSession, busStore.setUserIdSession]);
+  }, [userSessionId, busStore.setUserIdSession]);
 
   const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
   // const handleDataLayoutBus = useMemo(
   //   () => (data: ILayoutData) => {
   //     setDataLayoutBus(data);
-  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userIdSession);
+  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userSessionId);
   //   },
   //   []
   // );

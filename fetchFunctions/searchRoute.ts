@@ -1,7 +1,7 @@
 import { GenerateBooleanType, GenerateType } from "@/types/generaty.types";
 import { IRouteDataBase } from "@/types/interface";
 import { IGetSearchRouteManyOptionData, IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
-import { ZodFetchGetRoutesByICity } from "@/zod_shema/zodGetRoutesById";
+// import { ZodFetchGetRoutesByICity } from "@/zod_shema/zodGetRoutesById";
 import { ZodSchemaSearchRouteMany, ZodSchemaSearchRouteOne } from "@/zod_shema/zodGetSearchRoute";
 import { z } from "zod";
 
@@ -79,6 +79,7 @@ class SearchRoute {
       },
     });
   }
+
   //pattern
   async searchRoute<T, K>(data: T, type: string): Promise<K | null> {
     const foundType = this.types.find((item) => item.type === type);

@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 
 export const useFetchPassengerRoutes = (reload: boolean) => {
-  const { data: session } = useSession();
-  const passengerId: number | undefined = Number(session?.user?.id);
+  const { userSessionId } = useGetSessionParams();
+
   const [routesPassenger, setRoutesPassenger] = useState<Omit<GetRoutesByPassengerId, "isReservation">[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!passengerId) return;
+    if (!userSessionId) return;
 
     const fetchRoutes = async () => {
       try {
         setLoading(true);
-        const routes = await fetchGetRoutesByPassengerId<typeof selectMyBookings>(passengerId, selectMyBookings);
+        const routes = await fetchGetRoutesByPassengerId<typeof selectMyBookings>(userSessionId, selectMyBookings);
         if (routes !== null) {
-          setRoutesPassenger(routes.filter((item) => item.driverId !== passengerId));
+          setRoutesPassenger(routes.filter((item) => item.driverId !== userSessionId));
         }
       } catch (error) {
         console.error("Error fetching routes:", error);
@@ -28,7 +28,7 @@ export const useFetchPassengerRoutes = (reload: boolean) => {
     };
 
     fetchRoutes();
-  }, [passengerId, reload]);
+  }, [userSessionId, reload]);
 
-  return { routesPassenger, loading, passengerId };
+  return { routesPassenger, loading, userSessionId };
 };

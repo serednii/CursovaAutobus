@@ -18,8 +18,9 @@ import MyScaleLoader from "@/components/ui/MyScaleLoader";
 import { FindRouteContext } from "./findRouteContext";
 import { useClickToDate } from "./useClickToDate";
 import { useSearchRouteMany } from "./useSearchRouteMany";
-import { useFindRouteSession } from "./useFindRouteSession";
+import { useGetSessionParams } from "../../../hooks/useGetSessionParams";
 import { useFetchRoutesCity } from "@/app/(driver)/createroute/[id]/[type]/useFetchRoutesCity";
+import { useLocalStorageId } from "./useLocalStorageId";
 
 export default function FindRoute({ className }: { className?: string }) {
   const highlightedDatesRef = useRef<Date[] | []>([]);
@@ -39,13 +40,15 @@ export default function FindRoute({ className }: { className?: string }) {
   const departureFrom = watch("departureFrom")?.toLowerCase();
   const arrivalTo = watch("arrivalTo")?.toLowerCase();
 
-  const { sessionIdUser, status } = useFindRouteSession();
+  const { userSessionId, status } = useGetSessionParams();
+  useLocalStorageId();
+
   const { departureFromCity, setDepartureFromCity, arrivalToCity, setArrivalToCity, fullDepartureFromCity, fullArrivalToCity } = useFetchRoutesCity();
 
   useSearchRouteMany({
     setIsLoadingOne,
     watch,
-    sessionIdUser,
+    userSessionId,
     highlightedDatesRef,
     setHighlightedDates,
     setSearchDates,
@@ -62,7 +65,7 @@ export default function FindRoute({ className }: { className?: string }) {
     }
     // }, [searchDates, departureFrom, arrivalTo]);
   }, [searchDates, departureFrom, arrivalTo, fullArrivalToCity, fullDepartureFromCity, setArrivalToCity, setDepartureFromCity]);
-  const { clickToDate, setClickToDate } = useClickToDate({ setIsLoadingOne, setHighlightedDates, highlightedDatesRef, sessionIdUser });
+  const { clickToDate, setClickToDate } = useClickToDate({ setIsLoadingOne, setHighlightedDates, highlightedDatesRef, userSessionId });
 
   console.log("watch", watch());
 
@@ -79,7 +82,6 @@ export default function FindRoute({ className }: { className?: string }) {
               register={register}
               setValue={setValue}
               errors={errors}
-              // handleSearch={handleSearch}
               name={"departureFrom"}
               title={"Departure From"}
               className="grow"

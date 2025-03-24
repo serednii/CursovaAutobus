@@ -12,12 +12,12 @@ import { useDeletePassengerRoute } from "./useDeletePassengerRoute";
 
 export default function MyBookings() {
   const [reload, setReload] = useState<boolean>(false);
-  const { routesPassenger, loading, passengerId } = useFetchPassengerRoutes(reload);
-  const { removeRoutePassenger } = useDeletePassengerRoute(routesPassenger, passengerId, setReload);
+  const { routesPassenger, loading, userSessionId } = useFetchPassengerRoutes(reload);
+  const { removeRoutePassenger } = useDeletePassengerRoute(routesPassenger, userSessionId, setReload);
 
   if (loading) return <MyScaleLoader />;
 
-  const separateData = separateRoutesTable(routesPassenger, passengerId);
+  const separateData = separateRoutesTable(routesPassenger, userSessionId);
   const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(separateData);
 
   return (
