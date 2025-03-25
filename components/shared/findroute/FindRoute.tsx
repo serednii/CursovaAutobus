@@ -65,9 +65,8 @@ export default function FindRoute({ className }: { className?: string }) {
     }
     // }, [searchDates, departureFrom, arrivalTo]);
   }, [searchDates, departureFrom, arrivalTo, fullArrivalToCity, fullDepartureFromCity, setArrivalToCity, setDepartureFromCity]);
-  const { clickToDate, setClickToDate } = useClickToDate({ setIsLoadingOne, setHighlightedDates, highlightedDatesRef, userSessionId });
 
-  console.log("watch", watch());
+  const { clickToDate, setClickToDate } = useClickToDate({ setIsLoadingOne, setHighlightedDates, highlightedDatesRef, userSessionId });
 
   // if (status === "loading") return <MyScaleLoader />;
   // if (status === "loading") return <h1>Loading...</h1>;

@@ -82,13 +82,14 @@ export const useSearchRouteMany = ({
           .then((value) => {
             const routes = value as IGetSearchRouteMany[] | null;
             if (routes) {
-              console.log("response", routes);
-              const filterHighlightedDates = routes.map((item: IGetSearchRouteMany) => new Date(item.departureDate));
+              const filterRoutes = routes.filter((item) => item.driverId !== userSessionId);
+
+              const filterHighlightedDates = filterRoutes.map((item: IGetSearchRouteMany) => new Date(item.departureDate));
               //update list date routes
               setHighlightedDates(
                 (departureFrom || arrivalTo) && filterHighlightedDates.length > 0 ? filterHighlightedDates : highlightedDatesRef.current
               );
-              const newSearchDates: TypeBaseRoute[] | [] = routes.map((item) => {
+              const newSearchDates: TypeBaseRoute[] | [] = filterRoutes.map((item) => {
                 const isReservation = item.busSeats.some(
                   (busSeat) => busSeat.passenger === userSessionId && busSeat.busSeatStatus === SeatStatusEnum.RESERVED
                 ); //if there is a reserved user on this route

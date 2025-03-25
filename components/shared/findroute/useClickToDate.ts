@@ -31,10 +31,13 @@ export const useClickToDate = ({
           const route = value as IGetSearchRouteOne[] | null;
           console.log("response searchRoute", route);
           if (route) {
+            //Відкидаємо маршрути від водія , щоб він не міг на свої маршрути резервувати місця
+
             const dates: Date[] = route
               .filter((item) => item.driverId !== userSessionId)
               .map((route: { departureDate: string }) => new Date(route.departureDate));
             //update list date routes
+
             setHighlightedDates(dates);
             highlightedDatesRef.current = dates;
           } else {

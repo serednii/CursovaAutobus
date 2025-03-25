@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       arrivalToSearch,
       select,
       startOfDay = new Date().toISOString(),
-      endOfDay = new Date().toISOString(),
+      endOfDay,
       wifi,
       coffee,
       power,
@@ -105,6 +105,8 @@ export async function POST(req: NextRequest) {
       select,
     });
 
+    console.log("routes", routes);
+
     const routesCity = await prisma.routeDriver.findMany({
       where,
       take: limit,
@@ -126,6 +128,7 @@ export async function POST(req: NextRequest) {
 
     const safeRoutes = Array.isArray(routes) ? routes : []; // Гарантуємо, що це масив
     const saFeRoutesCity = Array.isArray(routesCity) ? routesCity : [];
+
     const fullRoutes =
       safeRoutes.map((route, index) => ({
         ...route,
