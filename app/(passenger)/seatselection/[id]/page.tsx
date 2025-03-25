@@ -1,17 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import OrderSeatsBus from "@/components/shared/passenger/OrderSeatsBus";
 import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
-import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
-import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
+// import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
+import { RoleEnum } from "@/enum/shared.enums";
 import { useParams } from "next/navigation";
-import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+// import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import busStore from "@/mobx/busStore";
 import { observer } from "mobx-react-lite";
 import useMixedLayoutsSeatsData from "@/components/shared/passenger/useBusLayoutData";
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";
-import useGetRoute from "./usegetRoute";
+import useGetRoute from "./useGetRoute";
 import useChangeBusSeatStatus from "./changeBusSeatStatus";
 
 function SeatSelection() {
@@ -26,13 +26,14 @@ function SeatSelection() {
 
   useEffect(() => {
     busStore.setDataLayoutBus(null, RoleEnum.PASSENGER);
-  }, [busStore.setDataLayoutBus]);
+  }, []);
 
   useEffect(() => {
     if (userSessionId) {
       busStore.setUserIdSession(userSessionId);
     }
-  }, [userSessionId, busStore.setUserIdSession]);
+  }, [userSessionId]);
+
   const { route, loading } = useGetRoute({ userSessionId, id });
   useChangeBusSeatStatus({ route, userSessionId });
 

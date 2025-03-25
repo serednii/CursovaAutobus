@@ -4,7 +4,7 @@ import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 // import useStore from "@/zustand/createStore";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SeatButton from "./SeatButton";
 // import SeatButton from "./SeatButton";
 import { observer } from "mobx-react-lite";
@@ -48,7 +48,7 @@ function PassengerSeat(props: Props) {
 
       busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
     });
-  }, [changeStatus.busSeatStatus, changeStatus.passenger, params, busStore]);
+  }, [changeStatus.busSeatStatus, changeStatus.passenger, params, busStore, action]);
 
   // useEffect(() => {
   //   params.busSeatStatus = changeStatus.busSeatStatus;

@@ -38,7 +38,7 @@ const useMixedLayoutsSeatsData = (route: IGetRouteSeatSelection | null) => {
       console.log("newData", newData);
       busStore.setDataLayoutBus(newData, RoleEnum.PASSENGER);
     }
-  }, [route, busStore.setDataLayoutBus, layoutsData]);
+  }, [route]);
 
   return null;
 };

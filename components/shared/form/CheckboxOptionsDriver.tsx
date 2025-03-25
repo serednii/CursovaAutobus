@@ -74,7 +74,7 @@ import { MdOutlinePower } from "react-icons/md";
 import { FaRestroom } from "react-icons/fa";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
-import { memo } from "react";
+// import { memo } from "react";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;

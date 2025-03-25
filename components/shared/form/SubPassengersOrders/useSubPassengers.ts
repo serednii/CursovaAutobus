@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { UseFormUnregister, UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { FormValuesRoute, SubPassengerDetails } from "@/types/form.types";
-import { NullableNumber } from "@/types/types";
+// import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";

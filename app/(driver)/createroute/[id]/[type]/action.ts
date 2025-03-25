@@ -7,7 +7,7 @@ import { UseFormSetValue } from "react-hook-form";
 import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
-import { observer } from "mobx-react-lite";
+// import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
 // const exampleRote = {
 //   arrivalDate: " Fri Mar 14 2025 20:00:00 GMT+0100 (Центральная Европа, стандартное время)",

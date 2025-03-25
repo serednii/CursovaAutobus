@@ -5,10 +5,10 @@ import DriverSeat from "./DriverSeat";
 import PassengerSeat from "./PassengerSeat";
 import Stairs from "./Stairs";
 
-import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
+import { BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
-import { memo, useEffect } from "react";
+// import { memo, useEffect } from "react";
 // import useStore from "@/zustand/createStore";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function useLocalStorageId() {
+export function useLocalStorageId(status: "authenticated" | "loading" | "unauthenticated") {
   const router = useRouter();
 
   const [idRoute, setIdRoute] = useState<string | null>(null);

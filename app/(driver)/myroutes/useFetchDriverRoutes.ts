@@ -27,7 +27,7 @@ export const useFetchDriverRoutes = () => {
     };
 
     fetchRoutes();
-  }, [session]);
+  }, [session, userSessionId]);
 
   return { routes, setRoutes, loading };
 };

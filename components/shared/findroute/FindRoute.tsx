@@ -41,7 +41,7 @@ export default function FindRoute({ className }: { className?: string }) {
   const arrivalTo = watch("arrivalTo")?.toLowerCase();
 
   const { userSessionId, status } = useGetSessionParams();
-  useLocalStorageId();
+  useLocalStorageId(status);
 
   const { departureFromCity, setDepartureFromCity, arrivalToCity, setArrivalToCity, fullDepartureFromCity, fullArrivalToCity } = useFetchRoutesCity();
 

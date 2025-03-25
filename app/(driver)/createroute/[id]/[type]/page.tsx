@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef, use, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useParams } from "next/navigation";
@@ -16,8 +16,8 @@ import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDrive
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders/SubPassengersOrders";
 
 import { FormValuesRoute } from "@/types/form.types";
-import { ILayoutData } from "@/types/layoutbus.types";
-import { UserSession } from "@/types/next-auth";
+// import { ILayoutData } from "@/types/layoutbus.types";
+// import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { RoleEnum } from "@/enum/shared.enums";
 
@@ -86,13 +86,13 @@ function CreateRoute() {
 
   useEffect(() => {
     busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
-  }, [busStore.setDataLayoutBus]);
+  }, []);
 
   useEffect(() => {
     if (userSessionId) {
       busStore.setUserIdSession(userSessionId);
     }
-  }, [userSessionId, busStore.setUserIdSession]);
+  }, [userSessionId]);
 
   const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
