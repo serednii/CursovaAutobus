@@ -4,9 +4,9 @@ import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
-import { IRoutesByIdDriver } from "@/types/route-passenger.types";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
+import { IRoutesByIdDriver } from "@/fetchFunctions/fetchGetRoutesByDriverId";
 
 interface Props {
   routes: IRoutesByIdDriver[];

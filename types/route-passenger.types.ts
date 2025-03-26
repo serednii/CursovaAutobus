@@ -56,9 +56,9 @@ export interface IRoutesTable extends IDateString, IFromTo {
   passengersSeatsList: ISubPassengersList | undefined;
 }
 
-export interface IRoutesByIdDriver extends IDateString, IFromTo {
-  id: number;
-  bookedSeats: number;
-  maxSeats: number;
-  routePrice: number;
-}
+// export interface IRoutesByIdDriver extends IDateString, IFromTo {
+//   id: number;
+//   bookedSeats: number;
+//   maxSeats: number;
+//   routePrice: number;
+// }

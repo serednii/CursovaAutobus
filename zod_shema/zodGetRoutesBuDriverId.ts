@@ -1,6 +1,6 @@
-import { IRoutesByIdDriver } from "@/types/route-passenger.types";
+import { IRoutesByIdDriver, IRoutesByIdDriverListBlocked } from "@/fetchFunctions/fetchGetRoutesByDriverId";
 import { z } from "zod";
-import { dateAndNameCitySchema } from "./zodBase";
+import { dateAndNameCitySchema, dateSchemaString } from "./zodBase";
 
 export const zodSchemaGetRoutesBuDriverId: z.ZodType<IRoutesByIdDriver> = z.object({
   id: z.number().int().positive(),
@@ -8,4 +8,9 @@ export const zodSchemaGetRoutesBuDriverId: z.ZodType<IRoutesByIdDriver> = z.obje
   routePrice: z.number().positive(),
   bookedSeats: z.number().int().nonnegative(),
   maxSeats: z.number().int().positive(),
+});
+
+export const zodSchemaGetRoutesBuDriverIdListBlocked: z.ZodType<IRoutesByIdDriverListBlocked> = z.object({
+  id: z.number().int().positive(),
+  ...dateSchemaString,
 });

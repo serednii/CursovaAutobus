@@ -1,3 +1,59 @@
 .react-datepicker-wrapper {
     width: 100% !important;
 }
+
+
+
+
+
+// Стилі для днів з заблокованими проміжками
+.react-datepicker__day--highlighted {
+    background-color: #f0f0f0;
+    color: #666;
+}
+
+
+
+// Стилі для вибраних годин
+.react-datepicker__time-list-item--selected {
+    background-color: #0066cc;
+    color: white;
+}
+
+// Стилі для днів з заблокованими проміжками
+.react-datepicker__day--day-with-blocked-intervals {
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 2px;
+        background-color: #ff6b6b;
+        border-radius: 1px;
+    }
+}
+
+// Стилі для заблокованих годин
+.disabled-time {
+    background-color: #ffebee;
+    color: #c62828;
+    font-weight: bold;
+
+    &:hover {
+        background-color: #ffcdd2 !important;
+    }
+}
+
+// Стилі для вибраних годин
+.react-datepicker__time-list-item--selected {
+    background-color: #1976d2;
+    color: white;
+
+    &.disabled-time {
+        background-color: #c62828 !important;
+    }
+}

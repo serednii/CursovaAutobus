@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import fetchGetRoutesByDriverId from "@/fetchFunctions/fetchGetRoutesByDriverId";
-import { IRoutesByIdDriver } from "@/types/route-passenger.types";
+import fetchGetRoutesByDriverId, { IRoutesByIdDriver, selectGetRoutesByDriverId } from "@/fetchFunctions/fetchGetRoutesByDriverId";
+
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 
 export const useFetchDriverRoutes = () => {
@@ -17,8 +17,10 @@ export const useFetchDriverRoutes = () => {
       }
 
       try {
-        const data = await fetchGetRoutesByDriverId(userSessionId);
-        setRoutes(data || []);
+        const value = await fetchGetRoutesByDriverId.searchRoute([userSessionId], selectGetRoutesByDriverId, "getDriver");
+        const result = value as IRoutesByIdDriver[] | null;
+        if (result === null || result.length === 0) return;
+        setRoutes(result);
       } catch (error) {
         console.error("Ошибка при загрузке маршрутов:", error);
       } finally {

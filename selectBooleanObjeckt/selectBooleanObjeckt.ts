@@ -75,7 +75,7 @@ export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
 
 import { IGetSearchRouteMyRouteOption } from "@/fetchFunctions/fetchGetRoutesById";
 import { IGetUsersByIdBySelectOption } from "@/fetchFunctions/fetchUsers";
-import { number } from "zod";
+import { IGetRoutesByDriverListBlockedOption, IGetRoutesByDriverOption } from "@/fetchFunctions/fetchGetRoutesByDriverId";
 
 export const selectRoute: IGetSearchRouteMyRouteOption = {
   ...baseDate,

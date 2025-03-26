@@ -1,4 +1,4 @@
-import { IRoutesByIdDriver } from "@/types/route-passenger.types";
+import { IRoutesByIdDriver } from "@/fetchFunctions/fetchGetRoutesByDriverId";
 import TableRoutes from "./TableRoutes";
 
 interface Props {

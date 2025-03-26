@@ -33,6 +33,7 @@ import { useFetchRoutesCity } from "./useFetchRoutesCity";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";
+import { useGetListBlockedDate } from "./useGetListBlockedDate";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -94,6 +95,16 @@ function CreateRoute() {
     }
   }, [userSessionId]);
 
+  const { route } = useFetchRoute({
+    id,
+    type,
+    setValue,
+    setStartStops,
+    setIndexSelectVariantBus,
+  });
+
+  const { listBlockedDate } = useGetListBlockedDate({ driverId: userSessionId, id, type });
+
   const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
   // const handleDataLayoutBus = useMemo(
@@ -106,14 +117,6 @@ function CreateRoute() {
 
   //Кількість пасажирів в кожному автобусі
   const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
-
-  const { route } = useFetchRoute({
-    id,
-    type,
-    setValue,
-    setStartStops,
-    setIndexSelectVariantBus,
-  });
 
   if (status === "loading") return <MyScaleLoader />;
 
@@ -130,8 +133,23 @@ function CreateRoute() {
       <main className="px-4 bg-[white] rounded-xl ">
         <form onSubmit={handleSubmit(handleRouteSubmit(type, id, busStore.dataLayoutBus, sessionUser, router))}>
           <div className="flex gap-5 mb-5 flex-wrap">
-            <CustomDatePicker title="Departure Date" name="departureDate" register={register} errors={errors} control={control} />
-            <CustomDatePicker title="Arrival Date" name="arrivalDate" register={register} errors={errors} watch={watch} control={control} />
+            <CustomDatePicker
+              title="Departure Date"
+              name="departureDate"
+              register={register}
+              errors={errors}
+              control={control}
+              listBlockedDate={listBlockedDate}
+            />
+            <CustomDatePicker
+              title="Arrival Date"
+              name="arrivalDate"
+              register={register}
+              errors={errors}
+              watch={watch}
+              control={control}
+              listBlockedDate={listBlockedDate}
+            />
           </div>
           <div className="flex gap-5  mb-5 flex-wrap">
             <CustomTextField

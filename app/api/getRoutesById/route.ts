@@ -19,8 +19,6 @@ export async function POST(req: NextRequest) {
     const body: TypeGetRoutesById = await req.json();
     const { id, select } = body;
 
-    console.log("id---", body);
-
     // Валідація `id`
     if (!Array.isArray(id) || id.length === 0) {
       return NextResponse.json({ error: "Поле 'id' має бути непорожнім масивом чисел!" }, { status: 400 });
