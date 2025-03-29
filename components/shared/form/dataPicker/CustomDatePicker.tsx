@@ -209,7 +209,7 @@ const CustomDatePicker = ({
     dayEnd.setHours(23, 59, 59, 999);
 
     const disabledTimes = [];
-    const current = new Date(dayStart);
+    // const current = new Date(dayStart);
 
     // Знаходимо всі заблоковані проміжки для цього дня
     const blockedIntervals = listBlockedDate
@@ -231,7 +231,7 @@ const CustomDatePicker = ({
       const start = new Date(Math.max(interval.start.getTime(), dayStart.getTime()));
       const end = new Date(Math.min(interval.end.getTime(), dayEnd.getTime()));
 
-      let currentTime = new Date(start);
+      const currentTime = new Date(start);
       while (currentTime <= end) {
         disabledTimes.push(new Date(currentTime));
         currentTime.setMinutes(currentTime.getMinutes() + 15);
