@@ -50,7 +50,7 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
 // const idOrderPassengers = useStore((state) => state.idOrderPassengers);
 
-function CreateRoute() {
+function CreateRouteForm() {
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
 
@@ -246,7 +246,7 @@ function CreateRoute() {
     // </CreateRouteContext.Provider>
   );
 }
-export default observer(CreateRoute);
+export default observer(CreateRouteForm);
 
 //   const IGetRouteUpdate: {
 //     routePrice: number;

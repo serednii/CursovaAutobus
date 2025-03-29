@@ -9,6 +9,7 @@ import LinkDriver from "./shared/driver/LinkDriver";
 import { MenuDriver } from "@/types/menudriver.types";
 import { CircularProgress } from "@mui/material";
 import { useGetSessionParams } from "../hooks/useGetSessionParams";
+import LanguageChanger from "./LanguageChanger";
 
 const menuDriver = [
   {
@@ -46,13 +47,14 @@ export default function Header() {
   return (
     <Container className="header-gradient flex justify-between gap-3 relative  flex-wrap z-[100]  rounded-lg py-2 w-full">
       {status === "loading" && <CircularProgress className="absolute top-2 left-1/2 color-[#94f07c] z-10" size={30} />}
-      <header className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center">
         <Link href="/" className="flex items-center gap-2 ">
           <FaBusAlt style={{ width: "32px", height: "32px", color: "blue" }} />
           <h1 className="font-bold text-black text-xl hidden md:block">ExpressBus</h1>
         </Link>
         <LinkDriver menuDriver={menulist} />
-      </header>
+      </div>
+      <LanguageChanger />
       <UserInfo />
     </Container>
   );

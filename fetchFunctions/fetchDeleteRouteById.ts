@@ -1,4 +1,4 @@
-import { getBusSeatsPassenger } from "@/app/(passenger)/mybookings/action";
+import { getBusSeatsPassenger } from "@/app/[locale]/(passenger)/mybookings/action";
 import { GenerateBooleanType, GenerateType, IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 import { IIntermediateStops, IRouteDataBase } from "@/types/interface";
 import { ApiResponse, SuccessResponse, ErrorResponse } from "@/types/response.types";

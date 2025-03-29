@@ -11,7 +11,7 @@ type TypeGetRoutesById = {
 export async function POST(req: NextRequest) {
   try {
     const middlewareResponse = await middleware(req);
-    console.log("middlewareResponse", middlewareResponse);
+    // console.log("middlewareResponse", middlewareResponse);
     if (middlewareResponse.status !== 200) {
       return middlewareResponse;
     }

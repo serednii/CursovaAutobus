@@ -1,4 +1,5 @@
 import FindRoute from "@/components/shared/findroute/FindRoute";
+import initTranslations from "../i18n";
 
 export default function Home() {
   return (

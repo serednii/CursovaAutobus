@@ -24,6 +24,15 @@
       "@mui/*": ["node_modules/@mui/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "zod_shema", "app/api/testuser"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "zod_shema",
+    "app/api/testuser",
+    "app/[locale]/(passenger)/layout.tuysx",
+, "components/LanguageChanger.jsx"    "app/[locale]/(driver)/createroute/[id]/[type]/page.jsx"
+  ],
   "exclude": ["node_modules"]
 }

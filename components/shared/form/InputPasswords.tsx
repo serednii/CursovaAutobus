@@ -5,7 +5,7 @@ import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { FaUnlockKeyhole } from "react-icons/fa6";
 import FormError from "./FormError";
-import { FormValues } from "@/app/(auth)/interface";
+import { FormValues } from "@/app/[locale]/(auth)/interface";
 
 interface Props {
   register: UseFormRegister<FormValues>;

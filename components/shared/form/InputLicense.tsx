@@ -1,4 +1,4 @@
-import { FormValues } from "@/app/(auth)/interface";
+import { FormValues } from "@/app/[locale]/(auth)/interface";
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FaIdCard } from "react-icons/fa6";

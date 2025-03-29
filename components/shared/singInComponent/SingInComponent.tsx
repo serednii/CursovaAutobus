@@ -8,7 +8,7 @@ import InputPassword from "@/components/shared/form/InputPasswords";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FormValues } from "@/app/(auth)/interface";
+import { FormValues } from "@/app/[locale]/(auth)/interface";
 
 export default function SignInComponent() {
   const router = useRouter();
