@@ -12,10 +12,11 @@ interface Props {
   className?: string;
   passengersLength: number[];
   handleChangeVariantBus: (value: number) => void;
+  t: any;
   indexSelectVariantBus: number | null;
 }
 
-const MaterialUISelect = ({ className, register, errors, passengersLength, handleChangeVariantBus, indexSelectVariantBus }: Props) => {
+const MaterialUISelect = ({ className, register, errors, passengersLength, handleChangeVariantBus, indexSelectVariantBus, t }: Props) => {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
@@ -39,7 +40,7 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
   return (
     <FormControl fullWidth variant="outlined" className={cn("", className)} error={!!errors} style={{ borderColor: "black" }}>
       <InputLabel style={{ color: "black", top: "5px" }} id="select-label">
-        Select an Option
+        {t("home:select_options")}
       </InputLabel>
 
       <Select
@@ -49,7 +50,7 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
         labelId="select-label"
         value={selectedValue ?? ""}
         onChange={handleChange}
-        label="Select Bus Layout"
+        label={t("select_bus")}
         sx={{
           "& .MuiOutlinedInput-notchedOutline.MuiOutlinedInput-notchedOutline": {
             borderColor: "gray", // Чорна рамка
@@ -66,7 +67,7 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
       >
         {passengersLength.map((e, index) => (
           <MenuItem key={index} value={index}>
-            Bus {index + 1}: {e} seats
+            {t("form:bus")} {index + 1}: {e} {t("form:seats")}
           </MenuItem>
         ))}
         ;

@@ -1,11 +1,17 @@
 import FindRoute from "@/components/shared/findroute/FindRoute";
-import initTranslations from "../i18n";
+import initTranslations from "@/app/i18n";
+import TranslationsProvider from "@/components/TranslationsProvider";
 
-export default function Home() {
+export default async function Home({ params }: { params: { locale: string } }) {
+  const { locale } = await params; // Використовуємо ?? для надійності
+  const { t, resources } = await initTranslations(locale, ["home", "form"]);
+
   return (
-    <div className="pt-[45px] px-0 bg-[#F9FAFB] font-bold text-3xl">
-      <h1 className="px-4 mb-[30px]">Find Your Route</h1>
-      <FindRoute className="p-6" />
-    </div>
+    <TranslationsProvider namespaces={["home", "form"]} locale={locale} resources={resources}>
+      <div className="pt-[45px] px-0 bg-[#F9FAFB] font-bold text-3xl">
+        <h1 className="px-4 mb-[30px]">{t("find_your_route")}</h1>
+        <FindRoute className="p-6" />
+      </div>
+    </TranslationsProvider>
   );
 }

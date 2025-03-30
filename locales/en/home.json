@@ -1,1 +1,5 @@
-{ "find_your_route": "Find Your Route", "available_routes": "Available Routes" }
+{
+  "find_your_route": "Find Your Route",
+  "available_routes": "Available Routes",
+  "select_options": "Select options"
+}

@@ -11,10 +11,11 @@ interface Props {
   unregister: UseFormUnregister<FormValuesRoute>;
   errors: FieldErrors<FormValuesRoute>;
   className?: string;
+  t: any;
   startStops?: string[];
 }
 
-const IntermediateStops = ({ register, unregister, errors, startStops }: Props) => {
+const IntermediateStops = ({ register, unregister, errors, startStops, t }: Props) => {
   const [stops, setStops] = useState<string[]>([]);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const IntermediateStops = ({ register, unregister, errors, startStops }: Props) 
   return (
     <div>
       <div className="flex gap-4 items-center">
-        <h3>Intermediate Stops</h3>
+        <h3>{t("form:intermediate_stops")}</h3>
         <button type="button" onClick={addStop} className="w-[32px] h-[32px] bg-[#F3F4F6] flex items-center justify-center rounded-lg">
           <FaPlus />
         </button>
@@ -60,7 +61,7 @@ const IntermediateStops = ({ register, unregister, errors, startStops }: Props) 
               })}
               value={stops[index]} // Прив'язка до стану
               onChange={(e) => changeStop(index, e.target.value)}
-              label={`Stop ${index + 1}`}
+              label={`${t("form:stops")} ${index + 1}`}
               variant="outlined"
               fullWidth
               error={!!errors.intermediateStops?.[index]}

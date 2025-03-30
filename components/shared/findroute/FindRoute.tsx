@@ -15,18 +15,21 @@ import { cn } from "@/lib/utils";
 
 import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
 import MyScaleLoader from "@/components/ui/MyScaleLoader";
-import { FindRouteContext } from "./findRouteContext";
+// import { FindRouteContext } from "./findRouteContext";
 import { useClickToDate } from "./useClickToDate";
 import { useSearchRouteMany } from "./useSearchRouteMany";
 import { useGetSessionParams } from "../../../hooks/useGetSessionParams";
-import { useFetchRoutesCity } from "@/app/[locale]/(driver)/createroute/[id]/[type]/useFetchRoutesCity";
+import { useFetchRoutesCity } from "@/app/[locale]/(driver)/createroute/[[...slug]]/useFetchRoutesCity";
 import { useLocalStorageId } from "./useLocalStorageId";
+import { useTranslation } from "react-i18next";
 
 export default function FindRoute({ className }: { className?: string }) {
   const highlightedDatesRef = useRef<Date[] | []>([]);
   const [highlightedDates, setHighlightedDates] = useState<Date[] | []>([]);
   const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);
   const [isLoadingOne, setIsLoadingOne] = useState(false);
+
+  const { t } = useTranslation();
   const {
     register,
     formState: { errors },
@@ -39,8 +42,8 @@ export default function FindRoute({ className }: { className?: string }) {
 
   const departureFrom = watch("departureFrom")?.toLowerCase();
   const arrivalTo = watch("arrivalTo")?.toLowerCase();
-
   const { userSessionId, status } = useGetSessionParams();
+
   useLocalStorageId(status);
 
   const { departureFromCity, setDepartureFromCity, arrivalToCity, setArrivalToCity, fullDepartureFromCity, fullArrivalToCity } = useFetchRoutesCity();
@@ -72,56 +75,54 @@ export default function FindRoute({ className }: { className?: string }) {
   // if (status === "loading") return <h1>Loading...</h1>;
 
   return (
-    <FindRouteContext.Provider value={{ isLoadingOne, setIsLoadingOne }}>
-      <div className={cn(className, "relative px-4 bg-[white] rounded-xl min-h-[530px]")}>
-        {isLoadingOne && <MyScaleLoader className="absolute top-0 left-1/2" settings={{ height: 30, width: 5 }} />}
-        <form className="mb-10">
-          <div className="flex gap-5 mb-5 flex-wrap">
-            <CustomTextField
-              register={register}
-              setValue={setValue}
-              errors={errors}
-              name={"departureFrom"}
-              title={"Departure From"}
-              className="grow"
-              listCity={departureFromCity}
-              action="searchRoute"
-            />
-            <CustomTextField
-              register={register}
-              setValue={setValue}
-              errors={errors}
-              name={"arrivalTo"}
-              title={"Arrival To"}
-              className="grow"
-              listCity={arrivalToCity}
-              action="searchRoute"
-            />
-            <SearchDataPicker
-              title="Departure Date"
-              name="departureDate"
-              register={register}
-              errors={errors}
-              highlightedDates={highlightedDates}
-              control={control} // Передаємо control
-              className="pt-8 grow search-data-picker"
-              clickToDate={clickToDate}
-              setClickToDate={setClickToDate}
-            />
+    <div className={cn(className, "relative px-4 bg-[white] rounded-xl min-h-[530px]")}>
+      {isLoadingOne && <MyScaleLoader className="absolute top-0 left-1/2" settings={{ height: 30, width: 5 }} />}
+      <form className="mb-10">
+        <div className="flex gap-5 mb-5 flex-wrap">
+          <CustomTextField
+            register={register}
+            setValue={setValue}
+            errors={errors}
+            name={"departureFrom"}
+            title={t("form:departure_from")}
+            className="grow"
+            listCity={departureFromCity}
+            action="searchRoute"
+          />
+          <CustomTextField
+            register={register}
+            setValue={setValue}
+            errors={errors}
+            name={"arrivalTo"}
+            title={t("form:arrival_to")}
+            className="grow"
+            listCity={arrivalToCity}
+            action="searchRoute"
+          />
+          <SearchDataPicker
+            title={t("form:departure_date")}
+            name="departureDate"
+            register={register}
+            errors={errors}
+            highlightedDates={highlightedDates}
+            control={control} // Передаємо control
+            className="pt-8 grow search-data-picker"
+            clickToDate={clickToDate}
+            setClickToDate={setClickToDate}
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="grow">
+            <Typography variant="h6" gutterBottom>
+              {t("select_options")}
+            </Typography>
+            <CheckboxOptionsMain register={register} watch={watch} t={t} />
           </div>
-          <div className="flex justify-between items-center">
-            <div className="grow">
-              <Typography variant="h6" gutterBottom>
-                Select options
-              </Typography>
-              <CheckboxOptionsMain register={register} watch={watch} />
-            </div>
-          </div>
-        </form>
-        <h2>Available Routes</h2>
-        {Array.isArray(searchDates) && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} status={status} />}
-        <div className="footer"></div>
-      </div>
-    </FindRouteContext.Provider>
+        </div>
+      </form>
+      <h2>{t("available_routes")}</h2>
+      {Array.isArray(searchDates) && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} status={status} t={t} />}
+      <div className="footer"></div>
+    </div>
   );
 }

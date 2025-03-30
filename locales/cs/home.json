@@ -1,1 +1,5 @@
-{ "find_your_route": "" }
+{
+  "find_your_route": "Najděte svou trasu",
+  "available_routes": "Dostupné trasy",
+  "select_options": "Vyberte možnosti"
+}

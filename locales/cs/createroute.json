@@ -1,1 +1,11 @@
-{ "title": "Správa tras" }
+{
+  "route_management": "Správa tras",
+  "create_and_manage_your_bus_routes": "Vytvorit a spravovat své autobusové trasy",
+  "bus_layout": "Vytvorit a spravovat své autobusové trasy",
+  "bus_number": "Cislo autobusu",
+  "route_price": "Cena trasy",
+  "additional_options": "Doplnkové možnosti",
+  "add_sub_passenger": "Pridat podpassazera",
+  "create_route": "Vytvorit trasu",
+  "update_route": "Aktualizovat trasu"
+}

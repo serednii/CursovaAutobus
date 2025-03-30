@@ -30,9 +30,11 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "zod_shema",
-    "app/api/testuser",
+    "app/[locale]/api/testuser",
     "app/[locale]/(passenger)/layout.tuysx",
-, "components/LanguageChanger.jsx"    "app/[locale]/(driver)/createroute/[id]/[type]/page.jsx"
+    "app/i18n.js",
+    "components/LanguageChanger.jsx",
+    "app/[locale]/(driver)/createroute/[id]/[type]/page.jsx"
   ],
   "exclude": ["node_modules"]
 }

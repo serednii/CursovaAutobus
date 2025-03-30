@@ -79,18 +79,19 @@ import { FormValuesRoute } from "@/types/form.types";
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   watch: UseFormWatch<FormValuesRoute>;
+  t: any;
 }
 
-const options1 = [
-  { name: "wifi", label: "Wi-Fi", icon: IoIosWifi },
-  { name: "coffee", label: "Coffee/Tea", icon: CgCoffee },
-];
-const options2 = [
-  { name: "power", label: "Power Outlets", icon: MdOutlinePower },
-  { name: "restRoom", label: "RestRoom", icon: FaRestroom },
-];
+export default function CheckboxOptionsDriver({ register, watch, t }: Props) {
+  const options1 = [
+    { name: "wifi", label: t("form:wi_fi"), icon: IoIosWifi },
+    { name: "coffee", label: t("form:coffee"), icon: CgCoffee },
+  ];
+  const options2 = [
+    { name: "power", label: t("form:power"), icon: MdOutlinePower },
+    { name: "restRoom", label: t("form:restRoom"), icon: FaRestroom },
+  ];
 
-export default function CheckboxOptionsDriver({ register, watch }: Props) {
   return (
     <div className="flex justify-between flex-wrap">
       <FormGroup>

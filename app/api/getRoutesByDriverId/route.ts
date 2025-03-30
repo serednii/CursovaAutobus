@@ -4,11 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const middlewareResponse = await middleware(req);
+    // const middlewareResponse = await middleware(req);
 
-    if (middlewareResponse.status !== 200) {
-      return middlewareResponse;
-    }
+    // if (middlewareResponse.status !== 200) {
+    //   return middlewareResponse;
+    // }
+    // const origin = req.headers.get("origin") || req.headers.get("referer") || "UNKNOWN";
+    // const userAgent = req.headers.get("user-agent") || "";
+    // console.log("Received Origin:", origin, "User Agent:", userAgent);
     // Отримуємо дані з тіла запиту
     const { driverId, select } = await req.json();
     // Перевірка, чи передано driverId

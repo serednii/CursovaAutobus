@@ -22,6 +22,7 @@ interface Props {
   watch: UseFormWatch<FormValuesRoute>;
   sessionUser?: UserSession | null;
   action: RoleEnum;
+  t: any;
 }
 
 function SubPassengersOrders({
@@ -35,6 +36,7 @@ function SubPassengersOrders({
   renderRef,
   watch,
   action,
+  t,
 }: Props) {
   // const idOrderPassengers = useStore((state) => state.idOrderPassengers);
 
@@ -58,7 +60,7 @@ function SubPassengersOrders({
 
   return (
     <div className="bg-white p-4 mb-4">
-      <h3 className="mb-4">Add Sub Passengers</h3>
+      <h3 className="mb-4">{t("add_sub_passenger")}</h3>
       {subPassengers.map((subPassenger, index) => (
         <SubPassengerFields
           key={index}
@@ -68,6 +70,7 @@ function SubPassengersOrders({
           // setValue={setValue}
           errors={errors}
           handleChange={handleChange}
+          t={t}
         />
       ))}
     </div>

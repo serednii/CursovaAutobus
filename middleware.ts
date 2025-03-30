@@ -65,6 +65,12 @@ import i18nConfig from "./i18nConfig";
 export async function middleware(req: any) {
   // const apiKey = req.headers.get("api-key"); // Отримуємо API ключ з заголовків
   const url = req.nextUrl.clone();
+  console.log("middleware pathname------", url.pathname);
+  console.log("req in middleware");
+
+  setTimeout(() => {
+    console.log("*************************", url.pathname);
+  }, 2000);
 
   const { pathname } = req.nextUrl;
 
@@ -73,6 +79,7 @@ export async function middleware(req: any) {
   }
 
   const localizedResponse = i18nRouter(req, i18nConfig);
+
   if (localizedResponse) return localizedResponse;
 
   // Якщо API ключ відсутній, перевіряємо авторизацію через NextAuth
@@ -93,11 +100,11 @@ export async function middleware(req: any) {
       ["/createroute", "/myroutes", "/myroute"].some((path) => url.pathname.startsWith(path) && token.role === RoleEnum.DRIVER)
     ) {
       console.log("createroute 000", url.pathname);
-      if (url.pathname.startsWith("/createroute")) {
-        console.log("createroute 111", url.pathname);
+      // if (url.pathname.startsWith("/createroute")) {
+      //   console.log("createroute 111", url.pathname);
 
-        url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0/type";
-      }
+      //   url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0/type";
+      // }
       url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/";
 
       url.searchParams.delete("callbackUrl"); // Видаляємо параметр, щоб він не передавався далі
@@ -105,13 +112,13 @@ export async function middleware(req: any) {
     } else {
       console.log("createroute 222", url.pathname);
 
-      if (url.pathname === "/createroute") {
-        console.log("createroute 3333");
+      // if (url.pathname === "/createroute") {
+      //   console.log("createroute 3333");
 
-        url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0/type";
-        url.searchParams.delete("callbackUrl"); // Видаляємо параметр, щоб він не передавався далі
-        return NextResponse.redirect(url);
-      }
+      //   url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0/type";
+      //   url.searchParams.delete("callbackUrl"); // Видаляємо параметр, щоб він не передавався далі
+      //   return NextResponse.redirect(url);
+      // }
     }
   }
   // console.log("old url", url.pathname);

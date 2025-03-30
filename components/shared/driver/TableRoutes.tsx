@@ -7,11 +7,12 @@ import { useRouter } from "next/navigation";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
 import { IRoutesByIdDriver } from "@/fetchFunctions/fetchGetRoutesByDriverId";
+import { useDeleteRoute } from "@/app/[locale]/(driver)/myroutes/useDeleteRoute";
 
 interface Props {
   routes: IRoutesByIdDriver[];
   isRouteAgain?: boolean;
-  setOk?: (id: number) => void;
+  t: any;
 }
 
 // Функція для створення кнопок у таблиці
@@ -33,10 +34,11 @@ const createColumnButton = (
   ),
 });
 
-export default function TableRoutes({ routes, isRouteAgain, setOk }: Props) {
+export default function TableRoutes({ routes, isRouteAgain, t }: Props) {
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState<IRoutesByIdDriver | null>(null);
   const router = useRouter();
+  const setRouteToDelete = useDeleteRoute();
 
   const handleViewRoute = (route: IRoutesByIdDriver) => router.push(`/myroute/${route.id}`);
   const handleChangeRoute = (route: IRoutesByIdDriver) => router.push(`/createroute/${route.id}/change`);
@@ -50,37 +52,37 @@ export default function TableRoutes({ routes, isRouteAgain, setOk }: Props) {
   const handleOkDeleteRoute = () => {
     if (route) {
       setOpen(false);
-      setOk?.(route.id);
+      setRouteToDelete?.(route.id);
     }
   };
 
   // Основні колонки
   const baseColumns: GridColDef[] = [
-    { field: "departureDate", headerName: "Departure Date", width: 150 },
-    { field: "arrivalDate", headerName: "Arrival Date", width: 150 },
-    { field: "departureFrom", headerName: "From", width: 100 },
-    { field: "arrivalTo", headerName: "To", width: 100 },
-    { field: "maxSeats", headerName: "Max Seats", width: 50 },
-    { field: "bookedSeats", headerName: "Booked Seats", width: 50 },
-    { field: "routePrice", headerName: "Price", width: 50 },
-    createColumnButton("viewRoute", "View Route", 130, handleViewRoute, "View Route"),
+    { field: "departureDate", headerName: t("form:departure_date"), width: 150 },
+    { field: "arrivalDate", headerName: t("form:arrival_date"), width: 150 },
+    { field: "departureFrom", headerName: t("form:from"), width: 100 },
+    { field: "arrivalTo", headerName: t("form:to"), width: 100 },
+    { field: "maxSeats", headerName: t("form:max_seats"), width: 50 },
+    { field: "bookedSeats", headerName: t("form:booked_seats"), width: 50 },
+    { field: "routePrice", headerName: t("form:price"), width: 50 },
+    createColumnButton("viewRoute", t("form:view_route"), 130, handleViewRoute, t("form:view_route")),
   ];
 
   // Колонки, якщо isRouteAgain === true
   const extraColumns: GridColDef[] = isRouteAgain
     ? [
-        createColumnButton("againRoute", "Activate Again", 200, handleAgainRoute, "Activate route again"),
-        createColumnButton("deleteRoute", "Delete Route", 130, handleCancelRoute, "Delete Route"),
+        createColumnButton("againRoute", t("form:activate_again"), 200, handleAgainRoute, t("activate_again")),
+        createColumnButton("deleteRoute", t("form:delete_route"), 130, handleCancelRoute, t("form:delete_route")),
       ]
     : [
-        createColumnButton("changeRoute", "Change Route", 150, handleChangeRoute, "Change Route"),
-        createColumnButton("newRoute", "New Route", 130, handleAgainRoute, "New Route"),
-        createColumnButton("cancelRoute", "Cancel Route", 130, handleCancelRoute, "Cancel Route"),
+        createColumnButton("changeRoute", t("form:change_route"), 150, handleChangeRoute, t("form:change_route")),
+        createColumnButton("newRoute", t("form:new_route"), 130, handleAgainRoute, t("form:new_route")),
+        createColumnButton("cancelRoute", t("form:cancel_route"), 130, handleCancelRoute, t("form:cancel_route")),
       ];
 
   return (
     <>
-      <MyDialogIsDelete title="You really want to delete the route?" setOpen={setOpen} open={open} setOk={handleOkDeleteRoute} />
+      <MyDialogIsDelete title={t("is_delete_route")} setOpen={setOpen} open={open} setOk={handleOkDeleteRoute} />
       <TableRoutesUI routes={routes} columns={[...baseColumns, ...extraColumns]} />
     </>
   );

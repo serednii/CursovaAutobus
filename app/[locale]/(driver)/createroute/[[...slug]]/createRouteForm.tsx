@@ -34,6 +34,7 @@ import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 import { useGetListBlockedDate } from "./useGetListBlockedDate";
+import { useTranslation } from "react-i18next";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -53,15 +54,18 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 function CreateRouteForm() {
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
-
+  const { t } = useTranslation();
   const router = useRouter();
   const renderRef = useRef(0);
 
   const { sessionUser, userSessionId, status } = useGetSessionParams();
 
   const params = useParams();
-  const id = params.id ? Number(params.id) : 0;
-  const type = params.type ? params.type : "";
+  const slug: string | string[] | undefined = params.slug;
+
+  console.log("params in CreateRouteForm", slug);
+  const id = (slug && Number(slug[0])) || 0;
+  const type = (slug && slug[1]) || "";
 
   // console.log("CreateRoute RENDER", bears);
   const {
@@ -125,16 +129,18 @@ function CreateRouteForm() {
     <Container className=" bg-[#F9FAFB]">
       <header className=" px-4 pt-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Route Management</h1>
-          <p>Create and manage your bus routes</p>
+          <h1 className="text-2xl font-bold">{t("route_management")}</h1>
+          <p>{t("create_and_manage_your_bus_routes")}</p>
         </div>
       </header>
+
+      {/* <h1>{t("title")}</h1> */}
 
       <main className="px-4 bg-[white] rounded-xl ">
         <form onSubmit={handleSubmit(handleRouteSubmit(type, id, busStore.dataLayoutBus, sessionUser, router))}>
           <div className="flex gap-5 mb-5 flex-wrap">
             <CustomDatePicker
-              title="Departure Date"
+              title={t("form:departure_date")}
               name="departureDate"
               register={register}
               errors={errors}
@@ -142,7 +148,7 @@ function CreateRouteForm() {
               listBlockedDate={listBlockedDate}
             />
             <CustomDatePicker
-              title="Arrival Date"
+              title={t("form:arrival_date")}
               name="arrivalDate"
               register={register}
               errors={errors}
@@ -159,7 +165,7 @@ function CreateRouteForm() {
               setValue={setValue}
               errors={errors}
               name={"departureFrom"}
-              title={"Departure From"}
+              title={t("form:departure_from")}
               className="grow"
             />
             <CustomTextField
@@ -169,23 +175,24 @@ function CreateRouteForm() {
               listCity={arrivalToCity}
               errors={errors}
               name={"arrivalTo"}
-              title={"Arrival To"}
+              title={t("form:arrival_to")}
               className="grow"
             />
           </div>
 
-          <IntermediateStops startStops={startStops} unregister={unregister} register={register} errors={errors} />
+          <IntermediateStops startStops={startStops} unregister={unregister} register={register} errors={errors} t={t} />
 
-          <CustomTextField register={register} action="createRoute" errors={errors} name={"busNumber"} title={"Bus Number"} className="mb-5" />
+          <CustomTextField register={register} action="createRoute" errors={errors} name={"busNumber"} title={t("bus_number")} className="mb-5" />
 
           <div>
-            <h2>Bus Layout</h2>
+            <h2>{t("bus_layout")}</h2>
             <MaterialUISelect
               passengersLength={passengersLength}
               handleChangeVariantBus={(value) => handleChangeVariantBus(value, setIndexSelectVariantBus, undefined)}
               register={register}
               errors={errors}
               indexSelectVariantBus={indexSelectVariantBus}
+              t={t}
               className="mb-5"
             />
 
@@ -212,17 +219,18 @@ function CreateRouteForm() {
               watch={watch}
               sessionUser={sessionUser}
               action={RoleEnum.DRIVER}
+              t={t}
             />
           )}
 
-          <CustomTextField register={register} action="createRoute" errors={errors} name={"routePrice"} title={"Route Price"} className="mb-5" />
+          <CustomTextField register={register} action="createRoute" errors={errors} name={"routePrice"} title={t("route_price")} className="mb-5" />
 
           <div className="flex justify-between items-center flex-wrap">
             <div className="grow">
               <Typography variant="h6" gutterBottom>
-                Additional options:
+                {t("additional_options")}:
               </Typography>
-              <CheckboxOptionsDriver register={register} watch={watch} />
+              <CheckboxOptionsDriver register={register} watch={watch} t={t} />
             </div>
             <div className="flex justify-end items-center gap-5 grow">
               <Button
@@ -232,7 +240,7 @@ function CreateRouteForm() {
                 // onClick={handleSubmit(onSubmit)}
                 disabled={!isValid}
               >
-                {type === "change" ? "Update Route" : "Create Route"}
+                {type === "change" ? t("update_route") : t("create_route")}
               </Button>
             </div>
           </div>
