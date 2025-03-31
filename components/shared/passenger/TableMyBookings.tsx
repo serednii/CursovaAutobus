@@ -10,19 +10,22 @@ import { MyDialogDetailsRoute } from "@/components/ui/MyDialogDetailsRoute/MyDia
 import { ISubPassengersList } from "@/types/interface";
 import { ContainerViewCenter } from "@/components/ui/ContainerViewCenter";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
+import { useDeletePassengerRoute } from "@/app/[locale]/(passenger)/mybookings/useDeletePassengerRoute";
+import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 
-interface Props<T> {
-  routes: T[];
+interface Props {
+  routes: Omit<IRoutesTable, "isReservation">[];
   isRouteAgain?: boolean;
-  removeRoutePassenger?: (route: number) => void;
 }
 
-export default function TableMyBookings<T extends { id: string | number }>({ routes, isRouteAgain, removeRoutePassenger }: Props<T>) {
+export default function TableMyBookings({ routes, isRouteAgain }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState({} as IRoutesTable);
   const [openDetails, setOpenDetails] = useState(false);
   const [routeDetails, setRouteDetails] = useState<ISubPassengersList>();
+  const { userSessionId } = useGetSessionParams();
+  const { removeRoutePassenger } = useDeletePassengerRoute(routes, userSessionId);
 
   const handleCancelOrderRoute = (route: IRoutesTable) => {
     setOpen(true);
@@ -39,7 +42,7 @@ export default function TableMyBookings<T extends { id: string | number }>({ rou
     console.log("Route Details", route);
   };
 
-  const setOk = () => removeRoutePassenger && removeRoutePassenger(route.id);
+  const setOk = () => removeRoutePassenger(route.id);
 
   // Основні колонки без колонки againRouter
   const baseColumns: GridColDef[] = [

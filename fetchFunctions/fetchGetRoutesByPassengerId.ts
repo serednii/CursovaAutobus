@@ -36,3 +36,27 @@ async function fetchGetRoutesByPassengerId<TSelect>(
 }
 
 export default fetchGetRoutesByPassengerId;
+
+// id: number;
+// departureDate: string;
+// arrivalDate: string;
+// departureFrom: string;
+// arrivalTo: string;
+// routePrice: number;
+// driverId: number;
+// busSeats: IBusSeats[];
+// passengersSeatsList: ISubPassengersList[];
+
+// departureFromCity?: string;
+// arrivalToCity?: string;
+
+//То ми получаємо GetRoutesByPassengerId
+// id: 1,
+// departureDate: '2025-05-11T19:30:00.000Z',
+// arrivalDate: '2025-02-11T19:00:00.000Z',
+// departureFrom: 'Houston',
+// arrivalTo: 'San Antonio',
+// routePrice: 25,
+// driverId: 5
+// busSeats:
+// passengersSeatsList: [],

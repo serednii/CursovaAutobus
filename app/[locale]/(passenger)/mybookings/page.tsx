@@ -1,30 +1,54 @@
-"use client";
+import React from "react";
 
-import React, { useState } from "react";
-import AvailableRoutes from "@/components/shared/passenger/AvailableRoutes";
-import PastRoutes from "@/components/shared/passenger/PastRoutes";
-import MyScaleLoader from "@/components/ui/MyScaleLoader";
-import { getPastRoutesAndAvailableRoutes } from "@/lib/utils";
+// import MyScaleLoader from "@/components/ui/MyScaleLoader";
+// import { useFetchPassengerRoutes } from "./useFetchPassengerRoutes";
+// import { useDeletePassengerRoute } from "./useDeletePassengerRoute";
+import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
+import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/configs/auth";
+import initTranslations from "@/app/i18n";
+import TranslationsProvider from "@/components/TranslationsProvider";
+import WrapperPassengerRoutes from "@/components/shared/passenger/WrapperPassengerRoutes";
 
-import { separateRoutesTable } from "./action";
-import { useFetchPassengerRoutes } from "./useFetchPassengerRoutes";
-import { useDeletePassengerRoute } from "./useDeletePassengerRoute";
+export default async function MyBookings({ params }: { params: { locale: string } }) {
+  const { locale } = await params; // Використовуємо ?? для надійності
+  const { resources } = await initTranslations(locale, ["mybookings", "form"]);
 
-export default function MyBookings() {
-  const [reload, setReload] = useState<boolean>(false);
-  const { routesPassenger, loading, userSessionId } = useFetchPassengerRoutes(reload);
-  const { removeRoutePassenger } = useDeletePassengerRoute(routesPassenger, userSessionId, setReload);
+  const session = await getServerSession(authConfig);
+  const userSessionId = Number(session?.user?.id);
 
-  if (loading) return <MyScaleLoader />;
+  // const { routesPassenger, loading, userSessionId } = useFetchPassengerRoutes(reload);
+  const routesPassenger = await fetchGetRoutesByPassengerId<typeof selectMyBookings>(userSessionId, selectMyBookings);
+  // const { removeRoutePassenger } = useDeletePassengerRoute(routesPassenger, userSessionId, setReload);
 
-  const separateData = separateRoutesTable(routesPassenger, userSessionId);
-  const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(separateData);
+  if (routesPassenger === null) return null;
 
   return (
-    <div className="bg-[#F9FAFB] px-4">
-      <h1 className="text-2xl font-bold mb-10">Booked Routes</h1>
-      <AvailableRoutes className="mb-10" routes={availableRoutes} removeRoutePassenger={removeRoutePassenger} />
-      <PastRoutes routes={pastRoutes} />
-    </div>
+    <TranslationsProvider namespaces={["mybookings", "form"]} locale={locale} resources={resources}>
+      <WrapperPassengerRoutes routes={routesPassenger} userSessionId={userSessionId} />
+    </TranslationsProvider>
   );
 }
+
+// id: 1,
+// departureDate: '2025-05-11T19:30:00.000Z',
+// arrivalDate: '2025-02-11T19:00:00.000Z',
+// departureFrom: 'Houston',
+// arrivalTo: 'San Antonio',
+// seatsNumber: '1, 3, 4',
+// routeTotalPrice: '$75',
+// routePrice: '$25',
+// busSeats:
+// passengersSeatsList: undefined
+
+//     id: number;
+//     routePrice: string;
+//     departureDate: string;
+//     arrivalDate: string;
+//     departureFrom: string;
+//     arrivalTo: string;
+//     busSeats: IBusSeats[];
+//     passengersSeatsList: ISubPassengersList | undefined;
+//     seatsNumber: string;
+//     routeTotalPrice: string;

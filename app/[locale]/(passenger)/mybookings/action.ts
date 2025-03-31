@@ -23,6 +23,7 @@ export const separateRoutesTable = (
       },
       { totalPrice: 0, seatsNumber: [] }
     );
+
     const passengersSeatsList: ISubPassengersList | undefined = route.passengersSeatsList.find((e) => e.idPassenger === passengerId);
 
     return {
@@ -42,7 +43,7 @@ export const separateRoutesTable = (
   return routesTable;
 };
 
-export const getBusSeatsRaw = (routesPassenger: Omit<GetRoutesByPassengerId, "isReservation">[], routeId: number) =>
+export const getBusSeatsRaw = (routesPassenger: Omit<IRoutesTable, "isReservation">[], routeId: number) =>
   routesPassenger.find((e) => e.id === routeId)?.busSeats || [];
 
 export const getBusSeatsPassenger = (busSeatsRaw: IBusSeats[], passengerId: number) => {
@@ -71,7 +72,7 @@ export const removeRoutePassengerFunction = async (
     idPassenger: passengerId,
     busSeats: busSeatsRaw,
   });
-  
+
   if (!result) {
     //Error delete route passenger
   } else {

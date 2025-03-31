@@ -2,16 +2,13 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 
-import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
+import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
 import { getBusSeatsRaw } from "./action";
+import { useRouter } from "next/navigation";
 
-export const useDeletePassengerRoute = (
-  routesPassenger: Omit<GetRoutesByPassengerId, "isReservation">[],
-  passengerId: number | undefined,
-  setReload: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+export const useDeletePassengerRoute = (routesPassenger: Omit<IRoutesTable, "isReservation">[], passengerId: number | undefined) => {
   const [deleting, setDeleting] = useState(false);
-
+  const router = useRouter();
   const removeRoutePassenger = async (routeId: number) => {
     if (!passengerId) return;
     setDeleting(true);
@@ -28,7 +25,7 @@ export const useDeletePassengerRoute = (
         toast.error("Error: Route not deleted");
       } else {
         toast.success("Route deleted", { duration: 3000 });
-        setReload((prev) => !prev); // Виправлений рядок
+        router.refresh();
       }
     } catch (error) {
       console.error("Error deleting route:", error);
