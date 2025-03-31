@@ -30,5 +30,8 @@
   "activate_again": "Активувати ще раз",
   "delete_route": "Видалити маршрут",
   "activate_route": "Активувати маршрут",
-  "activate_again_route": "Активувати ще раз"
+  "activate_again_route": "Активувати ще раз",
+  "date_and_time": "Дата та час",
+  "seats_number": "Номери місць",
+  "total_price": "Загальна ціна"
 }

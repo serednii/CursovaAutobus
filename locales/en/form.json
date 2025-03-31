@@ -30,5 +30,8 @@
   "activate_again": "Activate Again",
   "delete_route": "Delete Route",
   "activate_route": "Activate Route",
-  "activate_again_route": "Activate Again Route"
+  "activate_again_route": "Activate Again Route",
+  "date_and_time": "Data and Time",
+  "seats_number": "Seats Number",
+  "total_price": "Total Price"
 }

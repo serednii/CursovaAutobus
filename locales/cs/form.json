@@ -30,5 +30,8 @@
   "activate_again": "Znovu aktivovat",
   "delete_route": "Smazat trasu",
   "activate_route": "Aktivovat trasu",
-  "activate_again_route": "Znovu aktivovat trasu"
+  "activate_again_route": "Znovu aktivovat trasu",
+  "date_and_time": "Datum a čas",
+  "seats_number": "Misto",
+  "total_price": "Celková cena"
 }

@@ -13,7 +13,7 @@ import WrapperPassengerRoutes from "@/components/shared/passenger/WrapperPasseng
 
 export default async function MyBookings({ params }: { params: { locale: string } }) {
   const { locale } = await params; // Використовуємо ?? для надійності
-  const { resources } = await initTranslations(locale, ["mybookings", "form"]);
+  const { resources } = await initTranslations(locale, ["mybookings", "myroutes", "form"]);
 
   const session = await getServerSession(authConfig);
   const userSessionId = Number(session?.user?.id);
@@ -25,7 +25,7 @@ export default async function MyBookings({ params }: { params: { locale: string 
   if (routesPassenger === null) return null;
 
   return (
-    <TranslationsProvider namespaces={["mybookings", "form"]} locale={locale} resources={resources}>
+    <TranslationsProvider namespaces={["mybookings", "myroutes", "form"]} locale={locale} resources={resources}>
       <WrapperPassengerRoutes routes={routesPassenger} userSessionId={userSessionId} />
     </TranslationsProvider>
   );

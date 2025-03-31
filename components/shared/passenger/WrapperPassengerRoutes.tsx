@@ -23,10 +23,10 @@ export default function WrapperPassengerRoutes({ routes, userSessionId }: Props)
         <h1 className="text-2xl font-bold mb-10">{t("booked_routes")}</h1>
         <AvailableRoutes className="mb-10">
           {" "}
-          <TableMyBookings routes={availableRoutes} />{" "}
+          <TableMyBookings routes={availableRoutes} t={t} isRouteAgain={true} />
         </AvailableRoutes>
         <PastRoutes>
-          <TableMyBookings routes={pastRoutes} />
+          <TableMyBookings routes={pastRoutes} t={t} />
         </PastRoutes>
       </div>
     </Container>

@@ -16,9 +16,10 @@ import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 interface Props {
   routes: Omit<IRoutesTable, "isReservation">[];
   isRouteAgain?: boolean;
+  t: any;
 }
 
-export default function TableMyBookings({ routes, isRouteAgain }: Props) {
+export default function TableMyBookings({ routes, isRouteAgain, t }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState({} as IRoutesTable);
@@ -48,27 +49,27 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
   const baseColumns: GridColDef[] = [
     {
       field: "departureDate",
-      headerName: "Date & Time",
+      headerName: t("form:date_and_time"),
       minWidth: 180,
       flex: 1,
     },
-    { field: "departureFrom", headerName: "From", minWidth: 130, flex: 1 },
-    { field: "arrivalTo", headerName: "To", minWidth: 130, flex: 1 },
+    { field: "departureFrom", headerName: t("form:from"), minWidth: 130, flex: 1 },
+    { field: "arrivalTo", headerName: t("form:to"), minWidth: 130, flex: 1 },
     {
       field: "seatsNumber",
-      headerName: "Seats Number",
+      headerName: t("form:seats_number"),
       minWidth: 150,
       flex: 1,
     },
     {
       field: "routeTotalPrice",
-      headerName: "Total Price",
+      headerName: t("form:total_price"),
       minWidth: 90,
       flex: 1,
     },
     {
       field: "routePrice",
-      headerName: "Price",
+      headerName: t("form:price"),
       minWidth: 60,
       flex: 1,
     },
@@ -80,34 +81,36 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
         ...baseColumns,
         {
           field: "changeRouter",
-          headerName: "Change Route",
-          width: 150,
+          headerName: t("form:change_route"),
+          minWidth: 180,
           sortable: false,
           renderCell: (params) => (
             <Button variant="contained" color="primary" size="small" onClick={() => handleChangeOrderRoute(params.row)}>
-              Change Booking
+              {t("form:change_route")}
             </Button>
           ),
         },
         {
           field: "againRouter",
-          headerName: "Activate Again",
-          width: 150,
+          headerName: t("form:cancel_booking"),
+          minWidth: 100,
+          maxWidth: 200,
+          width: 200,
           sortable: false,
           renderCell: (params) => (
             <Button variant="contained" color="primary" size="small" onClick={() => handleCancelOrderRoute(params.row)}>
-              Cancel Booking
+              {t("form:cancel_booking")}
             </Button>
           ),
         },
         {
           field: "detailsRoute",
-          headerName: "Details Route",
-          width: 150,
+          headerName: t("form:details_route"),
+          minWidth: 200,
           sortable: false,
           renderCell: (params) => (
             <Button variant="contained" color="primary" size="small" onClick={() => handleDetailOrderRoute(params.row)}>
-              Detais
+              {t("form:details_route")}
             </Button>
           ),
         },
@@ -117,7 +120,7 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
   return (
     <>
       <MyDialogIsDelete
-        title="You really want to delete the route?"
+        title={t("is_delete_route")}
         // description="description"
         // content="content"
         setOpen={setOpen}
@@ -127,7 +130,7 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
 
       {openDetails && (
         <ContainerViewCenter className="mx-auto max-w-[1280px] px-4" setOpen={setOpenDetails}>
-          <MyDialogDetailsRoute passengersSeatsList={routeDetails} />
+          <MyDialogDetailsRoute passengersSeatsList={routeDetails} t={t} />
         </ContainerViewCenter>
       )}
 
