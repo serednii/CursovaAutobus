@@ -76,13 +76,20 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
   // busStore.setUserIdSession(userSessionId);
   // useBusLayoutData(route);
   // console.log("iorderpassengers", idOrderPassengers);
-  const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === userSessionId), [route, userSessionId]);
+  const myListPassengers = useMemo(
+    () => route?.passengersSeatsList.find((obj) => obj.idPassenger === userSessionId),
+    [route, userSessionId]
+  );
 
   return (
     <>
       {/* <form> */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <LayoutBus sessionUser={sessionUser} action={RoleEnum.PASSENGER} driverId={route?.driverId} />
+        <LayoutBus
+          sessionUser={sessionUser}
+          action={RoleEnum.PASSENGER}
+          driverId={route?.driverId}
+        />
 
         {busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0 && (
           <SubPassengersOrders
@@ -105,7 +112,7 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
           type="submit"
           disabled={!(busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0)} // Вимикає кнопку, якщо форма не валідна
         >
-          Reserve seats
+          {t("reserved_seats")}
         </Button>
       </form>
       <p>

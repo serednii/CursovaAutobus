@@ -1,1 +1,8 @@
-{ "error": "ddfsdsdsd" }
+{
+  "selected_bus": "Selected bus",
+  "departure": "departure",
+  "arrival": "arrival",
+  "seats_available": "seats available",
+  "add_sub_passenger": "Add sub-passenger",
+  "reserved_seats": "Reserved seats"
+}

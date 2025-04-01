@@ -2,8 +2,6 @@ import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 
 function replaceReservedToSelected({ userSessionId, route }: { userSessionId: number; route: IGetRouteSeatSelection }): IGetRouteSeatSelection {
-  // if (!fetchedRoute || !userSessionId) return null;
-
   if (route && route.busSeats) {
     const updatedPassengers = route.busSeats.map((seat) =>
       seat.passenger === userSessionId && seat.busSeatStatus === SeatStatusEnum.RESERVED ? { ...seat, busSeatStatus: SeatStatusEnum.SELECTED } : seat

@@ -13,9 +13,16 @@ import { ILayoutData } from "@/types/layoutbus.types";
 import TranslationsProvider from "@/components/TranslationsProvider";
 import replaceReservedToSelected from "./replaceReservedToSelected";
 
+export interface BusInfo {
+  selected_bus: string;
+  departure: string;
+  arrival: string;
+  seats_available: string;
+}
+
 async function SeatSelection({ params }: { params: { locale: string; id: string } }) {
   const { locale, id } = await params; // Використовуємо params без await
-  const { resources } = await initTranslations(locale, ["mybookings", "myroutes", "form"]);
+  const { t, resources } = await initTranslations(locale, ["seatselection", "form"]);
 
   const session = await getServerSession(authConfig);
   const userSessionId = Number(session?.user?.id);
@@ -35,12 +42,18 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
   //mixed layouts to seats
   const newData: ILayoutData = mixedLayoutsSeatsData(route);
   //*************************************** */
+  const language: BusInfo = {
+    selected_bus: t("selected_bus"),
+    departure: t("departure"),
+    arrival: t("arrival"),
+    seats_available: t("seats_available"),
+  };
 
   return (
-    <TranslationsProvider namespaces={["mybookings", "myroutes", "form"]} locale={locale} resources={resources}>
+    <TranslationsProvider namespaces={["seatselection", "form"]} locale={locale} resources={resources}>
       <AddDataToStore route={newData} userSessionId={userSessionId}>
         <Container className="pt-4">
-          <SelectedBusInfo route={fetchedRoute} />
+          <SelectedBusInfo route={fetchedRoute} language={language} />
           <OrderSeatsBus route={fetchedRoute} sessionUser={session.user} newData={newData} />
           MyBookings Driver Id {fetchedRoute?.driverId} Session user.id {session?.user?.id}
         </Container>
