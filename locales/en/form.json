@@ -33,5 +33,6 @@
   "activate_again_route": "Activate Again Route",
   "date_and_time": "Data and Time",
   "seats_number": "Seats Number",
-  "total_price": "Total Price"
+  "total_price": "Total Price",
+  "max_seats": "Max Seats"
 }

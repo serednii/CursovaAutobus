@@ -33,5 +33,6 @@
   "activate_again_route": "Активувати ще раз",
   "date_and_time": "Дата та час",
   "seats_number": "Номери місць",
-  "total_price": "Загальна ціна"
+  "total_price": "Загальна ціна",
+  "max_seats": "Максимальна кількість місць"
 }

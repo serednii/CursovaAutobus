@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders/SubPassengersOrders";
@@ -15,6 +15,8 @@ import useSubmitOrder from "./useSubmitOrder";
 // import useStore from "@/zustand/createStore";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
+import { useTranslation } from "react-i18next";
+import { ILayoutData } from "@/types/layoutbus.types";
 
 // interface session {
 //   user: UserSession;
@@ -23,12 +25,13 @@ import busStore from "@/mobx/busStore";
 interface Props {
   route: IGetRouteSeatSelection | undefined;
   sessionUser: UserSession | null;
+  newData: ILayoutData | null;
 }
 
-function OrderSeatsBus({ route, sessionUser }: Props) {
+function OrderSeatsBus({ route, sessionUser, newData }: Props) {
   // const setUserIdSession = useStore((state) => state.setUserIdSession);
   // const idOrderPassengers = useStore((state) => state.setUserIdSession);
-
+  const { t } = useTranslation();
   // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
   // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
 
@@ -50,9 +53,12 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
       restRoom: true,
     },
   });
+
   // let sessionUser: UserSession | null = null;
   const userSessionId: number = Number(sessionUser?.id);
-
+  // useEffect(() => {
+  //   busStore.setDataLayoutBus(newData, RoleEnum.PASSENGER);
+  // }, [route]);
   // const handleDataLayoutBus = useMemo(
   //   () => (data: ILayoutData) => {
   //     setDataLayoutBus(data);
@@ -89,6 +95,7 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
             renderRef={renderRef}
             watch={watch}
             action={RoleEnum.PASSENGER}
+            t={t}
           />
         )}
 

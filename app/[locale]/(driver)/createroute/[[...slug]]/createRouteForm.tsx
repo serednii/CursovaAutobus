@@ -3,7 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 
 import { Container } from "@/components/ui/Container";
 import CustomDatePicker from "@/components/shared/form/dataPicker/CustomDatePicker";
@@ -51,7 +51,7 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
 // const idOrderPassengers = useStore((state) => state.idOrderPassengers);
 
-function CreateRouteForm() {
+function CreateRouteForm({ id, type }: { id: number; type: string }) {
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
   const { t } = useTranslation();
@@ -59,13 +59,6 @@ function CreateRouteForm() {
   const renderRef = useRef(0);
 
   const { sessionUser, userSessionId, status } = useGetSessionParams();
-
-  const params = useParams();
-  const slug: string | string[] | undefined = params.slug;
-
-  console.log("params in CreateRouteForm", slug);
-  const id = (slug && Number(slug[0])) || 0;
-  const type = (slug && slug[1]) || "";
 
   // console.log("CreateRoute RENDER", bears);
   const {
@@ -129,8 +122,8 @@ function CreateRouteForm() {
     <Container className=" bg-[#F9FAFB]">
       <header className=" px-4 pt-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold">{t("route_management")}</h1>
-          <p>{t("create_and_manage_your_bus_routes")}</p>
+          {/* <h1 className="text-2xl font-bold">{t("route_management")}</h1>
+          <p>{t("create_and_manage_your_bus_routes")}</p> */}
         </div>
       </header>
 

@@ -1,55 +1,52 @@
-"use client";
-import React, { useEffect } from "react";
+import React from "react";
+import { getServerSession } from "next-auth";
+import initTranslations from "@/app/i18n";
 import OrderSeatsBus from "@/components/shared/passenger/OrderSeatsBus";
 import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
-// import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
-import { RoleEnum } from "@/enum/shared.enums";
-import { useParams } from "next/navigation";
-// import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
-import busStore from "@/mobx/busStore";
-import { observer } from "mobx-react-lite";
-import useMixedLayoutsSeatsData from "@/components/shared/passenger/useBusLayoutData";
-import { useGetSessionParams } from "@/hooks/useGetSessionParams";
-import useGetRoute from "./useGetRoute";
-import useChangeBusSeatStatus from "./changeBusSeatStatus";
+import mixedLayoutsSeatsData from "@/components/shared/passenger/mixedLayoutsSeatsData";
+import { authConfig } from "@/configs/auth";
+import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
+import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
+import AddDataToStore from "@/components/shared/passenger/AddDataToStore";
+import { ILayoutData } from "@/types/layoutbus.types";
+import TranslationsProvider from "@/components/TranslationsProvider";
+import replaceReservedToSelected from "./replaceReservedToSelected";
 
-function SeatSelection() {
-  const { sessionUser, userSessionId, session } = useGetSessionParams();
+async function SeatSelection({ params }: { params: { locale: string; id: string } }) {
+  const { locale, id } = await params; // Використовуємо params без await
+  const { resources } = await initTranslations(locale, ["mybookings", "myroutes", "form"]);
 
-  const params = useParams();
-  const id = params.id ? Number(params.id) : 0;
+  const session = await getServerSession(authConfig);
+  const userSessionId = Number(session?.user?.id);
+  const idNumber = Number(id);
 
-  console.log("id in SeatSelection ", id);
-  console.log("userSessionId in SeatSelection ", userSessionId);
-  console.log("session in SeatSelection ", session);
+  const routeArray = await fetchGetRoutesById.searchRoute([idNumber], selectSeatSelection, "seatSelection");
+  const routesArray = routeArray as IGetRouteSeatSelection[] | null;
+  const route = routesArray?.[0] || null;
 
-  useEffect(() => {
-    busStore.setDataLayoutBus(null, RoleEnum.PASSENGER);
-  }, []);
+  if (route === null || session === null) {
+    console.error("Route not found");
+    return <div>Route not found</div>;
+  }
 
-  useEffect(() => {
-    if (userSessionId) {
-      busStore.setUserIdSession(userSessionId);
-    }
-  }, [userSessionId]);
-
-  const { route, loading } = useGetRoute({ userSessionId, id });
-  useChangeBusSeatStatus({ route, userSessionId });
-
-  useMixedLayoutsSeatsData(route);
-
-  if (loading) return <div>Loading...</div>;
-  if (!route || !session || !params) return <div>No route found</div>;
-  console.log("route in SeatSelection ", route);
+  // change SeatStatusEnum.RESERVED  to SeatStatusEnum.SELECTED
+  const fetchedRoute = replaceReservedToSelected({ userSessionId, route });
+  //mixed layouts to seats
+  const newData: ILayoutData = mixedLayoutsSeatsData(route);
+  //*************************************** */
 
   return (
-    <Container className="pt-4">
-      <SelectedBusInfo route={route} />
-      <OrderSeatsBus route={route} sessionUser={sessionUser} />
-      MyBookings Driver Id {route?.driverId} Session user.id {session?.user?.id}
-    </Container>
+    <TranslationsProvider namespaces={["mybookings", "myroutes", "form"]} locale={locale} resources={resources}>
+      <AddDataToStore route={newData} userSessionId={userSessionId}>
+        <Container className="pt-4">
+          <SelectedBusInfo route={fetchedRoute} />
+          <OrderSeatsBus route={fetchedRoute} sessionUser={session.user} newData={newData} />
+          MyBookings Driver Id {fetchedRoute?.driverId} Session user.id {session?.user?.id}
+        </Container>
+      </AddDataToStore>
+    </TranslationsProvider>
   );
 }
 
-export default observer(SeatSelection);
+export default SeatSelection;

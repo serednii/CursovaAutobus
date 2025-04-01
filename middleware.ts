@@ -65,12 +65,12 @@ import i18nConfig from "./i18nConfig";
 export async function middleware(req: any) {
   // const apiKey = req.headers.get("api-key"); // Отримуємо API ключ з заголовків
   const url = req.nextUrl.clone();
-  console.log("middleware pathname------", url.pathname);
-  console.log("req in middleware");
+  // console.log("middleware pathname------", url.pathname);
+  // console.log("req in middleware");
 
-  setTimeout(() => {
-    console.log("*************************", url.pathname);
-  }, 2000);
+  // setTimeout(() => {
+  //   console.log("*************************", url.pathname);
+  // }, 2000);
 
   const { pathname } = req.nextUrl;
 
@@ -99,7 +99,7 @@ export async function middleware(req: any) {
       ["/signin", "/selectrole", "/registerdriver", "/registerpassenger"].some((path) => url.pathname.startsWith(path)) ||
       ["/createroute", "/myroutes", "/myroute"].some((path) => url.pathname.startsWith(path) && token.role === RoleEnum.DRIVER)
     ) {
-      console.log("createroute 000", url.pathname);
+      // console.log("createroute 000", url.pathname);
       // if (url.pathname.startsWith("/createroute")) {
       //   console.log("createroute 111", url.pathname);
 
@@ -110,11 +110,9 @@ export async function middleware(req: any) {
       url.searchParams.delete("callbackUrl"); // Видаляємо параметр, щоб він не передавався далі
       return NextResponse.redirect(url);
     } else {
-      console.log("createroute 222", url.pathname);
-
+      // console.log("createroute 222", url.pathname);
       // if (url.pathname === "/createroute") {
       //   console.log("createroute 3333");
-
       //   url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/createroute/0/type";
       //   url.searchParams.delete("callbackUrl"); // Видаляємо параметр, щоб він не передавався далі
       //   return NextResponse.redirect(url);

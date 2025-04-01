@@ -33,5 +33,6 @@
   "activate_again_route": "Znovu aktivovat trasu",
   "date_and_time": "Datum a čas",
   "seats_number": "Misto",
-  "total_price": "Celková cena"
+  "total_price": "Celková cena",
+  "max_seats": "Maximalní kapacita"
 }
