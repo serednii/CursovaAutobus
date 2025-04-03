@@ -11,12 +11,8 @@ import TableRow from "@mui/material/TableRow";
 import { useTranslation } from "react-i18next";
 
 const colorCombinations = [
-  // { text: "#000000", background: "#FFFFFF" }, // Чорний текст на білому
-  // { text: "#FFFFFF", background: "#000000" }, // Білий текст на чорному
   { text: "#FF5733", background: "#FDEDEC" }, // Яскравий помаранчевий текст на світлому фоні
-  // { text: "#C70039", background: "#F9EBEA" }, // Темно-червоний текст на рожевому фоні
   { text: "#900C3F", background: "#F5EEF8" }, // Бордовий текст на лавандовому фоні
-  // { text: "#581845", background: "#F4ECF7" }, // Темно-фіолетовий текст на світло-фіолетовому фоні
   { text: "#1F618D", background: "#EBF5FB" }, // Синій текст на блакитному фоні
   { text: "#2874A6", background: "#D6EAF8" }, // Темно-блакитний текст на світло-блакитному фоні
   { text: "#148F77", background: "#D1F2EB" }, // Зелений текст на світло-зеленому фоні

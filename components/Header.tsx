@@ -10,34 +10,37 @@ import { MenuDriver } from "@/types/menudriver.types";
 import { CircularProgress } from "@mui/material";
 import { useGetSessionParams } from "../hooks/useGetSessionParams";
 import LanguageChanger from "./LanguageChanger";
-
-const menuDriver = [
-  {
-    name: "Create route",
-    link: "/createroute",
-  },
-  {
-    name: "My routes",
-    link: "/myroutes",
-  },
-  // {
-  //   name: "My route",
-  //   link: "/myroute",
-  // },
-];
-
-const menuPassenger = [
-  {
-    name: "My Bookings",
-    link: "/mybookings",
-  },
-  {
-    name: "Seat selection",
-    link: "/seatselection",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
+  const { t } = useTranslation();
+
+  const menuDriver: MenuDriver[] = [
+    {
+      name: t("create_route"),
+      link: "/createroute",
+    },
+    {
+      name: t("my_routes"),
+      link: "/myroutes",
+    },
+    // {
+    //   name: t("my_route"),
+    //   link: "/myroute",
+    // },
+  ];
+
+  const menuPassenger: MenuDriver[] = [
+    {
+      name: t("my_bookings"),
+      link: "/mybookings",
+    },
+    {
+      name: t("seat_selection"),
+      link: "/seatselection",
+    },
+  ];
+
   const { sessionUser, status } = useGetSessionParams();
 
   let menulist: MenuDriver[] = [];
