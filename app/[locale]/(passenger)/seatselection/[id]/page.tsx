@@ -8,7 +8,6 @@ import mixedLayoutsSeatsData from "@/components/shared/passenger/mixedLayoutsSea
 import { authConfig } from "@/configs/auth";
 import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
-import AddDataToStore from "@/components/shared/passenger/AddDataToStore";
 import { ILayoutData } from "@/types/layoutbus.types";
 import TranslationsProvider from "@/components/TranslationsProvider";
 import replaceReservedToSelected from "./replaceReservedToSelected";
@@ -28,7 +27,11 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
   const userSessionId = Number(session?.user?.id);
   const idNumber = Number(id);
 
-  const routeArray = await fetchGetRoutesById.searchRoute([idNumber], selectSeatSelection, "seatSelection");
+  const routeArray = await fetchGetRoutesById.searchRoute(
+    [idNumber],
+    selectSeatSelection,
+    "seatSelection"
+  );
   const routesArray = routeArray as IGetRouteSeatSelection[] | null;
   const route = routesArray?.[0] || null;
 
@@ -50,14 +53,16 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
   };
 
   return (
-    <TranslationsProvider namespaces={["seatselection", "form"]} locale={locale} resources={resources}>
-      <AddDataToStore route={newData} userSessionId={userSessionId}>
-        <Container className="pt-4">
-          <SelectedBusInfo route={fetchedRoute} language={language} />
-          <OrderSeatsBus route={fetchedRoute} sessionUser={session.user} newData={newData} />
-          MyBookings Driver Id {fetchedRoute?.driverId} Session user.id {session?.user?.id}
-        </Container>
-      </AddDataToStore>
+    <TranslationsProvider
+      namespaces={["seatselection", "form"]}
+      locale={locale}
+      resources={resources}
+    >
+      <Container className="pt-4">
+        <SelectedBusInfo route={fetchedRoute} language={language} />
+        <OrderSeatsBus route={fetchedRoute} sessionUser={session.user} newData={newData} />
+        MyBookings Driver Id {fetchedRoute?.driverId} Session user.id {session?.user?.id}
+      </Container>
     </TranslationsProvider>
   );
 }

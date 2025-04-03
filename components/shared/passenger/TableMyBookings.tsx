@@ -48,7 +48,7 @@ export default function TableMyBookings({ routes, isRouteAgain, t }: Props) {
   // Основні колонки без колонки againRouter
   const baseColumns: GridColDef[] = [
     {
-      field: "departureDate",
+      field: t,
       headerName: t("form:date_and_time"),
       minWidth: 180,
       flex: 1,
@@ -85,7 +85,12 @@ export default function TableMyBookings({ routes, isRouteAgain, t }: Props) {
           minWidth: 180,
           sortable: false,
           renderCell: (params) => (
-            <Button variant="contained" color="primary" size="small" onClick={() => handleChangeOrderRoute(params.row)}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => handleChangeOrderRoute(params.row)}
+            >
               {t("form:change_route")}
             </Button>
           ),
@@ -98,7 +103,12 @@ export default function TableMyBookings({ routes, isRouteAgain, t }: Props) {
           width: 200,
           sortable: false,
           renderCell: (params) => (
-            <Button variant="contained" color="primary" size="small" onClick={() => handleCancelOrderRoute(params.row)}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => handleCancelOrderRoute(params.row)}
+            >
               {t("form:cancel_booking")}
             </Button>
           ),
@@ -109,7 +119,12 @@ export default function TableMyBookings({ routes, isRouteAgain, t }: Props) {
           minWidth: 200,
           sortable: false,
           renderCell: (params) => (
-            <Button variant="contained" color="primary" size="small" onClick={() => handleDetailOrderRoute(params.row)}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => handleDetailOrderRoute(params.row)}
+            >
               {t("form:details_route")}
             </Button>
           ),

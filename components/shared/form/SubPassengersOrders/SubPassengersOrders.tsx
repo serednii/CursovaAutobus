@@ -1,6 +1,12 @@
 "use client";
 import React from "react";
-import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormUnregister, UseFormWatch } from "react-hook-form";
+import {
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormUnregister,
+  UseFormWatch,
+} from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 // import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
@@ -51,7 +57,11 @@ function SubPassengersOrders({
     action,
   });
 
-  const handleChange = (index: number, value: string, field: "subFirstName" | "subLastName" | "subPhone" | "subEmail") => {
+  const handleChange = (
+    index: number,
+    value: string,
+    field: "subFirstName" | "subLastName" | "subPhone" | "subEmail"
+  ) => {
     setValue(`${field}.${index}`, value);
     setSubPassengers((prev) => prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)));
   };

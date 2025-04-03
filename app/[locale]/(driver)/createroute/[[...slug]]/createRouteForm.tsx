@@ -35,6 +35,7 @@ import busStore from "@/mobx/busStore";
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 import { useGetListBlockedDate } from "./useGetListBlockedDate";
 import { useTranslation } from "react-i18next";
+import { runInAction } from "mobx";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -82,14 +83,20 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
   // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
   // const [idOrderPassengers, setIdOrderPassengers] = useState<NullableNumber[]>([]);
 
-  useEffect(() => {
-    busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
-  }, []);
+  // useEffect(() => {
+  //   busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
+  // }, []);
 
-  useEffect(() => {
-    if (userSessionId) {
+  // useEffect(() => {
+  //   if (userSessionId) {
+  //     busStore.setUserIdSession(userSessionId);
+  //   }
+  // }, [userSessionId]);
+
+  useMemo(() => {
+    runInAction(() => {
       busStore.setUserIdSession(userSessionId);
-    }
+    });
   }, [userSessionId]);
 
   const { route } = useFetchRoute({
@@ -130,7 +137,11 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
       {/* <h1>{t("title")}</h1> */}
 
       <main className="px-4 bg-[white] rounded-xl ">
-        <form onSubmit={handleSubmit(handleRouteSubmit(type, id, busStore.dataLayoutBus, sessionUser, router))}>
+        <form
+          onSubmit={handleSubmit(
+            handleRouteSubmit(type, id, busStore.dataLayoutBus, sessionUser, router)
+          )}
+        >
           <div className="flex gap-5 mb-5 flex-wrap">
             <CustomDatePicker
               title={t("form:departure_date")}
@@ -173,15 +184,30 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
             />
           </div>
 
-          <IntermediateStops startStops={startStops} unregister={unregister} register={register} errors={errors} t={t} />
+          <IntermediateStops
+            startStops={startStops}
+            unregister={unregister}
+            register={register}
+            errors={errors}
+            t={t}
+          />
 
-          <CustomTextField register={register} action="createRoute" errors={errors} name={"busNumber"} title={t("bus_number")} className="mb-5" />
+          <CustomTextField
+            register={register}
+            action="createRoute"
+            errors={errors}
+            name={"busNumber"}
+            title={t("bus_number")}
+            className="mb-5"
+          />
 
           <div>
             <h2>{t("bus_layout")}</h2>
             <MaterialUISelect
               passengersLength={passengersLength}
-              handleChangeVariantBus={(value) => handleChangeVariantBus(value, setIndexSelectVariantBus, undefined)}
+              handleChangeVariantBus={(value) =>
+                handleChangeVariantBus(value, setIndexSelectVariantBus, undefined)
+              }
               register={register}
               errors={errors}
               indexSelectVariantBus={indexSelectVariantBus}
@@ -216,7 +242,14 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
             />
           )}
 
-          <CustomTextField register={register} action="createRoute" errors={errors} name={"routePrice"} title={t("route_price")} className="mb-5" />
+          <CustomTextField
+            register={register}
+            action="createRoute"
+            errors={errors}
+            name={"routePrice"}
+            title={t("route_price")}
+            className="mb-5"
+          />
 
           <div className="flex justify-between items-center flex-wrap">
             <div className="grow">

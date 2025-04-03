@@ -20,6 +20,10 @@ const menuDriver = [
     name: "My routes",
     link: "/myroutes",
   },
+  // {
+  //   name: "My route",
+  //   link: "/myroute",
+  // },
 ];
 
 const menuPassenger = [
@@ -46,7 +50,9 @@ export default function Header() {
 
   return (
     <Container className="header-gradient flex justify-between gap-3 relative  flex-wrap z-[100]  rounded-lg py-2 w-full">
-      {status === "loading" && <CircularProgress className="absolute top-2 left-1/2 color-[#94f07c] z-10" size={30} />}
+      {status === "loading" && (
+        <CircularProgress className="absolute top-2 left-1/2 color-[#94f07c] z-10" size={30} />
+      )}
       <div className="flex gap-4 items-center">
         <Link href="/" className="flex items-center gap-2 ">
           <FaBusAlt style={{ width: "32px", height: "32px", color: "blue" }} />

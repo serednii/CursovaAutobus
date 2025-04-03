@@ -7,14 +7,26 @@ import { ISubPassengersList } from "@/types/interface";
 import { fetchGetRoutesById, IGetRouteMyRoute } from "@/fetchFunctions/fetchGetRoutesById";
 import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { formatDate } from "@/lib/utils";
+import initTranslations from "@/app/i18n";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/configs/auth";
+import TranslationsProvider from "@/components/TranslationsProvider";
 
 export type paramsType = Promise<{ id: string }>;
-export default async function MyRoute(props: { params: paramsType }) {
-  const { id } = await props.params;
+export default async function MyRoute({ params }: { params: { locale: string; id: string } }) {
+  const { locale, id } = await params;
+  const { t, resources } = await initTranslations(locale, ["myroute"]);
+
+  const session = await getServerSession(authConfig);
+  const userSessionId = Number(session?.user?.id);
 
   const idArray = [Number(id)];
 
-  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.searchRoute(idArray, selectRoute, "byIdMyRoute");
+  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.searchRoute(
+    idArray,
+    selectRoute,
+    "byIdMyRoute"
+  );
 
   const [route] = formatDate(routeRaw);
 
@@ -25,22 +37,35 @@ export default async function MyRoute(props: { params: paramsType }) {
   const users = await getUsersFetchByIdsBySelect(uniquePassengersId, selectUser);
 
   const passengerDetails = getPassengerDetails(route, users, passengersSeatsList);
-  // console.log(passengerDetails);
 
   return (
     <Container>
-      <>
-        <header className="h-[150px] flex flex-col justify-center">
-          <h1 className="text-3xl font-bold">View Сhosen route</h1>
-          <p>Route: {`${route.departureFrom} ${route.departureDate} to ${route.arrivalTo} ${route.arrivalDate}`}</p>
+      <TranslationsProvider namespaces={["myroute"]} locale={locale} resources={resources}>
+        <header className="flex flex-col justify-center">
+          <h1 className="text-3xl font-bold mb-2">{t("view_chosen_route")}</h1>
+          <div className="flex gap-5 mb-2">
+            <div>
+              <p>{route.departureFrom} </p>
+              <p> {route.departureDate} </p>
+            </div>
+            <div>
+              <p>{route.arrivalTo} </p>
+              <p>{route.arrivalDate}</p>
+            </div>
+          </div>
         </header>
 
         <main>
-          <h2 className="text-2xl font-bold h-[80px] bg-white flex items-center pl-5">Passenger Details</h2>
+          <h2 className="text-2xl font-bold h-[80px] bg-white flex items-center pl-5">
+            {t("passenger_details")}
+          </h2>
           <TablePassengerDetails passengerDetails={passengerDetails || []} />
         </main>
-        <footer>route {id}</footer>
-      </>
+        <footer>
+          {" "}
+          {t("route")} {id}
+        </footer>
+      </TranslationsProvider>
     </Container>
   );
 }

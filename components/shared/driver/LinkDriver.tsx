@@ -4,6 +4,7 @@ import { MenuDriver } from "@/types/menudriver.types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaLongArrowAltRight } from "react-icons/fa";
+
 interface Props {
   menuDriver: MenuDriver[];
 }
@@ -11,6 +12,7 @@ interface Props {
 export default function LinkDriver({ menuDriver }: Props) {
   const pathname = usePathname();
   const IsSeatSelection = pathname.includes("seatselection");
+
   return (
     <div>
       <ul className="flex items-center ">
@@ -27,18 +29,14 @@ export default function LinkDriver({ menuDriver }: Props) {
               className="flex items-center"
               style={{ marginLeft: includeSeatSelection ? "0px" : "1rem" }}
             >
-              {includeSeatSelection && (
-                <FaLongArrowAltRight style={{ fontSize: "1.3rem" }} />
-              )}
+              {includeSeatSelection && <FaLongArrowAltRight style={{ fontSize: "1.3rem" }} />}
               <Link
                 style={{
                   backgroundColor: "white",
                   padding: "5px",
                   borderRadius: "15px",
                   color: "black",
-                  fontWeight: `${
-                    pathname.includes(item.link) ? "bold" : "normal"
-                  }`,
+                  fontWeight: `${pathname.includes(item.link) ? "bold" : "normal"}`,
                   fontSize: `${pathname === item.link ? "1.3rem" : "1rem"}`,
                   pointerEvents: `${includeSeatSelection ? "none" : "auto"}`,
                 }}

@@ -18,7 +18,7 @@ export const MyDialogDetailsRoute = ({ passengersSeatsList, t }: DialogProps) =>
     id: index, // або passenger.someUniqueField якщо є унікальний ідентифікатор
   }));
 
-  console.log("MyDialogDetailsRoute", subPassengersList);
+  // console.log("MyDialogDetailsRoute", subPassengersList);
 
   const columns: GridColDef[] = [
     {
@@ -28,10 +28,10 @@ export const MyDialogDetailsRoute = ({ passengersSeatsList, t }: DialogProps) =>
       flex: 1,
     },
     { field: "subLastName", headerName: t("form:subLastName"), minWidth: 130, flex: 1 },
-    { field: "subPhone", headerName: t("form:phone"), minWidth: 130, flex: 1 },
+    { field: "subPhone", headerName: t("form:subPhone"), minWidth: 130, flex: 1 },
     {
       field: "subEmail",
-      headerName: t("form:email"),
+      headerName: t("form:subEmail"),
       minWidth: 150,
       flex: 1,
     },

@@ -1,1 +1,10 @@
-{ "error": "ddfsdsdsd" }
+{
+  "view_chosen_route": "Пореглянути обраний маршрут",
+  "route": "Маршрут",
+  "passenger_details": "Деталі пасажирів",
+  "order_passenger": "Замовник маршруту",
+  "seats": "місця",
+  "passenger": "пасажир",
+  "phone": "телефон",
+  "email": "пошта"
+}

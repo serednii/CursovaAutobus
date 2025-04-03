@@ -8,6 +8,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useTranslation } from "react-i18next";
 
 const colorCombinations = [
   // { text: "#000000", background: "#FFFFFF" }, // Чорний текст на білому
@@ -67,6 +68,7 @@ interface Props {
 }
 
 export default React.memo(function TablePassengerDetails({ passengerDetails }: Props) {
+  const { t } = useTranslation();
   console.log(passengerDetails);
   return (
     <Paper sx={{ width: "100%" }}>
@@ -74,11 +76,11 @@ export default React.memo(function TablePassengerDetails({ passengerDetails }: P
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell>Seats</TableCell>
-              <TableCell align="left">Order Passenger</TableCell>
-              <TableCell align="left">Passenger</TableCell>
-              <TableCell align="left">phone</TableCell>
-              <TableCell align="left">email</TableCell>
+              <TableCell>{t("seats")}</TableCell>
+              <TableCell align="left">{t("order_passenger")}</TableCell>
+              <TableCell align="left">{t("passenger")}</TableCell>
+              <TableCell align="left">{t("phone")}</TableCell>
+              <TableCell align="left">{t("email")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

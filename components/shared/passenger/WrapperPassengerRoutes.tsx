@@ -22,7 +22,6 @@ export default function WrapperPassengerRoutes({ routes, userSessionId }: Props)
       <div className="bg-[#F9FAFB] px-4">
         <h1 className="text-2xl font-bold mb-10">{t("booked_routes")}</h1>
         <AvailableRoutes className="mb-10">
-          {" "}
           <TableMyBookings routes={availableRoutes} t={t} isRouteAgain={true} />
         </AvailableRoutes>
         <PastRoutes>

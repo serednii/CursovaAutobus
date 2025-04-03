@@ -17,6 +17,7 @@ import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
 import { useTranslation } from "react-i18next";
 import { ILayoutData } from "@/types/layoutbus.types";
+import { runInAction } from "mobx";
 
 // interface session {
 //   user: UserSession;
@@ -34,7 +35,7 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
   const { t } = useTranslation();
   // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
   // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
-
+  console.log("OrderSeatsBus newData", newData);
   const renderRef = useRef(0);
 
   const {
@@ -54,28 +55,17 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
     },
   });
 
-  // let sessionUser: UserSession | null = null;
   const userSessionId: number = Number(sessionUser?.id);
-  // useEffect(() => {
-  //   busStore.setDataLayoutBus(newData, RoleEnum.PASSENGER);
-  // }, [route]);
-  // const handleDataLayoutBus = useMemo(
-  //   () => (data: ILayoutData) => {
-  //     setDataLayoutBus(data);
-  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userSessionId);
-  //   },
-  //   []
-  // );
 
-  // if (status === "authenticated") {
-  //   sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
-  // }
+  useMemo(() => {
+    runInAction(() => {
+      busStore.setDataLayoutBus(newData, RoleEnum.PASSENGER);
+      busStore.setUserIdSession(userSessionId);
+    });
+  }, [route, userSessionId]);
 
   const { onSubmit } = useSubmitOrder(route?.id, sessionUser);
 
-  // busStore.setUserIdSession(userSessionId);
-  // useBusLayoutData(route);
-  // console.log("iorderpassengers", idOrderPassengers);
   const myListPassengers = useMemo(
     () => route?.passengersSeatsList.find((obj) => obj.idPassenger === userSessionId),
     [route, userSessionId]

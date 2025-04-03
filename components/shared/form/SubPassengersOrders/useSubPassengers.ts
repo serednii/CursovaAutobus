@@ -18,12 +18,15 @@ interface UseSubPassengersProps {
   action: RoleEnum;
 }
 
-export function useSubPassengers({ myListPassengers, renderRef, unregister, action, sessionUser }: UseSubPassengersProps) {
+export function useSubPassengers({
+  myListPassengers,
+  renderRef,
+  unregister,
+  action,
+  sessionUser,
+}: UseSubPassengersProps) {
   const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[]>([]);
-  // useEffect(() => {
-  //   console.log("subPassengers render", subPassengers);
-  // }, [subPassengers]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (!myListPassengers) renderRef.current = 4;
 
@@ -39,7 +42,6 @@ export function useSubPassengers({ myListPassengers, renderRef, unregister, acti
           unregister(`${field}.${index}`);
         });
       });
-
       // Додаємо нові поля, якщо потрібно
       const delta = busStore.idOrderPassengers.length - updatedPassengers.length;
       if (delta > 0) {
@@ -54,14 +56,20 @@ export function useSubPassengers({ myListPassengers, renderRef, unregister, acti
       } else {
         updatedPassengers = updatedPassengers.slice(0, busStore.idOrderPassengers.length);
       }
-
       setSubPassengers(updatedPassengers);
     }
 
     renderRef.current++;
     // }, [idOrderPassengers.length, myListPassengers]);
     // }, [idOrderPassengers.length, myListPassengers, action, renderRef, sessionUser?.phone, subPassengers, unregister]);
-  }, [busStore.idOrderPassengers.length, myListPassengers, action, renderRef, sessionUser?.phone, unregister]);
+  }, [
+    busStore.idOrderPassengers,
+    myListPassengers,
+    action,
+    renderRef,
+    sessionUser?.phone,
+    unregister,
+  ]);
 
   return { subPassengers, setSubPassengers };
 }
