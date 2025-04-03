@@ -9,7 +9,7 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/configs/auth";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/TranslationsProvider";
-import WrapperPassengerRoutes from "@/components/shared/passenger/WrapperPassengerRoutes";
+import WrapperPassengerRoutes from "@/app/[locale]/(passenger)/mybookings/WrapperPassengerRoutes";
 
 export default async function MyBookings({ params }: { params: { locale: string } }) {
   const { locale } = await params; // Використовуємо ?? для надійності
@@ -19,13 +19,20 @@ export default async function MyBookings({ params }: { params: { locale: string 
   const userSessionId = Number(session?.user?.id);
 
   // const { routesPassenger, loading, userSessionId } = useFetchPassengerRoutes(reload);
-  const routesPassenger = await fetchGetRoutesByPassengerId<typeof selectMyBookings>(userSessionId, selectMyBookings);
+  const routesPassenger = await fetchGetRoutesByPassengerId<typeof selectMyBookings>(
+    userSessionId,
+    selectMyBookings
+  );
   // const { removeRoutePassenger } = useDeletePassengerRoute(routesPassenger, userSessionId, setReload);
 
   if (routesPassenger === null) return null;
 
   return (
-    <TranslationsProvider namespaces={["mybookings", "myroutes", "form"]} locale={locale} resources={resources}>
+    <TranslationsProvider
+      namespaces={["mybookings", "myroutes", "form"]}
+      locale={locale}
+      resources={resources}
+    >
       <WrapperPassengerRoutes routes={routesPassenger} userSessionId={userSessionId} />
     </TranslationsProvider>
   );

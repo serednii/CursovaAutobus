@@ -10,7 +10,11 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormValues } from "@/app/[locale]/(auth)/interface";
 
-export default function SignInComponent() {
+interface Props {
+  t: any;
+}
+
+export default function SignInComponent({ t }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -42,13 +46,18 @@ export default function SignInComponent() {
 
   return (
     <div className="max-w-[450px] w-[100%] mb-4">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">Sign In</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-md bg-white p-6 rounded-lg shadow-md"
+      >
+        <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">
+          {t("auth:sign_in:title")}
+        </h1>
         <GoogleButton />
         <GitHubButton />
         <div className="text-center my-1 text-[2rem]">Or</div>
-        <InputEmail register={register} errors={errors} watch={watch} />
-        <InputPassword register={register} errors={errors} watch={watch} one={true} />
+        <InputEmail register={register} errors={errors} watch={watch} t={t} />
+        <InputPassword register={register} errors={errors} watch={watch} one={true} t={t} />
 
         <button
           type="submit"
@@ -58,13 +67,24 @@ export default function SignInComponent() {
           {loading ? (
             <>
               <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                ></path>
               </svg>
-              Signing in...
+              {t("auth:sign_in:loading")}
             </>
           ) : (
-            "Sign In"
+            t("auth:sign_in:title")
           )}
         </button>
       </form>

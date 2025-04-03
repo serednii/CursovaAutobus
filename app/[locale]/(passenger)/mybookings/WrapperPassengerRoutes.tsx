@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { getPastRoutesAndAvailableRoutes } from "@/lib/utils";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { useTranslation } from "react-i18next";
-import TableMyBookings from "./TableMyBookings";
+import TableMyBookings from "../../../../components/shared/passenger/TableMyBookings";
 
 interface Props {
   routes: Omit<GetRoutesByPassengerId, "isReservation">[];

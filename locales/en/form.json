@@ -12,10 +12,10 @@
   "seats": "Seats",
   "intermediate_stops": "Intermediate Stops",
   "stops": "Stop",
-  "subFirstName": "First Name",
-  "subLastName": "Last Name",
-  "subPhone": "Phone",
-  "subEmail": "Email",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "phone": "Phone",
+  "email": "Email",
   "from": "From",
   "to": "To",
   "available_seats": "Available Seats",
@@ -34,5 +34,24 @@
   "date_and_time": "Data and Time",
   "seats_number": "Seats Number",
   "total_price": "Total Price",
-  "max_seats": "Max Seats"
+  "max_seats": "Max Seats",
+
+  "invalid_phone_number": "Invalid phone number",
+  "phone_is_required": "Phone number is required",
+
+  "invalid_email": "Invalid email",
+  "email_is_required": "Email is required",
+
+  "password": "Password",
+  "repeat_password": "Repeat password",
+  "you_must_specify_password": "You must specify a password",
+  "password_must_have_at_least_8_characters": "Password must have at least 8 characters",
+
+  "the_passwords_do_not_match": "The passwords do not match",
+
+  "driver_license_number": "Driver's license number",
+  "this_field_is_required": "This field is required",
+  "minimum_5_symbol_license": "Minimum 5 characters for license",
+
+  "submit": "Submit"
 }

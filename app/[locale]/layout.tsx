@@ -30,12 +30,16 @@ export default async function RootLayout({
   params: { locale: string };
 }) {
   const { locale } = await params; // Використовуємо ?? для надійності
-  const { resources } = await initTranslations(locale, ["header"]);
+  const { resources } = await initTranslations(locale, ["header", "auth", "form"]);
 
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased pt-3`}>
-        <TranslationsProvider namespaces={["header"]} locale={locale} resources={resources}>
+        <TranslationsProvider
+          namespaces={["header", "auth", "form"]}
+          locale={locale}
+          resources={resources}
+        >
           <Providers>
             {children}
             <Toaster position="top-center" />

@@ -23,15 +23,15 @@ export const MyDialogDetailsRoute = ({ passengersSeatsList, t }: DialogProps) =>
   const columns: GridColDef[] = [
     {
       field: "subFirstName",
-      headerName: t("form:subFirstName"),
+      headerName: t("form:firstName"),
       minWidth: 180,
       flex: 1,
     },
-    { field: "subLastName", headerName: t("form:subLastName"), minWidth: 130, flex: 1 },
-    { field: "subPhone", headerName: t("form:subPhone"), minWidth: 130, flex: 1 },
+    { field: "subLastName", headerName: t("form:lastName"), minWidth: 130, flex: 1 },
+    { field: "subPhone", headerName: t("form:phone"), minWidth: 130, flex: 1 },
     {
       field: "subEmail",
-      headerName: t("form:subEmail"),
+      headerName: t("form:email"),
       minWidth: 150,
       flex: 1,
     },

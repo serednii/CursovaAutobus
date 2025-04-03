@@ -12,10 +12,10 @@
   "seats": "Місць",
   "intermediate_stops": "Проміжні зупинки",
   "stops": "Зупинка",
-  "subFirstName": "Ім'я",
-  "subLastName": "Прізвище",
-  "subPhone": "Телефон",
-  "subEmail": "Пошта",
+  "firstName": "Ім'я",
+  "lastName": "Прізвище",
+  "phone": "Телефон",
+  "email": "Пошта",
   "from": "Від",
   "to": "До",
   "available_seats": "Доступні місця",
@@ -34,5 +34,22 @@
   "date_and_time": "Дата та час",
   "seats_number": "Номери місць",
   "total_price": "Загальна ціна",
-  "max_seats": "Максимальна кількість місць"
+  "max_seats": "Максимальна кількість місць",
+  "invalid_phone_number": "Неправильний формат телефону",
+  "invalid_email": "Неправильна пошта",
+  "phone_is_required": "Номер телефону є обов’язковим",
+
+  "email_is_required": "Email є обов’язковим",
+
+  "password": "Пароль",
+  "repeat_password": "Повторіть пароль",
+  "you_must_specify_password": "Ви повинні вказати пароль",
+  "password_must_have_at_least_8_characters": "Пароль має містити щонайменше 8 символів",
+
+  "the_passwords_do_not_match": "Паролі не співпадають",
+
+  "driver_license_number": "Номер водійського посвідчення",
+  "this_field_is_required": "Це поле є обов’язковим",
+  "minimum_5_symbol_license": "Мінімум 5 символів для посвідчення",
+  "submit": "Відправити"
 }
