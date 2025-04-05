@@ -8,30 +8,24 @@ import { FormValuesRoute } from "@/types/form.types";
 import { RoleEnum } from "@/enum/shared.enums";
 import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
-// import useBusLayoutData from "./useBusLayoutData";
 import useSubmitOrder from "./useSubmitOrder";
-// import { ILayoutData } from "@/types/layoutbus.types";
-// import { NullableNumber } from "@/types/types";
-// import useStore from "@/zustand/createStore";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
+import { ILayoutData } from "@/types/layoutbus.types";
+import { runInAction } from "mobx";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
-// interface session {
-//   user: UserSession;
-//   expires: string;
-// }
 interface Props {
   route: IGetRouteSeatSelection | undefined;
   sessionUser: UserSession | null;
+  newData: ILayoutData | null;
 }
 
-function OrderSeatsBus({ route, sessionUser }: Props) {
-  // const setUserIdSession = useStore((state) => state.setUserIdSession);
-  // const idOrderPassengers = useStore((state) => state.setUserIdSession);
+// "seatselection", "form"]);
+function OrderSeatsBus({ route, sessionUser, newData }: Props) {
+  const { t } = useAppTranslation("seatselection");
 
-  // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
-  // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
-
+  console.log("OrderSeatsBus newData", newData);
   const renderRef = useRef(0);
 
   const {
@@ -50,33 +44,31 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
       restRoom: true,
     },
   });
-  // let sessionUser: UserSession | null = null;
+
   const userSessionId: number = Number(sessionUser?.id);
 
-  // const handleDataLayoutBus = useMemo(
-  //   () => (data: ILayoutData) => {
-  //     setDataLayoutBus(data);
-  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userSessionId);
-  //   },
-  //   []
-  // );
-
-  // if (status === "authenticated") {
-  //   sessionUser = session?.user as UserSession; // Присвоюємо значення session.user
-  // }
+  useMemo(() => {
+    runInAction(() => {
+      busStore.setDataLayoutBus(newData, RoleEnum.PASSENGER);
+      busStore.setUserIdSession(userSessionId);
+    });
+  }, [route, userSessionId]);
 
   const { onSubmit } = useSubmitOrder(route?.id, sessionUser);
 
-  // busStore.setUserIdSession(userSessionId);
-  // useBusLayoutData(route);
-  // console.log("iorderpassengers", idOrderPassengers);
-  const myListPassengers = useMemo(() => route?.passengersSeatsList.find((obj) => obj.idPassenger === userSessionId), [route, userSessionId]);
+  const myListPassengers = useMemo(
+    () => route?.passengersSeatsList.find((obj) => obj.idPassenger === userSessionId),
+    [route, userSessionId]
+  );
 
   return (
     <>
-      {/* <form> */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <LayoutBus sessionUser={sessionUser} action={RoleEnum.PASSENGER} driverId={route?.driverId} />
+        <LayoutBus
+          sessionUser={sessionUser}
+          action={RoleEnum.PASSENGER}
+          driverId={route?.driverId}
+        />
 
         {busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0 && (
           <SubPassengersOrders
@@ -85,7 +77,6 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
             unregister={unregister}
             setValue={setValue}
             myListPassengers={myListPassengers}
-            // idOrderPassengers={idOrderPassengers.slice(1)}
             renderRef={renderRef}
             watch={watch}
             action={RoleEnum.PASSENGER}
@@ -98,7 +89,7 @@ function OrderSeatsBus({ route, sessionUser }: Props) {
           type="submit"
           disabled={!(busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0)} // Вимикає кнопку, якщо форма не валідна
         >
-          Reserve seats
+          {t("reserved_seats")}
         </Button>
       </form>
       <p>

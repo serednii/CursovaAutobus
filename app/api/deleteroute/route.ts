@@ -12,7 +12,7 @@ export async function DELETE(req: NextRequest) {
     }
     // Отримуємо дані з тіла запиту
     const { routeId } = await req.json();
-    console.log("routeId", routeId);
+    // console.log("routeId", routeId);
     // Перевірка, чи передано routeId
     if (!routeId) {
       return NextResponse.json({ error: "Поле 'routeId' є обов'язковим" }, { status: 400 });
@@ -26,17 +26,14 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json(deletedRoute, { status: 200 });
   } catch (error: unknown) {
     console.error("Помилка видалення маршруту:", error);
-  
+
     if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json(
         { error: "Маршрут із зазначеним 'routeId' не знайдено" },
         { status: 404 }
       );
     }
-  
-    return NextResponse.json(
-      { error: "Внутрішня помилка сервера" },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ error: "Внутрішня помилка сервера" }, { status: 500 });
   }
 }

@@ -42,12 +42,12 @@ async function up() {
       for (const [index, routeDriver] of routerDrivers.entries()) {
         try {
           const result = await fetchCreateRoute(routeDriver);
-          console.log("result", routeDriver);
-          if (result) {
-            console.log("Маршрути успішно створені", index);
-          } else {
-            console.error("Помилка створення маршрутів", index);
-          }
+          // console.log("result", routeDriver);
+          // if (result) {
+          //   console.log("Маршрути успішно створені", index);
+          // } else {
+          //   console.error("Помилка створення маршрутів", index);
+          // }
         } catch (e) {
           console.error(e);
         }

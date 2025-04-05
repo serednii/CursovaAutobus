@@ -18,8 +18,8 @@ export async function PATCH(req: Request) {
       return middlewareResponse;
     }
     const resData = await req.json();
-    console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
-    console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].seatId);
+    // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
+    // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].seatId);
 
     const {
       id,
@@ -39,8 +39,18 @@ export async function PATCH(req: Request) {
       restRoom,
     }: IUpdateRouteAPI = resData;
 
-    if (!(Array.isArray(passengersSeatsList) && passengersSeatsList.length > 0 && Array.isArray(busSeats) && busSeats.length > 0)) {
-      return NextResponse.json({ error: "Поле 'passengersSeatsList' і 'busSeats' є обов'язковим" }, { status: 500 });
+    if (
+      !(
+        Array.isArray(passengersSeatsList) &&
+        passengersSeatsList.length > 0 &&
+        Array.isArray(busSeats) &&
+        busSeats.length > 0
+      )
+    ) {
+      return NextResponse.json(
+        { error: "Поле 'passengersSeatsList' і 'busSeats' є обов'язковим" },
+        { status: 500 }
+      );
     }
 
     const idPassenger = passengersSeatsList[0].idPassenger;
@@ -82,7 +92,7 @@ export async function PATCH(req: Request) {
     }
 
     const updatedBusSeatsResult = await updatedBusSeats(busSeats || [], id);
-    console.log("ipdatedBusSeatsResult", updatedBusSeatsResult);
+    // console.log("ipdatedBusSeatsResult", updatedBusSeatsResult);
     if (!updatedBusSeatsResult) {
       console.error("Failed to update route busSeats");
       //delete route passenger if busSeats not updated
@@ -99,8 +109,11 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
     }
 
-    console.log("passengersSeatsList - - - - - - - - - - - ", passengersSeatsList);
-    const createPassengersSeatsListResult = (await createPassengersSeatsList(passengersSeatsList, id)) as IPassengersSeatsList[] | null;
+    // console.log("passengersSeatsList - - - - - - - - - - - ", passengersSeatsList);
+    const createPassengersSeatsListResult = (await createPassengersSeatsList(
+      passengersSeatsList,
+      id
+    )) as IPassengersSeatsList[] | null;
     if (!createPassengersSeatsListResult) {
       console.error("Failed to update route passengersSeatsList");
 
@@ -115,12 +128,19 @@ export async function PATCH(req: Request) {
         const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
         return NextResponse.json(errorResponse, { status: 500 });
       }
-      return NextResponse.json({ error: "Failed to update route passengersSeatsList" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Failed to update route passengersSeatsList" },
+        { status: 500 }
+      );
     }
 
     // console.log("Route updated successfully:", res);
 
-    return NextResponse.json({ ...res, passengersSeatsList: createPassengersSeatsListResult, busSeats: updatedBusSeatsResult });
+    return NextResponse.json({
+      ...res,
+      passengersSeatsList: createPassengersSeatsListResult,
+      busSeats: updatedBusSeatsResult,
+    });
   } catch (error) {
     console.error("Error updating route:", error);
     return NextResponse.json({ error: "Failed to update route" }, { status: 500 });

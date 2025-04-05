@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid"; // Для генерації унікаль
 
 const findOrCreateUser = async (email: string, profile: any) => {
   let user = await prisma.user.findUnique({ where: { email } });
-  console.log("USER GITHUB", user);
+  // console.log("USER GITHUB");
   if (!user) {
     user = await prisma.user.create({
       data: {
@@ -107,7 +107,7 @@ export const authConfig: AuthOptions = {
 
     async jwt({ token, user }) {
       if (user) {
-        console.log("user", user);
+        // console.log("user", user);
         token = {
           ...token,
           id: user.id,

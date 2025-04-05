@@ -139,7 +139,7 @@ const CustomDatePicker = ({
   const now = departureDate1 || new Date();
   const departureDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0);
   const arrivalDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59);
-  console.log("listBlockedDate", listBlockedDate);
+  // console.log("listBlockedDate", listBlockedDate);
   // Нова функція для перевірки, чи є вільні проміжки в дні
   const hasAvailableTimeSlots = (date: Date) => {
     const dayStart = new Date(date);

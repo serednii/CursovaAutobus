@@ -1,4 +1,7 @@
-import { zodSchemaGetRoutesBuDriverId, zodSchemaGetRoutesBuDriverIdListBlocked } from "@/zod_shema/zodGetRoutesBuDriverId";
+import {
+  zodSchemaGetRoutesBuDriverId,
+  zodSchemaGetRoutesBuDriverIdListBlocked,
+} from "@/zod_shema/zodGetRoutesBuDriverId";
 import { GenerateBooleanType, GenerateType } from "@/types/generaty.types";
 import { IRouteDataBase } from "@/types/interface";
 import { z } from "zod";
@@ -32,9 +35,14 @@ export const selectGetRoutesByDriverId: IGetRoutesByDriverOption = {
 };
 //********************************************************** */
 
-type selectRoutesByIdDriverListBlockedKeys = ("id" | "departureDate" | "arrivalDate") & keyof IRouteDataBase;
-export type IGetRoutesByDriverListBlockedOption = GenerateBooleanType<selectRoutesByIdDriverListBlockedKeys>;
-export type IRoutesByIdDriverListBlocked = GenerateType<IRouteDataBase, selectRoutesByIdDriverListBlockedKeys>;
+type selectRoutesByIdDriverListBlockedKeys = ("id" | "departureDate" | "arrivalDate") &
+  keyof IRouteDataBase;
+export type IGetRoutesByDriverListBlockedOption =
+  GenerateBooleanType<selectRoutesByIdDriverListBlockedKeys>;
+export type IRoutesByIdDriverListBlocked = GenerateType<
+  IRouteDataBase,
+  selectRoutesByIdDriverListBlockedKeys
+>;
 
 export const selectRouteListBlocked: IGetRoutesByDriverListBlockedOption = {
   id: true,
@@ -57,7 +65,7 @@ class GetRoutesByDriverId {
       type,
       schema,
       search: async (driverId: number[], select: T): Promise<K | null> => {
-        console.log("data searchRoute", select);
+        // console.log("data searchRoute", select);
 
         try {
           const response = await fetch(`${API_URL}/api/getRoutesByDriverId`, {
@@ -67,7 +75,8 @@ class GetRoutesByDriverId {
             body: JSON.stringify({ driverId, select }),
           });
 
-          if (!response.ok) throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
+          if (!response.ok)
+            throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
 
           const result = await response.json();
           return schema.parse(result); // Перевірка через Zod перед поверненням
@@ -93,12 +102,15 @@ class GetRoutesByDriverId {
 
 const fetchGetRoutesByDriverId = new GetRoutesByDriverId();
 export default fetchGetRoutesByDriverId;
-fetchGetRoutesByDriverId.addType<IGetRoutesByDriverOption, IRoutesByIdDriver[]>("getDriver", zodSchemaGetRoutesBuDriverId.array());
-
-fetchGetRoutesByDriverId.addType<IGetRoutesByDriverListBlockedOption, IRoutesByIdDriverListBlocked[]>(
-  "listBlocked",
-  zodSchemaGetRoutesBuDriverIdListBlocked.array()
+fetchGetRoutesByDriverId.addType<IGetRoutesByDriverOption, IRoutesByIdDriver[]>(
+  "getDriver",
+  zodSchemaGetRoutesBuDriverId.array()
 );
+
+fetchGetRoutesByDriverId.addType<
+  IGetRoutesByDriverListBlockedOption,
+  IRoutesByIdDriverListBlocked[]
+>("listBlocked", zodSchemaGetRoutesBuDriverIdListBlocked.array());
 
 // async function fetchGetRoutesByDriverId1(driverId: number): Promise<IRoutesByIdDriver[] | null> {
 //   try {

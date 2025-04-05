@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
       select,
     });
 
-    console.log("routes", routes);
+    // console.log("routes", routes);
 
     const routesCity = await prisma.routeDriver.findMany({
       where,

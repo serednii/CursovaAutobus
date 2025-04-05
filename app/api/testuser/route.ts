@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
     // Отримуємо всіх користувачів з бази даних
     const users = await prisma.user.findMany();
-    console.log("routeDriver", users);
+    // console.log("routeDriver", users);
 
     // Повертаємо успішну відповідь з даними користувачів
     return NextResponse.json({ users }, { status: 200 });

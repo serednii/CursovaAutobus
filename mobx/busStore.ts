@@ -19,13 +19,15 @@ class BusStore {
     this.userSessionId = value;
   };
 
-  setSubPassengers = (value: SubPassengerDetails[] | ((prev: SubPassengerDetails[]) => SubPassengerDetails[])) => {
+  setSubPassengers = (
+    value: SubPassengerDetails[] | ((prev: SubPassengerDetails[]) => SubPassengerDetails[])
+  ) => {
     this.subPassengers = typeof value === "function" ? value(this.subPassengers) : value ?? [];
   };
 
   setDataLayoutBus = (value: ILayoutData | null, action: RoleEnum) => {
     this.dataLayoutBus = value;
-
+    // console.log("busStore.ts", value, this.userSessionId, action);
     if (!value || !("passenger" in value)) {
       this.idOrderPassengers = [];
       return;
@@ -35,12 +37,14 @@ class BusStore {
       .filter(
         (e) =>
           e.passenger === this.userSessionId &&
-          e.busSeatStatus === (action === RoleEnum.PASSENGER ? SeatStatusEnum.SELECTED : SeatStatusEnum.RESERVEDEMPTY)
+          e.busSeatStatus ===
+            (action === RoleEnum.PASSENGER ? SeatStatusEnum.SELECTED : SeatStatusEnum.RESERVEDEMPTY)
       )
       .map((e) => e.passenger);
 
-    console.log("newIdOrderPassengers in busStore", newIdOrderPassengers);
-    if (action === RoleEnum.PASSENGER && newIdOrderPassengers.length > 0) newIdOrderPassengers.pop();
+    // console.log("newIdOrderPassengers in busStore ---------------- ", newIdOrderPassengers);
+    if (action === RoleEnum.PASSENGER && newIdOrderPassengers.length > 0)
+      newIdOrderPassengers.pop();
     this.setIdOrderPassengers(newIdOrderPassengers);
   };
 

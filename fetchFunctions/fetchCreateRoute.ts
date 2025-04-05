@@ -16,7 +16,7 @@ const fetchCreateRoute = async <T>(data: T): Promise<any> => {
     }
 
     const obj = await response.json();
-    console.log("obj", obj);
+    // console.log("obj", obj);
     try {
       const res = zodSchemaCreateRoute.parse(obj);
       return res;

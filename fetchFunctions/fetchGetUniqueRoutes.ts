@@ -54,7 +54,7 @@ class FetchGetUniqueRoutes {
       type,
       schema,
       search: async (data: T): Promise<K | null> => {
-        console.log("data searchRoute", data);
+        // console.log("data searchRoute", data);
         try {
           const response = await fetch(`${API_URL}/api/getUniqueRoutes`, {
             cache: "no-store",
@@ -66,7 +66,7 @@ class FetchGetUniqueRoutes {
           if (!response.ok) throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
 
           const result = await response.json();
-          return schema.parse(result); // Перевірка через Zod перед поверненням
+          return result; // Перевірка через Zod перед поверненням
         } catch (error) {
           console.error("Error fetching data:", (error as Error).message);
           return null;

@@ -1,4 +1,4 @@
-import { FormValues } from "@/app/(auth)/interface";
+import { FormValues } from "@/app/[locale]/(auth)/interface";
 import { FieldErrors } from "react-hook-form";
 
 interface Props {

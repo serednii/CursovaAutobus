@@ -27,9 +27,11 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const uniqueRouteDriversId: number[] = Array.from(new Set(routeDriversId.map((route) => route.routeDriverId)));
+    const uniqueRouteDriversId: number[] = Array.from(
+      new Set(routeDriversId.map((route) => route.routeDriverId))
+    );
 
-    console.log("getRoutesByPassengerId XXXXXXXXXXXXXXXXX", uniqueRouteDriversId);
+    // console.log("getRoutesByPassengerId XXXXXXXXXXXXXXXXX", uniqueRouteDriversId);
     const routes = await prisma.routeDriver.findMany({
       where: {
         id: { in: uniqueRouteDriversId },

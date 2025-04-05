@@ -11,9 +11,10 @@ import TableRoutesUI from "@/components/ui/TableRoutesUI";
 interface Props {
   routes: TypeBaseRoute[];
   status: "authenticated" | "loading" | "unauthenticated";
+  t: any;
 }
 
-export default function TableSearchRoutes({ routes, status }: Props) {
+export default function TableSearchRoutes({ routes, status, t }: Props) {
   const router = useRouter();
 
   const handleViewRoute = (route: TypeBaseRoute) => {
@@ -31,44 +32,44 @@ export default function TableSearchRoutes({ routes, status }: Props) {
   const columns: GridColDef[] = [
     {
       field: "departureDate",
-      headerName: "Departure Date",
+      headerName: t("form:departure_date"),
       minWidth: 140,
       flex: 1,
     },
     {
       field: "arrivalDate",
-      headerName: "Arrival Date",
+      headerName: t("form:arrival_date"),
       minWidth: 140,
       flex: 1,
     },
     {
       field: "departureFrom",
-      headerName: "From",
+      headerName: t("form:from"),
       minWidth: 100,
       flex: 1,
     },
     {
       field: "arrivalTo",
-      headerName: "To",
+      headerName: t("form:to"),
       minWidth: 100,
       flex: 1,
     },
     {
       field: "availableSeats",
-      headerName: "Available Seats",
+      headerName: t("form:available_seats"),
       minWidth: 80,
       flex: 1,
     },
     {
       field: "routePrice",
-      headerName: "Price",
+      headerName: t("form:price"),
       minWidth: 50,
       flex: 1,
     },
     {
       field: "viewRouter",
-      headerName: "View Route",
-      minWidth: 100,
+      headerName: t("form:view_route"),
+      minWidth: 250,
       flex: 1,
       sortable: false,
       renderCell: (params) => (
@@ -78,7 +79,7 @@ export default function TableSearchRoutes({ routes, status }: Props) {
           size="small"
           onClick={() => handleViewRoute(params.row)}
         >
-          {params.row.isReservation ? "Edit Reservation" : "Book Now"}
+          {params.row.isReservation ? t("form:edit_reservation") : t("form:book_now")}
         </Button>
       ),
     },

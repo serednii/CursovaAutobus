@@ -1,5 +1,10 @@
-import { getBusSeatsPassenger } from "@/app/(passenger)/mybookings/action";
-import { GenerateBooleanType, GenerateType, IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
+import { getBusSeatsPassenger } from "@/app/[locale]/(passenger)/mybookings/action";
+import {
+  GenerateBooleanType,
+  GenerateType,
+  IGetBusSeatsBoolean,
+  IGetPassengersSeatsList,
+} from "@/types/generaty.types";
 import { IIntermediateStops, IRouteDataBase } from "@/types/interface";
 import { ApiResponse, SuccessResponse, ErrorResponse } from "@/types/response.types";
 import { GetRoutesByDriverId } from "@/types/route-driver.types";
@@ -37,7 +42,7 @@ export type TDeleteRouteUpdateResult = GenerateType<IRouteDataBase, selectRouteS
 
 async function fetchDeleteRouteById(routeId: number) {
   try {
-    console.log("fetchDeleteRouteById", routeId);
+    // console.log("fetchDeleteRouteById", routeId);
     // Відправка DELETE-запиту
     const response = await fetch(`${API_URL}/api/deleteroute`, {
       method: "DELETE",
@@ -54,7 +59,7 @@ async function fetchDeleteRouteById(routeId: number) {
 
     // Обробка відповіді
     const data: unknown = await response.json();
-    console.log("Отримані маршрути:", data);
+    // console.log("Отримані маршрути:", data);
     try {
       const res = z.object(allParametersRoute).parse(data);
       const successResponse: SuccessResponse = {

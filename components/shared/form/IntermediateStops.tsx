@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { FieldErrors, UseFormRegister, UseFormUnregister } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
+import { TranslationFunction, useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
@@ -16,7 +17,7 @@ interface Props {
 
 const IntermediateStops = ({ register, unregister, errors, startStops }: Props) => {
   const [stops, setStops] = useState<string[]>([]);
-
+  const { t: form } = useAppTranslation("form");
   useEffect(() => {
     if (startStops) {
       setStops(startStops);
@@ -28,7 +29,7 @@ const IntermediateStops = ({ register, unregister, errors, startStops }: Props) 
   };
 
   const changeStop = (index: number, value: string) => {
-    console.log(index);
+    // console.log(index);
     const updatedStops = [...stops];
     updatedStops[index] = value; // Оновлюємо відповідне значення
     setStops(updatedStops);
@@ -43,15 +44,24 @@ const IntermediateStops = ({ register, unregister, errors, startStops }: Props) 
   return (
     <div>
       <div className="flex gap-4 items-center">
-        <h3>Intermediate Stops</h3>
-        <button type="button" onClick={addStop} className="w-[32px] h-[32px] bg-[#F3F4F6] flex items-center justify-center rounded-lg">
+        <h3>{form("intermediate_stops")}</h3>
+        <button
+          type="button"
+          onClick={addStop}
+          className="w-[32px] h-[32px] bg-[#F3F4F6] flex items-center justify-center rounded-lg"
+        >
           <FaPlus />
         </button>
       </div>
       <div className="mt-4">
         {stops.map((stop, index) => (
           <div className="relative" key={index}>
-            <button data-id={index} type="button" onClick={deleteStop} className="absolute right-3 top-[9px] z-10 cursor-pointer">
+            <button
+              data-id={index}
+              type="button"
+              onClick={deleteStop}
+              className="absolute right-3 top-[9px] z-10 cursor-pointer"
+            >
               <FiPlus style={{ width: "26px", height: "26px", rotate: "45deg" }} />
             </button>
             <TextField
@@ -60,7 +70,7 @@ const IntermediateStops = ({ register, unregister, errors, startStops }: Props) 
               })}
               value={stops[index]} // Прив'язка до стану
               onChange={(e) => changeStop(index, e.target.value)}
-              label={`Stop ${index + 1}`}
+              label={`${form("stops")} ${index + 1}`}
               variant="outlined"
               fullWidth
               error={!!errors.intermediateStops?.[index]}

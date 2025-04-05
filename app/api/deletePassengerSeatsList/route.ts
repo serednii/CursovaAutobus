@@ -15,12 +15,18 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Отримуємо дані з тіла запиту
-    const { routeDriverId, idPassenger, busSeats }: { routeDriverId: number; idPassenger: number; busSeats: IBusSeats[] } = await req.json();
-    console.log("Отримані дані:", { routeDriverId, idPassenger, busSeats });
+    const {
+      routeDriverId,
+      idPassenger,
+      busSeats,
+    }: { routeDriverId: number; idPassenger: number; busSeats: IBusSeats[] } = await req.json();
+    // console.log("Отримані дані:", { routeDriverId, idPassenger, busSeats });
 
     // Перевірка, чи передано routeId та idPassenger
     if (!routeDriverId || !idPassenger) {
-      const responseError: ErrorResponse = { error: "Поле 'routeId' і 'idPassenger' є обов'язковим" };
+      const responseError: ErrorResponse = {
+        error: "Поле 'routeId' і 'idPassenger' є обов'язковим",
+      };
       return NextResponse.json(responseError, { status: 400 });
     }
 
@@ -56,7 +62,9 @@ export async function DELETE(req: NextRequest) {
     // Обробка помилок Prisma
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
-        const responseError: ErrorResponse = { error: "Маршрут із зазначеним 'routeId' не знайдено" };
+        const responseError: ErrorResponse = {
+          error: "Маршрут із зазначеним 'routeId' не знайдено",
+        };
         return NextResponse.json(responseError, { status: 404 });
       }
       console.error("Помилка Prisma:", error.message);

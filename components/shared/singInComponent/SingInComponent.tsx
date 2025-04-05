@@ -8,11 +8,13 @@ import InputPassword from "@/components/shared/form/InputPasswords";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FormValues } from "@/app/(auth)/interface";
+import { FormValues } from "@/app/[locale]/(auth)/interface";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 export default function SignInComponent() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { t: auth } = useAppTranslation("auth");
 
   const {
     register,
@@ -34,7 +36,7 @@ export default function SignInComponent() {
     if (res && !res.error) {
       router.push("/");
     } else {
-      console.log(res);
+      // console.log(res);
     }
 
     reset();
@@ -42,8 +44,13 @@ export default function SignInComponent() {
 
   return (
     <div className="max-w-[450px] w-[100%] mb-4">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">Sign In</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-md bg-white p-6 rounded-lg shadow-md"
+      >
+        <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">
+          {auth("sign_in.title")}
+        </h1>
         <GoogleButton />
         <GitHubButton />
         <div className="text-center my-1 text-[2rem]">Or</div>
@@ -58,13 +65,24 @@ export default function SignInComponent() {
           {loading ? (
             <>
               <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                ></path>
               </svg>
-              Signing in...
+              {auth("sign_in.loading")}
             </>
           ) : (
-            "Sign In"
+            auth("sign_in.title")
           )}
         </button>
       </form>

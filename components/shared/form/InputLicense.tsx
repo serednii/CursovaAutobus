@@ -1,5 +1,6 @@
-import { FormValues } from "@/app/(auth)/interface";
+import { FormValues } from "@/app/[locale]/(auth)/interface";
 import { cn } from "@/lib/utils";
+import { t } from "i18next";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FaIdCard } from "react-icons/fa6";
 import FormError from "./FormError";
@@ -17,14 +18,14 @@ export default function InputLicense({ register, errors, className, watch }: Pro
   return (
     <div className={cn("mb-4 relative", className)}>
       <label htmlFor="license" className="block text-sm font-medium text-gray-700">
-        Drivers License Number
+        {t("form:driver_license_number")}
       </label>
       <input
         {...register("license", {
-          required: "This field is required.",
+          required: t("form:this_field_is_required"),
           minLength: {
             value: 5,
-            message: `Minimum 5 symbol license`,
+            message: t("form:minimum_5_symbol_license"),
           },
         })}
         type="text"
@@ -32,7 +33,9 @@ export default function InputLicense({ register, errors, className, watch }: Pro
           license === "" ? "pl-6" : ""
         }mt-1 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
       />
-      {license === "" && <FaIdCard style={{ color: "gray" }} className="absolute top-[37px] left-1 " />}
+      {license === "" && (
+        <FaIdCard style={{ color: "gray" }} className="absolute top-[37px] left-1 " />
+      )}
 
       <FormError errors={errors} name="license" />
     </div>

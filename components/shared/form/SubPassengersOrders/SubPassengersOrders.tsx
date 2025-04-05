@@ -1,6 +1,12 @@
 "use client";
 import React from "react";
-import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormUnregister, UseFormWatch } from "react-hook-form";
+import {
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormUnregister,
+  UseFormWatch,
+} from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 // import { NullableNumber } from "@/types/types";
 import { ISubPassengersList } from "@/types/interface";
@@ -11,6 +17,7 @@ import SubPassengerFields from "./SubPassengerFields";
 // import useStore from "@/zustand/createStore";
 // import busStore from "@/mobx/busStore";
 import { observer } from "mobx-react-lite";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   unregister: UseFormUnregister<FormValuesRoute>;
@@ -37,6 +44,7 @@ function SubPassengersOrders({
   action,
 }: Props) {
   // const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+  const { t: createroute } = useAppTranslation("createroute");
 
   const { subPassengers, setSubPassengers } = useSubPassengers({
     // busStore.idOrderPassengers,
@@ -49,7 +57,11 @@ function SubPassengersOrders({
     action,
   });
 
-  const handleChange = (index: number, value: string, field: "subFirstName" | "subLastName" | "subPhone" | "subEmail") => {
+  const handleChange = (
+    index: number,
+    value: string,
+    field: "subFirstName" | "subLastName" | "subPhone" | "subEmail"
+  ) => {
     setValue(`${field}.${index}`, value);
     setSubPassengers((prev) => prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)));
   };
@@ -58,7 +70,7 @@ function SubPassengersOrders({
 
   return (
     <div className="bg-white p-4 mb-4">
-      <h3 className="mb-4">Add Sub Passengers</h3>
+      <h3 className="mb-4">{createroute("add_sub_passenger")}</h3>
       {subPassengers.map((subPassenger, index) => (
         <SubPassengerFields
           key={index}
