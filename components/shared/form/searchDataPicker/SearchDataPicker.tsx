@@ -26,7 +26,7 @@ interface Props {
 const SearchDataPicker = ({ name, title, control, errors, className, watch, highlightedDates, clickToDate, setClickToDate }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const departureDate = watch && watch("departureDate");
-  console.log("selectedDate", selectedDate);
+  // console.log("selectedDate", selectedDate);
   // Поточна дата і час
   const now = departureDate || new Date();
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0); // Початок дня

@@ -38,7 +38,7 @@ export default function SignInComponent({ t }: Props) {
     if (res && !res.error) {
       router.push("/");
     } else {
-      console.log(res);
+      // console.log(res);
     }
 
     reset();

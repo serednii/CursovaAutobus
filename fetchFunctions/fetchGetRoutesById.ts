@@ -1,4 +1,9 @@
-import { GenerateBooleanType, GenerateType, IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
+import {
+  GenerateBooleanType,
+  GenerateType,
+  IGetBusSeatsBoolean,
+  IGetPassengersSeatsList,
+} from "@/types/generaty.types";
 import { IIntermediateStops, IRouteDataBase } from "@/types/interface";
 import {
   ZodFetchGetRoutesByIdAgain,
@@ -28,16 +33,28 @@ type selectRouteSeatSelectionKeys = (
   | "driverId"
 ) &
   keyof IRouteDataBase;
-export type IGetSearchRouteSeatSelectionOption = GenerateBooleanType<Exclude<selectRouteSeatSelectionKeys, "passengersSeatsList" | "busSeats">> &
+export type IGetSearchRouteSeatSelectionOption = GenerateBooleanType<
+  Exclude<selectRouteSeatSelectionKeys, "passengersSeatsList" | "busSeats">
+> &
   IGetBusSeatsBoolean &
   IGetPassengersSeatsList;
 export type IGetRouteSeatSelection = GenerateType<IRouteDataBase, selectRouteSeatSelectionKeys>;
 
 //********************************************************** */
 
-type selectRouteMyRouteKeys = ("departureDate" | "arrivalDate" | "departureFrom" | "arrivalTo" | "routePrice" | "busSeats" | "passengersSeatsList") &
+type selectRouteMyRouteKeys = (
+  | "departureDate"
+  | "arrivalDate"
+  | "departureFrom"
+  | "arrivalTo"
+  | "routePrice"
+  | "busSeats"
+  | "passengersSeatsList"
+) &
   keyof IRouteDataBase;
-export type IGetSearchRouteMyRouteOption = GenerateBooleanType<Exclude<selectRouteMyRouteKeys, "busSeats" | "passengersSeatsList">> &
+export type IGetSearchRouteMyRouteOption = GenerateBooleanType<
+  Exclude<selectRouteMyRouteKeys, "busSeats" | "passengersSeatsList">
+> &
   IGetBusSeatsBoolean &
   IGetPassengersSeatsList;
 export type IGetRouteMyRoute = GenerateType<IRouteDataBase, selectRouteMyRouteKeys>;
@@ -65,18 +82,34 @@ type selectRouteSeatUpdateKeys = (
   | "intermediateStops"
 ) &
   keyof IRouteDataBase;
-export type IGetSearchRouteUpdateOption = GenerateBooleanType<Exclude<selectRouteSeatUpdateKeys, "busSeats" | "passengersSeatsList">> &
+export type IGetSearchRouteUpdateOption = GenerateBooleanType<
+  Exclude<selectRouteSeatUpdateKeys, "busSeats" | "passengersSeatsList">
+> &
   IGetBusSeatsBoolean &
   IGetPassengersSeatsList;
-export type IGetRouteUpdate = GenerateType<IRouteDataBase, Exclude<selectRouteSeatUpdateKeys, "intermediateStops">> & {
+export type IGetRouteUpdate = GenerateType<
+  IRouteDataBase,
+  Exclude<selectRouteSeatUpdateKeys, "intermediateStops">
+> & {
   intermediateStops: IIntermediateStops[];
 };
 
 //********************************************************** */
 
-type selectRouteAgainKeys = ("departureFrom" | "arrivalTo" | "routePrice" | "modelBus" | "driverId" | "intermediateStops") & keyof IRouteDataBase;
+type selectRouteAgainKeys = (
+  | "departureFrom"
+  | "arrivalTo"
+  | "routePrice"
+  | "modelBus"
+  | "driverId"
+  | "intermediateStops"
+) &
+  keyof IRouteDataBase;
 export type IGetSearchRouteAgainOption = GenerateBooleanType<selectRouteAgainKeys>;
-export type IGetRouteAgain = GenerateType<IRouteDataBase, Exclude<selectRouteAgainKeys, "intermediateStops">> & {
+export type IGetRouteAgain = GenerateType<
+  IRouteDataBase,
+  Exclude<selectRouteAgainKeys, "intermediateStops">
+> & {
   intermediateStops: IIntermediateStops[];
 };
 
@@ -94,7 +127,7 @@ class GetRoutesById {
       type,
       schema,
       search: async (id: number[], select: T): Promise<K | null> => {
-        console.log("data searchRoute", select);
+        // console.log("data searchRoute", select);
 
         try {
           const response = await fetch(`${API_URL}/api/getRoutesById`, {
@@ -104,7 +137,8 @@ class GetRoutesById {
             body: JSON.stringify({ id, select }),
           });
 
-          if (!response.ok) throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
+          if (!response.ok)
+            throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
 
           const result = await response.json();
           return schema.parse(result); // Перевірка через Zod перед поверненням
@@ -130,7 +164,19 @@ class GetRoutesById {
 
 export const fetchGetRoutesById = new GetRoutesById();
 
-fetchGetRoutesById.addType<IGetSearchRouteSeatSelectionOption, IGetRouteSeatSelection[]>("seatSelection", ZodFetchGetRoutesByIdSeatSelection.array());
-fetchGetRoutesById.addType<IGetSearchRouteMyRouteOption, IGetRouteMyRoute[]>("byIdMyRoute", ZodFetchGetRoutesByIdMyRoute.array());
-fetchGetRoutesById.addType<IGetSearchRouteUpdateOption, IGetRouteUpdate[]>("ByIdUpdate", ZodFetchGetRoutesByIdUpdate.array());
-fetchGetRoutesById.addType<IGetSearchRouteAgainOption, IGetRouteAgain[]>("byIdAgain", ZodFetchGetRoutesByIdAgain.array());
+fetchGetRoutesById.addType<IGetSearchRouteSeatSelectionOption, IGetRouteSeatSelection[]>(
+  "seatSelection",
+  ZodFetchGetRoutesByIdSeatSelection.array()
+);
+fetchGetRoutesById.addType<IGetSearchRouteMyRouteOption, IGetRouteMyRoute[]>(
+  "byIdMyRoute",
+  ZodFetchGetRoutesByIdMyRoute.array()
+);
+fetchGetRoutesById.addType<IGetSearchRouteUpdateOption, IGetRouteUpdate[]>(
+  "ByIdUpdate",
+  ZodFetchGetRoutesByIdUpdate.array()
+);
+fetchGetRoutesById.addType<IGetSearchRouteAgainOption, IGetRouteAgain[]>(
+  "byIdAgain",
+  ZodFetchGetRoutesByIdAgain.array()
+);

@@ -10,6 +10,7 @@ import { MenuDriver } from "@/types/menudriver.types";
 import { CircularProgress } from "@mui/material";
 import { useGetSessionParams } from "../hooks/useGetSessionParams";
 import LanguageChanger from "./LanguageChanger";
+// import { useAppTranslation } from "./TranslationsProvider";
 import { useTranslation } from "react-i18next";
 
 export default function Header() {

@@ -34,7 +34,8 @@
     "app/[locale]/(passenger)/layout.tuysx",
     "app/i18n.js",
     "components/LanguageChanger.jsx",
-    "app/[locale]/(driver)/createroute/[id]/[type]/page.jsx"
+    "app/[locale]/(driver)/createroute/[id]/[type]/page.jsx",
+    "components/shared/driver/colors.js"
   ],
   "exclude": ["node_modules"]
 }

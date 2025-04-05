@@ -29,7 +29,7 @@ const IntermediateStops = ({ register, unregister, errors, startStops, t }: Prop
   };
 
   const changeStop = (index: number, value: string) => {
-    console.log(index);
+    // console.log(index);
     const updatedStops = [...stops];
     updatedStops[index] = value; // Оновлюємо відповідне значення
     setStops(updatedStops);
@@ -45,14 +45,23 @@ const IntermediateStops = ({ register, unregister, errors, startStops, t }: Prop
     <div>
       <div className="flex gap-4 items-center">
         <h3>{t("form:intermediate_stops")}</h3>
-        <button type="button" onClick={addStop} className="w-[32px] h-[32px] bg-[#F3F4F6] flex items-center justify-center rounded-lg">
+        <button
+          type="button"
+          onClick={addStop}
+          className="w-[32px] h-[32px] bg-[#F3F4F6] flex items-center justify-center rounded-lg"
+        >
           <FaPlus />
         </button>
       </div>
       <div className="mt-4">
         {stops.map((stop, index) => (
           <div className="relative" key={index}>
-            <button data-id={index} type="button" onClick={deleteStop} className="absolute right-3 top-[9px] z-10 cursor-pointer">
+            <button
+              data-id={index}
+              type="button"
+              onClick={deleteStop}
+              className="absolute right-3 top-[9px] z-10 cursor-pointer"
+            >
               <FiPlus style={{ width: "26px", height: "26px", rotate: "45deg" }} />
             </button>
             <TextField

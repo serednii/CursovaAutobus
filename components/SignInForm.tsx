@@ -21,7 +21,7 @@ const SignInForm = () => {
     if (res && !res.error) {
       router.push("/driver");
     } else {
-      console.log(res);
+      // console.log(res);
     }
   };
 

@@ -54,7 +54,7 @@ class FetchGetUniqueRoutes {
       type,
       schema,
       search: async (data: T): Promise<K | null> => {
-        console.log("data searchRoute", data);
+        // console.log("data searchRoute", data);
         try {
           const response = await fetch(`${API_URL}/api/getUniqueRoutes`, {
             cache: "no-store",

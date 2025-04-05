@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     const origin = req.headers.get("origin") || req.headers.get("referer") || "UNKNOWN";
     const userAgent = req.headers.get("user-agent") || "";
-    console.log("Received Origin:", origin, "User Agent:", userAgent);
+    // console.log("Received Origin:", origin, "User Agent:", userAgent);
     // if (!origin || !origin.startsWith(allowedOrigin)) {
     //   return res.status(403).json({ error: "Access denied" });
     // }
@@ -30,7 +30,10 @@ export async function POST(req: NextRequest) {
 
     // Валідація `id`
     if (!Array.isArray(id) || id.length === 0) {
-      return NextResponse.json({ error: "Поле 'id' має бути непорожнім масивом чисел!" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Поле 'id' має бути непорожнім масивом чисел!" },
+        { status: 400 }
+      );
     }
     // Валідація `select`
     if (!select || typeof select !== "object") {
@@ -45,7 +48,10 @@ export async function POST(req: NextRequest) {
 
     // Перевірка на порожній результат
     if (routes.length === 0) {
-      return NextResponse.json({ message: "Маршрути для вказаного ID не знайдено" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Маршрути для вказаного ID не знайдено" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(routes);

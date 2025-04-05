@@ -29,18 +29,28 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   //   busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
   // }, []);
 
-  console.log("LayoutBus RENDER", busStore.dataLayoutBus);
-  if (driverId === null || busStore.dataLayoutBus === null || busStore.dataLayoutBus?.passenger.length === 0) {
+  console.log("LayoutBus RENDER");
+  if (
+    driverId === null ||
+    busStore.dataLayoutBus === null ||
+    busStore.dataLayoutBus?.passenger.length === 0
+  ) {
     return null;
   }
 
-  const keysDriverSeat = Object.keys(busStore.dataLayoutBus.driverSeat) as (keyof typeof busStore.dataLayoutBus.driverSeat)[];
+  const keysDriverSeat = Object.keys(
+    busStore.dataLayoutBus.driverSeat
+  ) as (keyof typeof busStore.dataLayoutBus.driverSeat)[];
 
-  const keysStairs_0 = Object.keys(busStore.dataLayoutBus.stairs[0]) as (keyof (typeof busStore.dataLayoutBus.stairs)[0])[];
+  const keysStairs_0 = Object.keys(
+    busStore.dataLayoutBus.stairs[0]
+  ) as (keyof (typeof busStore.dataLayoutBus.stairs)[0])[];
 
   const keysStairs_1 =
     busStore.dataLayoutBus.stairs.length === 2 &&
-    (Object.keys(busStore.dataLayoutBus.stairs[1]) as (keyof (typeof busStore.dataLayoutBus.stairs)[1])[]);
+    (Object.keys(
+      busStore.dataLayoutBus.stairs[1]
+    ) as (keyof (typeof busStore.dataLayoutBus.stairs)[1])[]);
 
   type styleKey = ("left" | "bottom" | "right" | "top")[]; // Виправлений тип
 
@@ -59,7 +69,8 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
 
   const styleDriverSeat = getKeysStyles(keysDriverSeat, busStore.dataLayoutBus.driverSeat);
   const styleStairs_0 = getKeysStyles(keysStairs_0, busStore.dataLayoutBus.stairs[0]);
-  const styleStairs_1 = (keysStairs_1 && getKeysStyles(keysStairs_1, busStore.dataLayoutBus.stairs[1])) || null;
+  const styleStairs_1 =
+    (keysStairs_1 && getKeysStyles(keysStairs_1, busStore.dataLayoutBus.stairs[1])) || null;
 
   const styleBus = {
     width: busStore.dataLayoutBus.busWidth,
@@ -69,7 +80,10 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
 
   return (
     <div className={cn("overflow-auto", className)}>
-      <div style={styleBus} className="relative m-auto  rounded-l-[50px] rounded-r-[25px] bg-[#ccd0d7]  border-2 border-[#000000]">
+      <div
+        style={styleBus}
+        className="relative m-auto  rounded-l-[50px] rounded-r-[25px] bg-[#ccd0d7]  border-2 border-[#000000]"
+      >
         <DriverSeat style={styleDriverSeat} className="left-[80px] bottom-[20px]" />
         <Stairs style={styleStairs_0} className="right-[100px] top-[0px]" />
         {styleStairs_1 && <Stairs style={styleStairs_1 || {}} className="left-[50px] top-[0px]" />}

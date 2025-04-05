@@ -12,7 +12,7 @@ export default function useDriverAuth(reset: () => void, role: RoleEnum) {
     const { password_repeat, ...data } = formData; // Удаляем password_repeat
     void password_repeat;
     data.role = role;
-    console.log(data);
+    // console.log(data);
     const result = await createUser(data);
 
     if (result.error) {
@@ -30,7 +30,7 @@ export default function useDriverAuth(reset: () => void, role: RoleEnum) {
     if (res && !res.error) {
       router.push("/");
     } else {
-      console.log(res);
+      // console.log(res);
     }
     reset();
   };

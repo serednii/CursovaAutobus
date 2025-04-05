@@ -19,7 +19,10 @@ export const useClickToDate = ({
   setHighlightedDates,
   highlightedDatesRef,
   userSessionId,
-}: IUseClickToDate): { clickToDate: number; setClickToDate: React.Dispatch<React.SetStateAction<number>> } => {
+}: IUseClickToDate): {
+  clickToDate: number;
+  setClickToDate: React.Dispatch<React.SetStateAction<number>>;
+} => {
   const [clickToDate, setClickToDate] = useState(0);
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export const useClickToDate = ({
         .searchRoute(data, "one")
         .then((value) => {
           const route = value as IGetSearchRouteOne[] | null;
-          console.log("response searchRoute", route);
+          // console.log("response searchRoute", route);
           if (route) {
             //Відкидаємо маршрути від водія , щоб він не міг на свої маршрути резервувати місця
 

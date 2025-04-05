@@ -10,13 +10,17 @@ async function CreateRoutePage({ params }: { params: { locale: string; slug: str
   const id = (slug && Number(slug[0])) || 0;
   const type = (slug && slug[1]) || "";
 
-  console.log("params in CreateRoutePage", locale, slug, id, type);
+  // console.log("params in CreateRoutePage", locale, slug, id, type);
   // console.log("params", params);
 
   const { resources } = await initTranslations(locale, ["createroute", "home", "form"]);
 
   return (
-    <TranslationsProvider namespaces={["createroute", "home", "form"]} locale={locale} resources={resources}>
+    <TranslationsProvider
+      namespaces={["createroute", "home", "form"]}
+      locale={locale}
+      resources={resources}
+    >
       <CreateRouteForm id={id} type={type} />
     </TranslationsProvider>
   );

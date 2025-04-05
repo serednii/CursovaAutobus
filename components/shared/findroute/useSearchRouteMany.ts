@@ -61,7 +61,7 @@ export const useSearchRouteMany = ({
       const startOfDay = new Date(`${newDate}T00:00:00`);
 
       const endOfDay = new Date(`${newDate}T23:59:59`);
-      console.log("newDate", newDate, "startOfDay", startOfDay, "endOfDay", endOfDay);
+      // console.log("newDate", newDate, "startOfDay", startOfDay, "endOfDay", endOfDay);
 
       const data: IGetSearchRouteManyOptionData = {
         departureSearch: firstLetterUpperCase(departureFrom),

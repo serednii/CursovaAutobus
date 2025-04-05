@@ -17,7 +17,7 @@ async function main() {
         });
     }
 
-    console.log(`Оновлено ${users.length} користувачів.`);
+    // console.log(`Оновлено ${users.length} користувачів.`);
 }
 
 main()

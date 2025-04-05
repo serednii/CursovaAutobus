@@ -19,6 +19,7 @@ export default function RegisterPassenger() {
     reset,
     watch,
   } = useForm<FormValues>({ mode: "onChange" });
+
   const { onSubmit } = useDriverAuth(reset, RoleEnum.PASSENGER);
 
   return (

@@ -87,7 +87,16 @@ export async function middleware(req: any) {
 
   if (!token) {
     // Якщо користувач не авторизований, перенаправляємо на сторінку входу
-    if (["/protected", "/createroute", "/myroutes", "/mybookings", "/myprofile", "/seatselection"].some((path) => url.pathname.startsWith(path))) {
+    if (
+      [
+        "/protected",
+        "/createroute",
+        "/myroutes",
+        "/mybookings",
+        "/myprofile",
+        "/seatselection",
+      ].some((path) => url.pathname.startsWith(path))
+    ) {
       url.pathname = "/signin";
       return NextResponse.redirect(url);
     }
@@ -96,8 +105,12 @@ export async function middleware(req: any) {
     const urlRedirect = url.searchParams.get("callbackUrl"); // Отримуємо URL після авторизації
 
     if (
-      ["/signin", "/selectrole", "/registerdriver", "/registerpassenger"].some((path) => url.pathname.startsWith(path)) ||
-      ["/createroute", "/myroutes", "/myroute"].some((path) => url.pathname.startsWith(path) && token.role === RoleEnum.DRIVER)
+      ["/signin", "/selectrole", "/registerdriver", "/registerpassenger"].some((path) =>
+        url.pathname.startsWith(path)
+      ) ||
+      ["/createroute", "/myroutes", "/myroute"].some(
+        (path) => url.pathname.startsWith(path) && token.role === RoleEnum.DRIVER
+      )
     ) {
       // console.log("createroute 000", url.pathname);
       // if (url.pathname.startsWith("/createroute")) {

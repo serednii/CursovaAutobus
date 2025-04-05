@@ -42,14 +42,21 @@ export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
   }
 }
 
-export async function createPassengersSeatsList(passengersSeatsList: IPassengersSeatsList[], routeDriverId: number) {
+export async function createPassengersSeatsList(
+  passengersSeatsList: IPassengersSeatsList[],
+  routeDriverId: number
+) {
   try {
-    console.log("createPassengersSeatsList passengersSeatsList", passengersSeatsList, routeDriverId);
+    // console.log(
+    //   "createPassengersSeatsList passengersSeatsList",
+    //   passengersSeatsList,
+    //   routeDriverId
+    // );
 
     const [results] = await Promise.all(
       passengersSeatsList.map(async (seat) => {
         try {
-          console.log("createPassengersSeatsList seat", seat);
+          // console.log("createPassengersSeatsList seat", seat);
           const passengersSeatList = await prisma.passengersSeatsList.create({
             data: {
               idPassenger: seat.idPassenger,

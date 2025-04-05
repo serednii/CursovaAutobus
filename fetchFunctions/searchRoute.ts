@@ -1,13 +1,19 @@
 import { GenerateBooleanType, GenerateType } from "@/types/generaty.types";
 import { IRouteDataBase } from "@/types/interface";
-import { IGetSearchRouteManyOptionData, IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
+import {
+  IGetSearchRouteManyOptionData,
+  IGetSearchRouteOneOptionData,
+} from "@/types/searchRoute.types";
 // import { ZodFetchGetRoutesByICity } from "@/zod_shema/zodGetRoutesById";
 import { ZodSchemaSearchRouteMany, ZodSchemaSearchRouteOne } from "@/zod_shema/zodGetSearchRoute";
 import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-type IRouteDataBaseWithCity = IRouteDataBase & { departureFromCity?: string; arrivalToCity?: string };
+type IRouteDataBaseWithCity = IRouteDataBase & {
+  departureFromCity?: string;
+  arrivalToCity?: string;
+};
 
 type selectRouteManyKeys = (
   | "id"
@@ -30,7 +36,10 @@ type selectRouteOneKeys = ("departureDate" | "driverId") & keyof IRouteDataBase;
 
 export type IGetSearchRouteManyOption = GenerateBooleanType<selectRouteManyKeys>;
 
-export type IGetSearchRouteMany = GenerateType<IRouteDataBaseWithCity, selectRouteManyKeys | ("departureFromCity" | "arrivalToCity")>;
+export type IGetSearchRouteMany = GenerateType<
+  IRouteDataBaseWithCity,
+  selectRouteManyKeys | ("departureFromCity" | "arrivalToCity")
+>;
 
 export type IGetSearchRouteOneOption = GenerateBooleanType<selectRouteOneKeys>;
 
@@ -58,7 +67,7 @@ class SearchRoute {
       type,
       schema,
       search: async (data: T): Promise<K | null> => {
-        console.log("data searchRoute", data);
+        // console.log("data searchRoute", data);
         try {
           const response = await fetch(`${API_URL}/api/searchRoute`, {
             cache: "no-store",
@@ -67,7 +76,8 @@ class SearchRoute {
             body: JSON.stringify(data),
           });
 
-          if (!response.ok) throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
+          if (!response.ok)
+            throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
 
           const result = await response.json();
           return result; // Перевірка через Zod перед поверненням
@@ -93,6 +103,12 @@ class SearchRoute {
 
 export const searchRoute = new SearchRoute();
 
-searchRoute.addType<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>("many", ZodSchemaSearchRouteMany.array());
-searchRoute.addType<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>("one", ZodSchemaSearchRouteOne.array());
+searchRoute.addType<IGetSearchRouteManyOptionData, IGetSearchRouteMany[]>(
+  "many",
+  ZodSchemaSearchRouteMany.array()
+);
+searchRoute.addType<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(
+  "one",
+  ZodSchemaSearchRouteOne.array()
+);
 // searchRoute.addType<IGetSearchRouteCityOption, IGetRouteCity[]>("byCity", ZodFetchGetRoutesByICity.array());

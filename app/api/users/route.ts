@@ -16,7 +16,7 @@ export async function GET(req: Request) {
 
     // Отримуємо всіх користувачів з бази даних
     const users = await prisma.user.findMany();
-    console.log("routeDriver", users);
+    // console.log("routeDriver", users);
 
     // Повертаємо успішну відповідь з даними користувачів
     return NextResponse.json({ users }, { status: 200 });
@@ -40,11 +40,11 @@ export async function POST(req: NextRequest) {
 
     // Очікуємо парсинг JSON
     const data: User = await req.json();
-    console.log("api/users", data);
+    // console.log("api/users", data);
 
     // Перевірка на валідність даних
     const { firstName, lastName, email, password, phone, role, license } = data;
-    console.log("Request data:", data);
+    // console.log("Request data:", data);
 
     if (!firstName || !lastName || !email || !password || !phone) {
       return NextResponse.json({ error: "Invalid data: all fields are required" }, { status: 400 });

@@ -29,8 +29,12 @@ export const handleRouteSubmit =
   ): SubmitHandler<FormValuesRoute> =>
   async (dataForm) => {
     try {
-      console.log("Submitting Route Data:", type, dataForm);
-      const createRouteDriver: ISendDataBaseRouteDriver = transformData(dataForm, dataLayoutBus as ILayoutData, sessionUser as UserSession);
+      // console.log("Submitting Route Data:", type, dataForm);
+      const createRouteDriver: ISendDataBaseRouteDriver = transformData(
+        dataForm,
+        dataLayoutBus as ILayoutData,
+        sessionUser as UserSession
+      );
       if (type === "change") {
         await handleUpdateRoute(createRouteDriver, id, router);
       } else {
@@ -44,12 +48,19 @@ export const handleRouteSubmit =
   };
 
 // 🔹 Функція для оновлення маршруту
-const handleUpdateRoute = async (routeData: ISendDataBaseRouteDriver, id: number, router: ReturnType<typeof useRouter>) => {
+const handleUpdateRoute = async (
+  routeData: ISendDataBaseRouteDriver,
+  id: number,
+  router: ReturnType<typeof useRouter>
+) => {
   const parsedData = z.object(zodUpdateRouteAll).parse({ ...routeData, id });
 
   try {
-    console.log("Updating Route:", { ...parsedData, id });
-    const response = await fetchUpdateRouteById<ISendDataBaseRouteDriverWidthId>({ ...parsedData, id });
+    // console.log("Updating Route:", { ...parsedData, id });
+    const response = await fetchUpdateRouteById<ISendDataBaseRouteDriverWidthId>({
+      ...parsedData,
+      id,
+    });
 
     if (!response) {
       toast.error("Your reservation has not been completed", { duration: timeShowToast });
@@ -66,7 +77,10 @@ const handleUpdateRoute = async (routeData: ISendDataBaseRouteDriver, id: number
 };
 
 // 🔹 Функція для створення маршруту
-const handleCreateRoute = async (routeData: ISendDataBaseRouteDriver, router: ReturnType<typeof useRouter>) => {
+const handleCreateRoute = async (
+  routeData: ISendDataBaseRouteDriver,
+  router: ReturnType<typeof useRouter>
+) => {
   const parsedData = z.object(zodCreateRouteAll).parse(routeData);
 
   try {

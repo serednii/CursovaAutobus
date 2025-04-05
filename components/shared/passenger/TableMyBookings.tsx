@@ -40,7 +40,7 @@ export default function TableMyBookings({ routes, isRouteAgain, t }: Props) {
   const handleDetailOrderRoute = (route: IRoutesTable) => {
     setRouteDetails(route.passengersSeatsList);
     setOpenDetails(true);
-    console.log("Route Details", route);
+    // console.log("Route Details", route);
   };
 
   const setOk = () => removeRoutePassenger(route.id);

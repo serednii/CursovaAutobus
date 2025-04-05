@@ -16,7 +16,15 @@ interface Props {
   indexSelectVariantBus: number | null;
 }
 
-const MaterialUISelect = ({ className, register, errors, passengersLength, handleChangeVariantBus, indexSelectVariantBus, t }: Props) => {
+const MaterialUISelect = ({
+  className,
+  register,
+  errors,
+  passengersLength,
+  handleChangeVariantBus,
+  indexSelectVariantBus,
+  t,
+}: Props) => {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
@@ -35,10 +43,16 @@ const MaterialUISelect = ({ className, register, errors, passengersLength, handl
     }
   }, [indexSelectVariantBus]);
 
-  console.log("indexSelectVariantBus+++++++++++++", indexSelectVariantBus);
+  // console.log("indexSelectVariantBus+++++++++++++", indexSelectVariantBus);
 
   return (
-    <FormControl fullWidth variant="outlined" className={cn("", className)} error={!!errors} style={{ borderColor: "black" }}>
+    <FormControl
+      fullWidth
+      variant="outlined"
+      className={cn("", className)}
+      error={!!errors}
+      style={{ borderColor: "black" }}
+    >
       <InputLabel style={{ color: "black", top: "5px" }} id="select-label">
         {t("home:select_options")}
       </InputLabel>
