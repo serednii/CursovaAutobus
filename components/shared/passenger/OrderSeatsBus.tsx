@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders/SubPassengersOrders";
@@ -8,33 +8,23 @@ import { FormValuesRoute } from "@/types/form.types";
 import { RoleEnum } from "@/enum/shared.enums";
 import { UserSession } from "@/types/next-auth";
 import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
-// import useBusLayoutData from "./useBusLayoutData";
 import useSubmitOrder from "./useSubmitOrder";
-// import { ILayoutData } from "@/types/layoutbus.types";
-// import { NullableNumber } from "@/types/types";
-// import useStore from "@/zustand/createStore";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
-import { useTranslation } from "react-i18next";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { runInAction } from "mobx";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
-// interface session {
-//   user: UserSession;
-//   expires: string;
-// }
 interface Props {
   route: IGetRouteSeatSelection | undefined;
   sessionUser: UserSession | null;
   newData: ILayoutData | null;
 }
 
+// "seatselection", "form"]);
 function OrderSeatsBus({ route, sessionUser, newData }: Props) {
-  // const setUserIdSession = useStore((state) => state.setUserIdSession);
-  // const idOrderPassengers = useStore((state) => state.setUserIdSession);
-  const { t } = useTranslation();
-  // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
-  // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null>(null);
+  const { t } = useAppTranslation("seatselection");
+
   console.log("OrderSeatsBus newData", newData);
   const renderRef = useRef(0);
 
@@ -73,7 +63,6 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
 
   return (
     <>
-      {/* <form> */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <LayoutBus
           sessionUser={sessionUser}
@@ -88,11 +77,9 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
             unregister={unregister}
             setValue={setValue}
             myListPassengers={myListPassengers}
-            // idOrderPassengers={idOrderPassengers.slice(1)}
             renderRef={renderRef}
             watch={watch}
             action={RoleEnum.PASSENGER}
-            t={t}
           />
         )}
 

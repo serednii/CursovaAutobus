@@ -6,7 +6,7 @@ import { Namespace, TranslationKey } from "@/types/translations";
 // Підтримувані простори імен
 
 // Тип функції перекладу
-type TranslationFunction = <T extends Namespace>(
+export type TranslationFunction = <T extends Namespace>(
   namespace: T,
   key: TranslationKey<T>,
   options?: Record<string, any>

@@ -8,18 +8,12 @@ import { fetchGetRoutesById, IGetRouteMyRoute } from "@/fetchFunctions/fetchGetR
 import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { formatDate } from "@/lib/utils";
 import initTranslations from "@/app/i18n";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/configs/auth";
-import TranslationsProvider from "@/components/CustomTranslationsProvider";
 import { PiArrowFatLinesRightDuotone } from "react-icons/pi";
 
 export type paramsType = Promise<{ id: string }>;
 export default async function MyRoute({ params }: { params: { locale: string; id: string } }) {
   const { locale, id } = await params;
-  const { t, resources } = await initTranslations(locale, ["myroute"]);
-
-  const session = await getServerSession(authConfig);
-  const userSessionId = Number(session?.user?.id);
+  const { t } = await initTranslations(locale, ["myroute"]);
 
   const idArray = [Number(id)];
 
@@ -41,34 +35,31 @@ export default async function MyRoute({ params }: { params: { locale: string; id
 
   return (
     <Container>
-      <TranslationsProvider namespaces={["myroute"]} locale={locale} resources={resources}>
-        <header className="flex flex-col justify-center">
-          <h1 className="text-3xl font-bold mb-2">{t("view_chosen_route")}</h1>
-          <div className="flex gap-5 mb-2 items-center">
-            <div>
-              <p>{route.departureFrom} </p>
-              <p> {route.departureDate} </p>
-            </div>
-            <PiArrowFatLinesRightDuotone className="shrink-0" />
-            <div>
-              <p>{route.arrivalTo} </p>
-              <p>{route.arrivalDate}</p>
-            </div>
+      <header className="flex flex-col justify-center">
+        <h1 className="text-3xl font-bold mb-2">{t("view_chosen_route")}</h1>
+        <div className="flex gap-5 mb-2 items-center">
+          <div>
+            <p>{route.departureFrom} </p>
+            <p> {route.departureDate} </p>
           </div>
-        </header>
+          <PiArrowFatLinesRightDuotone className="shrink-0" />
+          <div>
+            <p>{route.arrivalTo} </p>
+            <p>{route.arrivalDate}</p>
+          </div>
+        </div>
+      </header>
 
-        <main>
-          <h2 className="text-2xl font-bold h-[80px] bg-white flex items-center pl-5">
-            {t("passenger_details")}
-          </h2>
-          <TablePassengerDetails passengerDetails={passengerDetails} />
-        </main>
+      <main>
+        <h2 className="text-2xl font-bold h-[80px] bg-white flex items-center pl-5">
+          {t("passenger_details")}
+        </h2>
+        <TablePassengerDetails passengerDetails={passengerDetails} />
+      </main>
 
-        <footer>
-          {" "}
-          {t("route")} {id}
-        </footer>
-      </TranslationsProvider>
+      <footer>
+        {t("route")} {id}
+      </footer>
     </Container>
   );
 }

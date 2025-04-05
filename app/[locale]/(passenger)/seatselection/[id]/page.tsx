@@ -21,7 +21,7 @@ export interface BusInfo {
 
 async function SeatSelection({ params }: { params: { locale: string; id: string } }) {
   const { locale, id } = await params; // Використовуємо params без await
-  const { t, resources } = await initTranslations(locale, ["seatselection", "form"]);
+  const { t } = await initTranslations(locale, ["seatselection", "form"]);
 
   const session = await getServerSession(authConfig);
   const userSessionId = Number(session?.user?.id);
@@ -32,6 +32,7 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
     selectSeatSelection,
     "seatSelection"
   );
+
   const routesArray = routeArray as IGetRouteSeatSelection[] | null;
   const route = routesArray?.[0] || null;
 
@@ -53,17 +54,11 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
   };
 
   return (
-    <TranslationsProvider
-      namespaces={["seatselection", "form"]}
-      locale={locale}
-      resources={resources}
-    >
-      <Container className="pt-4">
-        <SelectedBusInfo route={fetchedRoute} language={language} />
-        <OrderSeatsBus route={fetchedRoute} sessionUser={session.user} newData={newData} />
-        MyBookings Driver Id {fetchedRoute?.driverId} Session user.id {session?.user?.id}
-      </Container>
-    </TranslationsProvider>
+    <Container className="pt-4">
+      <SelectedBusInfo route={fetchedRoute} language={language} />
+      <OrderSeatsBus route={fetchedRoute} sessionUser={session.user} newData={newData} />
+      MyBookings Driver Id {fetchedRoute?.driverId} Session user.id {session?.user?.id}
+    </Container>
   );
 }
 

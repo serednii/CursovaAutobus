@@ -35,6 +35,7 @@ import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 import { useGetListBlockedDate } from "./useGetListBlockedDate";
 import { useTranslation } from "react-i18next";
 import { runInAction } from "mobx";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -54,10 +55,12 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 function CreateRouteForm({ id, type }: { id: number; type: string }) {
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
-  const { t } = useTranslation();
+  const { t } = useAppTranslation("createroute");
+  const { t: form } = useAppTranslation("form");
+
   const router = useRouter();
   const renderRef = useRef(0);
-
+  // namespaces={["createroute", "home", "form"]}
   const { sessionUser, userSessionId, status } = useGetSessionParams();
 
   // console.log("CreateRoute RENDER", bears);
@@ -128,12 +131,10 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
     <Container className=" bg-[#F9FAFB]">
       <header className=" px-4 pt-4 mb-6">
         <div>
-          {/* <h1 className="text-2xl font-bold">{t("route_management")}</h1>
-          <p>{t("create_and_manage_your_bus_routes")}</p> */}
+          <h1 className="text-2xl font-bold">{t("route_management")}</h1>
+          <p>{t("create_and_manage_your_bus_routes")}</p>
         </div>
       </header>
-
-      {/* <h1>{t("title")}</h1> */}
 
       <main className="px-4 bg-[white] rounded-xl ">
         <form
@@ -143,7 +144,7 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
         >
           <div className="flex gap-5 mb-5 flex-wrap">
             <CustomDatePicker
-              title={t("form:departure_date")}
+              title={form("departure_date")}
               name="departureDate"
               register={register}
               errors={errors}
@@ -151,7 +152,7 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
               listBlockedDate={listBlockedDate}
             />
             <CustomDatePicker
-              title={t("form:arrival_date")}
+              title={form("arrival_date")}
               name="arrivalDate"
               register={register}
               errors={errors}
@@ -168,7 +169,7 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
               setValue={setValue}
               errors={errors}
               name={"departureFrom"}
-              title={t("form:departure_from")}
+              title={form("departure_from")}
               className="grow"
             />
             <CustomTextField
@@ -178,7 +179,7 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
               listCity={arrivalToCity}
               errors={errors}
               name={"arrivalTo"}
-              title={t("form:arrival_to")}
+              title={form("arrival_to")}
               className="grow"
             />
           </div>
@@ -188,7 +189,6 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
             unregister={unregister}
             register={register}
             errors={errors}
-            t={t}
           />
 
           <CustomTextField
@@ -210,19 +210,14 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
               register={register}
               errors={errors}
               indexSelectVariantBus={indexSelectVariantBus}
-              t={t}
               className="mb-5"
             />
 
-            {/* {dataLayoutBus && ( */}
             <LayoutBus
               sessionUser={sessionUser}
-              // dataLayoutBus={dataLayoutBus}
-              // handleDataLayoutBus={handleDataLayoutBus}
               action={RoleEnum.DRIVER}
               driverId={route?.driverId || 0}
             />
-            {/* )} */}
           </div>
 
           {busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0 && (
@@ -232,12 +227,10 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
               unregister={unregister}
               setValue={setValue}
               myListPassengers={undefined}
-              // idOrderPassengers={idOrderPassengers}
               renderRef={renderRef}
               watch={watch}
               sessionUser={sessionUser}
               action={RoleEnum.DRIVER}
-              t={t}
             />
           )}
 
@@ -255,7 +248,7 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
               <Typography variant="h6" gutterBottom>
                 {t("additional_options")}:
               </Typography>
-              <CheckboxOptionsDriver register={register} watch={watch} t={t} />
+              <CheckboxOptionsDriver register={register} watch={watch} />
             </div>
             <div className="flex justify-end items-center gap-5 grow">
               <Button
@@ -280,73 +273,3 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
   );
 }
 export default observer(CreateRouteForm);
-
-//   const IGetRouteUpdate: {
-//     routePrice: number;
-//     busSeats: IBusSeats[];
-//     driverId: number;
-//     selectBusLayout: string;
-//     departureDate: string;
-//     arrivalDate: string;
-//     wifi: boolean;
-//     coffee: boolean;
-//     power: boolean;
-//     restRoom: boolean;
-//     departureFrom: string;
-//     arrivalTo: string;
-//     id: number;
-//     modelBus: string;
-//     passengersSeatsList: IPassengersSeatsList[];
-//     bookedSeats: number;
-//     maxSeats: number;
-//     intermediateStops: IIntermediateStops[];
-// }
-
-//   const IGetRouteAgain: {
-//     routePrice: number;
-//     driverId: number;
-//     departureFrom: string;
-//     arrivalTo: string;
-//     modelBus: string;
-//     intermediateStops: IIntermediateStops[];
-// }
-
-// const FormValuesRoute: {
-//   intermediateStops: string[];
-//   busNumber: string;
-//   routePrice: string;
-//   busSeats: any;
-//   driverId: number;
-//   selectBusLayout: string;
-//   subFirstName: string[] | undefined;
-//   subLastName: string[] | undefined;
-//   subPhone: string[] | undefined;
-//   subEmail: string[] | undefined;
-//   departureDate: Date;
-//   arrivalDate: Date;
-//   wifi: boolean;
-//   coffee: boolean;
-//   power: boolean;
-//   restRoom: boolean;
-//   departureFrom: string;
-//   arrivalTo: string;
-// }
-
-// const exampleRote = {
-//   arrivalDate: " Fri Mar 14 2025 20:00:00 GMT+0100 (Центральная Европа, стандартное время)",
-//   arrivalTo: "Львів",
-//   busNumber: "33456",
-//   coffee: true,
-//   departureDate: "Fri Mar 07 2025 20:15:00 GMT+0100 (Центральная Европа, стандартное время) ",
-//   departureFrom: "New York",
-//   intermediateStops: ["stop1", "stop2"],
-//   power: true,
-//   restRoom: false,
-//   routePrice: "456",
-//   selectBusLayout: 0,
-//   subEmail?: ["RESERVATIONDRIVER@gmail.com", "RESERVATIONDRIVER@gmail.com"],
-//   subFirstName?: ["RESERVATION DRIVER", "RESERVATION DRIVER"],
-//   subLastName?: ["RESERVATION DRIVER", "RESERVATION DRIVER"],
-//   subPhone?: ["476757575700", "476757575700"],
-//   wifi: false,
-// };

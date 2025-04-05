@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 import { SelectChangeEvent } from "@mui/material/Select";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
@@ -12,7 +13,6 @@ interface Props {
   className?: string;
   passengersLength: number[];
   handleChangeVariantBus: (value: number) => void;
-  t: any;
   indexSelectVariantBus: number | null;
 }
 
@@ -23,9 +23,10 @@ const MaterialUISelect = ({
   passengersLength,
   handleChangeVariantBus,
   indexSelectVariantBus,
-  t,
 }: Props) => {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const { t: home } = useAppTranslation("home");
+  const { t: form } = useAppTranslation("form");
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = Number(event.target.value); // Приводимо значення до числа
@@ -54,7 +55,7 @@ const MaterialUISelect = ({
       style={{ borderColor: "black" }}
     >
       <InputLabel style={{ color: "black", top: "5px" }} id="select-label">
-        {t("home:select_options")}
+        {home("select_options")}
       </InputLabel>
 
       <Select
@@ -64,7 +65,7 @@ const MaterialUISelect = ({
         labelId="select-label"
         value={selectedValue ?? ""}
         onChange={handleChange}
-        label={t("select_bus")}
+        label={form("select_bus")}
         sx={{
           "& .MuiOutlinedInput-notchedOutline.MuiOutlinedInput-notchedOutline": {
             borderColor: "gray", // Чорна рамка
@@ -81,7 +82,7 @@ const MaterialUISelect = ({
       >
         {passengersLength.map((e, index) => (
           <MenuItem key={index} value={index}>
-            {t("form:bus")} {index + 1}: {e} {t("form:seats")}
+            {form("bus")} {index + 1}: {e} {form("seats")}
           </MenuItem>
         ))}
         ;

@@ -12,9 +12,10 @@ import { useGetSessionParams } from "../hooks/useGetSessionParams";
 import LanguageChanger from "./LanguageChanger";
 // import { useAppTranslation } from "./TranslationsProvider";
 import { useTranslation } from "react-i18next";
+import { useAppTranslation } from "./CustomTranslationsProvider";
 
 export default function Header() {
-  const { t } = useTranslation();
+  const { t } = useAppTranslation("header");
 
   const menuDriver: MenuDriver[] = [
     {

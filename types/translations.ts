@@ -36,6 +36,10 @@ export interface AuthTranslations {
     welcome: string;
     register: string;
   };
+  error: {
+    error_message: string;
+    try_again: string;
+  };
 }
 
 // Інтерфейс для перекладів form.json
@@ -103,6 +107,8 @@ export interface SeatSelectionTranslations {
 
 // Інтерфейс для myroutes.json
 export interface MyRoutesTranslations {
+  my_routes: string;
+  there_are_no_available_routes: string;
   available_routes: string;
   past_routes: string;
   is_delete_route: string;
@@ -147,6 +153,24 @@ export interface CreateRouteTranslations {
   update_route: string;
 }
 
+export interface FooterTranslations {
+  company_name: string;
+  company_description: string;
+  quick_links: string;
+  about_us: string;
+  contact: string;
+  terms: string;
+  support: string;
+  faq: string;
+  help_center: string;
+  privacy: string;
+  follow_us: string;
+  facebook: string;
+  instagram: string;
+  twitter: string;
+  rights: string;
+}
+
 export type Namespace =
   | "header"
   | "auth"
@@ -156,7 +180,8 @@ export type Namespace =
   | "myroute"
   | "mybookings"
   | "home"
-  | "createroute";
+  | "createroute"
+  | "footer";
 
 export type TranslationKey<T extends Namespace> = T extends "header"
   ? keyof HeaderTranslations
@@ -176,4 +201,6 @@ export type TranslationKey<T extends Namespace> = T extends "header"
   ? keyof HomeTranslations
   : T extends "createroute"
   ? keyof CreateRouteTranslations
+  : T extends "footer"
+  ? keyof FooterTranslations
   : never;

@@ -1,5 +1,5 @@
 "use client";
-import { useTranslation } from "react-i18next";
+import { useAppTranslation } from "./CustomTranslationsProvider";
 
 interface Props {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function AvailableRoutes({ children, className }: Props) {
-  const { t } = useTranslation();
+  const { t } = useAppTranslation("myroutes");
   return (
     <div className={className}>
       <h2 className="font-bold mb-4">{t("available_routes")}</h2>

@@ -1,5 +1,6 @@
 "use client";
 import AvailableRoutes from "@/components/AvailableRoutes";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 import PastRoutes from "@/components/PastRoutes";
 import { Container } from "@/components/ui/Container";
 import { IRoutesByIdDriver } from "@/fetchFunctions/fetchGetRoutesByDriverId";
@@ -12,20 +13,22 @@ interface Props {
 }
 
 export default function WrapperDriverRoutes({ routes }: Props) {
-  const { t } = useTranslation();
+  // ["myroutes", "form"])
+  const { t } = useAppTranslation("myroutes");
   const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(routes);
+
   return (
     <Container>
-      <h1 className="text-2xl font-bold mb-10">Мои маршруты</h1>
+      <h1 className="text-2xl font-bold mb-10">{t("my_routes")}</h1>
       {routes.length === 0 ? (
-        <p className="text-2xl font-bold mb-10">Нет доступных маршрутов.</p>
+        <p className="text-2xl font-bold mb-10">{t("there_are_no_available_routes")}</p>
       ) : (
         <>
           <AvailableRoutes className="mb-10">
-            <TableRoutes routes={availableRoutes} t={t} />
+            <TableRoutes routes={availableRoutes} />
           </AvailableRoutes>
           <PastRoutes>
-            <TableRoutes routes={pastRoutes} isRouteAgain={true} t={t} />
+            <TableRoutes routes={pastRoutes} isRouteAgain={true} />
           </PastRoutes>
         </>
       )}

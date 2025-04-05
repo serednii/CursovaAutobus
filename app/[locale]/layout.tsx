@@ -1,5 +1,7 @@
 import { Providers } from "@/components/shared/Providers";
-import TranslationsProvider from "@/components/TranslationsProvider";
+import TranslationsProviderI18n from "@/components/TranslationsProvider";
+import TranslationsProvider from "@/components/CustomTranslationsProvider";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
@@ -30,21 +32,44 @@ export default async function RootLayout({
   params: { locale: string };
 }) {
   const { locale } = await params; // Використовуємо ?? для надійності
-  const { resources } = await initTranslations(locale, ["header", "auth", "form"]);
+  const { resources } = await initTranslations(locale, [
+    "header",
+    "auth",
+    "form",
+    "seatselection",
+    "myroutes",
+    "myroute",
+    "mybookings",
+    "home",
+    "createroute",
+    "footer"
+  ]);
 
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased pt-3`}>
-        <TranslationsProvider
-          namespaces={["header", "auth", "form"]}
-          locale={locale}
-          resources={resources}
-        >
-          <Providers>
-            {children}
-            <Toaster position="top-center" />
-          </Providers>
-        </TranslationsProvider>
+        <TranslationsProviderI18n namespaces={[]} locale={locale} resources={resources}>
+          <TranslationsProvider
+            namespaces={[
+              "header",
+              "auth",
+              "form",
+              "seatselection",
+              "myroutes",
+              "myroute",
+              "mybookings",
+              "home",
+              "createroute",
+            ]}
+            locale={locale}
+            resources={resources}
+          >
+            <Providers>
+              {children}
+              <Toaster position="top-center" />
+            </Providers>
+          </TranslationsProvider>
+        </TranslationsProviderI18n>
       </body>
     </html>
   );

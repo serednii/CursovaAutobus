@@ -5,19 +5,19 @@ import { FaPlus } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { FieldErrors, UseFormRegister, UseFormUnregister } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
+import { TranslationFunction, useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   unregister: UseFormUnregister<FormValuesRoute>;
   errors: FieldErrors<FormValuesRoute>;
   className?: string;
-  t: any;
   startStops?: string[];
 }
 
-const IntermediateStops = ({ register, unregister, errors, startStops, t }: Props) => {
+const IntermediateStops = ({ register, unregister, errors, startStops }: Props) => {
   const [stops, setStops] = useState<string[]>([]);
-
+  const { t: form } = useAppTranslation("form");
   useEffect(() => {
     if (startStops) {
       setStops(startStops);
@@ -44,7 +44,7 @@ const IntermediateStops = ({ register, unregister, errors, startStops, t }: Prop
   return (
     <div>
       <div className="flex gap-4 items-center">
-        <h3>{t("form:intermediate_stops")}</h3>
+        <h3>{form("intermediate_stops")}</h3>
         <button
           type="button"
           onClick={addStop}
@@ -70,7 +70,7 @@ const IntermediateStops = ({ register, unregister, errors, startStops, t }: Prop
               })}
               value={stops[index]} // Прив'язка до стану
               onChange={(e) => changeStop(index, e.target.value)}
-              label={`${t("form:stops")} ${index + 1}`}
+              label={`${form("stops")} ${index + 1}`}
               variant="outlined"
               fullWidth
               error={!!errors.intermediateStops?.[index]}

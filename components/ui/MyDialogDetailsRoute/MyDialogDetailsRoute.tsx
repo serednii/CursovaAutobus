@@ -3,13 +3,15 @@ import { GridColDef } from "@mui/x-data-grid";
 import "./dialog.css";
 import TableRoutesUI from "../TableRoutesUI";
 import { t } from "i18next";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface DialogProps {
   passengersSeatsList: ISubPassengersList | undefined;
-  t: any;
 }
 
-export const MyDialogDetailsRoute = ({ passengersSeatsList, t }: DialogProps) => {
+export const MyDialogDetailsRoute = ({ passengersSeatsList }: DialogProps) => {
+  const { t: form } = useAppTranslation("form");
+
   if (!passengersSeatsList) return null;
   const subPassengersList = passengersSeatsList.subPassengersList;
 
@@ -23,15 +25,15 @@ export const MyDialogDetailsRoute = ({ passengersSeatsList, t }: DialogProps) =>
   const columns: GridColDef[] = [
     {
       field: "subFirstName",
-      headerName: t("form:firstName"),
+      headerName: form("firstName"),
       minWidth: 180,
       flex: 1,
     },
-    { field: "subLastName", headerName: t("form:lastName"), minWidth: 130, flex: 1 },
-    { field: "subPhone", headerName: t("form:phone"), minWidth: 130, flex: 1 },
+    { field: "subLastName", headerName: form("lastName"), minWidth: 130, flex: 1 },
+    { field: "subPhone", headerName: form("phone"), minWidth: 130, flex: 1 },
     {
       field: "subEmail",
-      headerName: t("form:email"),
+      headerName: form("email"),
       minWidth: 150,
       flex: 1,
     },

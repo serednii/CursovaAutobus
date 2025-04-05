@@ -21,6 +21,7 @@ export default function useDriverAuth(reset: () => void, role: RoleEnum) {
     }
 
     console.log("add user to data base");
+
     const res = await signIn("credentials", {
       email: data.email,
       password: data.password,

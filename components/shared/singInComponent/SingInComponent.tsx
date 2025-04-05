@@ -9,14 +9,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormValues } from "@/app/[locale]/(auth)/interface";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
-interface Props {
-  t: any;
-}
-
-export default function SignInComponent({ t }: Props) {
+export default function SignInComponent() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { t: auth } = useAppTranslation("auth");
 
   const {
     register,
@@ -51,13 +49,13 @@ export default function SignInComponent({ t }: Props) {
         className="w-full max-w-md bg-white p-6 rounded-lg shadow-md"
       >
         <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">
-          {t("auth:sign_in:title")}
+          {auth("sign_in.title")}
         </h1>
         <GoogleButton />
         <GitHubButton />
         <div className="text-center my-1 text-[2rem]">Or</div>
-        <InputEmail register={register} errors={errors} watch={watch} t={t} />
-        <InputPassword register={register} errors={errors} watch={watch} one={true} t={t} />
+        <InputEmail register={register} errors={errors} watch={watch} />
+        <InputPassword register={register} errors={errors} watch={watch} one={true} />
 
         <button
           type="submit"
@@ -81,10 +79,10 @@ export default function SignInComponent({ t }: Props) {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                 ></path>
               </svg>
-              {t("auth:sign_in:loading")}
+              {auth("sign_in.loading")}
             </>
           ) : (
-            t("auth:sign_in:title")
+            auth("sign_in.title")
           )}
         </button>
       </form>

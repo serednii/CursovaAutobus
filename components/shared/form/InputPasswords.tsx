@@ -6,26 +6,20 @@ import { cn } from "@/lib/utils";
 import { FaUnlockKeyhole } from "react-icons/fa6";
 import FormError from "./FormError";
 import { FormValues } from "@/app/[locale]/(auth)/interface";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface Props {
   register: UseFormRegister<FormValues>;
   errors: FieldErrors<FormValues>;
   watch: UseFormWatch<FormValues>;
   className?: string;
-  t: any;
   one?: boolean;
 }
 
-export default function InputPassword({
-  register,
-  errors,
-  t,
-  watch,
-  one = false,
-  className,
-}: Props) {
+export default function InputPassword({ register, errors, watch, one = false, className }: Props) {
   const password = watch("password", "");
   const password_repeat = watch("password_repeat", "");
+  const { t: form } = useAppTranslation("form");
 
   // console.log(password);
   const [toggle1, setToggle1] = useState(false);
@@ -34,14 +28,14 @@ export default function InputPassword({
     <div>
       <div className={cn("mb-4 relative", className)}>
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          {t("form:password")}
+          {form("password")}
         </label>
         <input
           {...register("password", {
-            required: t("form:you_must_specify_password"),
+            required: form("you_must_specify_password"),
             minLength: {
               value: 5,
-              message: t("form:password_must_have_at_least_8_characters"),
+              message: form("password_must_have_at_least_8_characters"),
             },
           })}
           type={toggle1 ? "text" : "password"}
@@ -63,12 +57,11 @@ export default function InputPassword({
       {!one && (
         <div className="mb-4 relative">
           <label htmlFor="password_repeat" className="block text-sm font-medium text-gray-700">
-            {t("form:repeat_password")}
+            {form("repeat_password")}
           </label>
           <input
             {...register("password_repeat", {
-              validate: (value: string) =>
-                value === password || t("form:the_passwords_do_not_match"),
+              validate: (value: string) => value === password || form("the_passwords_do_not_match"),
             })}
             type={toggle2 ? "text" : "password"}
             className="pr-8 mt-1 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -1,4 +1,5 @@
 import { FormValues } from "@/app/[locale]/(auth)/interface";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 import { cn } from "@/lib/utils";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -8,25 +9,24 @@ interface Props {
   register: UseFormRegister<FormValues>;
   errors: FieldErrors<FormValues>;
   watch: UseFormWatch<FormValues>;
-  t: any;
   className?: string;
 }
 
-export default function InputPhone({ register, errors, watch, t, className }: Props) {
+export default function InputPhone({ register, errors, watch, className }: Props) {
   const phone = watch("phone", "");
   const emptyPhone = phone === "" ? "pl-6" : "";
-
+  const { t: form } = useAppTranslation("form");
   return (
     <div className={cn("mb-4 relative", className)}>
       <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-        {t("form:phone")}
+        {form("phone")}
       </label>
       <input
         {...register("phone", {
-          required: t("form:phone_is_required"),
+          required: form("phone_is_required"),
           pattern: {
             value: /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/,
-            message: t("form:invalidPhone"),
+            message: form("invalid_phone_number"),
           },
         })}
         placeholder="+123456789"
