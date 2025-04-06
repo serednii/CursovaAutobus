@@ -1,6 +1,9 @@
 import { GenerateBooleanType, GenerateType } from "@/types/generaty.types";
 import { IRouteDataBase } from "@/types/interface";
-import { IGetSearchRouteManyOptionData, IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
+import {
+  IGetSearchRouteManyOptionData,
+  IGetSearchRouteOneOptionData,
+} from "@/types/searchRoute.types";
 import { ZodFetchGetRoutesByICity } from "@/zod_shema/zodGetRoutesById";
 import { ZodSchemaSearchRouteMany, ZodSchemaSearchRouteOne } from "@/zod_shema/zodGetSearchRoute";
 import { z } from "zod";
@@ -54,7 +57,7 @@ class FetchGetUniqueRoutes {
       type,
       schema,
       search: async (data: T): Promise<K | null> => {
-        // console.log("data searchRoute", data);
+        console.log("fetchGetUniqueRoutes API_URL", `${API_URL}/api/getUniqueRoutes`);
         try {
           const response = await fetch(`${API_URL}/api/getUniqueRoutes`, {
             cache: "no-store",
@@ -63,7 +66,8 @@ class FetchGetUniqueRoutes {
             body: JSON.stringify(data),
           });
 
-          if (!response.ok) throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
+          if (!response.ok)
+            throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
 
           const result = await response.json();
           return result; // Перевірка через Zod перед поверненням
@@ -87,4 +91,7 @@ class FetchGetUniqueRoutes {
 
 export const fetchGetUniqueRoutes = new FetchGetUniqueRoutes();
 
-fetchGetUniqueRoutes.addType<IGetSearchRouteCityOption, IGetRouteCity[]>("byCity", ZodFetchGetRoutesByICity.array());
+fetchGetUniqueRoutes.addType<IGetSearchRouteCityOption, IGetRouteCity[]>(
+  "byCity",
+  ZodFetchGetRoutesByICity.array()
+);
