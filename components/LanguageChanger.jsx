@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import i18nConfig from "@/i18nConfig";
-// import { useAppTranslation } from "./CustomTranslationsProvider";
+import { cn } from "@/lib/utils";
 
-export default function LanguageChanger() {
+export default function LanguageChanger({ className }) {
   const { i18n } = useTranslation();
   const currentLocale = i18n.language;
   const router = useRouter();
@@ -23,6 +23,7 @@ export default function LanguageChanger() {
 
     // redirect to the new locale path
     if (currentLocale === i18nConfig.defaultLocale && !i18nConfig.prefixDefault) {
+      //Свойство "prefixDefault" не существует в типе "{ locales: string[]; defaultLocale: string; }".ts(2339)
       router.push("/" + newLocale + currentPathname);
     } else {
       router.push(currentPathname.replace(`/${currentLocale}`, `/${newLocale}`));
@@ -32,10 +33,17 @@ export default function LanguageChanger() {
   };
 
   return (
-    <select onChange={handleChange} value={currentLocale}>
-      <option value="en">English</option>
-      <option value="uk">Ukrainian</option>
-      <option value="cs">Czech</option>
+    <select
+      className={cn(
+        "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-1.5",
+        className
+      )}
+      onChange={handleChange}
+      value={currentLocale}
+    >
+      <option value="en">En</option>
+      <option value="uk">Ua</option>
+      <option value="cs">Cz</option>
     </select>
   );
 }

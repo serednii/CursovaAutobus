@@ -7,15 +7,17 @@ import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface Props {
   routes: TypeBaseRoute[];
   status: "authenticated" | "loading" | "unauthenticated";
-  t: any;
 }
 
-export default function TableSearchRoutes({ routes, status, t }: Props) {
+export default function TableSearchRoutes({ routes, status }: Props) {
   const router = useRouter();
+
+  const { t: form } = useAppTranslation("form");
 
   const handleViewRoute = (route: TypeBaseRoute) => {
     if (status !== "authenticated") {
@@ -32,43 +34,43 @@ export default function TableSearchRoutes({ routes, status, t }: Props) {
   const columns: GridColDef[] = [
     {
       field: "departureDate",
-      headerName: t("form:departure_date"),
+      headerName: form("departure_date"),
       minWidth: 140,
       flex: 1,
     },
     {
       field: "arrivalDate",
-      headerName: t("form:arrival_date"),
+      headerName: form("arrival_date"),
       minWidth: 140,
       flex: 1,
     },
     {
       field: "departureFrom",
-      headerName: t("form:from"),
+      headerName: form("from"),
       minWidth: 100,
       flex: 1,
     },
     {
       field: "arrivalTo",
-      headerName: t("form:to"),
+      headerName: form("to"),
       minWidth: 100,
       flex: 1,
     },
     {
       field: "availableSeats",
-      headerName: t("form:available_seats"),
+      headerName: form("available_seats"),
       minWidth: 80,
       flex: 1,
     },
     {
       field: "routePrice",
-      headerName: t("form:price"),
+      headerName: form("price"),
       minWidth: 50,
       flex: 1,
     },
     {
       field: "viewRouter",
-      headerName: t("form:view_route"),
+      headerName: form("view_route"),
       minWidth: 250,
       flex: 1,
       sortable: false,
@@ -79,7 +81,7 @@ export default function TableSearchRoutes({ routes, status, t }: Props) {
           size="small"
           onClick={() => handleViewRoute(params.row)}
         >
-          {params.row.isReservation ? t("form:edit_reservation") : t("form:book_now")}
+          {params.row.isReservation ? form("edit_reservation") : form("book_now")}
         </Button>
       ),
     },

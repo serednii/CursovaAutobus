@@ -2,7 +2,6 @@ import { ISubPassengersList } from "@/types/interface";
 import { GridColDef } from "@mui/x-data-grid";
 import "./dialog.css";
 import TableRoutesUI from "../TableRoutesUI";
-import { t } from "i18next";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface DialogProps {

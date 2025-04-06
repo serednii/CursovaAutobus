@@ -12,14 +12,15 @@ import { ILayoutData } from "@/types/layoutbus.types";
 import replaceReservedToSelected from "./replaceReservedToSelected";
 import replaceReservedEmptyToReserved from "./replaceReservedEmptyToReserved";
 
-export interface BusInfo {
-  selected_bus: string;
-  departure: string;
-  arrival: string;
-  seats_available: string;
-}
+// export interface BusInfo {
+//   selected_bus: string;
+//   departure: string;
+//   arrival: string;
+//   seats_available: string;
+// }
+// async function SeatSelection({ params }: { params: { locale: string; id: string } }) {
 
-async function SeatSelection({ params }: { params: { locale: string; id: string } }) {
+async function SeatSelection({ params }) {
   const { locale, id } = await params; // Використовуємо params без await
   const { t } = await initTranslations(locale, ["seatselection", "form"]);
 
@@ -32,8 +33,9 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
     selectSeatSelection,
     "seatSelection"
   );
+  // const routesArray = routesArrayUnknown as IGetRouteSeatSelection[] | null;
 
-  const routesArray = routesArrayUnknown as IGetRouteSeatSelection[] | null;
+  const routesArray = routesArrayUnknown;
   const route = routesArray?.[0] || null;
 
   if (route === null || session === null) {
@@ -45,9 +47,18 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
   // change SeatStatusEnum.RESERVED  to SeatStatusEnum.SELECTED
   const fetchedRoute = replaceReservedToSelected({ userSessionId, route: fetchedRouteEmpty });
   //mixed layouts to seats
-  const newData: ILayoutData = mixedLayoutsSeatsData(route);
+  // const newData: ILayoutData = mixedLayoutsSeatsData(route);
+
+  const newData = mixedLayoutsSeatsData(route);
   //*************************************** */
-  const language: BusInfo = {
+  // const language: BusInfo = {
+  //   selected_bus: t("selected_bus"),
+  //   departure: t("departure"),
+  //   arrival: t("arrival"),
+  //   seats_available: t("seats_available"),
+  // };
+
+  const language = {
     selected_bus: t("selected_bus"),
     departure: t("departure"),
     arrival: t("arrival"),

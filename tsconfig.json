@@ -35,7 +35,11 @@
     "app/i18n.js",
     "components/LanguageChanger.jsx",
     "app/[locale]/(driver)/createroute/[id]/[type]/page.jsx",
-    "components/shared/driver/colors.js"
+    "components/shared/driver/colors.js",
+    "app/[locale]/(driver)/createroute/[[...slug]]/page.jsx",
+    "app/[locale]/(driver)/myroute/[id]/page.jsx",
+    "app/[locale]/(passenger)/seatselection/[id]/page.jsx",
+    "app/[locale]/page.jsx"
   ],
   "exclude": ["node_modules"]
 }

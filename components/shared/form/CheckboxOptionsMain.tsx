@@ -5,20 +5,21 @@ import { MdOutlinePower } from "react-icons/md";
 import { FaRestroom } from "react-icons/fa";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   watch: UseFormWatch<FormValuesRoute>;
-  t: any;
   className?: string;
 }
 
-export default function CheckboxOptionsMain({ register, watch, t }: Props) {
+export default function CheckboxOptionsMain({ register, watch }: Props) {
+  const { t: form } = useAppTranslation("form");
   const options = [
-    { name: "wifi", label: t("form:wi_fi"), icon: IoIosWifi },
-    { name: "coffee", label: t("form:coffee"), icon: CgCoffee },
-    { name: "power", label: t("form:power"), icon: MdOutlinePower },
-    { name: "restRoom", label: t("form:restRoom"), icon: FaRestroom },
+    { name: "wifi", label: form("wi_fi"), icon: IoIosWifi },
+    { name: "coffee", label: form("coffee"), icon: CgCoffee },
+    { name: "power", label: form("power"), icon: MdOutlinePower },
+    { name: "restRoom", label: form("restRoom"), icon: FaRestroom },
   ];
 
   return (

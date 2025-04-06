@@ -2,11 +2,14 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 
-import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
+import { IRoutesTable } from "@/types/route-passenger.types";
 import { getBusSeatsRaw } from "./action";
 import { useRouter } from "next/navigation";
 
-export const useDeletePassengerRoute = (routesPassenger: Omit<IRoutesTable, "isReservation">[], passengerId: number | undefined) => {
+export const useDeletePassengerRoute = (
+  routesPassenger: Omit<IRoutesTable, "isReservation">[],
+  passengerId: number | undefined
+) => {
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();
   const removeRoutePassenger = async (routeId: number) => {

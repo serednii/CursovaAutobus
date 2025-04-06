@@ -3,29 +3,31 @@ import { Container } from "@/components/ui/Container";
 import TablePassengerDetails from "@/components/shared/driver/TablePassengerDetails";
 import { getPassengerDetails, getPassengersId } from "./action";
 import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
-import { ISubPassengersList } from "@/types/interface";
-import { fetchGetRoutesById, IGetRouteMyRoute } from "@/fetchFunctions/fetchGetRoutesById";
+// import { ISubPassengersList } from "@/types/interface";
+import { fetchGetRoutesById } from "@/fetchFunctions/fetchGetRoutesById";
 import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { formatDate } from "@/lib/utils";
 import initTranslations from "@/app/i18n";
 import { PiArrowFatLinesRightDuotone } from "react-icons/pi";
 
-export type paramsType = Promise<{ id: string }>;
-export default async function MyRoute({ params }: { params: { locale: string; id: string } }) {
+// export default async function MyRoute({ params }: { params: { locale: string; id: string } }) {
+// export type paramsType = Promise<{ id: string }>;
+export default async function MyRoute({ params }) {
   const { locale, id } = await params;
   const { t } = await initTranslations(locale, ["myroute"]);
 
   const idArray = [Number(id)];
-
-  const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.searchRoute(
+  const routeRaw = await fetchGetRoutesById.searchRoute(
+    // const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.searchRoute(
     idArray,
     selectRoute,
     "byIdMyRoute"
   );
 
   const [route] = formatDate(routeRaw);
+  // const passengersSeatsList: ISubPassengersList[] = cloneDeep(route.passengersSeatsList);
 
-  const passengersSeatsList: ISubPassengersList[] = cloneDeep(route.passengersSeatsList);
+  const passengersSeatsList = cloneDeep(route.passengersSeatsList);
 
   const uniquePassengersId = Array.from(new Set(getPassengersId(route)));
 

@@ -1,9 +1,14 @@
-import { BusInfo } from "@/app/[locale]/(passenger)/seatselection/[id]/page";
+// import { BusInfo } from "@/app/[locale]/(passenger)/seatselection/[id]/page";
 import { timeAmPm, travelTime } from "@/lib/utils";
 import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import React from "react";
 import { IoArrowForward } from "react-icons/io5";
-
+export interface BusInfo {
+  selected_bus: string;
+  departure: string;
+  arrival: string;
+  seats_available: string;
+}
 interface Props {
   route: Omit<IGetRoutePassengerById, "isReservation"> | undefined | null;
   language: BusInfo;

@@ -1,4 +1,4 @@
-import { middleware } from "@/middleware";
+// import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,7 +27,10 @@ export async function POST(req: NextRequest) {
     // console.log("getRoutesByDriverId XXXXXXXXXXXXXXXXX", routes);
     // Якщо маршрути не знайдено
     if (!routes.length) {
-      return NextResponse.json({ message: "Маршрути для вказаного driverId не знайдено" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Маршрути для вказаного driverId не знайдено" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(routes);

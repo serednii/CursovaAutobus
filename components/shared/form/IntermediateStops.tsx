@@ -5,7 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { FieldErrors, UseFormRegister, UseFormUnregister } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
-import { TranslationFunction, useAppTranslation } from "@/components/CustomTranslationsProvider";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;

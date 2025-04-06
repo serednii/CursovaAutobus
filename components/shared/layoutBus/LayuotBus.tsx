@@ -22,13 +22,6 @@ interface Props {
 }
 
 function LayoutBus({ className, sessionUser, action, driverId }: Props) {
-  // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
-  // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
-
-  // useEffect(() => {
-  //   busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
-  // }, []);
-
   console.log("LayoutBus RENDER");
   if (
     driverId === null ||

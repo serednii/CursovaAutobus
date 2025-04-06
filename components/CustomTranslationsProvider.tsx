@@ -9,6 +9,7 @@ import { Namespace, TranslationKey } from "@/types/translations";
 export type TranslationFunction = <T extends Namespace>(
   namespace: T,
   key: TranslationKey<T>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: Record<string, any>
 ) => string;
 
@@ -21,10 +22,12 @@ export const TranslationsContext = createContext<
 >(undefined);
 
 // Пропси для провайдера
+// type Resources = Record<string, Record<string, string>>;
 export interface TranslationsProviderProps {
   children: ReactNode;
   locale: string;
   namespaces: Namespace[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resources: any;
 }
 
@@ -35,7 +38,7 @@ export default function TranslationsProvider({
   resources,
 }: TranslationsProviderProps) {
   // Створюємо функцію перекладу
-  const t: TranslationFunction = (namespace, key, options) => {
+  const t: TranslationFunction = (namespace, key) => {
     // options = options || {};
     // Для вкладених ключів (наприклад, 'select_role.driver.title')
 
@@ -65,6 +68,7 @@ function useAppTranslation(namespace: Namespace) {
 
   // Повертаємо функцію t, яка автоматично використовує вказаний namespace
   return {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: <K extends TranslationKey<typeof namespace>>(key: K, options?: Record<string, any>) =>
       context.t(namespace, key, options),
     locale: context.locale,

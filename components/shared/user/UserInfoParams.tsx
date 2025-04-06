@@ -11,12 +11,10 @@ export default function UserInfoParams({ user }: Props) {
   return (
     <div>
       <h1>
-        Welcome! {user?.lastName} {user?.firstName} ({user?.role})
+        {user?.lastName} {user?.firstName}
       </h1>
-      <p>
-        {" "}
-        {user?.email} id-{user?.id}
-      </p>
+      <p>{user?.email}</p>
+      <p className="text-red-600">{user?.role.toUpperCase()}</p>
     </div>
   );
 }

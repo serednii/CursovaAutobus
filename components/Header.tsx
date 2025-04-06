@@ -9,10 +9,10 @@ import LinkDriver from "./shared/driver/LinkDriver";
 import { MenuDriver } from "@/types/menudriver.types";
 import { CircularProgress } from "@mui/material";
 import { useGetSessionParams } from "../hooks/useGetSessionParams";
-import LanguageChanger from "./LanguageChanger";
 // import { useAppTranslation } from "./TranslationsProvider";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { useAppTranslation } from "./CustomTranslationsProvider";
+import LanguageChanger from "./LanguageChanger";
 
 export default function Header() {
   const { t } = useAppTranslation("header");
@@ -54,7 +54,7 @@ export default function Header() {
   }
 
   return (
-    <Container className="header-gradient flex justify-between gap-3 relative  flex-wrap z-[100]  rounded-lg py-2 w-full">
+    <Container className="header-gradient flex justify-between gap-3 relative  flex-wrap z-[100]  rounded-lg py-2  w-full">
       {status === "loading" && (
         <CircularProgress className="absolute top-2 left-1/2 color-[#94f07c] z-10" size={30} />
       )}
@@ -65,8 +65,8 @@ export default function Header() {
         </Link>
         <LinkDriver menuDriver={menulist} />
       </div>
-      <LanguageChanger />
       <UserInfo />
+      <LanguageChanger className="absolute top-[28px] right-2" />
     </Container>
   );
 }

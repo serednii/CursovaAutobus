@@ -1,5 +1,5 @@
 import { SeatStatusEnum } from "@/enum/shared.enums";
-import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
+// import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
@@ -8,7 +8,7 @@ export const newFormatRoutesTable = (
   routes: Omit<GetRoutesByPassengerId, "isReservation">[],
   passengerId: number
 ): Omit<IRoutesTable, "isReservation">[] => {
-  console.log("routesPassenger ******** ", routes);
+  // console.log("routesPassenger ******** ", routes);
   const routesTable: Omit<IRoutesTable, "isReservation">[] = routes.map(
     (route): Omit<IRoutesTable, "isReservation"> => {
       const getTotalPriceSeatsNumber = route.busSeats?.reduce(

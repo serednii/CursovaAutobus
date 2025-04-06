@@ -21,7 +21,8 @@ import { useSearchRouteMany } from "./useSearchRouteMany";
 import { useGetSessionParams } from "../../../hooks/useGetSessionParams";
 import { useFetchRoutesCity } from "@/app/[locale]/(driver)/createroute/[[...slug]]/useFetchRoutesCity";
 import { useLocalStorageId } from "./useLocalStorageId";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
+import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 export default function FindRoute({ className }: { className?: string }) {
   const highlightedDatesRef = useRef<Date[] | []>([]);
@@ -29,7 +30,9 @@ export default function FindRoute({ className }: { className?: string }) {
   const [searchDates, setSearchDates] = useState<TypeBaseRoute[] | []>([]);
   const [isLoadingOne, setIsLoadingOne] = useState(false);
 
-  const { t } = useTranslation();
+  const { t } = useAppTranslation("home");
+  const { t: form } = useAppTranslation("form");
+
   const {
     register,
     formState: { errors },
@@ -46,7 +49,14 @@ export default function FindRoute({ className }: { className?: string }) {
 
   useLocalStorageId(status);
 
-  const { departureFromCity, setDepartureFromCity, arrivalToCity, setArrivalToCity, fullDepartureFromCity, fullArrivalToCity } = useFetchRoutesCity();
+  const {
+    departureFromCity,
+    setDepartureFromCity,
+    arrivalToCity,
+    setArrivalToCity,
+    fullDepartureFromCity,
+    fullArrivalToCity,
+  } = useFetchRoutesCity();
 
   useSearchRouteMany({
     setIsLoadingOne,
@@ -60,23 +70,40 @@ export default function FindRoute({ className }: { className?: string }) {
   useEffect(() => {
     if (searchDates && searchDates.length === 0) return;
     if (departureFrom || arrivalTo) {
-      setDepartureFromCity(Array.from(new Set(searchDates.map((item) => item?.departureFromCity || ""))));
+      setDepartureFromCity(
+        Array.from(new Set(searchDates.map((item) => item?.departureFromCity || "")))
+      );
       setArrivalToCity(Array.from(new Set(searchDates.map((item) => item?.arrivalToCity || ""))));
     } else {
       setDepartureFromCity(fullDepartureFromCity.current);
       setArrivalToCity(fullArrivalToCity.current);
     }
     // }, [searchDates, departureFrom, arrivalTo]);
-  }, [searchDates, departureFrom, arrivalTo, fullArrivalToCity, fullDepartureFromCity, setArrivalToCity, setDepartureFromCity]);
+  }, [
+    searchDates,
+    departureFrom,
+    arrivalTo,
+    fullArrivalToCity,
+    fullDepartureFromCity,
+    setArrivalToCity,
+    setDepartureFromCity,
+  ]);
 
-  const { clickToDate, setClickToDate } = useClickToDate({ setIsLoadingOne, setHighlightedDates, highlightedDatesRef, userSessionId });
+  const { clickToDate, setClickToDate } = useClickToDate({
+    setIsLoadingOne,
+    setHighlightedDates,
+    highlightedDatesRef,
+    userSessionId,
+  });
 
   // if (status === "loading") return <MyScaleLoader />;
   // if (status === "loading") return <h1>Loading...</h1>;
 
   return (
     <div className={cn(className, "relative px-4 bg-[white] rounded-xl min-h-[530px]")}>
-      {isLoadingOne && <MyScaleLoader className="absolute top-0 left-1/2" settings={{ height: 30, width: 5 }} />}
+      {isLoadingOne && (
+        <MyScaleLoader className="absolute top-0 left-1/2" settings={{ height: 30, width: 5 }} />
+      )}
       <form className="mb-10">
         <div className="flex gap-5 mb-5 flex-wrap">
           <CustomTextField
@@ -84,7 +111,7 @@ export default function FindRoute({ className }: { className?: string }) {
             setValue={setValue}
             errors={errors}
             name={"departureFrom"}
-            title={t("form:departure_from")}
+            title={form("departure_from")}
             className="grow"
             listCity={departureFromCity}
             action="searchRoute"
@@ -94,13 +121,13 @@ export default function FindRoute({ className }: { className?: string }) {
             setValue={setValue}
             errors={errors}
             name={"arrivalTo"}
-            title={t("form:arrival_to")}
+            title={form("arrival_to")}
             className="grow"
             listCity={arrivalToCity}
             action="searchRoute"
           />
           <SearchDataPicker
-            title={t("form:departure_date")}
+            title={form("departure_date")}
             name="departureDate"
             register={register}
             errors={errors}
@@ -116,12 +143,14 @@ export default function FindRoute({ className }: { className?: string }) {
             <Typography variant="h6" gutterBottom>
               {t("select_options")}
             </Typography>
-            <CheckboxOptionsMain register={register} watch={watch} t={t} />
+            <CheckboxOptionsMain register={register} watch={watch} />
           </div>
         </div>
       </form>
       <h2>{t("available_routes")}</h2>
-      {Array.isArray(searchDates) && searchDates.length > 0 && <TableSearchRoutes routes={searchDates} status={status} t={t} />}
+      {Array.isArray(searchDates) && searchDates.length > 0 && (
+        <TableSearchRoutes routes={searchDates} status={status} />
+      )}
       <div className="footer"></div>
     </div>
   );

@@ -20,9 +20,10 @@ const UserAvatar = ({ avatarUrl, firstName, lastName, email }: Props) => {
   const initials = getInitials(firstName || lastName || email);
 
   return (
-    <div>
+    <div className="w-[50px] h-[50px] shrink-0">
       {avatarUrl ? (
         <Image
+          className="w-[50px] h-[50px]"
           src={avatarUrl}
           alt="User Avatar"
           width={50}

@@ -1,5 +1,5 @@
 import { IGetSearchRouteUpdateOption } from "@/fetchFunctions/fetchGetRoutesById";
-import { middleware } from "@/middleware";
+// import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,10 +16,10 @@ export async function POST(req: NextRequest) {
     //   return middlewareResponse;
     // }
 
-    const allowedOrigin = "https://yourwebsite.com"; // Замените на ваш домен
+    // const allowedOrigin = "https://yourwebsite.com"; // Замените на ваш домен
 
-    const origin = req.headers.get("origin") || req.headers.get("referer") || "UNKNOWN";
-    const userAgent = req.headers.get("user-agent") || "";
+    // const origin = req.headers.get("origin") || req.headers.get("referer") || "UNKNOWN";
+    // const userAgent = req.headers.get("user-agent") || "";
     // console.log("Received Origin:", origin, "User Agent:", userAgent);
     // if (!origin || !origin.startsWith(allowedOrigin)) {
     //   return res.status(403).json({ error: "Access denied" });

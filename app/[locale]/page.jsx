@@ -2,7 +2,9 @@ import FindRoute from "@/components/shared/findroute/FindRoute";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/components/TranslationsProvider";
 
-export default async function Home({ params }: { params: { locale: string } }) {
+// export default async function Home({ params }: { params: { locale: string } }) {
+
+export default async function Home({ params }) {
   const { locale } = await params; // Використовуємо ?? для надійності
   const { t, resources } = await initTranslations(locale, ["home", "form"]);
 
