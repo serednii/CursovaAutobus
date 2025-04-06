@@ -1,5 +1,5 @@
 "use client";
-import { separateRoutesTable } from "@/app/[locale]/(passenger)/mybookings/action";
+import { newFormatRoutesTable, deleteMyRoute } from "@/app/[locale]/(passenger)/mybookings/action";
 import AvailableRoutes from "@/components/AvailableRoutes";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 import PastRoutes from "@/components/PastRoutes";
@@ -14,8 +14,11 @@ interface Props {
 }
 
 export default function WrapperPassengerRoutes({ routes, userSessionId }: Props) {
-  const separateData = separateRoutesTable(routes, userSessionId);
-  const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(separateData);
+  const widthOutMyRoute = deleteMyRoute(routes, userSessionId);
+  const newFormatData = newFormatRoutesTable(widthOutMyRoute, userSessionId);
+
+  const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(newFormatData);
+
   const { t } = useAppTranslation("mybookings");
   return (
     <Container>
