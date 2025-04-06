@@ -36,6 +36,7 @@ import { useGetListBlockedDate } from "./useGetListBlockedDate";
 import { useTranslation } from "react-i18next";
 import { runInAction } from "mobx";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -51,8 +52,12 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
 // const idOrderPassengers = useStore((state) => state.idOrderPassengers);
-
-function CreateRouteForm({ id, type }: { id: number; type: string }) {
+interface Props {
+  id: number;
+  type: string;
+  route: IGetRouteUpdate | IGetRouteAgain | undefined;
+}
+function CreateRouteForm({ id, type, route }: Props) {
   const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
   const { t } = useAppTranslation("createroute");
@@ -101,9 +106,10 @@ function CreateRouteForm({ id, type }: { id: number; type: string }) {
     });
   }, [userSessionId]);
 
-  const { route } = useFetchRoute({
+  useFetchRoute({
     id,
     type,
+    route,
     setValue,
     setStartStops,
     setIndexSelectVariantBus,

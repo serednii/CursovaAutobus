@@ -41,9 +41,9 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
     return <div>Route not found</div>;
   }
 
-  // const fetchedRouteEmpty = replaceReservedEmptyToReserved({ route });
+  const fetchedRouteEmpty = replaceReservedEmptyToReserved({ route });
   // change SeatStatusEnum.RESERVED  to SeatStatusEnum.SELECTED
-  const fetchedRoute = replaceReservedToSelected({ userSessionId, route });
+  const fetchedRoute = replaceReservedToSelected({ userSessionId, route: fetchedRouteEmpty });
   //mixed layouts to seats
   const newData: ILayoutData = mixedLayoutsSeatsData(route);
   //*************************************** */

@@ -111,23 +111,29 @@ export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
   res: T,
   setValue: UseFormSetValue<FormValuesRoute>,
   setStartStops: React.Dispatch<React.SetStateAction<string[]>>,
-  setDataLayoutBus: (
-    value:
-      | ILayoutData
-      | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined)
-      | null
-      | undefined,
-    action: RoleEnum
-  ) => void,
+  // setDataLayoutBus: (
+  //   value:
+  //     | ILayoutData
+  //     | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined)
+  //     | null
+  //     | undefined,
+  //   action: RoleEnum
+  // ) => void,
   setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>
 ) => {
   setValue("routePrice", String(res.routePrice));
   setValue("departureFrom", res.departureFrom);
+
   setValue("arrivalTo", res.arrivalTo);
+
   setValue("busNumber", res.modelBus);
+
   setValue("selectBusLayout", res.modelBus);
+
   setStartStops(res.intermediateStops.map((e) => e.stopName));
+
   const findIndexLayoutsBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
+
   handleChangeVariantBus(
     findIndexLayoutsBus,
     setIndexSelectVariantBus,

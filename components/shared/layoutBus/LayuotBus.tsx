@@ -92,9 +92,6 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
             <div key={index}>
               <PassengerSeat
                 params={item}
-                // user={user || ""}
-                // dataLayoutBus={busStore.dataLayoutBus}
-                // handleDataLayoutBus={handleDataLayoutBus}
                 sessionUser={sessionUser}
                 action={action}
                 driverId={driverId}
