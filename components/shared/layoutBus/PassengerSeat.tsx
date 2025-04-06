@@ -45,20 +45,9 @@ function PassengerSeat(props: Props) {
     runInAction(() => {
       params.busSeatStatus = changeStatus.busSeatStatus;
       params.passenger = changeStatus.passenger;
-
       busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
     });
   }, [changeStatus.busSeatStatus, changeStatus.passenger, params, busStore, action]);
-
-  // useEffect(() => {
-  //   params.busSeatStatus = changeStatus.busSeatStatus;
-  //   params.passenger = changeStatus.passenger;
-
-  //   busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
-
-  //   // console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
-  //   // }, [changeStatus.busSeatStatus, changeStatus.passenger, dataLayoutBus, params, setDataLayoutBus]);
-  // }, [changeStatus.busSeatStatus, changeStatus.passenger, params, busStore.setDataLayoutBus]);
 
   // Змінюємо колір залежно від статусу місця
   const statusColor = {
@@ -74,12 +63,23 @@ function PassengerSeat(props: Props) {
     setChangeStatus((prevParams: BusSeatInfo) => {
       //Якщо являємося водієм і на своєму маршруті
       let updatedStatus: SeatStatusEnum = SeatStatusEnum.AVAILABLE;
-      if ((userRole === RoleEnum.DRIVER && Number(sessionUser?.id) === driverId) || driverId === 0) {
-        updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.RESERVEDEMPTY : SeatStatusEnum.AVAILABLE;
-      } else if (userRole === RoleEnum.DRIVER && sessionUserId !== driverId) {
-        updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
-      } else if (userRole === RoleEnum.PASSENGER) {
-        updatedStatus = prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE ? SeatStatusEnum.SELECTED : SeatStatusEnum.AVAILABLE;
+
+      if (
+        (userRole === RoleEnum.DRIVER && Number(sessionUser?.id) === driverId) ||
+        driverId === 0
+      ) {
+        updatedStatus =
+          prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE
+            ? SeatStatusEnum.RESERVEDEMPTY
+            : SeatStatusEnum.AVAILABLE;
+      } else if (
+        (userRole === RoleEnum.DRIVER && sessionUserId !== driverId) ||
+        userRole === RoleEnum.PASSENGER
+      ) {
+        updatedStatus =
+          prevParams.busSeatStatus === SeatStatusEnum.AVAILABLE
+            ? SeatStatusEnum.SELECTED
+            : SeatStatusEnum.AVAILABLE;
       }
 
       const res = {
@@ -93,17 +93,6 @@ function PassengerSeat(props: Props) {
   };
 
   return (
-    // <button
-    //   disabled={changeStatus.busSeatStatus === SeatStatusEnum.RESERVED || (action === RoleEnum.PASSENGER && sessionUserId === driverId)}
-    //   onClick={handleClick}
-    //   style={styles}
-    //   className={cn("absolute disabled:cursor-not-allowed", className)}
-    // >
-    //   <div className={cn("relative w-[60px] h-[40px] rounded-t-lg rounded-b-md flex justify-center items-center", statusColor)}>
-    //     <p className="text-white text-[1.5rem] translate-x-[-5px]">{number}</p>
-    //     <div className="absolute right-[2px] top-[0px] rounded-t-md rounded-b-xl w-[15px] h-[40px] bg-[#5a8950]"></div>
-    //   </div>
-    // </button>
     <SeatButton
       number={number}
       changeStatus={changeStatus}

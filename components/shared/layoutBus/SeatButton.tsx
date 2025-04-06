@@ -26,15 +26,24 @@ const SeatButton: React.FC<SeatButtonProps> = ({
   className,
   handleClick,
 }) => {
+  const disabled =
+    changeStatus.busSeatStatus === SeatStatusEnum.RESERVED ||
+    (action === RoleEnum.PASSENGER && sessionUserId === driverId) ||
+    (changeStatus.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY && sessionUserId !== driverId);
   // console.log("SeatButton RENDER");
   return (
     <button
-      disabled={changeStatus.busSeatStatus === SeatStatusEnum.RESERVED || (action === RoleEnum.PASSENGER && sessionUserId === driverId)}
+      disabled={disabled}
       onClick={handleClick}
       style={styles}
       className={cn("absolute disabled:cursor-not-allowed", className)}
     >
-      <div className={cn("relative w-[60px] h-[40px] rounded-t-lg rounded-b-md flex justify-center items-center", statusColor)}>
+      <div
+        className={cn(
+          "relative w-[60px] h-[40px] rounded-t-lg rounded-b-md flex justify-center items-center",
+          statusColor
+        )}
+      >
         <p className="text-white text-[1.5rem] translate-x-[-5px]">{number}</p>
         <div className="absolute right-[2px] top-[0px] rounded-t-md rounded-b-xl w-[15px] h-[40px] bg-[#5a8950]"></div>
       </div>

@@ -9,8 +9,8 @@ import { authConfig } from "@/configs/auth";
 import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
 import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { ILayoutData } from "@/types/layoutbus.types";
-import TranslationsProvider from "@/components/TranslationsProvider";
 import replaceReservedToSelected from "./replaceReservedToSelected";
+import replaceReservedEmptyToReserved from "./replaceReservedEmptyToReserved";
 
 export interface BusInfo {
   selected_bus: string;
@@ -27,13 +27,13 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
   const userSessionId = Number(session?.user?.id);
   const idNumber = Number(id);
 
-  const routeArray = await fetchGetRoutesById.searchRoute(
+  const routesArrayUnknown = await fetchGetRoutesById.searchRoute(
     [idNumber],
     selectSeatSelection,
     "seatSelection"
   );
 
-  const routesArray = routeArray as IGetRouteSeatSelection[] | null;
+  const routesArray = routesArrayUnknown as IGetRouteSeatSelection[] | null;
   const route = routesArray?.[0] || null;
 
   if (route === null || session === null) {
@@ -41,6 +41,7 @@ async function SeatSelection({ params }: { params: { locale: string; id: string 
     return <div>Route not found</div>;
   }
 
+  // const fetchedRouteEmpty = replaceReservedEmptyToReserved({ route });
   // change SeatStatusEnum.RESERVED  to SeatStatusEnum.SELECTED
   const fetchedRoute = replaceReservedToSelected({ userSessionId, route });
   //mixed layouts to seats
