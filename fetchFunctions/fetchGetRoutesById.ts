@@ -128,7 +128,7 @@ class GetRoutesById {
       schema,
       search: async (id: number[], select: T): Promise<K | null> => {
         console.log("data searchRoute", id, select);
-
+        console.log("API_URL", `${API_URL}/api/getRoutesById`);
         try {
           const response = await fetch(`${API_URL}/api/getRoutesById`, {
             cache: "no-store",
