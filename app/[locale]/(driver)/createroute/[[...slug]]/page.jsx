@@ -33,8 +33,7 @@ export default async function CreateRoutePage({ params }) {
 
   const id = Number(slug[0]) || 0;
   const type = slug[1] || "";
-
   const route = await getRoute({ id, type });
-
+  console.log("create route ", id, type, route);
   return <CreateRouteForm id={id} type={type} route={route} />;
 }
