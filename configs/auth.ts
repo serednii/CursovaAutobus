@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import { prisma } from "@/prisma/prisma-client";
 import { RoleEnum } from "@/enum/shared.enums";
 import { v4 as uuidv4 } from "uuid"; // Для генерації унікального ключа
+import { url } from "inspector";
 
 const findOrCreateUser = async (email: string, profile: any) => {
   let user = await prisma.user.findUnique({ where: { email } });
@@ -31,11 +32,20 @@ const findOrCreateUser = async (email: string, profile: any) => {
   return { ...profile, ...user };
 };
 
+const processObj: { clientId: string; clientSecret: string } = {
+  clientId: process.env.GITHUB_CLIENT_ID_LOCALHOST!,
+  clientSecret: process.env.GITHUB_SECRET_LOCALHOST!,
+};
+
+if (process.env.NEXTAUTH_URL === "https://cursovaautobus-production.up.railway.app") {
+  processObj.clientId = process.env.GITHUB_CLIENT_ID_RAILWAY!;
+  processObj.clientSecret = process.env.GITHUB_SECRET_RAILWAY!;
+}
+
 export const authConfig: AuthOptions = {
   providers: [
     GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
+      ...processObj,
       profile(profile) {
         return findOrCreateUser(profile.email, profile); // Без `await`
       },
