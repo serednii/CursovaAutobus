@@ -1,14 +1,6 @@
-import { getBusSeatsPassenger } from "@/app/[locale]/(passenger)/mybookings/action";
-import {
-  GenerateBooleanType,
-  GenerateType,
-  IGetBusSeatsBoolean,
-  IGetPassengersSeatsList,
-} from "@/types/generaty.types";
+import { GenerateType } from "@/types/generaty.types";
 import { IIntermediateStops, IRouteDataBase } from "@/types/interface";
-import { ApiResponse, SuccessResponse, ErrorResponse } from "@/types/response.types";
-import { GetRoutesByDriverId } from "@/types/route-driver.types";
-import { IDeleteRoutePassenger } from "@/types/route-passenger.types";
+import { SuccessResponse, ErrorResponse } from "@/types/response.types";
 import { allParametersRoute } from "@/zod_shema/zodBase";
 import { z } from "zod";
 
