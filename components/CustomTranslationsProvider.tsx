@@ -38,20 +38,18 @@ export default function TranslationsProvider({
   resources,
 }: TranslationsProviderProps) {
   // Створюємо функцію перекладу
-  const t: TranslationFunction = (namespace, key) => {
-    // options = options || {};
-    // Для вкладених ключів (наприклад, 'select_role.driver.title')
 
-    if (typeof key === "string" && key.includes(".")) {
-      // Якщо ключ уже має формат 'namespace:key', не додаємо namespace
-      if (key.includes(":")) {
-        return resources[locale]?.[namespace]?.[key] || key;
-      }
-      return resources[locale]?.[namespace]?.[key] || key;
+  const t: TranslationFunction = (namespace, key) => {
+    const fullKey = typeof key === "string" ? key : (key as string);
+    const parts = fullKey.split(".");
+    let current = resources[locale]?.[namespace];
+
+    for (const part of parts) {
+      if (current?.[part] === undefined) return fullKey; // або просто key
+      current = current[part];
     }
 
-    // Для простих ключів
-    return resources[locale]?.[namespace]?.[key as string] || (key as string);
+    return typeof current === "string" ? current : fullKey;
   };
 
   return (
@@ -68,7 +66,7 @@ function useAppTranslation(namespace: Namespace) {
 
   // Повертаємо функцію t, яка автоматично використовує вказаний namespace
   return {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: <K extends TranslationKey<typeof namespace>>(key: K, options?: Record<string, any>) =>
       context.t(namespace, key, options),
     locale: context.locale,

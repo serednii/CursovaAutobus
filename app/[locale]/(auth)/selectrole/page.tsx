@@ -20,13 +20,13 @@ export default function SelectRole() {
         <div className="role__links">
           <Link href="/registerdriver">
             <FaBusAlt style={{ color: "#2563EB", width: "32px", height: "36px" }} />
-            <h2>{auth("select_role.driver:title")}</h2>
-            <p>{auth("select_role.driver:description")}</p>
+            <h2>{auth("select_role.driver.title")}</h2>
+            <p>{auth("select_role.driver.description")}</p>
           </Link>
           <Link href="/registerpassenger">
             <FaUserAlt style={{ color: "#2563EB", width: "32px", height: "36px" }} />
-            <h2>{auth("select_role.passenger:title")}</h2>
-            <p>{auth("select_role.passenger:description")}</p>
+            <h2>{auth("select_role.passenger.title")}</h2>
+            <p>{auth("select_role.passenger.description")}</p>
           </Link>
         </div>
         <Link href="/">
