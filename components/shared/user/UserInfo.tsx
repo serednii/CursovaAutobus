@@ -3,7 +3,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { SessionData } from "@/types/next-auth";
 import Link from "next/link";
-import UserInfoParams from "./UserInfoParams";
+// import UserInfoParams from "./UserInfoParams";
 import ShowIf from "@/components/ShowIf";
 import UserAvatar from "@/components/UserAvatar";
 import LanguageChanger from "@/components/LanguageChanger";
