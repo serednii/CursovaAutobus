@@ -20,22 +20,22 @@ const UserAvatar = ({ avatarUrl, firstName, lastName, email }: Props) => {
   const initials = getInitials(firstName || lastName || email);
 
   return (
-    <div className="w-[50px] h-[50px] shrink-0">
+    <div className="w-[35px] h-[35px] shrink-0">
       {avatarUrl ? (
         <Image
-          className="w-[50px] h-[50px]"
+          className="w-[35px] h-[35px]"
           src={avatarUrl}
           alt="User Avatar"
-          width={50}
-          height={50}
+          width={35}
+          height={35}
           style={{ borderRadius: "50%" }}
         />
       ) : (
         <div
           style={{
-            width: 50,
-            height: 50,
-            borderRadius: "50%",
+            width: 35,
+            height: 35,
+            borderRadius: "35%",
             backgroundColor: "#ccc",
             display: "flex",
             alignItems: "center",
