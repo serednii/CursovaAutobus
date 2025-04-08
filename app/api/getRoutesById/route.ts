@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     // Отримуємо дані з тіла запиту
     const body: TypeGetRoutesById = await req.json();
     const { id, select } = body;
-    console.log("API getRoutesById", id, select);
+
     // Валідація `id`
     if (!Array.isArray(id) || id.length === 0) {
       return NextResponse.json(
@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
     if (!select || typeof select !== "object") {
       return NextResponse.json({ error: "Некоректне поле 'select'!" }, { status: 400 });
     }
-    console.log("API getRoutesById 22", id, select);
 
     // Запит до бази даних
     const routes = await prisma.routeDriver.findMany({

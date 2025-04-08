@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       where: { driverId: { in: driverId } },
       select: select,
     });
-    // console.log("getRoutesByDriverId XXXXXXXXXXXXXXXXX", routes);
+
     // Якщо маршрути не знайдено
     if (!routes.length) {
       return NextResponse.json(

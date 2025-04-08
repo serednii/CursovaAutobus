@@ -6,7 +6,7 @@ import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutes
 // import { ILayoutData } from "@/types/layoutbus.types";
 import useStore from "@/zustand/createStore";
 
-interface UseFetchRouteProps {
+interface Props {
   id: number;
   type: string | string[];
   route: IGetRouteUpdate | IGetRouteAgain | undefined;
@@ -15,14 +15,14 @@ interface UseFetchRouteProps {
   setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-export const useFetchRoute = ({
+export const useUpdateValues = ({
   id,
   type,
   route,
   setValue,
   setStartStops,
   setIndexSelectVariantBus,
-}: UseFetchRouteProps) => {
+}: Props) => {
   const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 
   useMemo(() => {

@@ -10,7 +10,7 @@ import IntermediateStops from "@/components/shared/form/IntermediateStops";
 import MaterialUISelect from "@/components/shared/form/MaterialUISelect";
 import CustomTextField from "@/components/shared/form/CustomTextField";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
-import MyScaleLoader from "@/components/ui/MyScaleLoader";
+// import MyScaleLoader from "@/components/ui/MyScaleLoader";
 import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders/SubPassengersOrders";
 
@@ -23,7 +23,7 @@ import { RoleEnum } from "@/enum/shared.enums";
 import { handleChangeVariantBus } from "./action";
 import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
-import { useFetchRoute } from "./useFetchRoute";
+import { useUpdateValues } from "./useUpdateValues";
 import { handleRouteSubmit } from "./handleRouteSubmit";
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
 import { useFetchRoutesCity } from "./useFetchRoutesCity";
@@ -31,17 +31,16 @@ import { useFetchRoutesCity } from "./useFetchRoutesCity";
 
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
-import { useGetSessionParams } from "@/hooks/useGetSessionParams";
+// import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 import { useGetListBlockedDate } from "./useGetListBlockedDate";
 // import { useTranslation } from "react-i18next";
 import { runInAction } from "mobx";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
-
+import { UserSession } from "@/types/next-auth";
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
 }
-
 // export const debouncedSetIdOrderPassengers = debounce((data: ILayoutData, setIdOrderPassengers, userSessionId) => {
 //   const idOrderPassengers = data.passenger
 //     .filter((e) => e.passenger === userSessionId && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
@@ -52,21 +51,28 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
 // const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+
 interface Props {
   id: number;
   type: string;
   route: IGetRouteUpdate | IGetRouteAgain | undefined;
+  sessionUser: UserSession;
 }
-function CreateRouteForm({ id, type, route }: Props) {
-  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
-  const [startStops, setStartStops] = useState<string[]>([]);
+
+function CreateRouteForm({ id, type, sessionUser, route }: Props) {
+  console.log("session User", sessionUser);
+  const userSessionId = Number(sessionUser?.id);
+
   const { t } = useAppTranslation("createroute");
   const { t: form } = useAppTranslation("form");
+
+  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
+  const [startStops, setStartStops] = useState<string[]>([]);
 
   const router = useRouter();
   const renderRef = useRef(0);
   // namespaces={["createroute", "home", "form"]}
-  const { sessionUser, userSessionId, status } = useGetSessionParams();
+  // const { sessionUser, status } = useGetSessionParams();
 
   // console.log("CreateRoute RENDER", bears);
   const {
@@ -87,26 +93,13 @@ function CreateRouteForm({ id, type, route }: Props) {
     },
   });
 
-  // const [dataLayoutBus, setDataLayoutBus] = useState<ILayoutData | null | undefined>(null);
-  // const [idOrderPassengers, setIdOrderPassengers] = useState<NullableNumber[]>([]);
-
-  // useEffect(() => {
-  //   busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (userSessionId) {
-  //     busStore.setUserIdSession(userSessionId);
-  //   }
-  // }, [userSessionId]);
-
   useMemo(() => {
     runInAction(() => {
       busStore.setUserIdSession(userSessionId);
     });
   }, [userSessionId]);
 
-  useFetchRoute({
+  useUpdateValues({
     id,
     type,
     route,
@@ -119,18 +112,10 @@ function CreateRouteForm({ id, type, route }: Props) {
 
   const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
-  // const handleDataLayoutBus = useMemo(
-  //   () => (data: ILayoutData) => {
-  //     setDataLayoutBus(data);
-  //     debouncedSetIdOrderPassengers(data, setIdOrderPassengers, userSessionId);
-  //   },
-  //   []
-  // );
-
   //Кількість пасажирів в кожному автобусі
   const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
 
-  if (status === "loading") return <MyScaleLoader />;
+  // if (status === "loading") return <MyScaleLoader />;
 
   return (
     // <CreateRouteContext.Provider value={{ isLoadingOne: false, setIsLoadingOne: () => {} }}>

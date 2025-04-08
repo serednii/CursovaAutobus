@@ -22,7 +22,7 @@ interface Props {
 }
 
 function PassengerSeat(props: Props) {
-  console.log("PassengerSeat RENDER");
+  // console.log("PassengerSeat RENDER");
   // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 
   const { className, params, sessionUser, action, driverId } = props;

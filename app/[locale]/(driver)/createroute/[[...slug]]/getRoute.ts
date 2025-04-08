@@ -15,20 +15,17 @@ export const getRoute = async ({
   id,
   type,
 }: Props): Promise<IGetRouteUpdate | IGetRouteAgain | undefined> => {
-  if (id === 0) return;
+  if (!id || id === 0) return;
 
   try {
     if (type === "change") {
       const value = await fetchGetRoutesById.searchRoute([id], selectRouteUpdate, "ByIdUpdate");
-      console.log("value", value);
       const result = value as IGetRouteUpdate[] | null;
       return result?.[0];
     }
 
     if (type === "again") {
       const value = await fetchGetRoutesById.searchRoute([id], selectRouteAgain, "byIdAgain");
-      console.log("value", value);
-
       const result = value as IGetRouteAgain[] | null;
       return result?.[0];
     }
