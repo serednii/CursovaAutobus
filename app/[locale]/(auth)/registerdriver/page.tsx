@@ -27,7 +27,7 @@ export default function RegisterDriver() {
 
   return (
     <Overlay className="driver justify-center top-[80px]">
-      <div className="w-[50%] flex justify-center items-center">
+      <div className="flex justify-center items-center">
         <div className="max-w-[450px] w-[100%]">
           <form
             onSubmit={handleSubmit(onSubmit)}

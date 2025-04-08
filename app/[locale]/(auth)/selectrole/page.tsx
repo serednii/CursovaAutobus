@@ -13,7 +13,6 @@ export default function SelectRole() {
 
   return (
     <Overlay className="role flex items-center justify-center top-[80px]">
-      {/* <div className="w-[50%] flex justify-center items-center"> */}
       <div className="role__inner">
         <h1>{auth("select_role.title")}</h1>
         <p>{auth("select_role.description")}</p>
