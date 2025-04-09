@@ -23,7 +23,7 @@ export default function NavbarMenu({ menuDriver }: Props) {
   return (
     <div className="navbar">
       <div className="navbar__button_wrapper  items-center relative ">
-        <div className="absolute inset-y-0 left-0 flex items-center ">
+        <div className="absolute inset-y-0 left-[-20px] flex items-center ">
           {/* <!-- Mobile menu button--> */}
           <button
             type="button"
@@ -42,14 +42,14 @@ export default function NavbarMenu({ menuDriver }: Props) {
               style={isOpen ? { display: "none" } : {}}
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               aria-hidden="true"
               data-slot="icon"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
               />
             </svg>
@@ -62,12 +62,12 @@ export default function NavbarMenu({ menuDriver }: Props) {
               style={isOpen ? {} : { display: "none" }}
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               aria-hidden="true"
               data-slot="icon"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
