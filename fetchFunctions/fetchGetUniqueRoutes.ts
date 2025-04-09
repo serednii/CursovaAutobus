@@ -76,6 +76,8 @@ class FetchGetUniqueRoutes {
   }
   //pattern
   async searchRoute<T, K>(data: T, type: string): Promise<K | null> {
+    console.log("data", data);
+    console.log("type", type);
     const foundType = this.types.find((item) => item.type === type);
     if (!foundType) {
       console.error(`Type "${type}" not found`);
@@ -84,7 +86,9 @@ class FetchGetUniqueRoutes {
     return foundType.search(data);
   }
 }
-
+// localhost:3000/api/getUniqueRoutes
+// localhost:3000/api/getUniqueRoutes
+// http: http:
 export const fetchGetUniqueRoutes = new FetchGetUniqueRoutes();
 
 fetchGetUniqueRoutes.addType<IGetSearchRouteCityOption, IGetRouteCity[]>(

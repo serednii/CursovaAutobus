@@ -8,12 +8,12 @@ export const useFetchRoutesCity = () => {
   const [arrivalToCity, setArrivalToCity] = useState<string[]>([]);
   const fullDepartureFromCity = useRef<string[] | []>([]);
   const fullArrivalToCity = useRef<string[] | []>([]);
-
+  console.log("fullArrivalToCity", departureFromCity);
   useEffect(() => {
     console.log("fetch routes byCity************************************");
     fetchGetUniqueRoutes.searchRoute(selectRouteCity, "byCity").then((value) => {
       const result = value as IGetRouteCity[] | null;
-      // console.log("result city", result);
+      console.log("result city", result);
 
       if (result === null || result.length === 0) return;
       const departureFromCityFull = new Set(result.map((item) => item.departureFrom));
@@ -27,5 +27,12 @@ export const useFetchRoutesCity = () => {
     });
   }, [setDepartureFromCity, setArrivalToCity]);
 
-  return { departureFromCity, setDepartureFromCity, arrivalToCity, setArrivalToCity, fullDepartureFromCity, fullArrivalToCity };
+  return {
+    departureFromCity,
+    setDepartureFromCity,
+    arrivalToCity,
+    setArrivalToCity,
+    fullDepartureFromCity,
+    fullArrivalToCity,
+  };
 };

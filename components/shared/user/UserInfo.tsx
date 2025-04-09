@@ -17,10 +17,10 @@ export default function UserInfo() {
   const { user } = data || {};
 
   return (
-    <div className="flex  gap-1 sm:gap-2 lg:gap-3  items-center">
+    <div className="flex  gap-2  sm:gap-3  items-center">
       <ShowIf condition={!!user}>
-        <UserInfoParams user={user} />
-        <Bell />
+        <UserInfoParams user={user} className="hidden lg:block" />
+        {/* <Bell /> */}
         <UserAvatar avatarUrl={user?.avatar_url || user?.image || ""} {...user} />
       </ShowIf>
       <ShowIf condition={!!data}>

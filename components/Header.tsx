@@ -53,16 +53,16 @@ export default function Header() {
   }
 
   return (
-    <Container className="header-gradient flex justify-between items-center gap-1 sm:gap-3 relative  flex-wrap z-[100]  rounded-lg py-2  w-full">
+    <Container className="header-gradient flex justify-between items-center gap-1 sm:gap-3 relative  flex-wrap z-[100]  rounded-lg py-2 pe-2  w-full">
       {status === "loading" && (
         <CircularProgress className="absolute top-2 left-1/2 color-[#94f07c] z-10" size={30} />
       )}
       <div className="flex gap-4 items-center relative">
-        <LogoComponent className="hidden sm:flex" />
+        <LogoComponent className="hidden md:flex" />
 
         <NavbarMenu menuDriver={menulist} />
       </div>
-      <LogoComponent className="flex sm:hidden" />
+      <LogoComponent className="flex md:hidden" />
 
       <UserInfo />
     </Container>

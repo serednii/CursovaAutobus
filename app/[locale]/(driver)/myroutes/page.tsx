@@ -1,12 +1,13 @@
 import React from "react";
-import { Container } from "@mui/material";
+
 import fetchGetRoutesByDriverId, {
   IRoutesByIdDriver,
   selectGetRoutesByDriverId,
 } from "@/fetchFunctions/fetchGetRoutesByDriverId";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/configs/auth";
-import WrapperDriverRoutes from "@/components/shared/driver/WrapperDriverRoutes";
+import WrapperDriverRoutes from "@/app/[locale]/(driver)/myroutes/WrapperDriverRoutes";
+import { Container } from "@/components/ui/Container";
 
 export default async function MyRoutes() {
   const session = await getServerSession(authConfig);

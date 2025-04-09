@@ -139,7 +139,7 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
       <MyDialogIsDelete title={t("is_delete_route")} setOpen={setOpen} open={open} setOk={setOk} />
 
       {openDetails && (
-        <ContainerViewCenter className="mx-auto max-w-[1280px] px-4" setOpen={setOpenDetails}>
+        <ContainerViewCenter className="mx-auto max-w-[1920px] px-4" setOpen={setOpenDetails}>
           <MyDialogDetailsRoute passengersSeatsList={routeDetails} />
         </ContainerViewCenter>
       )}

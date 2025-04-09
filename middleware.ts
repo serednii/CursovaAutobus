@@ -57,7 +57,7 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import { RoleEnum } from "./enum/shared.enums";
-import { prisma } from "@/prisma/prisma-client"; // Імпортуйте Prisma Client
+// import { prisma } from "@/prisma/prisma-client"; // Імпортуйте Prisma Client
 
 import { i18nRouter } from "next-i18n-router";
 import i18nConfig from "./i18nConfig";

@@ -4,7 +4,7 @@ import { UserSelect } from "@/types/next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  // console.log("getUniqueRoutes", req);
+  console.log("getUniqueRoutes", req);
   try {
     const middlewareResponse = await middleware(req);
 
@@ -36,19 +36,19 @@ export async function POST(req: NextRequest) {
       restRoom?: boolean;
     } = await req.json();
 
-    // console.log(
-    //   "getUniqueRoutes search select",
-    //   departureSearch,
-    //   arrivalToSearch,
-    //   select,
-    //   startOfDay,
-    //   endOfDay,
-    //   wifi,
-    //   coffee,
-    //   power,
-    //   restRoom,
-    //   limit
-    // );
+    console.log(
+      "getUniqueRoutes search select",
+      departureSearch,
+      arrivalToSearch,
+      select,
+      startOfDay,
+      endOfDay,
+      wifi,
+      coffee,
+      power,
+      restRoom,
+      limit
+    );
     // Формуємо діапазон часу для конкретного дня
     let dateFilter = {};
 

@@ -37,7 +37,7 @@ export default async function MyRoute({ params }) {
 
   return (
     <Container>
-      <header className="flex flex-col justify-center">
+      <header className="flex flex-col justify-center px-1 sm:px-2 md:px-4 bg-white">
         <h1 className="text-3xl font-bold mb-2">{t("view_chosen_route")}</h1>
         <div className="flex gap-5 mb-2 items-center">
           <div>

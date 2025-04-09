@@ -21,7 +21,7 @@ export default function TableRoutesUI<T extends { id: string | number }>({
   sx = { height: 400, width: "100%" },
 }: Props<T>) {
   return (
-    <div>
+    <div className="px-1 bg-white">
       <Paper sx={sx}>
         <DataGrid
           rows={routes}

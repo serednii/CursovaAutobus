@@ -22,7 +22,7 @@ export default function WrapperPassengerRoutes({ routes, userSessionId }: Props)
   const { t } = useAppTranslation("mybookings");
   return (
     <Container>
-      <div className="bg-[#F9FAFB] px-4">
+      <div className="bg-[#F9FAFB] px-1 sm:px-2 md:px-4">
         <h1 className="text-2xl font-bold mb-10">{t("booked_routes")}</h1>
         <AvailableRoutes className="mb-10">
           <TableMyBookings routes={availableRoutes} isRouteAgain={true} />
