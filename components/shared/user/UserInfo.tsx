@@ -1,5 +1,4 @@
 "use client";
-import { FaRegBell } from "react-icons/fa";
 import { signOut, useSession } from "next-auth/react";
 import { SessionData } from "@/types/next-auth";
 import Link from "next/link";
@@ -7,7 +6,6 @@ import UserInfoParams from "./UserInfoParams";
 import ShowIf from "@/components/ShowIf";
 import UserAvatar from "@/components/UserAvatar";
 import LanguageChanger from "@/components/LanguageChanger";
-import Bell from "@/components/Bell";
 // import LanguageChanger from "@/components/LanguageChanger";
 
 export default function UserInfo() {
