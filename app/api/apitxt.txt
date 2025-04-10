@@ -1,0 +1,38 @@
+// http://localhost:3000/api/users
+// http://localhost:3000/api/updateRouteById
+// http://localhost:3000/api/searchRoute
+// http://localhost:3000/api/getUsersByIdBySelect
+// http://localhost:3000/api/getUniqueRoutes
+// http://localhost:3000/api/getRoutesByPassengerId
+// http://localhost:3000/api/getRoutesById
+// http://localhost:3000/api/getRoutesByDriverId
+// http://localhost:3000/api/deleteroute
+// http://localhost:3000/api/deletePassengerSeatsList
+// http://localhost:3000/api/createroute
+// http://localhost:3000/api/auth
+
+// Поточний endpoint	Пропозиція	Коментар
+// /api/users	                    /api/users	✅ Залишити, якщо отримує всіх
+
+// /api/getUniqueRoutes	            /api/routes/unique	Уточнення логіки
+// /api/updateRouteById	            /api/routes/:id (метод PUT)	RESTful оновлення маршруту
+// /api/searchRoute	                /api/routes/search	Пошук — краще як підресурс
+// /api/getUsersByIdBySelect	    /api/users/select або /api/users/by-ids	Уточнити, що це вибірка
+// /api/getRoutesByPassengerId	    /api/passengers/:id/routes	Вкладені маршрути пасажира
+// /api/getRoutesById	            /api/routes/:id (метод GET)	Отримання маршруту
+// /api/getRoutesByDriverId 	    /api/drivers/:id/routes	Як з пасажиром
+// /api/deleteroute	                /api/routes/:id (метод DELETE)	RESTful видалення
+// /api/deletePassengerSeatsList	/api/passengers/:id/seats (метод DELETE)	Видалення місць пасажира
+// /api/createroute	                /api/routes (метод POST)	Створення маршруту
+
+// /api/auth	                    /api/auth/login або /api/auth/signup	Уточнити дію
+
+// GET /api/routes/:id → отримати
+
+// POST /api/routes → створити
+
+// PUT /api/routes/:id → оновити
+
+// DELETE /api/routes/:id → видалити
+
+// Групуй ендпоінти логічно: /routes, /users, /drivers, /passengers, /auth.

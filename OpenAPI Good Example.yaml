@@ -1,0 +1,244 @@
+openapi: 3.0.0
+info:
+  title: Простой пример хорошей OpenAPI спецификация
+  version: 0.1.0
+servers:
+  - url: http://localhost:8080/v1/
+    description: Localhost Test
+
+paths:
+  /requests:
+    post:
+      summary: Метод добавления запроса
+      description: Метод предназначен для сохранения в БД данных по входящему запросу от системы-инициатора.
+      operationId: createRequests
+      tags:
+        - Requests
+      parameters:
+        - name: CorellationId
+          in: header
+          schema:
+            type: string
+          example: aa1ff211-b5dd-4397-b8a8-3f640705efa2
+        - name: SystemId
+          in: header
+          description: Название системы или модуля, который прислал запрос
+          required: true
+          schema:
+            type: string
+          example: Test System
+        - name: requestId
+          in: query
+          schema:
+            type: string
+          example: bb1ff211-b5dd-4397-b8a8-3f640705efa2
+        - name: validationId
+          in: query
+          description: Код запрошенного вида сведений
+          required: true
+          schema:
+            type: integer
+          example: 2040
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              last_name: Иванов
+              birth_date: 1990-01-01
+              first_name: Иван
+              middle_name: Иванович
+              snils: 123456789862
+              gender: MALE
+      responses:
+        '200':
+          "description": Подтверждение получения запроса
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+          headers:
+            CorellationId:
+              schema:
+                type: string
+                example: aa1ff211-b5dd-4397-b8a8-3f640705efa2
+        '400':
+          "description": Ошибка уникальности requestId или отсутствует вид сведений с указанным validationId
+          content: {}
+          headers:
+            CorellationId:
+              schema:
+                type: string
+                example: aa1ff211-b5dd-4397-b8a8-3f640705efa2
+        '5XX':
+          description: Любая неожиданная ошибка сервиса
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            CorellationId:
+              schema:
+                type: string
+                example: aa1ff211-b5dd-4397-b8a8-3f640705efa2
+            Content-Language: 
+              description: Язык (локализация) содержимого
+              schema:
+                type: string
+                enum:
+                  - en
+                  - ru
+                example: en
+                
+  /notifications:
+    post:
+      summary: Метод получения уведомления
+      description: Метод предназначен для получения уведомления со статусом выполнения переданного ранее запроса.
+      operationId: getNotification
+      tags:
+        - Notifications
+      parameters:
+        - name: CorellationId
+          in: header
+          schema:
+            type: string
+          example: aa1ff211-b5dd-4397-b8a8-3f640705efa2
+        - name: SystemId
+          in: header
+          description: Название системы или модуля, который прислал запрос
+          required: true
+          schema:
+            type: string
+          example: Test System
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Notification"
+      responses:
+        '200':
+          description: Получение уведомления о готовности данных по запросу
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+          headers:
+            CorellationId:
+              schema:
+                type: string
+                example: aa1ff211-b5dd-4397-b8a8-3f640705efa2
+        '5XX':
+          description: Любая неожиданная ошибка сервиса
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            CorellationId:
+              schema:
+                type: string
+                example: aa1ff211-b5dd-4397-b8a8-3f640705efa2
+            Content-Language: 
+              description: Язык (локализация) содержимого
+              schema:
+                type: string
+                enum:
+                  - en
+                  - ru
+                example: en
+      
+components:
+  schemas:
+    Error:
+     type: object
+      required:
+        - title
+        - detail
+        - request
+        - time
+        - errorTraceId
+      properties:
+        title:
+          description: Краткое описание проблемы, понятное человеку
+          type: string
+          example: Entity not found
+        detail:
+          description: Описание конкретно возникшей ошибки, понятное человеку
+          type: string
+          example: Entity [Post] with id = [123456] not found. You MUST use POST to add entity instead of PUT
+        request:
+          description: Метод и URL запроса
+          type: string
+          example: PUT /posts/123456
+        time:
+          description: Время возникновения ошибки с точностью до миллисекунд
+          type: string
+          example: 1996-12-19T16:39:57.87-08:00
+        errorTraceId:
+          description: Идентификатор конкретного возникновения ошибки
+          type: string
+          example: ce1ff211-b5dd-4397-b8a8-3f640705efa2
+          
+        errorCode:
+          description: Код ошибки по бизнес логике приложения
+          type: integer
+          format: int32
+          example: 57
+          
+        exception:
+          description: Тип ошибки
+          type: string
+          example: NullPointerException
+        stacktrace:
+          description: Stacktrace в случае возникновения на сервере исключения
+          type: string
+          example: ...
+        causeException:
+          description: Тип первоначального исключения
+          type: string
+          example: ...
+        causeStacketrace:
+          description: Stacktrace первоначального исключения
+          type: string
+          example: ...
+          
+    Response:
+      type: object
+      required:
+        - request_id
+      properties:
+        request_id:
+          description: Уникальный ID входящего сообщения для связи запроса с будущим ответом.
+          type: string
+          example: bbcbebaf-3df6-4374-94da-0cd9c0ba9aea
+          
+    Notification:
+      type: object
+      required:
+        - request_id
+        - request_code
+        - status_code
+        - status_note
+        - status_date
+      properties:
+        request_id:
+          type: string
+          example: bbcbebaf-3df6-4374-94da-0cd9c0ba9aea
+        request_code:
+          description: Код, присвоенный обращению
+          type: string
+          example: aacbebaf-5df2-4374-94da-0cd9c1aa9aaa
+        status_code:
+          description: Статус обработки запроса
+          type: integer
+          format: int32
+          example: 1004
+        status_note:
+          type: string
+          example: Всё успешно, вы молодцы
+        status_date:
+          type: string
+          example: 2022-07-01T15:00:00+01

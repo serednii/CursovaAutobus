@@ -1,4 +1,4 @@
-import CreateRouteForm from "./createRouteForm";
+import CreateRouteForm from "./CreateRouteForm";
 import { getRoute } from "./getRoute";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/configs/auth";
