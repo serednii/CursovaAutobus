@@ -1,0 +1,206 @@
+openapi: '3.0.3'
+info:
+  title: Autobus List API
+  version: '1.0'
+servers:
+  - url: http://localhost:3000/api/v1
+paths:
+  /users:
+    get:
+      summary: Get all users (optionally with selected fields)
+      parameters:
+        - name: select
+          in: query
+          description: Comma-separated fields to select (e.g., name,email)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSession'
+
+    post:
+      summary: Get users by IDs and selected fields
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                select:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Filtered users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSession'
+
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Single user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSession'
+
+    patch:
+      summary: Update a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPatch'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSession'
+
+    delete:
+      summary: Delete a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted successfully
+
+components:
+  schemas:
+    UserSession:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        image:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        phone:
+          type: string
+        license:
+          type: string
+        isNewUser:
+          type: boolean
+        avatar_url:
+          type: string
+        picture:
+          type: string
+        apiKey:
+          type: string
+          nullable: true
+
+    UserPatch:
+      type: object
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        license:
+          type: string
+        isNewUser:
+          type: boolean
+        avatar_url:
+          type: string
+        picture:
+          type: string
+        apiKey:
+          type: string
+
+    RoleEnum:
+      type: string
+      enum:
+        - admin
+        - guest
+        - driver
+        - passenger
+
+
+# // Структура API
+# // GET /api/v1/users: Повертає всіх користувачів з усіма полями.
+
+# // GET /api/v1/users?select=name,email: Повертає всіх користувачів з полями name та email.
+
+# // GET /api/v1/users/:id: Повертає одного користувача за конкретним id.
+
+# // GET /api/v1/users/:id/:id2: Повертає кілька користувачів за кількома id (динамічний маршрут).
+
+# // POST /api/v1/users: Повертає кілька користувачів за масивом ids з вибраними полями.
+
+# export interface UserSession {
+#   id: string;
+#   email: string;
+#   name?: string;
+#   image?: string;
+#   firstName: string;
+#   lastName: string;
+#   role: RoleEnum;
+#   phone: string;
+#   license: string;
+#   isNewUser: boolean;
+#   avatar_url?: string;
+#   picture?: string;
+#   apiKey?: string | null;
+# }
+
+# export enum RoleEnum {
+#   ADMIN = "admin",
+#   GUEST = "guest",
+#   DRIVER = "driver",
+#   PASSENGER = "passenger",
+# }
+
+# добавити  crut api

@@ -32,6 +32,19 @@ export interface UserSession {
   apiKey?: string | null;
 }
 
+// {
+//   "id": 1,
+//   "createdAt": "2025-02-02T08:42:18.304Z",
+//   "firstName": "Mykola",
+//   "lastName": "Serednii",
+//   "email": "seredniimykola@gmail.com",
+//   "phone": "476757575700",
+//   "password": "$2b$10$.rf/aZmYU9FB/PKJYxy/9eoDlpCsC2ixxBgtqWSRcnFqTZTYvjD92",
+//   "role": "driver",
+//   "license": "456356356356",
+//   "apiKey": "f7db8c96-0ab3-434e-8741-cbabfc0342d5"
+// }
+
 // export interface UserSelect {
 //   id?: boolean;
 //   email?: boolean;

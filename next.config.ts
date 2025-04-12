@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactStrictMode: false,
+  reactStrictMode: true, // Рекомендується увімкнути для кращої перевірки помилок
   images: {
     remotePatterns: [
       {
@@ -14,6 +13,15 @@ const nextConfig: NextConfig = {
         hostname: "lh3.googleusercontent.com",
       },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/old-signin",
+        destination: "/auth/signin",
+        permanent: true,
+      },
+    ];
   },
 };
 

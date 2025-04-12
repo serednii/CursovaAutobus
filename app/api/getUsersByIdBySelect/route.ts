@@ -15,7 +15,10 @@ export async function POST(req: NextRequest) {
     // console.log("Select options oooooooooooooooo:", select, ids);
 
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
-      return NextResponse.json({ error: "Поле 'ids' є обов'язковим і має бути масивом" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Поле 'ids' є обов'язковим і має бути масивом" },
+        { status: 400 }
+      );
     }
 
     const users = await prisma.user.findMany({
@@ -28,7 +31,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (users.length === 0) {
-      return NextResponse.json({ message: "Користувачів із заданими ID не знайдено" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Користувачів із заданими ID не знайдено" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(users);
@@ -37,3 +43,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
   }
 }
+
+//  GET /api/users/12/34/122/?select=name,email  повертати користувачів з id 12, 34, 122 із полями name та email
+// GET /api/users/12/34 повертати з усіма полями
+// GET /api/users повертати з усіма полями всіх користувачів
+//GET /api/users/?select=name,email  повертати всіх користувачів з полями name та email

@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import { FaBusAlt } from "react-icons/fa";
-import "../style.scss";
 import { Overlay } from "@/components/shared/Overlay";
 import SingInComponent from "@/components/shared/singInComponent/SingInComponent";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
+import "../style.scss";
 
 export default function SignIn() {
   const { t: auth } = useAppTranslation("auth");

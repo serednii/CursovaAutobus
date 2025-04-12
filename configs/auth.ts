@@ -9,8 +9,11 @@ import { v4 as uuidv4 } from "uuid"; // Для генерації унікаль
 import { url } from "inspector";
 
 const findOrCreateUser = async (email: string, profile: any) => {
+  if (!email) {
+    throw new Error("Email is required for user creation.");
+  }
+
   let user = await prisma.user.findUnique({ where: { email } });
-  // console.log("USER GITHUB");
   if (!user) {
     user = await prisma.user.create({
       data: {
@@ -40,6 +43,9 @@ const processObj: { clientId: string; clientSecret: string } = {
 if (process.env.NEXTAUTH_URL === "https://cursovaautobus-production.up.railway.app") {
   processObj.clientId = process.env.GITHUB_CLIENT_ID_RAILWAY!;
   processObj.clientSecret = process.env.GITHUB_SECRET_RAILWAY!;
+} else if (process.env.NEXTAUTH_URL === "http://localhost:3000") {
+  processObj.clientId = process.env.GITHUB_CLIENT_ID_LOCALHOST!;
+  processObj.clientSecret = process.env.GITHUB_SECRET_LOCALHOST!;
 }
 
 export const authConfig: AuthOptions = {
@@ -47,14 +53,14 @@ export const authConfig: AuthOptions = {
     GitHubProvider({
       ...processObj,
       profile(profile) {
-        return findOrCreateUser(profile.email, profile); // Без `await`
+        return findOrCreateUser(profile.email, profile);
       },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_SECRET!,
       profile(profile) {
-        return findOrCreateUser(profile.email, profile); // Без `await`
+        return findOrCreateUser(profile.email, profile);
       },
     }),
 
@@ -63,6 +69,7 @@ export const authConfig: AuthOptions = {
         email: { label: "Email", type: "email", required: true },
         password: { label: "Password", type: "password", required: true },
       },
+
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) return null;
 
