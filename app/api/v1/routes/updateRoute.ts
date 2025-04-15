@@ -1,28 +1,32 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/prisma/prisma-client";
-import { updatedBusSeats } from "./updatedBusSeats";
-import { createPassengersSeatsList } from "../createroute/createFunctions";
-import { IUpdateRouteAPI } from "@/types/route-passenger.types";
-import { firstLetterUpperCase } from "@/lib/utils";
 import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
-import { IPassengersSeatsList } from "@/types/interface";
+import { firstLetterUpperCase } from "@/lib/utils";
 import { middleware } from "@/middleware";
+import { prisma } from "@/prisma/prisma-client";
+import { IPassengersSeatsList } from "@/types/interface";
 import { ApiResponse, ErrorResponse } from "@/types/response.types";
+import { IUpdateRouteAPI } from "@/types/route-passenger.types";
+import { NextRequest, NextResponse } from "next/server";
+import { createPassengersSeatsList } from "./createFunctions";
+import { updatedBusSeats } from "./updatedBusSeats";
 
-// API route handler for updating a route
-export async function PATCH(req: Request) {
+export async function updateRoute(req: NextRequest, id: number) {
   try {
+    // const { searchParams } = new URL(req.url);
+    // const id = searchParams.get("id");
+    // const numberId = parseInt(id || "0", 10);
     const middlewareResponse = await middleware(req);
+
+    console.log("id>>>>>>>><<<<<<<<<<<<<<<<<<<", id);
 
     if (middlewareResponse.status !== 200) {
       return middlewareResponse;
     }
+
     const resData = await req.json();
     // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
     // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].seatId);
 
     const {
-      id,
       busSeats,
       bookedSeats,
       passengersSeatsList,

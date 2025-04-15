@@ -1,4 +1,4 @@
-import { IGetSearchRouteOne, searchRoute } from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteOne, searchRoute } from "@/fetchFunctions/v1/searchRoute";
 import { selectOne } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
 import { useEffect, useState } from "react";

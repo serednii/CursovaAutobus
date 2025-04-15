@@ -60,7 +60,7 @@ interface Props {
 }
 
 function CreateRouteForm({ id, type, sessionUser, route }: Props) {
-  console.log("session User", sessionUser);
+  console.log("session User", sessionUser, route);
   const userSessionId = Number(sessionUser?.id);
 
   const { t } = useAppTranslation("createroute");
@@ -71,10 +71,11 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
 
   const router = useRouter();
   const renderRef = useRef(0);
+
   // namespaces={["createroute", "home", "form"]}
   // const { sessionUser, status } = useGetSessionParams();
-
   // console.log("CreateRoute RENDER", bears);
+
   const {
     register,
     unregister,

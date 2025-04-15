@@ -16,9 +16,8 @@ export async function getUsersByEmail(email: string): Promise<IGetUsersByIdBySel
     if (!email) return null;
     const response = await fetch(`${API_URL}/api/v1/users?email=${email}`, {
       cache: "no-store",
-      method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
       },
     });
 

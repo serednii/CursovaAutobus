@@ -2,13 +2,13 @@ import cloneDeep from "lodash/cloneDeep";
 import { Container } from "@/components/ui/Container";
 import TablePassengerDetails from "@/components/shared/driver/TablePassengerDetails";
 import { getPassengerDetails, getPassengersId } from "./action";
-import { getUsersFetchByIdsBySelect } from "@/fetchFunctions/fetchUsers";
 // import { ISubPassengersList } from "@/types/interface";
 import { fetchGetRoutesById } from "@/fetchFunctions/fetchGetRoutesById";
 import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { formatDate } from "@/lib/utils";
 import initTranslations from "@/app/i18n";
 import { PiArrowFatLinesRightDuotone } from "react-icons/pi";
+import { getUsersById } from "@/fetchFunctions/v1/getUsersById";
 
 // export default async function MyRoute({ params }: { params: { locale: string; id: string } }) {
 // export type paramsType = Promise<{ id: string }>;
@@ -31,7 +31,7 @@ export default async function MyRoute({ params }) {
 
   const uniquePassengersId = Array.from(new Set(getPassengersId(route)));
 
-  const users = await getUsersFetchByIdsBySelect(uniquePassengersId, selectUser);
+  const users = await getUsersById(uniquePassengersId, selectUser);
 
   const passengerDetails = getPassengerDetails(route, users, passengersSeatsList);
 

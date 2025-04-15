@@ -40,6 +40,7 @@ async function fetchDeleteRouteById(routeId: number) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
       },
       body: JSON.stringify({ routeId }), // Передаємо дані для видалення
     });

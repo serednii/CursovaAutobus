@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { selectRouteCity } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
-import { IGetRouteCity } from "@/fetchFunctions/searchRoute";
+import { IGetRouteCity } from "@/fetchFunctions/v1/searchRoute";
 import { fetchGetUniqueRoutes } from "@/fetchFunctions/fetchGetUniqueRoutes";
 
 export const useFetchRoutesCity = () => {

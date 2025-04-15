@@ -25,14 +25,38 @@
 // /api/deletePassengerSeatsList	/api/passengers/:id/seats (метод DELETE)	Видалення місць пасажира
 // /api/createroute	                /api/routes (метод POST)	Створення маршруту
 
-// /api/auth	                    /api/auth/login або /api/auth/signup	Уточнити дію
 
-// GET /api/routes/:id → отримати
 
-// POST /api/routes → створити
 
-// PUT /api/routes/:id → оновити
+// GET /api/routes → отримати всі маршрути
+// GET /api/routes/id → отримати по id
 
-// DELETE /api/routes/:id → видалити
+
+
+// /api/v1/auth/api/auth/login або /api/auth/signup	Уточнити дію
+
+
+////////////////////////////////////////////////////////////////
+// GET /api/v1/users/id/ отримати користувача по  id з усіма полями
+// GET /api/v1/users/id/?select=name,id,phone,email отримати користувача по id з вказаними  полями
+
+// GET /api/v1/users/ отримати всіх користувачів усіма полями
+// GET /api/v1/users/?select=name,id,phone,email отримати користувачів по  певних id з вказаними  полями
+
+// GET /api/v1/users/?email={myemail@mail.com} отримати користувача з певним email і з усіма полями
+// GET /api/v1/users/?select=name,id,phone,email&email={myemail@mail.com}отримати користувача з певним email з вказаними  полями
+
+// GET /api/v1/users/?filter[ids]={1,3,5,6,7,8,34} отримати користувача з певним email і з усіма полями
+// GET /api/v1/users/?select=name,id,phone,email&filter[ids]={1,3,5,6,7,8,34}отримати користувача з певним email з вказаними  полями
+
+// POST /api/v1/users → створити користувача
+
+// DELETE /api/v1/users/id видалити користувача по id
+////////////////////////////////////////////////////////////////
+
+// POST /api/v1/routes → створити
+// PATCH /api/v1/routes/:id → оновити дані частково
+
+// DELETE /api/v1/routes/:id → видалити
 
 // Групуй ендпоінти логічно: /routes, /users, /drivers, /passengers, /auth.

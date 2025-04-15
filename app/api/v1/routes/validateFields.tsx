@@ -1,7 +1,8 @@
-import { ICreateRoute } from "../../../types/interface";
+import { ICreateRoute } from "../../../../types/interface";
 
 export default function validateFields(data: ICreateRoute) {
   const errors: Record<string, string> = {};
+
   const {
     driverId,
     departureDate,
@@ -24,11 +25,19 @@ export default function validateFields(data: ICreateRoute) {
     // passengersSeatsList,
   } = data;
 
-  if (!Array.isArray(busSeats) || busSeats.some((seat) => typeof seat.number !== "number" || typeof seat.busSeatStatus !== "string")) {
+  if (
+    !Array.isArray(busSeats) ||
+    busSeats.some(
+      (seat) => typeof seat.number !== "number" || typeof seat.busSeatStatus !== "string"
+    )
+  ) {
     errors.busSeats = `${busSeats}  Invalid data: busSeats must be an array of valid seat objects`;
   }
 
-  if (!Array.isArray(intermediateStops) || intermediateStops.some((stop) => typeof stop !== "string")) {
+  if (
+    !Array.isArray(intermediateStops) ||
+    intermediateStops.some((stop) => typeof stop !== "string")
+  ) {
     errors.intermediateStops = `${intermediateStops} Invalid data: intermediateStops must be an array of strings`;
   }
 

@@ -1,6 +1,10 @@
-import { IGetSearchRouteManyOption } from "@/fetchFunctions/searchRoute";
+import {
+  IGetSearchRouteManyOption,
+  IGetSearchRouteOneOption,
+} from "@/fetchFunctions/v1/searchRoute";
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
+import { IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
 // import { UserSelect } from "@/types/next-auth";
 // import { ca } from "date-fns/locale";
 import { NextRequest, NextResponse } from "next/server";
@@ -27,7 +31,7 @@ export async function POST(req: NextRequest) {
     }: {
       departureSearch?: string;
       arrivalToSearch?: string;
-      select: IGetSearchRouteManyOption;
+      select: IGetSearchRouteManyOption | IGetSearchRouteOneOption;
       startOfDay?: string; // Конкретна дата у форматі YYYY-MM-DD
       endOfDay?: string;
       limit?: number;
@@ -73,31 +77,11 @@ export async function POST(req: NextRequest) {
         gt: new Date(),
       },
       ...dateFilter,
+      ...(wifi ? { wifi: true } : {}),
+      ...(coffee ? { coffee: true } : {}),
+      ...(power ? { power: true } : {}),
+      ...(restRoom ? { restRoom: true } : {}),
     };
-
-    // if (departureSearch) {
-    //   where.departureFrom = { contains: departureSearch };
-    // }
-
-    // if (arrivalToSearch) {
-    //   where.arrivalTo = { contains: arrivalToSearch };
-    // }
-
-    if (wifi) {
-      where.wifi = wifi;
-    }
-
-    if (coffee) {
-      where.coffee = coffee;
-    }
-
-    if (power) {
-      where.power = power;
-    }
-
-    if (restRoom) {
-      where.restRoom = restRoom;
-    }
 
     const routes = await prisma.routeDriver.findMany({
       where,
@@ -116,15 +100,6 @@ export async function POST(req: NextRequest) {
       },
       distinct: ["departureFrom", "arrivalTo"],
     });
-
-    // const routes: RouteDriver[] | null = await prisma.$queryRaw<RouteDriver[]>`
-    //   SELECT * FROM "RouteDriver"
-    //   WHERE "departureFrom" ILIKE ${`%${departureSearch ?? ""}%`}
-    //   AND "arrivalTo" ILIKE ${`%${arrivalToSearch ?? ""}%`}
-    //   AND "wifi" = ${wifi}
-    //   AND "arrivalDate" > NOW()
-    //   LIMIT ${limit}
-    // `;
 
     const safeRoutes = Array.isArray(routes) ? routes : []; // Гарантуємо, що це масив
     const saFeRoutesCity = Array.isArray(routesCity) ? routesCity : [];

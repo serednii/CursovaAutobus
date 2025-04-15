@@ -1,4 +1,7 @@
-import { IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/searchRoute";
+import {
+  IGetSearchRouteManyOption,
+  IGetSearchRouteOneOption,
+} from "@/fetchFunctions/v1/searchRoute";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "./generaty.types";
 
 export interface IGetSearchRouteManyOptionData {
@@ -10,7 +13,9 @@ export interface IGetSearchRouteManyOptionData {
   coffee: boolean;
   power: boolean;
   restRoom: boolean;
-  select: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList;
+  select: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> &
+    IGetBusSeatsBoolean &
+    IGetPassengersSeatsList;
 }
 
 export interface IGetSearchRouteOneOptionData {

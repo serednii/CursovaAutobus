@@ -8,20 +8,22 @@ import { RoleEnum } from "@/enum/shared.enums";
 import { v4 as uuidv4 } from "uuid"; // Для генерації унікального ключа
 import { url } from "inspector";
 
-const findOrCreateUser = async (email: string, profile: any) => {
+const findOrCreateUser = async (profile: any) => {
+  const email = profile.email;
+  console.log("profile", profile);
   if (!email) {
     throw new Error("Email is required for user creation.");
   }
-
   let user = await prisma.user.findUnique({ where: { email } });
+  console.log("user", user);
+
   if (!user) {
     user = await prisma.user.create({
       data: {
         email,
         firstName: profile.name || "",
         lastName: "",
-        role: "user",
-        phone: "",
+        role: RoleEnum.PASSENGER,
         license: "no license",
         password: "", // Пароль не потрібен для GitHub авторизації
         apiKey: uuidv4(),
@@ -53,14 +55,14 @@ export const authConfig: AuthOptions = {
     GitHubProvider({
       ...processObj,
       profile(profile) {
-        return findOrCreateUser(profile.email, profile);
+        return findOrCreateUser(profile);
       },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_SECRET!,
       profile(profile) {
-        return findOrCreateUser(profile.email, profile);
+        return findOrCreateUser(profile);
       },
     }),
 
@@ -89,7 +91,7 @@ export const authConfig: AuthOptions = {
           firstName: user.firstName,
           lastName: user.lastName,
           role: user.role as RoleEnum,
-          phone: user.phone,
+          phone: user.phone ?? "",
           license: user.license,
           isNewUser: false,
           apiKey: user.apiKey,

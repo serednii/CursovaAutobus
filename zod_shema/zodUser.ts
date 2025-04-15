@@ -1,5 +1,5 @@
 import { RoleEnum } from "@/enum/shared.enums";
-import { IGetUsersByIdBySelect } from "@/fetchFunctions/fetchUsers";
+import { IGetUsersByIdBySelect } from "@/fetchFunctions/fetchUsersDELETE";
 import { UserSelect } from "@/types/next-auth";
 import { z } from "zod";
 

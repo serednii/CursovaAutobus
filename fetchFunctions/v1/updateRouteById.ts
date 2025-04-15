@@ -1,5 +1,6 @@
 import { GenerateType } from "@/types/generaty.types";
 import { IRouteDataBase } from "@/types/interface";
+import { IUpdateRoute } from "@/types/route-passenger.types";
 import { zodSchemaUpdateRouteResData } from "@/zod_shema/zodGetUpdateRoute";
 import toast from "react-hot-toast";
 
@@ -31,13 +32,21 @@ type TRouteSeatUpdateKeys = (
 
 export type TRouteUpdateResult = GenerateType<IRouteDataBase, TRouteSeatUpdateKeys>;
 
-async function fetchUpdateRouteById<TResult>(updateRouteById: TResult) {
+async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TResult) {
+  const id = updateRouteById.id;
+  console.log(
+    "updateRouteById.ts",
+    updateRouteById,
+    "============",
+    `${API_URL}/api/v1/routes/${id}`
+  );
   try {
-    const response = await fetch(`${API_URL}/api/updateRouteById`, {
+    const response = await fetch(`${API_URL}/api/v1/routes/${id}`, {
       cache: "no-store",
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
       },
       body: JSON.stringify(updateRouteById),
     });
@@ -64,4 +73,41 @@ async function fetchUpdateRouteById<TResult>(updateRouteById: TResult) {
   }
 }
 
-export default fetchUpdateRouteById;
+export default updateRouteById;
+// driverId: number;
+// departureDate: string;
+// arrivalDate: string;
+// busSeats: IBusSeats[];
+// modelBus: string;
+// wifi: boolean;
+// coffee: boolean;
+// power: boolean;
+// restRoom: boolean;
+// routePrice: number;
+// busNumber: string;
+// maxSeats: number;
+// bookedSeats: number;
+// selectBusLayout: string;
+// notate: string;
+// departureFrom: string;
+// arrivalTo: string;
+// id: number;
+
+// id: number;
+// departureDate: string;
+// arrivalDate: string;
+// departureFrom: string;
+// arrivalTo: string;
+// routePrice: number;
+// busSeats: IBusSeats[];
+// driverId: number;
+// busNumber: string;
+// selectBusLayout: string;
+// notate: string;
+// modelBus: string;
+// maxSeats: number;
+// bookedSeats: number;
+// wifi: boolean;
+// coffee: boolean;
+// power: boolean;
+// restRoom: boolean;

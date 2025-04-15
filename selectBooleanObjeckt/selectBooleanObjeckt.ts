@@ -1,4 +1,8 @@
-import { IGetSearchRouteCityOption, IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/searchRoute";
+import {
+  IGetSearchRouteCityOption,
+  IGetSearchRouteManyOption,
+  IGetSearchRouteOneOption,
+} from "@/fetchFunctions/v1/searchRoute";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 
 const busSeats = {
@@ -34,7 +38,9 @@ const baseDate = {
   routePrice: true, // Залишаємо це поле
 };
 
-export const selectMany: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> & IGetBusSeatsBoolean & IGetPassengersSeatsList = {
+export const selectMany: Omit<IGetSearchRouteManyOption, "busSeats" | "passengersSeatsList"> &
+  IGetBusSeatsBoolean &
+  IGetPassengersSeatsList = {
   id: true,
   driverId: true,
   ...baseDate,
@@ -59,7 +65,11 @@ export const selectMyBookings = {
   passengersSeatsList,
 };
 
-import { IGetSearchRouteAgainOption, IGetSearchRouteSeatSelectionOption, IGetSearchRouteUpdateOption } from "@/fetchFunctions/fetchGetRoutesById";
+import {
+  IGetSearchRouteAgainOption,
+  IGetSearchRouteSeatSelectionOption,
+  IGetSearchRouteUpdateOption,
+} from "@/fetchFunctions/fetchGetRoutesById";
 export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   // export const select = {
   id: true,
@@ -74,8 +84,11 @@ export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
 };
 
 import { IGetSearchRouteMyRouteOption } from "@/fetchFunctions/fetchGetRoutesById";
-import { IGetUsersByIdBySelectOption } from "@/fetchFunctions/fetchUsers";
-import { IGetRoutesByDriverListBlockedOption, IGetRoutesByDriverOption } from "@/fetchFunctions/fetchGetRoutesByDriverId";
+import { IGetUsersByIdBySelectOption } from "@/fetchFunctions/fetchUsersDELETE";
+import {
+  IGetRoutesByDriverListBlockedOption,
+  IGetRoutesByDriverOption,
+} from "@/fetchFunctions/fetchGetRoutesByDriverId";
 
 export const selectRoute: IGetSearchRouteMyRouteOption = {
   ...baseDate,

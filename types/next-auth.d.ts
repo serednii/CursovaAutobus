@@ -24,7 +24,7 @@ export interface UserSession {
   firstName: string;
   lastName: string;
   role: RoleEnum;
-  phone: string;
+  phone?: string;
   license: string;
   isNewUser: boolean;
   avatar_url?: string;
@@ -32,6 +32,9 @@ export interface UserSession {
   apiKey?: string | null;
 }
 
+export interface UserUserSession {
+  user: UserSession;
+}
 // {
 //   "id": 1,
 //   "createdAt": "2025-02-02T08:42:18.304Z",

@@ -2,7 +2,7 @@ fetch('http://localhost:3000/api/testuser', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
-        'api-key': 'f7db8c96-0ab3-434e-8741-cbabfc0342d5',
+        apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
     },
     body: {}
 })

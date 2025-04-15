@@ -63,8 +63,15 @@ import i18nConfig from "./i18nConfig";
 export async function middleware(req: any) {
   const url = req.nextUrl.clone();
   const token = await getToken({ req });
-  console.log("Request URL:", req.url);
+  // console.log("token", token);
+  // console.log("Request URL:", req);
   const { pathname } = req.nextUrl;
+  const apiKey = token?.apiKey;
+  console.log("midlevare pathname apiKey", pathname, token?.apiKey);
+
+  // if (apiKey !== process.env.NEXT_PUBLIC_API_KEY && pathname.includes("/api")) {
+  //   return NextResponse.json({ message: "Невірний API ключ" }, { status: 403 });
+  // }
 
   // Якщо токен відсутній
   if (!token) {
@@ -81,6 +88,11 @@ export async function middleware(req: any) {
       return NextResponse.redirect(url);
     }
   } else {
+    // if (token.isNewUser) {
+    //   // token.isNewUser = false;
+    //   url.pathname = "/selectrole";
+    //   return NextResponse.redirect(url);
+    // }00000000
     // Якщо токен є — перевірка на роль
     const urlRedirect = url.searchParams.get("callbackUrl");
 
@@ -88,7 +100,7 @@ export async function middleware(req: any) {
       ["/signin", "/selectrole", "/registerdriver", "/registerpassenger"].some((path) =>
         pathname.includes(path)
       ) ||
-      (["createroute", "myroutes", "myroute"].some((path) => pathname.includes(path)) &&
+      (["/createroute", "/myroutes", "/myroute"].some((path) => pathname.includes(path)) &&
         token.role !== RoleEnum.DRIVER)
     ) {
       url.pathname = urlRedirect ? decodeURIComponent(urlRedirect) : "/";

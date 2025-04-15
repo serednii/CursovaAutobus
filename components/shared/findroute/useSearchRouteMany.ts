@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { debounce } from "lodash";
-import { IGetSearchRouteMany, searchRoute } from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteMany, searchRoute } from "@/fetchFunctions/v1/searchRoute";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
@@ -57,7 +57,10 @@ export const useSearchRouteMany = ({
 
       const newDate =
         departureDate &&
-        `${departureDate.getFullYear()}-${String(departureDate.getMonth() + 1).padStart(2, "0")}-${String(departureDate.getDate()).padStart(2, "0")}`;
+        `${departureDate.getFullYear()}-${String(departureDate.getMonth() + 1).padStart(
+          2,
+          "0"
+        )}-${String(departureDate.getDate()).padStart(2, "0")}`;
       const startOfDay = new Date(`${newDate}T00:00:00`);
 
       const endOfDay = new Date(`${newDate}T23:59:59`);
@@ -84,14 +87,20 @@ export const useSearchRouteMany = ({
             if (routes) {
               const filterRoutes = routes.filter((item) => item.driverId !== userSessionId);
 
-              const filterHighlightedDates = filterRoutes.map((item: IGetSearchRouteMany) => new Date(item.departureDate));
+              const filterHighlightedDates = filterRoutes.map(
+                (item: IGetSearchRouteMany) => new Date(item.departureDate)
+              );
               //update list date routes
               setHighlightedDates(
-                (departureFrom || arrivalTo) && filterHighlightedDates.length > 0 ? filterHighlightedDates : highlightedDatesRef.current
+                (departureFrom || arrivalTo) && filterHighlightedDates.length > 0
+                  ? filterHighlightedDates
+                  : highlightedDatesRef.current
               );
               const newSearchDates: TypeBaseRoute[] | [] = filterRoutes.map((item) => {
                 const isReservation = item.busSeats.some(
-                  (busSeat) => busSeat.passenger === userSessionId && busSeat.busSeatStatus === SeatStatusEnum.RESERVED
+                  (busSeat) =>
+                    busSeat.passenger === userSessionId &&
+                    busSeat.busSeatStatus === SeatStatusEnum.RESERVED
                 ); //if there is a reserved user on this route
                 const newItem: TypeBaseRoute = {
                   id: item.id,

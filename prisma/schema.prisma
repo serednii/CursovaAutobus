@@ -13,7 +13,7 @@ model User {
   firstName           String
   lastName            String
   email               String                @unique
-  phone               String                @unique
+  phone               String?               @unique
   password            String
   role                String
   license             String

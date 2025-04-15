@@ -1,7 +1,7 @@
 import { IUpdateRoute } from "@/types/route-passenger.types";
 import { allParametersRoute, busSeats, passengersSeatsList } from "./zodBase";
 import { z } from "zod";
-import { TRouteUpdateResult } from "@/fetchFunctions/fetchUpdateRouteById";
+import { TRouteUpdateResult } from "@/fetchFunctions/fetchUpdateRouteByIdDELETE";
 
 export const zodSchemaUpdateRouteIn: z.ZodType<IUpdateRoute> = z.object({
   id: z.number(),

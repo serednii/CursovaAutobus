@@ -4,28 +4,43 @@ import { zodSchemaUsers } from "@/zod_shema/zodUser";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-type selectUserKeys = ("id" | "firstName" | "lastName" | "email" | "phone" | "role") & keyof UserDataBase;
+type selectUserKeys = ("id" | "firstName" | "lastName" | "email" | "phone" | "role") &
+  keyof UserDataBase;
 
 export type IGetUsersByIdBySelectOption = GenerateBooleanType<selectUserKeys>;
 export type IGetUsersByIdBySelect = GenerateType<UserDataBase, selectUserKeys>;
 
-export async function getUsersFetchByIdsBySelect(ids: number[], select: IGetUsersByIdBySelectOption): Promise<IGetUsersByIdBySelect[] | null> {
+export async function getUsersById(
+  ids: number[],
+  select: IGetUsersByIdBySelectOption
+): Promise<IGetUsersByIdBySelect[] | null> {
   try {
     if (ids && Array.isArray(ids) && ids.length === 0) return null;
-    const response = await fetch(`${API_URL}/api/getUsersByIdBySelect`, {
-      cache: "no-store",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ids, select }),
-    });
+    if (select === null) return null;
+    const selectString = Object.keys(select).join(",");
+    const idString = ids.join(",");
+    console.log(
+      "getUsersByIdsBySelect",
+      `${API_URL}/api/v1/users/?filter[ids]=${idString}&select=${selectString}`
+    );
+
+    const response = await fetch(
+      `${API_URL}/api/v1/users/?filter[ids]=${idString}&select=${selectString}`,
+      {
+        cache: "no-store",
+        headers: {
+          apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
 
-    const data: unknown = await response.json();
+    const { data }: { data: unknown } = await response.json();
+    console.log("data getUsersById============", data);
+
     try {
       const parsedData: IGetUsersByIdBySelect[] | null = zodSchemaUsers.array().parse(data);
       return parsedData;

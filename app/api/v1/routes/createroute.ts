@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
-import { ICreateRoute } from "../../../types/interface";
-import { createBusSeats, createIntermediateStops, createPassengersSeatsList } from "./createFunctions";
+import { ICreateRoute } from "../../../../types/interface";
+import {
+  createBusSeats,
+  createIntermediateStops,
+  createPassengersSeatsList,
+} from "./createFunctions";
 import { middleware } from "@/middleware";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
@@ -64,7 +68,10 @@ export async function createRoute(req: NextRequest) {
     }
 
     // // Створення проміжних зупинок
-    const resultIntermediateStops = await createIntermediateStops(intermediateStops, routeDriver.id);
+    const resultIntermediateStops = await createIntermediateStops(
+      intermediateStops,
+      routeDriver.id
+    );
     if (!resultIntermediateStops) {
       return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
     }
@@ -76,15 +83,27 @@ export async function createRoute(req: NextRequest) {
     }
 
     // Створення списку пасажирів
-    const resultPassengersSeatsList = await createPassengersSeatsList(passengersSeatsList, routeDriver.id);
+    const resultPassengersSeatsList = await createPassengersSeatsList(
+      passengersSeatsList,
+      routeDriver.id
+    );
     if (!resultPassengersSeatsList) {
-      return NextResponse.json({ error: "Failed to create passengers seats list" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Failed to create passengers seats list" },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ routeDriver, resultIntermediateStops, resultBusSeats }, { status: 201 });
+    return NextResponse.json(
+      { routeDriver, resultIntermediateStops, resultBusSeats },
+      { status: 201 }
+    );
   } catch (error: unknown) {
     if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
-      return NextResponse.json({ error: "Маршрут із зазначеним 'routeId' не знайдено" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Маршрут із зазначеним 'routeId' не знайдено" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ error: "Внутрішня помилка сервера" }, { status: 500 });

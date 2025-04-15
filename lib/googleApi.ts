@@ -28,7 +28,13 @@ const destination = "San Antonio";
 export const getStops = async () => {
   try {
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${apiKey}`
+      `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${apiKey}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
+        },
+      }
     );
 
     if (!response.ok) {

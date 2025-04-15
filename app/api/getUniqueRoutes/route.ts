@@ -75,6 +75,10 @@ export async function POST(req: NextRequest) {
         gt: new Date(),
       },
       ...dateFilter,
+      ...(wifi ? { wifi: true } : {}),
+      ...(coffee ? { coffee: true } : {}),
+      ...(power ? { power: true } : {}),
+      ...(restRoom ? { restRoom: true } : {}),
     };
 
     if (departureSearch) {
@@ -83,22 +87,6 @@ export async function POST(req: NextRequest) {
 
     if (arrivalToSearch) {
       where.arrivalTo = { contains: arrivalToSearch };
-    }
-
-    if (wifi) {
-      where.wifi = wifi;
-    }
-
-    if (coffee) {
-      where.coffee = coffee;
-    }
-
-    if (power) {
-      where.power = power;
-    }
-
-    if (restRoom) {
-      where.restRoom = restRoom;
     }
 
     const routes = await prisma.routeDriver.findMany({

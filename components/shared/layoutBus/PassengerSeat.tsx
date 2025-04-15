@@ -16,7 +16,7 @@ interface Props {
   params: BusSeatInfo;
   // dataLayoutBus: ILayoutData;
   // handleDataLayoutBus: (value: ILayoutData) => void;
-  sessionUser: UserSession | null;
+  sessionUser: UserSession;
   action: RoleEnum;
   driverId: number | null | undefined;
 }

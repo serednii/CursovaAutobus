@@ -7,6 +7,7 @@ const fetchCreateRoute = async <T>(data: T): Promise<any> => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
       },
       body: JSON.stringify(data),
     });

@@ -58,7 +58,10 @@ class FetchGetUniqueRoutes {
           const response = await fetch(`${API_URL}/api/getUniqueRoutes`, {
             cache: "no-store",
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
+            },
             body: JSON.stringify(data),
           });
 

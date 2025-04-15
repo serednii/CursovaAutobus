@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { IGetSearchRouteMany, IGetSearchRouteOne } from "@/fetchFunctions/searchRoute";
+import { IGetSearchRouteMany, IGetSearchRouteOne } from "@/fetchFunctions/v1/searchRoute";
 import { busSeats, dateAndNameCitySchema, passengersSeatsList } from "./zodBase";
 
 export const ZodSchemaSearchRouteMany: z.ZodType<IGetSearchRouteMany> = z.object({

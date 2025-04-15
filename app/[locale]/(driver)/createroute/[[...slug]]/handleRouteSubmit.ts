@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
-import fetchUpdateRouteById from "@/fetchFunctions/fetchUpdateRouteById";
 import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
@@ -12,6 +11,8 @@ import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodBase";
 import { delay } from "@/lib/utils";
 import { transformData } from "./action";
+
+import updateRouteById from "@/fetchFunctions/v1/updateRouteById";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -24,7 +25,7 @@ export const handleRouteSubmit =
     type: string | string[],
     id: number,
     dataLayoutBus: ILayoutData | null | undefined,
-    sessionUser: UserSession | null,
+    sessionUser: UserSession,
     router: ReturnType<typeof useRouter>
   ): SubmitHandler<FormValuesRoute> =>
   async (dataForm) => {
@@ -53,14 +54,11 @@ const handleUpdateRoute = async (
   id: number,
   router: ReturnType<typeof useRouter>
 ) => {
-  const parsedData = z.object(zodUpdateRouteAll).parse({ ...routeData, id });
-
+  console.log("parsedData", id, routeData);
+  const parsedData = z.object(zodUpdateRouteAll).parse({ ...routeData, id: 148 });
   try {
     // console.log("Updating Route:", { ...parsedData, id });
-    const response = await fetchUpdateRouteById<ISendDataBaseRouteDriverWidthId>({
-      ...parsedData,
-      id,
-    });
+    const response = await updateRouteById<ISendDataBaseRouteDriverWidthId>(parsedData);
 
     if (!response) {
       toast.error("Your reservation has not been completed", { duration: timeShowToast });

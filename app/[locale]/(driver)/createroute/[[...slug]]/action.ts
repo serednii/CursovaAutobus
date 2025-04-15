@@ -61,7 +61,7 @@ export const transformData = (
       passengersSeatsList.subPassengersList = subPassengersList;
     }
   }
-
+  console.log("XXXXXXXXX", sessionUser.id, Number(sessionUser.id));
   return {
     ...data,
     routePrice: Number(data.routePrice),

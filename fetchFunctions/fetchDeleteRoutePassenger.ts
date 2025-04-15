@@ -19,6 +19,7 @@ async function fetchDeleteRoutePassenger(
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
       },
       body: JSON.stringify(newDeleteRouteIdData), // Передаємо дані для видалення
     });
