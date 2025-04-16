@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
     if (arrivalToSearch) {
       where.arrivalTo = { contains: arrivalToSearch };
     }
-
+    console.log("select getUniqueRoutes", select);
     const routes = await prisma.routeDriver.findMany({
       where,
       take: limit,

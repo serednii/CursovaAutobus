@@ -28,6 +28,7 @@ export const useClickToDate = ({
   useEffect(() => {
     if (clickToDate) {
       setIsLoadingOne(true);
+      console.log("**************------------", data);
       searchRoute
         .searchRoute(data, "one")
         .then((value) => {

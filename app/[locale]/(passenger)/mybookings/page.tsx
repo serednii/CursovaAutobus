@@ -15,7 +15,7 @@ export default async function MyBookings() {
     userSessionId,
     selectMyBookings
   );
-  console.log("routesPassenger", routesPassenger);
+  // console.log("routesPassenger", routesPassenger);
   // const { removeRoutePassenger } = useDeletePassengerRoute(routesPassenger, userSessionId, setReload);
 
   if (routesPassenger === null) return null;

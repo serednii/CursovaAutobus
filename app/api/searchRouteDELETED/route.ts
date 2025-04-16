@@ -41,17 +41,17 @@ export async function POST(req: NextRequest) {
       restRoom?: boolean;
     } = await req.json();
 
-    // console.log("services search select");
-    // console.log("select", select);
-    // console.log("departureSearch", departureSearch);
-    // console.log("arrivalToSearch", arrivalToSearch);
-    // console.log("startOfDay", startOfDay);
-    // console.log("endOfDay", endOfDay);
-    // console.log("wifi", wifi);
-    // console.log("coffee", coffee);
-    // console.log("power", power);
-    // console.log("restRoom", restRoom);
-    // console.log("limit", limit);
+    console.log("services search select");
+    console.log("select", select);
+    console.log("departureSearch", departureSearch);
+    console.log("arrivalToSearch", arrivalToSearch);
+    console.log("startOfDay", startOfDay);
+    console.log("endOfDay", endOfDay);
+    console.log("wifi", wifi);
+    console.log("coffee", coffee);
+    console.log("power", power);
+    console.log("restRoom", restRoom);
+    console.log("limit", limit);
 
     // Формуємо діапазон часу для конкретного дня
     let dateFilter = {};

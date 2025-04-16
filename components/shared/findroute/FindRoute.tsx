@@ -57,6 +57,7 @@ export default function FindRoute({ className }: { className?: string }) {
     fullDepartureFromCity,
     fullArrivalToCity,
   } = useFetchRoutesCity();
+
   console.log("departureFromCity", departureFromCity);
 
   useSearchRouteMany({

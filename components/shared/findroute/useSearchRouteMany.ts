@@ -61,10 +61,19 @@ export const useSearchRouteMany = ({
           2,
           "0"
         )}-${String(departureDate.getDate()).padStart(2, "0")}`;
+
       const startOfDay = new Date(`${newDate}T00:00:00`);
 
       const endOfDay = new Date(`${newDate}T23:59:59`);
-      // console.log("newDate", newDate, "startOfDay", startOfDay, "endOfDay", endOfDay);
+      console.log(
+        "newDate",
+        departureDate,
+        newDate,
+        "startOfDay",
+        startOfDay,
+        "endOfDay",
+        endOfDay
+      );
 
       const data: IGetSearchRouteManyOptionData = {
         departureSearch: firstLetterUpperCase(departureFrom),
@@ -77,7 +86,7 @@ export const useSearchRouteMany = ({
         restRoom,
         select: selectMany,
       };
-
+      console.log("data useSearchRouteMany", data);
       if (departureFrom || arrivalTo || departureDate) {
         setIsLoadingOne(true);
         searchRoute

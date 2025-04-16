@@ -7,7 +7,6 @@ import {
 // import { ZodFetchGetRoutesByICity } from "@/zod_shema/zodGetRoutesById";
 import { ZodSchemaSearchRouteMany, ZodSchemaSearchRouteOne } from "@/zod_shema/zodGetSearchRoute";
 import { z } from "zod";
-import { buildRouteSearchURL } from "../utils";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -67,32 +66,15 @@ class SearchRoute {
     this.types.push({
       type,
       schema,
-      search: async (
-        data: T extends IGetSearchRouteManyOptionData
-          ? IGetSearchRouteOneOptionData
-          : IGetSearchRouteManyOptionData
-      ): Promise<K | null> => {
-        const { select, ...rest } = data;
-        const selectString = Object.keys(select).join(",");
-        const searchURL = buildRouteSearchURL(rest);
-        console.log(
-          "data searchRoute",
-          data,
-          rest,
-          type,
-          `${API_URL}/api/v1/routes?${searchURL}&select=${selectString}`
-        );
-
+      search: async (data: T): Promise<K | null> => {
+        // console.log("data searchRoute", data);
         try {
-          const response = await fetch(
-            `${API_URL}/api/v1/routes?${searchURL}&select=${selectString}`,
-            {
-              cache: "no-store",
-              headers: {
-                apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
-              },
-            }
-          );
+          const response = await fetch(`${API_URL}/api/searchRoute`, {
+            cache: "no-store",
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
 
           if (!response.ok)
             throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
@@ -111,12 +93,10 @@ class SearchRoute {
   //pattern
   async searchRoute<T, K>(data: T, type: string): Promise<K | null> {
     const foundType = this.types.find((item) => item.type === type);
-
     if (!foundType) {
       console.error(`Type "${type}" not found`);
       return null;
     }
-
     return foundType.search(data);
   }
 }
