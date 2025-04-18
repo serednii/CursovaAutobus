@@ -1,4 +1,4 @@
-import { IGetRouteMyRoute } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetRouteMyRoute } from "@/fetchFunctions/v1/getRoutesById";
 import { IGetUsersByIdBySelect } from "@/fetchFunctions/fetchUsersDELETE";
 import { SubPassengerDetails } from "@/types/form.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
@@ -48,10 +48,12 @@ export const getPassengerDetails = (
         };
       }
 
-      const subPassengersLists: SubPassengerDetails[] = subOrderPassenger.subPassengersList;
+      console.log("subOrderPassenger", passengersSeatsList, subOrderPassenger);
 
-      const [subUser] = subPassengersLists.splice(0, 1);
+      if (!subOrderPassenger.subPassengersList) return;
+      const subPassengersLists: SubPassengerDetails[] = subOrderPassenger?.subPassengersList;
 
+      const [subUser] = subPassengersLists?.splice(0, 1);
       return {
         seat: index + 1,
         orderPassengers: `${user?.firstName || ""} ${user?.lastName || ""}`,

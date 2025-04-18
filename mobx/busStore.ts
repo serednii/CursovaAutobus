@@ -43,7 +43,7 @@ class BusStore {
       .map((e) => e.passenger);
 
     // console.log("newIdOrderPassengers in busStore ---------------- ", newIdOrderPassengers);
-    if (action === RoleEnum.PASSENGER && newIdOrderPassengers.length > 0)
+    if (action === RoleEnum.PASSENGER && newIdOrderPassengers.length >= 0)
       newIdOrderPassengers.pop();
     this.setIdOrderPassengers(newIdOrderPassengers);
   };

@@ -4,29 +4,25 @@ import { middleware } from "@/middleware";
 import { IGetUsersByIdBySelect } from "@/fetchFunctions/fetchUsersDELETE";
 import { zodSchemaUsers, zodSchemaUsersInApi } from "@/zod_shema/zodUser";
 import { UserSelect } from "@/types/next-auth";
+import { checkApiKey, parseStringUserToObject } from "../../routes/util";
 
 export async function GET(req: NextRequest, { params }: { params: { id?: string } }) {
   try {
     // Викликаємо middleware для перевірки авторизації
-    const middlewareResponse = await middleware(req);
-    if (middlewareResponse.status !== 200) {
-      return middlewareResponse;
+    // const middlewareResponse = await middleware(req);
+    // if (middlewareResponse.status !== 200) {
+    //   return middlewareResponse;
+    // }
+    const isApiKeyValid = checkApiKey(req);
+    if (!isApiKeyValid) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
     }
-
-    const { searchParams } = new URL(req.url);
-    const selectParam = searchParams.get("select"); // Наприклад: 'name,email'
-    // const ids = searchParams.get("ids");
-
-    console.log("selectParam", selectParam);
-
-    // Перетворюємо select параметр на список полів
-    const selectFields = selectParam ? selectParam.split(",") : [];
-    console.log("selectFields", selectFields);
-    const selectObject: Record<string, boolean> = selectFields.reduce((acc, field) => {
-      acc[field] = true;
-      return acc;
-    }, {} as Record<string, boolean>);
     const { id } = await params;
+    const { searchParams } = new URL(req.url);
+    const selectParams = searchParams.get("select") || ""; // Наприклад: 'name,email'
+
+    const selectObject: Record<string, boolean> = parseStringUserToObject(selectParams);
+
     try {
       const parsedData: Partial<UserSelect> | null = zodSchemaUsersInApi.parse(selectObject);
       console.log("parsedData", parsedData);
@@ -35,28 +31,28 @@ export async function GET(req: NextRequest, { params }: { params: { id?: string 
       }
 
       // Якщо id передано в параметрах запиту, шукаємо за цими id
-      if (id) {
-        const idNumber = parseInt(id || "0", 10);
-        console.log("ids", id);
-        const users = await prisma.user.findMany({
-          where: {
-            id: idNumber, // Пошук користувачів за кількома id
-          },
-          select: selectFields.length ? selectObject : undefined,
-        });
-
-        if (users.length === 0) {
-          return NextResponse.json(
-            { message: "Користувачів із заданими ID не знайдено" },
-            { status: 404 }
-          );
-        }
-        return NextResponse.json(users);
+      if (!id) {
+        return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
       }
 
-      // Якщо id не передано
+      const idNumber = parseInt(id || "0", 10);
+      console.log("ids", id);
+      const users = await prisma.user.findMany({
+        where: {
+          id: idNumber, // Пошук користувачів за кількома id
+        },
+        select: selectParams ? selectObject : undefined,
+      });
 
-      return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
+      if (users.length === 0) {
+        return NextResponse.json(
+          { message: "Користувачів із заданими ID не знайдено" },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json(users);
+
+      // Якщо id не передано
     } catch (parseError: unknown) {
       console.error("Помилка парсингу даних:", parseError);
       throw parseError;

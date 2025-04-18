@@ -26,7 +26,7 @@ export function useSubPassengers({
   sessionUser,
 }: UseSubPassengersProps) {
   const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[]>([]);
-
+  console.log("SubPassengerFields.tsx useSubPassengers myListPassengers", subPassengers);
   useEffect(() => {
     if (!myListPassengers) renderRef.current = 4;
 
@@ -34,6 +34,7 @@ export function useSubPassengers({
       renderRef.current++;
       setSubPassengers(myListPassengers.subPassengersList);
     } else if (renderRef.current > 2) {
+      if (!subPassengers) return;
       let updatedPassengers = [...subPassengers];
 
       // Очистка полів у react-hook-form

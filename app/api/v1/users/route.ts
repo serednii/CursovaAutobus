@@ -6,43 +6,48 @@ import { UserSelect } from "@/types/next-auth";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { method } from "lodash";
-import { parseStringToObject } from "../routes/util";
+import { checkApiKey, parseStringUserToObject } from "../routes/util";
 
 export async function GET(req: NextRequest) {
   try {
     // Викликаємо middleware для перевірки авторизації
-    const middlewareResponse = await middleware(req);
-    if (middlewareResponse.status !== 200) {
-      return middlewareResponse;
-    }
+    // const middlewareResponse = await middleware(req);
+    // if (middlewareResponse.status !== 200) {
+    //   return middlewareResponse;
+    // }
 
     const { searchParams } = new URL(req.url);
 
+    const isApiKeyValid = checkApiKey(req);
+    if (!isApiKeyValid) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+    }
     const selectParams = searchParams.get("select") || ""; // Наприклад: 'name,email'
-    const selectObject = parseStringToObject(selectParams);
+    const selectObject = parseStringUserToObject(selectParams);
     const email = searchParams.get("email");
-
+    const limit = parseInt(searchParams.get("limit") || "100", 10);
     const idsStr = searchParams.get("filter[ids]");
+    console.log("+++++++++++", req.headers.get("apiKey"));
+
     const ids = idsStr ? idsStr.split(",").map(Number) : [];
 
     const searchParamsObject: { email?: string; id?: { in: number[] } } = {};
 
     if (email) {
       searchParamsObject.email = email;
-    } else {
+    } else if (ids && ids.length > 0) {
       searchParamsObject.id = { in: ids };
     }
-
-    console.log("selectParam", searchParamsObject);
-    // console.log("ids", ids);
+    // console.log("searchParamsObject", searchParamsObject, ids, email);
 
     try {
       const parsedData: Partial<UserSelect> | null = zodSchemaUsersInApi.parse(selectObject);
-      console.log("parsedData", parsedData);
+      // console.log("parsedData", parsedData);
 
       // Якщо id не передано, повертаємо всіх користувачів
       const users = await prisma.user.findMany({
         where: searchParamsObject,
+        take: limit,
         select: Object.keys(selectObject).length > 0 ? selectObject : undefined,
       });
 

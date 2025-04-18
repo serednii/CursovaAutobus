@@ -36,7 +36,7 @@ import { useGetListBlockedDate } from "./useGetListBlockedDate";
 // import { useTranslation } from "react-i18next";
 import { runInAction } from "mobx";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
-import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/v1/getRoutesById";
 import { UserSession } from "@/types/next-auth";
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;

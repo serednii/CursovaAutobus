@@ -21,20 +21,20 @@ interface Props {
   driverId: number | null | undefined;
 }
 
-function PassengerSeat(props: Props) {
+function PassengerSeat({ className, params, sessionUser, action, driverId }: Props) {
   // console.log("PassengerSeat RENDER");
   // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 
-  const { className, params, sessionUser, action, driverId } = props;
   const { number } = params;
   const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
   const keys = Object.keys(params) as (keyof typeof params)[];
   const styles: React.CSSProperties = {};
-  const sessionUserId = Number(sessionUser?.id) as number;
+  const sessionUserId = parseInt(sessionUser.id);
   const userRole = sessionUser?.role;
 
   // console.log("sessionUserId === driverId", sessionUserId, driverId);
   //add styles top, bottom, left, right
+
   keys.forEach((key) => {
     if (params[key] && key !== "number" && key !== "busSeatStatus" && key !== "passenger") {
       styles[key] = typeof params[key] === "number" ? `${params[key]}px` : params[key];

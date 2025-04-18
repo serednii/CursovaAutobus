@@ -1,4 +1,4 @@
-import { IGetSearchRouteUpdateOption } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetSearchRouteUpdateOption } from "@/fetchFunctions/v1/getRoutesById";
 // import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
       where: { id: { in: id } },
       select: select,
     });
+
     console.log("routes", routes);
     // Перевірка на порожній результат
     if (routes.length === 0) {

@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/Container";
 import TablePassengerDetails from "@/components/shared/driver/TablePassengerDetails";
 import { getPassengerDetails, getPassengersId } from "./action";
 // import { ISubPassengersList } from "@/types/interface";
-import { fetchGetRoutesById } from "@/fetchFunctions/fetchGetRoutesById";
+import { getRoutesById } from "@/fetchFunctions/v1/getRoutesById";
 import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { formatDate } from "@/lib/utils";
 import initTranslations from "@/app/i18n";
@@ -16,10 +16,10 @@ export default async function MyRoute({ params }) {
   const { locale, id } = await params;
   const { t } = await initTranslations(locale, ["myroute"]);
 
-  const idArray = [Number(id)];
-  const routeRaw = await fetchGetRoutesById.searchRoute(
+  const idNumber = Number(id || 0);
+  const routeRaw = await getRoutesById.searchRoute(
     // const routeRaw: IGetRouteMyRoute[] | null = await fetchGetRoutesById.searchRoute(
-    idArray,
+    idNumber,
     selectRoute,
     "byIdMyRoute"
   );

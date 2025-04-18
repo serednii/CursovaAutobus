@@ -16,7 +16,7 @@ interface Props {
   className?: string;
   // dataLayoutBus: ILayoutData;
   // handleDataLayoutBus: (value: ILayoutData) => void;
-  sessionUser: UserSession;
+  sessionUser: UserSession | null;
   action: RoleEnum;
   driverId: number | undefined | null;
 }
@@ -24,6 +24,7 @@ interface Props {
 function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   console.log("LayoutBus RENDER");
   if (
+    sessionUser === null ||
     driverId === null ||
     busStore.dataLayoutBus === null ||
     busStore.dataLayoutBus?.passenger.length === 0

@@ -18,6 +18,7 @@ import SubPassengerFields from "./SubPassengerFields";
 // import busStore from "@/mobx/busStore";
 import { observer } from "mobx-react-lite";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
+import { sub } from "date-fns";
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   unregister: UseFormUnregister<FormValuesRoute>;
@@ -65,8 +66,9 @@ function SubPassengersOrders({
     setValue(`${field}.${index}`, value);
     setSubPassengers((prev) => prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)));
   };
-
-  if (subPassengers.length === 0) return null;
+  console.log("SubPassengerFields.tsx subPassengers", subPassengers);
+  if (!subPassengers) return null;
+  console.log("SubPassengerFields.tsx subPassengers++++++++", subPassengers);
 
   return (
     <div className="bg-white p-4 mb-4">

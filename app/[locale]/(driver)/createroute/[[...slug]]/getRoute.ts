@@ -1,10 +1,6 @@
 import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 
-import {
-  fetchGetRoutesById,
-  IGetRouteAgain,
-  IGetRouteUpdate,
-} from "@/fetchFunctions/fetchGetRoutesById";
+import { getRoutesById, IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/v1/getRoutesById";
 
 interface Props {
   id: number;
@@ -19,13 +15,13 @@ export const getRoute = async ({
 
   try {
     if (type === "change") {
-      const value = await fetchGetRoutesById.searchRoute([id], selectRouteUpdate, "ByIdUpdate");
+      const value = await getRoutesById.searchRoute(id, selectRouteUpdate, "ByIdUpdate");
       const result = value as IGetRouteUpdate[] | null;
       return result?.[0];
     }
 
     if (type === "again") {
-      const value = await fetchGetRoutesById.searchRoute([id], selectRouteAgain, "byIdAgain");
+      const value = await getRoutesById.searchRoute(id, selectRouteAgain, "byIdAgain");
       const result = value as IGetRouteAgain[] | null;
       return result?.[0];
     }

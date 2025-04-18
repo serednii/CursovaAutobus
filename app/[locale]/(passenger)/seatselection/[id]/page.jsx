@@ -6,19 +6,10 @@ import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
 import mixedLayoutsSeatsData from "@/components/shared/passenger/mixedLayoutsSeatsData";
 import { authConfig } from "@/configs/auth";
-import { fetchGetRoutesById, IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
+import { getRoutesById } from "@/fetchFunctions/v1/getRoutesById";
 import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
-import { ILayoutData } from "@/types/layoutbus.types";
 import replaceReservedToSelected from "./replaceReservedToSelected";
 import replaceReservedEmptyToReserved from "./replaceReservedEmptyToReserved";
-
-// export interface BusInfo {
-//   selected_bus: string;
-//   departure: string;
-//   arrival: string;
-//   seats_available: string;
-// }
-// async function SeatSelection({ params }: { params: { locale: string; id: string } }) {
 
 async function SeatSelection({ params }) {
   const { locale, id } = await params; // Використовуємо params без await
@@ -26,13 +17,15 @@ async function SeatSelection({ params }) {
 
   const session = await getServerSession(authConfig);
   const userSessionId = Number(session?.user?.id);
-  const idNumber = Number(id);
+  const idNumber = Number(id || 0);
 
-  const routesArrayUnknown = await fetchGetRoutesById.searchRoute(
-    [idNumber],
+  const routesArrayUnknown = await getRoutesById.searchRoute(
+    idNumber,
     selectSeatSelection,
     "seatSelection"
   );
+
+  console.log("idNumber seatselection", idNumber, routesArrayUnknown);
   // const routesArray = routesArrayUnknown as IGetRouteSeatSelection[] | null;
 
   const routesArray = routesArrayUnknown;

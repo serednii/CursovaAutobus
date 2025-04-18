@@ -4,7 +4,7 @@ import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { UseFormSetValue } from "react-hook-form";
-import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/v1/getRoutesById";
 import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 // import { observer } from "mobx-react-lite";

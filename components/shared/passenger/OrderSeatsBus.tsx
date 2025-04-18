@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 import { RoleEnum } from "@/enum/shared.enums";
 import { UserSession } from "@/types/next-auth";
-import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetRouteSeatSelection } from "@/fetchFunctions/v1/getRoutesById";
 import useSubmitOrder from "./useSubmitOrder";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
@@ -25,7 +25,7 @@ interface Props {
 function OrderSeatsBus({ route, sessionUser, newData }: Props) {
   const { t } = useAppTranslation("seatselection");
 
-  console.log("OrderSeatsBus newData", newData);
+  console.log("OrderSeatsBus newData", newData, route, sessionUser);
   const renderRef = useRef(0);
 
   const {
@@ -60,6 +60,8 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
     () => route?.passengersSeatsList.find((obj) => obj.idPassenger === userSessionId),
     [route, userSessionId]
   );
+
+  console.log("mylistpassengers------", myListPassengers);
 
   return (
     <>

@@ -12,7 +12,7 @@ const busSeats = {
     number: true,
     busSeatStatus: true,
     routeDriverId: true,
-    routeDriver: true,
+    // routeDriver: true,
   },
 };
 
@@ -69,7 +69,7 @@ import {
   IGetSearchRouteAgainOption,
   IGetSearchRouteSeatSelectionOption,
   IGetSearchRouteUpdateOption,
-} from "@/fetchFunctions/fetchGetRoutesById";
+} from "@/fetchFunctions/v1/getRoutesById";
 export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   // export const select = {
   id: true,
@@ -83,12 +83,8 @@ export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   passengersSeatsList,
 };
 
-import { IGetSearchRouteMyRouteOption } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetSearchRouteMyRouteOption } from "@/fetchFunctions/v1/getRoutesById";
 import { IGetUsersByIdBySelectOption } from "@/fetchFunctions/fetchUsersDELETE";
-import {
-  IGetRoutesByDriverListBlockedOption,
-  IGetRoutesByDriverOption,
-} from "@/fetchFunctions/fetchGetRoutesByDriverId";
 
 export const selectRoute: IGetSearchRouteMyRouteOption = {
   ...baseDate,

@@ -14,7 +14,7 @@ export type IGetBusSeatsBoolean = {
       number: boolean;
       busSeatStatus: boolean;
       routeDriverId: boolean;
-      routeDriver: boolean;
+      // routeDriver: boolean;
     };
   };
 };

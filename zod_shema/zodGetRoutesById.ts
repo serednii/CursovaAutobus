@@ -3,12 +3,10 @@ import {
   IGetRouteMyRoute,
   IGetRouteSeatSelection,
   IGetRouteUpdate,
-} from "@/fetchFunctions/fetchGetRoutesById";
+} from "@/fetchFunctions/v1/getRoutesById";
 import {
   busSeats,
   passengersSeatsList,
-  passengerSchema,
-  fullBaseRouteSchema,
   citySchema,
   dateAndNameCitySchema,
   servicesSchema,

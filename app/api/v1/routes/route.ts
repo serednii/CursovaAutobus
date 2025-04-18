@@ -2,14 +2,18 @@ import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
 import { createRoute } from "./createroute";
-import { parseStringToObject } from "./util";
+import { checkApiKey, parseStringRoutesToObject } from "./util";
 
 export async function GET(req: NextRequest) {
+  const isApiKeyValid = checkApiKey(req);
+  if (!isApiKeyValid) {
+    return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+  }
   const { searchParams } = new URL(req.url);
 
   const selectParams = searchParams.get("select") || "";
 
-  const selectObject = parseStringToObject(selectParams);
+  const selectObject = parseStringRoutesToObject(selectParams);
 
   const departureSearch = searchParams.get("departureSearch") || "";
   const arrivalToSearch = searchParams.get("arrivalToSearch") || "";
@@ -17,15 +21,15 @@ export async function GET(req: NextRequest) {
   const startOfDayDate = startOfDay && startOfDay !== "Invalid Date" ? new Date(startOfDay) : null;
   const endOfDay = searchParams.get("endOfDay") || null;
   const endOfDayDate = endOfDay && endOfDay !== "Invalid Date" ? new Date(endOfDay) : null;
-  // const limit = parseInt(searchParams.get("limit") || "10", 100);
-  const limit = 100;
+  const limit = parseInt(searchParams.get("limit") || "100", 10);
+  // const limit = 100;
   const wifi = searchParams.get("wifi") === "true";
   const coffee = searchParams.get("coffee") === "true";
   const power = searchParams.get("power") === "true";
   const restRoom = searchParams.get("restRoom") === "true";
 
   console.log("selectObject", selectObject);
-  console.log("departureSearch", selectObject);
+  console.log("departureSearch", departureSearch);
   console.log("arrivalToSearch", arrivalToSearch);
   console.log("startOfDay", startOfDay, startOfDayDate);
   console.log("endOfDay", endOfDay, endOfDayDate);
@@ -47,20 +51,12 @@ export async function GET(req: NextRequest) {
       : {};
 
   const where = {
-    ...(departureSearch
-      ? {
-          departureFrom: {
-            contains: departureSearch,
-          },
-        }
-      : {}),
-    ...(arrivalToSearch
-      ? {
-          arrivalTo: {
-            contains: arrivalToSearch,
-          },
-        }
-      : {}),
+    departureFrom: {
+      contains: departureSearch ?? "",
+    },
+    arrivalTo: {
+      contains: arrivalToSearch ?? "",
+    },
 
     departureDate: {
       gt: new Date(),
@@ -75,10 +71,30 @@ export async function GET(req: NextRequest) {
   const routes = await prisma.routeDriver.findMany({
     where,
     take: limit,
-    select: Object.keys(selectObject).length > 0 ? selectObject : undefined,
+    select: selectObject,
   });
 
-  return NextResponse.json(routes);
+  const routesCity = await prisma.routeDriver.findMany({
+    where,
+    take: 20,
+    select: {
+      departureFrom: true,
+      arrivalTo: true,
+    },
+    distinct: ["departureFrom", "arrivalTo"],
+  });
+
+  const safeRoutes = Array.isArray(routes) ? routes : []; // Гарантуємо, що це масив
+  const saFeRoutesCity = Array.isArray(routesCity) ? routesCity : [];
+
+  const fullRoutes =
+    safeRoutes.map((route, index) => ({
+      ...route,
+      departureFromCity: saFeRoutesCity[index]?.departureFrom,
+      arrivalToCity: saFeRoutesCity[index]?.arrivalTo,
+    })) ?? [];
+
+  return NextResponse.json(fullRoutes);
 }
 
 export async function POST(req: NextRequest) {

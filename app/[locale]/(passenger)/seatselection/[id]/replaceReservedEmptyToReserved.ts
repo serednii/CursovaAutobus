@@ -1,4 +1,4 @@
-import { IGetRouteSeatSelection } from "@/fetchFunctions/fetchGetRoutesById";
+import { IGetRouteSeatSelection } from "@/fetchFunctions/v1/getRoutesById";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 
 function replaceReservedEmptyToReserved({
