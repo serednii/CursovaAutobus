@@ -1,6 +1,7 @@
+import createRoute from "@/fetchFunctions/v1/createRoute";
 import { routerDrivers, users } from "./constants";
 import { prisma } from "./prisma-client";
-import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
+// import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
 
 // const routerDriverFetch = async (routeDriver: any) => {
 //   try {
@@ -41,7 +42,7 @@ async function up() {
     try {
       for (const [index, routeDriver] of routerDrivers.entries()) {
         try {
-          const result = await fetchCreateRoute(routeDriver);
+          const result = await createRoute(routeDriver);
           // console.log("result", routeDriver);
           // if (result) {
           //   console.log("Маршрути успішно створені", index);

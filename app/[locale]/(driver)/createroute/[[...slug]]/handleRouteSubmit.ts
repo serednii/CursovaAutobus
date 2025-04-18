@@ -3,7 +3,6 @@ import { z } from "zod";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
 import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
@@ -13,6 +12,7 @@ import { delay } from "@/lib/utils";
 import { transformData } from "./action";
 
 import updateRouteById from "@/fetchFunctions/v1/updateRouteById";
+import createRoute from "@/fetchFunctions/v1/createRoute";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -82,7 +82,7 @@ const handleCreateRoute = async (
   const parsedData = z.object(zodCreateRouteAll).parse(routeData);
 
   try {
-    const response = await fetchCreateRoute<ISendDataBaseRouteDriver>(parsedData);
+    const response = await createRoute<ISendDataBaseRouteDriver>(parsedData);
 
     if (!response) {
       toast.error("Error creating route", { duration: timeShowToast });
