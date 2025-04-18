@@ -1,5 +1,6 @@
 // import { IGetSearchRouteUpdateOption } from "@/fetchFunctions/v1/getRoutesById";
 import { prisma } from "@/prisma/prisma-client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
 
 import { updateRoute } from "../../updateRoute";
@@ -62,6 +63,10 @@ export async function GET(req: NextRequest, { params }: { params: { id?: string 
 
 // API route handler for updating a route
 export async function PATCH(req: NextRequest, { params }: { params: { id?: string } }) {
+  const isApiKeyValid = checkApiKey(req);
+  if (!isApiKeyValid) {
+    return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+  }
   const { id } = await params;
   // const { searchParams } = new URL(req.url);
   // const id = searchParams.get("id");
@@ -72,4 +77,43 @@ export async function PATCH(req: NextRequest, { params }: { params: { id?: strin
   }
 
   return await updateRoute(req, numberId);
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const isApiKeyValid = checkApiKey(req);
+    if (!isApiKeyValid) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+    }
+    // const middlewareResponse = await middleware(req);
+
+    // if (middlewareResponse.status !== 200) {
+    //   return middlewareResponse;
+    // }
+    // Отримуємо дані з тіла запиту
+    const { routeId } = await req.json();
+    // console.log("routeId", routeId);
+    // Перевірка, чи передано routeId
+    if (!routeId) {
+      return NextResponse.json({ error: "Поле 'routeId' є обов'язковим" }, { status: 400 });
+    }
+
+    // Видалення маршруту
+    const deletedRoute = await prisma.routeDriver.delete({
+      where: { id: routeId },
+    });
+
+    return NextResponse.json(deletedRoute, { status: 200 });
+  } catch (error: unknown) {
+    console.error("Помилка видалення маршруту:", error);
+
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return NextResponse.json(
+        { error: "Маршрут із зазначеним 'routeId' не знайдено" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ error: "Внутрішня помилка сервера" }, { status: 500 });
+  }
 }

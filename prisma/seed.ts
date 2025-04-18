@@ -1,7 +1,6 @@
 import createRoute from "@/fetchFunctions/v1/createRoute";
 import { routerDrivers, users } from "./constants";
 import { prisma } from "./prisma-client";
-// import fetchCreateRoute from "@/fetchFunctions/fetchCreateRoute";
 
 // const routerDriverFetch = async (routeDriver: any) => {
 //   try {
