@@ -1,21 +1,24 @@
 import React from "react";
 
-import fetchGetRoutesByDriverId, {
-  IRoutesByIdDriver,
-  selectGetRoutesByDriverId,
-} from "@/fetchFunctions/fetchGetRoutesByDriverId";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/configs/auth";
 import WrapperDriverRoutes from "@/app/[locale]/(driver)/myroutes/WrapperDriverRoutes";
 import { Container } from "@/components/ui/Container";
+import {
+  getRoute,
+  IRoutesByIdDriver,
+  selectGetRoutesByDriverId,
+} from "@/fetchFunctions/v1/getRoutes";
 
 export default async function MyRoutes() {
   const session = await getServerSession(authConfig);
   const userSessionId = Number(session?.user?.id);
 
-  const value = await fetchGetRoutesByDriverId.searchRoute(
-    [userSessionId],
-    selectGetRoutesByDriverId,
+  const value = await getRoute.searchRoute(
+    {
+      driverId: userSessionId,
+      select: selectGetRoutesByDriverId,
+    },
     "getDriver"
   );
 

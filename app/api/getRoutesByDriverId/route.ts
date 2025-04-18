@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     // console.log("Received Origin:", origin, "User Agent:", userAgent);
     // Отримуємо дані з тіла запиту
     const { driverId, select } = await req.json();
+
     // Перевірка, чи передано driverId
     if (!driverId) {
       return NextResponse.json({ error: "Поле 'driverId' є обов'язковим" }, { status: 400 });

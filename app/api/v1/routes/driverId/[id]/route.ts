@@ -1,9 +1,9 @@
-import { IGetSearchRouteUpdateOption } from "@/fetchFunctions/v1/getRoutesById";
+// import { IGetSearchRouteUpdateOption } from "@/fetchFunctions/v1/getRoutesById";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
-import { updateRoute } from "../updateRoute";
-import { checkApiKey, parseStringRoutesToObject } from "../util";
+import { updateRoute } from "../../updateRoute";
+import { checkApiKey, parseStringRoutesToObject } from "../../util";
 
 // type TypeGetRoutesById = {
 //   id: number[];

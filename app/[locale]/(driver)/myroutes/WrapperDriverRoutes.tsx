@@ -2,7 +2,8 @@
 import AvailableRoutes from "@/components/AvailableRoutes";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 import PastRoutes from "@/components/PastRoutes";
-import { IRoutesByIdDriver } from "@/fetchFunctions/fetchGetRoutesByDriverId";
+import { IRoutesByIdDriver } from "@/fetchFunctions/v1/getRoutes";
+
 import { getPastRoutesAndAvailableRoutes } from "@/lib/utils";
 // import { useTranslation } from "react-i18next";
 import TableRoutes from "../../../../components/shared/driver/TableRoutes";

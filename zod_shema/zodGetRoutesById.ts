@@ -12,7 +12,7 @@ import {
   servicesSchema,
 } from "./zodBase";
 import { z } from "zod";
-import { IGetRouteCity } from "@/fetchFunctions/v1/searchRoute";
+import { IGetRouteCity } from "@/fetchFunctions/v1/getRoutes";
 
 const routeSchemaMyRoute = z.object({
   ...dateAndNameCitySchema,

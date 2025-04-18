@@ -1,4 +1,7 @@
-import { IRoutesByIdDriver, IRoutesByIdDriverListBlocked } from "@/fetchFunctions/fetchGetRoutesByDriverId";
+import {
+  IRoutesByIdDriver,
+  IRoutesByIdDriverListBlocked,
+} from "@/fetchFunctions/fetchGetRoutesByDriverIdDELETED";
 import { z } from "zod";
 import { dateAndNameCitySchema, dateSchemaString } from "./zodBase";
 
@@ -10,7 +13,8 @@ export const zodSchemaGetRoutesBuDriverId: z.ZodType<IRoutesByIdDriver> = z.obje
   maxSeats: z.number().int().positive(),
 });
 
-export const zodSchemaGetRoutesBuDriverIdListBlocked: z.ZodType<IRoutesByIdDriverListBlocked> = z.object({
-  id: z.number().int().positive(),
-  ...dateSchemaString,
-});
+export const zodSchemaGetRoutesBuDriverIdListBlocked: z.ZodType<IRoutesByIdDriverListBlocked> =
+  z.object({
+    id: z.number().int().positive(),
+    ...dateSchemaString,
+  });

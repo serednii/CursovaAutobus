@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import fetchGetRoutesByDriverId, { IRoutesByIdDriver, selectGetRoutesByDriverId } from "@/fetchFunctions/fetchGetRoutesByDriverId";
 
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";
+import {
+  selectGetRoutesByDriverId,
+  IRoutesByIdDriver,
+  getRoute,
+} from "@/fetchFunctions/v1/getRoutes";
 
 export const useFetchDriverRoutes = () => {
   const { session, userSessionId } = useGetSessionParams();
@@ -17,7 +21,13 @@ export const useFetchDriverRoutes = () => {
       }
 
       try {
-        const value = await fetchGetRoutesByDriverId.searchRoute([userSessionId], selectGetRoutesByDriverId, "getDriver");
+        const value = await getRoute.searchRoute(
+          {
+            driverId: userSessionId,
+            select: selectGetRoutesByDriverId,
+          },
+          "getDriver"
+        );
         const result = value as IRoutesByIdDriver[] | null;
         if (result === null || result.length === 0) return;
         setRoutes(result);

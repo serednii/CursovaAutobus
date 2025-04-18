@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { debounce } from "lodash";
-import { IGetSearchRouteMany, searchRoute } from "@/fetchFunctions/v1/searchRoute";
+import { IGetSearchRouteMany, getRoute } from "@/fetchFunctions/v1/getRoutes";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
@@ -89,7 +89,7 @@ export const useSearchRouteMany = ({
       console.log("data useSearchRouteMany", data);
       if (departureFrom || arrivalTo || departureDate) {
         setIsLoadingOne(true);
-        searchRoute
+        getRoute
           .searchRoute(data, "many")
           .then((value) => {
             const routes = value as IGetSearchRouteMany[] | null;

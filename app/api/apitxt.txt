@@ -26,7 +26,17 @@
 // GET /api/routes?limit=10 → отримати всі маршрути
 
 // GET /api/routes/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по id з певними полями
-//Отримати маршрутти по пошуку за параметрами departureSearch, arrivalToSearch, startOfDay, endOfDay, wifi, coffee, power, restRoom
+//Отримати маршрутти по пошуку за параметрами departureSearch, arrivalToSearch, startOfDay, endOfDay, wifi, coffee, power, restRoom, limit, driverId
+  departureSearch?: string;
+  arrivalToSearch?: string;
+  startOfDay?: string;
+  endOfDay?: string;
+  wifi?: boolean;
+  coffee?: boolean;
+  power?: boolean;
+  restRoom?: boolean;
+  limit?: number;
+  driverId?: number;
 // GET api/v1/routes?limit=10&departureSearch=Fd&arrivalToSearch=&startOfDay=Invalid+Date&endOfDay=Invalid+Date&wifi=false&coffee=false&power=false&restRoom=false&select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList
 
 // POST /api/v1/routes → створити

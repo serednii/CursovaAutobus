@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import fetchGetRoutesByDriverId, {
+import {
+  getRoute,
   IRoutesByIdDriverListBlocked,
   selectRouteListBlocked,
-} from "@/fetchFunctions/fetchGetRoutesByDriverId";
+} from "@/fetchFunctions/v1/getRoutes";
 
 interface UseFetchRouteProps {
   driverId: number;
@@ -15,8 +16,8 @@ export const useGetListBlockedDate = ({ driverId, type, id }: UseFetchRouteProps
 
   useEffect(() => {
     if (driverId && driverId > 0) {
-      fetchGetRoutesByDriverId
-        .searchRoute([driverId], selectRouteListBlocked, "listBlocked")
+      getRoute
+        .searchRoute({ driverId, select: selectRouteListBlocked }, "listBlocked")
         .then((value) => {
           const result = value as IRoutesByIdDriverListBlocked[] | null;
           if (result === null || result.length === 0) {

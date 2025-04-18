@@ -8,6 +8,7 @@ export function buildRouteSearchURL(filters: {
   power?: boolean;
   restRoom?: boolean;
   limit?: number;
+  driverId?: number;
 }): string {
   const query: Record<string, string> = {};
 

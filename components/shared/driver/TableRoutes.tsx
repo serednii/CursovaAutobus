@@ -6,9 +6,10 @@ import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
-import { IRoutesByIdDriver } from "@/fetchFunctions/fetchGetRoutesByDriverId";
+
 import { useDeleteRoute } from "@/app/[locale]/(driver)/myroutes/useDeleteRoute";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
+import { IRoutesByIdDriver } from "@/fetchFunctions/v1/getRoutes";
 
 interface Props {
   routes: IRoutesByIdDriver[];

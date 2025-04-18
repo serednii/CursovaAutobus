@@ -1,7 +1,4 @@
-import {
-  IGetSearchRouteManyOption,
-  IGetSearchRouteOneOption,
-} from "@/fetchFunctions/v1/searchRoute";
+import { IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/v1/getRoutes";
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";

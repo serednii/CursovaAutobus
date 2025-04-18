@@ -41,7 +41,7 @@ async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TR
     `${API_URL}/api/v1/routes/${id}`
   );
   try {
-    const response = await fetch(`${API_URL}/api/v1/routes/${id}`, {
+    const response = await fetch(`${API_URL}/api/v1/routes/id/${id}`, {
       cache: "no-store",
       method: "PATCH",
       headers: {
