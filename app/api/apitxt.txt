@@ -46,5 +46,8 @@
 // GET /api/routes/passengerId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
 // GET /api/routes/passengerId/:id → отримати  маршрут по passengerId з усіма полями
 
-//GET api/v1/routes/uniqueCity?select=id,departureFrom,arrivalTo, //Видає комбінацію унікальних міст departureFrom,arrivalTo з вказаними полями
-//GET api/v1/routes/uniqueCity //Видає комбінацію унікальних міст departureFrom,arrivalTo з повними полями
+// GET /api/routes/driverId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
+// GET /api/routes/driverId/:id → отримати  маршрут по passengerId з усіма полями
+
+// GET api/v1/routes/uniqueCity?select=id,departureFrom,arrivalTo, //Видає комбінацію унікальних міст departureFrom,arrivalTo з вказаними полями
+// GET api/v1/routes/uniqueCity //Видає комбінацію унікальних міст departureFrom,arrivalTo з повними полями

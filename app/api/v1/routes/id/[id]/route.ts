@@ -6,38 +6,27 @@ import { NextRequest, NextResponse } from "next/server";
 import { updateRoute } from "../../updateRoute";
 import { checkApiKey, parseStringRoutesToObject } from "../../util";
 
-// type TypeGetRoutesById = {
-//   id: number[];
-//   select?: IGetSearchRouteUpdateOption;
-// };
-
 export async function GET(req: NextRequest, { params }: { params: { id?: string } }) {
   try {
     const isApiKeyValid = checkApiKey(req);
     if (!isApiKeyValid) {
       return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
     }
-    const { searchParams } = new URL(req.url);
-    const selectParams = searchParams.get("select") || "";
-    console.log("getUniqueRoutes search select", selectParams);
-    const selectObject = parseStringRoutesToObject(selectParams);
-    // Отримуємо дані з тіла запиту
-    // const body: TypeGetRoutesById = await req.json();
-    // const { id, select } = body;
-
     const { id } = await params;
-    console.log("getUniqueRoutes search select", selectObject);
-    console.log("getUniqueRoutes search id", id);
 
     if (!id) {
       return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
     }
 
-    const idNumber = parseInt(id || "0", 10);
+    const { searchParams } = new URL(req.url);
+    const selectParams = searchParams.get("select") || "";
+    const selectObject = parseStringRoutesToObject(selectParams);
 
-    // if (!selectObject || typeof selectObject !== "object") {
-    //   return NextResponse.json({ error: "Некоректне поле 'select'!" }, { status: 400 });
-    // }
+    if (!selectObject || typeof selectObject !== "object") {
+      return NextResponse.json({ error: "Некоректне поле 'select'!" }, { status: 400 });
+    }
+
+    const idNumber = parseInt(id || "0", 10);
 
     // Запит до бази даних
     const routes = await prisma.routeDriver.findMany({

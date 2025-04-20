@@ -4,12 +4,10 @@ import { getServerSession } from "next-auth";
 import { authConfig } from "@/configs/auth";
 import WrapperDriverRoutes from "@/app/[locale]/(driver)/myroutes/WrapperDriverRoutes";
 import { Container } from "@/components/ui/Container";
-import {
-  getRoute,
+import getRoutesByDriverId, {
   IRoutesByIdDriver,
   selectGetRoutesByDriverId,
-} from "@/fetchFunctions/v1/getRoutes";
-import fetchGetRoutesByDriverId from "@/fetchFunctions/fetchGetRoutesByDriverId";
+} from "@/fetchFunctions/v1/gеtRoutesByDriverId";
 
 export default async function MyRoutes() {
   const session = await getServerSession(authConfig);
@@ -24,7 +22,7 @@ export default async function MyRoutes() {
   //   "getDriver"
   // );
 
-  const value = await fetchGetRoutesByDriverId.searchRoute(
+  const value = await getRoutesByDriverId.searchRoute(
     [userSessionId],
     selectGetRoutesByDriverId,
     "getDriver"

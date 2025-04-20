@@ -4,10 +4,10 @@ import {
   IGetSearchRouteManyOptionData,
   IGetSearchRouteOneOptionData,
 } from "@/types/searchRoute.types";
-import {
-  zodSchemaGetRoutesBuDriverId,
-  zodSchemaGetRoutesBuDriverIdListBlocked,
-} from "@/zod_shema/zodGetRoutesBuDriverId";
+// import {
+//   zodSchemaGetRoutesBuDriverId,
+//   zodSchemaGetRoutesBuDriverIdListBlocked,
+// } from "@/zod_shema/zodGetRoutesBuDriverId";
 // import { ZodFetchGetRoutesByICity } from "@/zod_shema/zodGetRoutesById";
 import { ZodSchemaSearchRouteMany, ZodSchemaSearchRouteOne } from "@/zod_shema/zodGetSearchRoute";
 import { z } from "zod";
@@ -58,33 +58,33 @@ export type IGetRouteCity = GenerateType<IRouteDataBase, selectRouteCityKeys>;
 
 //********************************************************** */
 
-//********************************************************** */
+// //********************************************************** */
 
-type selectRoutesByIdDriverKeys = (
-  | "id"
-  | "departureDate"
-  | "arrivalDate"
-  | "departureFrom"
-  | "arrivalTo"
-  | "routePrice"
-  | "bookedSeats"
-  | "maxSeats"
-) &
-  keyof IRouteDataBase;
-export type IGetRoutesByDriverOption = GenerateBooleanType<selectRoutesByIdDriverKeys>;
-export type IRoutesByIdDriver = GenerateType<IRouteDataBase, selectRoutesByIdDriverKeys>;
+// type selectRoutesByIdDriverKeys = (
+//   | "id"
+//   | "departureDate"
+//   | "arrivalDate"
+//   | "departureFrom"
+//   | "arrivalTo"
+//   | "routePrice"
+//   | "bookedSeats"
+//   | "maxSeats"
+// ) &
+//   keyof IRouteDataBase;
+// export type IGetRoutesByDriverOption = GenerateBooleanType<selectRoutesByIdDriverKeys>;
+// export type IRoutesByIdDriver = GenerateType<IRouteDataBase, selectRoutesByIdDriverKeys>;
 
-export const selectGetRoutesByDriverId: IGetRoutesByDriverOption = {
-  id: true,
-  departureDate: true,
-  arrivalDate: true,
-  departureFrom: true,
-  arrivalTo: true,
-  routePrice: true,
-  bookedSeats: true,
-  maxSeats: true,
-};
-//********************************************************** */
+// export const selectGetRoutesByDriverId: IGetRoutesByDriverOption = {
+//   id: true,
+//   departureDate: true,
+//   arrivalDate: true,
+//   departureFrom: true,
+//   arrivalTo: true,
+//   routePrice: true,
+//   bookedSeats: true,
+//   maxSeats: true,
+// };
+// //********************************************************** */
 
 type selectRoutesByIdDriverListBlockedKeys = ("id" | "departureDate" | "arrivalDate") &
   keyof IRouteDataBase;
@@ -180,13 +180,13 @@ getRoute.addType<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(
   ZodSchemaSearchRouteOne.array()
 );
 
-getRoute.addType<IGetRoutesByDriverOption, IRoutesByIdDriver[]>(
-  "getDriver",
-  zodSchemaGetRoutesBuDriverId.array()
-);
+// getRoute.addType<IGetRoutesByDriverOption, IRoutesByIdDriver[]>(
+//   "getDriver",
+//   zodSchemaGetRoutesBuDriverId.array()
+// );
 
-getRoute.addType<IGetRoutesByDriverListBlockedOption, IRoutesByIdDriverListBlocked[]>(
-  "listBlocked",
-  zodSchemaGetRoutesBuDriverIdListBlocked.array()
-);
+// getRoute.addType<IGetRoutesByDriverListBlockedOption, IRoutesByIdDriverListBlocked[]>(
+//   "listBlocked",
+//   zodSchemaGetRoutesBuDriverIdListBlocked.array()
+// );
 // searchRoute.addType<IGetSearchRouteCityOption, IGetRouteCity[]>("byCity", ZodFetchGetRoutesByICity.array());
