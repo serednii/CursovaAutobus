@@ -55,7 +55,7 @@ class FetchGetUniqueRoutes {
       search: async (data: { select: IGetSearchRouteCityOption }): Promise<K | null> => {
         const { select } = data;
         const selectString = Object.keys(select).join(",");
-        console.log("data searchRoute", data);
+        // console.log("data searchRoute", data);
         console.log("fetchGetUniqueRoutes API_URL", `${API_URL}/api/getUniqueRoutes`);
         try {
           const response = await fetch(

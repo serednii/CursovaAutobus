@@ -1,6 +1,5 @@
-import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
+import deleteRoutePassenger from "@/fetchFunctions/v1/deleteRoutePassenger";
 import { firstLetterUpperCase } from "@/lib/utils";
-import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { IPassengersSeatsList } from "@/types/interface";
 import { ApiResponse, ErrorResponse } from "@/types/response.types";
@@ -14,13 +13,6 @@ export async function updateRoute(req: NextRequest, id: number) {
     // const { searchParams } = new URL(req.url);
     // const id = searchParams.get("id");
     // const numberId = parseInt(id || "0", 10);
-    const middlewareResponse = await middleware(req);
-
-    console.log("id>>>>>>>><<<<<<<<<<<<<<<<<<<", id);
-
-    if (middlewareResponse.status !== 200) {
-      return middlewareResponse;
-    }
 
     const resData = await req.json();
     // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
@@ -57,8 +49,9 @@ export async function updateRoute(req: NextRequest, id: number) {
       );
     }
 
+    //**************************************************************** */
     const idPassenger = passengersSeatsList[0].idPassenger;
-    const deletePassengerResult: ApiResponse = await fetchDeleteRoutePassenger({
+    const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
       routeDriverId: id,
       idPassenger: idPassenger,
       busSeats,
@@ -69,6 +62,7 @@ export async function updateRoute(req: NextRequest, id: number) {
       return NextResponse.json(errorResponse, { status: 500 });
     }
 
+    //**************************************************************** */
     // Perform database update using Prisma
     const res = await prisma.routeDriver.update({
       where: {
@@ -100,7 +94,7 @@ export async function updateRoute(req: NextRequest, id: number) {
     if (!updatedBusSeatsResult) {
       console.error("Failed to update route busSeats");
       //delete route passenger if busSeats not updated
-      const deletePassengerResult: ApiResponse = await fetchDeleteRoutePassenger({
+      const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
         routeDriverId: id,
         idPassenger: idPassenger,
         busSeats,
@@ -122,7 +116,7 @@ export async function updateRoute(req: NextRequest, id: number) {
       console.error("Failed to update route passengersSeatsList");
 
       //delete route passenger if createPassengersSeatsList not created
-      const deletePassengerResult: ApiResponse = await fetchDeleteRoutePassenger({
+      const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
         routeDriverId: id,
         idPassenger: idPassenger,
         busSeats,
@@ -132,6 +126,7 @@ export async function updateRoute(req: NextRequest, id: number) {
         const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
         return NextResponse.json(errorResponse, { status: 500 });
       }
+
       return NextResponse.json(
         { error: "Failed to update route passengersSeatsList" },
         { status: 500 }

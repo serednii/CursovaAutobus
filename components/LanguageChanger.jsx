@@ -41,9 +41,9 @@ export default function LanguageChanger({ className }) {
       onChange={handleChange}
       value={currentLocale}
     >
-      <option value="en">En</option>
-      <option value="uk">Ua</option>
-      <option value="cs">Cz</option>
+      <option value="en">EN</option>
+      <option value="uk">UA</option>
+      <option value="cs">CZ</option>
     </select>
   );
 }

@@ -6,32 +6,6 @@ import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-//********************************************************** */
-
-type selectRouteSeatUpdateKeys = (
-  | "id"
-  | "departureDate"
-  | "arrivalDate"
-  | "departureFrom"
-  | "arrivalTo"
-  | "routePrice"
-  | "selectBusLayout"
-  | "modelBus"
-  | "wifi"
-  | "coffee"
-  | "power"
-  | "restRoom"
-  | "maxSeats"
-  | "bookedSeats"
-  | "notate"
-) &
-  keyof IRouteDataBase;
-export type TDeleteRouteUpdateResult = GenerateType<IRouteDataBase, selectRouteSeatUpdateKeys> & {
-  intermediateStops: IIntermediateStops[];
-};
-
-//********************************************************** */
-
 async function fetchDeleteRouteById(routeId: number) {
   try {
     // console.log("fetchDeleteRouteById", routeId);

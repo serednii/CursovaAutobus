@@ -2,16 +2,20 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
+import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 
 interface IRouteWithDate {
   arrivalDate: string; // або Date, залежно від вашого типу даних
   departureDate: string;
 }
 
+//******************************************************* */
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+//******************************************************* */
 export const travelTime = (departureDate: string, arrivalDate: string) => {
   const departureTime = new Date(departureDate);
   const arrivalTime = new Date(arrivalDate);
@@ -21,6 +25,8 @@ export const travelTime = (departureDate: string, arrivalDate: string) => {
   return `${hours}h ${minutes}m`;
 };
 
+//******************************************************* */
+
 export const timeAmPm = (data: string) => {
   const date = new Date(data);
   const hours = date.getHours();
@@ -28,6 +34,8 @@ export const timeAmPm = (data: string) => {
   const formattedHours = hours % 12 || 12;
   return `${formattedHours}:00 ${amPm}`;
 };
+
+//******************************************************* */
 
 export const firstLetterUpperCase = (string: string | undefined): string | undefined => {
   return (
@@ -39,7 +47,11 @@ export const firstLetterUpperCase = (string: string | undefined): string | undef
   );
 };
 
-export const formatDate = <T extends { arrivalDate: string; departureDate: string }>(dateArray: T[] | null): T[] => {
+//******************************************************* */
+
+export const formatDate = <T extends { arrivalDate: string; departureDate: string }>(
+  dateArray: T[] | null
+): T[] => {
   if (!dateArray) return [];
   return dateArray.map((route: T) => {
     return {
@@ -54,16 +66,24 @@ export const formatDate = <T extends { arrivalDate: string; departureDate: strin
   });
 };
 
+//******************************************************* */
+
 export const getPastRoutesAndAvailableRoutes = <T extends IRouteWithDate>(routes: T[]) => {
   const currentDate = new Date().getTime();
 
-  const pastRoutesRaw = routes.filter((route) => new Date(route.arrivalDate).getTime() < currentDate);
-  const availableRoutesRaw = routes.filter((route) => new Date(route.arrivalDate).getTime() > currentDate);
+  const pastRoutesRaw = routes.filter(
+    (route) => new Date(route.arrivalDate).getTime() < currentDate
+  );
+  const availableRoutesRaw = routes.filter(
+    (route) => new Date(route.arrivalDate).getTime() > currentDate
+  );
 
   return {
     pastRoutes: formatDate(pastRoutesRaw),
     availableRoutes: formatDate(availableRoutesRaw),
   };
 };
+
+//******************************************************* */
 
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

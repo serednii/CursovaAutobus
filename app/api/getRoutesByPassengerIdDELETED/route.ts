@@ -4,11 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const middlewareResponse = await middleware(req);
+    // const middlewareResponse = await middleware(req);
 
-    if (middlewareResponse.status !== 200) {
-      return middlewareResponse;
-    }
+    // if (middlewareResponse.status !== 200) {
+    //   return middlewareResponse;
+    // }
     // Отримуємо дані з тіла запиту
     const { passengerId, select } = await req.json();
     // console.log("passengerId", passengerId);
@@ -18,28 +18,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Поле 'passengerId' є обов'язковим" }, { status: 400 });
     }
 
-    // Виконуємо запит до бази даних із включенням зв’язаних таблиць
-    const routeDriversId: { routeDriverId: number }[] = await prisma.busSeat.findMany({
+    // Находимо всіх маршрути які заказав даний пасажир
+    const uniqueRouteDriversId: { routeDriverId: number }[] = await prisma.busSeat.findMany({
       where: { passenger: passengerId },
+      distinct: ["routeDriverId"],
       select: {
         routeDriverId: true, // Залишаємо це поле
-        // Усі інші поля не будуть включені, якщо вони не вказані як `true`
       },
     });
+    const routeDriverIds: number[] = uniqueRouteDriversId.map((route) => route.routeDriverId);
 
-    const uniqueRouteDriversId: number[] = Array.from(
-      new Set(routeDriversId.map((route) => route.routeDriverId))
-    );
-
-    // console.log("getRoutesByPassengerId XXXXXXXXXXXXXXXXX", uniqueRouteDriversId);
     const routes = await prisma.routeDriver.findMany({
       where: {
-        id: { in: uniqueRouteDriversId },
+        id: { in: routeDriverIds },
+        driverId: { not: passengerId },
       },
 
       select: select,
     });
 
+    console.log("routeDriversId", routeDriverIds, uniqueRouteDriversId, routes);
     return NextResponse.json([...routes]);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);

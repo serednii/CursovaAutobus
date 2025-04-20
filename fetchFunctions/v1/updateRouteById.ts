@@ -38,7 +38,7 @@ async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TR
     "updateRouteById.ts",
     updateRouteById,
     "============",
-    `${API_URL}/api/v1/routes/${id}`
+    `${API_URL}/api/v1/routes/id/${id}`
   );
   try {
     const response = await fetch(`${API_URL}/api/v1/routes/id/${id}`, {

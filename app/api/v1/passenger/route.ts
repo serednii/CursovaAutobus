@@ -1,10 +1,9 @@
-import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { IBusSeats } from "@/types/interface";
 import { ErrorResponse, SuccessResponse } from "@/types/response.types";
 import { Prisma } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
-import { updatedBusSeats } from "../v1/routes/updatedBusSeats";
+import { updatedBusSeats } from "../routes/updatedBusSeats";
 
 export async function DELETE(req: NextRequest) {
   try {

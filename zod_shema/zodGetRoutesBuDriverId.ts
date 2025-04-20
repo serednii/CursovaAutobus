@@ -1,7 +1,7 @@
 import {
   IRoutesByIdDriver,
   IRoutesByIdDriverListBlocked,
-} from "@/fetchFunctions/fetchGetRoutesByDriverIdDELETED";
+} from "@/fetchFunctions/fetchGetRoutesByDriverId";
 import { z } from "zod";
 import { dateAndNameCitySchema, dateSchemaString } from "./zodBase";
 

@@ -1,5 +1,4 @@
 import { SeatStatusEnum } from "@/enum/shared.enums";
-// import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { GetRoutesByPassengerId, IRoutesTable } from "@/types/route-passenger.types";
@@ -70,58 +69,3 @@ export const getBusSeatsPassenger = (busSeatsRaw: IBusSeats[], passengerId: numb
   });
   return busSeats;
 };
-
-// export const removeRoutePassengerFunction = async (
-//   routeId: number,
-//   passengerId: number,
-//   routes: GetRoutesByPassengerId[],
-//   reload: boolean,
-//   setReload: React.Dispatch<React.SetStateAction<boolean>>
-// ) => {
-//   const busSeatsRaw = getBusSeatsRaw(routes, routeId);
-//   // const busSeats = getBusSeatsPassenger(busSeatsRaw, passengerId);
-
-//   const result = await fetchDeleteRoutePassenger({
-//     routeDriverId: routeId,
-//     idPassenger: passengerId,
-//     busSeats: busSeatsRaw,
-//   });
-
-//   if (!result) {
-//     //Error delete route passenger
-//   } else {
-//     setReload(!reload);
-//   }
-
-//   console.log("Removing route ID:", routeId, passengerId);
-// };
-
-// const   GetRoutesByPassengerId: {
-//     //  driverId: number; delete
-//      busSeats: IBusSeats[];
-//      passengersSeatsList: ISubPassengersList[];
-//      isReservation: boolean;
-//      id: number;
-//      routePrice: number;
-//     //  departureFromCity?: string; delete
-//     //  arrivalToCity?: string; delete
-//      departureDate: string;
-//      arrivalDate: string;
-//      departureFrom: string;
-//      arrivalTo: string;
-//  }
-
-// const IRoutesTable: {
-//     id: number;
-//     seatsNumber: string;
-//     // routeTotalPrice: string; add
-//     routePrice: string;
-//     busSeats: IBusSeats[];
-//     isReservation: boolean;
-//     passengersSeatsList: ISubPassengersList | undefined;
-//     departureDate: string;
-//     arrivalDate: string;
-//     departureFrom: string;
-//     arrivalTo: string;
-
-// }

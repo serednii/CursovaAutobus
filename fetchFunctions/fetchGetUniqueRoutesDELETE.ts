@@ -53,7 +53,7 @@ class FetchGetUniqueRoutes {
       type,
       schema,
       search: async (data: T): Promise<K | null> => {
-        console.log("data searchRoute", data);
+        // console.log("data searchRoute", data);
         console.log("fetchGetUniqueRoutes API_URL", `${API_URL}/api/getUniqueRoutes`);
         try {
           const response = await fetch(`${API_URL}/api/getUniqueRoutes`, {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
+import deleteRoutePassenger from "@/fetchFunctions/v1/deleteRoutePassenger";
 
 import { IRoutesTable } from "@/types/route-passenger.types";
 import { getBusSeatsRaw } from "./action";
@@ -18,7 +18,8 @@ export const useDeletePassengerRoute = (
 
     try {
       const busSeatsRaw = getBusSeatsRaw(routesPassenger, routeId);
-      const result = await fetchDeleteRoutePassenger({
+      console.log("routeDriverId", routeId, "idPassenger", passengerId, "busSeats", busSeatsRaw);
+      const result = await deleteRoutePassenger({
         routeDriverId: routeId,
         idPassenger: passengerId,
         busSeats: busSeatsRaw,

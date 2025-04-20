@@ -8,7 +8,7 @@ import "./style.scss";
 import { FieldErrors, UseFormRegister, Controller, Control, UseFormWatch } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import { FormValuesRoute } from "@/types/form.types";
-import { IRoutesByIdDriverListBlocked } from "@/fetchFunctions/fetchGetRoutesByDriverIdDELETED";
+import { IRoutesByIdDriverListBlocked } from "@/fetchFunctions/fetchGetRoutesByDriverId";
 
 interface Props {
   name: keyof FormValuesRoute;
@@ -244,7 +244,10 @@ const CustomDatePicker = ({
   const getTimeClassName = (time: Date) => {
     const disabledTimes = getDisabledTimes(time);
     const isDisabled = disabledTimes.some((disabledTime) => {
-      return disabledTime.getHours() === time.getHours() && disabledTime.getMinutes() === time.getMinutes();
+      return (
+        disabledTime.getHours() === time.getHours() &&
+        disabledTime.getMinutes() === time.getMinutes()
+      );
     });
 
     return isDisabled ? "disabled-time" : "";
@@ -271,7 +274,11 @@ const CustomDatePicker = ({
             timeCaption="Time"
             dateFormat="MM/dd/yyyy h:mm aa"
             minDate={now}
-            minTime={selectedDate && selectedDate.toDateString() === now.toDateString() ? now : departureDate}
+            minTime={
+              selectedDate && selectedDate.toDateString() === now.toDateString()
+                ? now
+                : departureDate
+            }
             maxTime={arrivalDate}
             filterDate={(date) => hasAvailableTimeSlots(date)}
             excludeTimes={selectedDate ? getDisabledTimes(selectedDate) : []}

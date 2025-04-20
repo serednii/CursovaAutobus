@@ -9,6 +9,7 @@ class BusStore {
   userSessionId: number | null = null;
   subPassengers: SubPassengerDetails[] = [];
   dataLayoutBus: ILayoutData | null = null;
+  idOrderSubPassengers: NullableNumber[] = [];
   idOrderPassengers: NullableNumber[] = [];
 
   constructor() {
@@ -27,9 +28,11 @@ class BusStore {
 
   setDataLayoutBus = (value: ILayoutData | null, action: RoleEnum) => {
     this.dataLayoutBus = value;
-    // console.log("busStore.ts", value, this.userSessionId, action);
+    console.log("busStore.ts value", value);
+    console.log("busStore.ts", this.dataLayoutBus, this.userSessionId, action);
+
     if (!value || !("passenger" in value)) {
-      this.idOrderPassengers = [];
+      this.idOrderSubPassengers = [];
       return;
     }
 
@@ -42,9 +45,11 @@ class BusStore {
       )
       .map((e) => e.passenger);
 
-    // console.log("newIdOrderPassengers in busStore ---------------- ", newIdOrderPassengers);
-    if (action === RoleEnum.PASSENGER && newIdOrderPassengers.length >= 0)
-      newIdOrderPassengers.pop();
+    if (action === RoleEnum.PASSENGER && newIdOrderPassengers.length > 0) {
+      this.setIdOrderSubPassengers(newIdOrderPassengers.slice(1));
+    } else if (action === RoleEnum.DRIVER) {
+      this.setIdOrderSubPassengers(newIdOrderPassengers);
+    }
     this.setIdOrderPassengers(newIdOrderPassengers);
   };
 
@@ -52,6 +57,24 @@ class BusStore {
     runInAction(() => {
       this.idOrderPassengers = newIdOrderPassengers;
     });
+    console.log(
+      "newIdOrderPassengers in busStore ---------------- ",
+      newIdOrderPassengers,
+      this.idOrderSubPassengers.length,
+      this.idOrderPassengers.length
+    );
+  }, 800);
+
+  setIdOrderSubPassengers = debounce((newIdOrderPassengers: NullableNumber[]) => {
+    runInAction(() => {
+      this.idOrderSubPassengers = newIdOrderPassengers;
+    });
+    console.log(
+      "newIdOrderPassengers in busStore ---------------- ",
+      newIdOrderPassengers,
+      this.idOrderSubPassengers.length,
+      this.idOrderPassengers.length
+    );
   }, 800);
 }
 

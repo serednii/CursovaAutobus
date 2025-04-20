@@ -25,7 +25,7 @@ interface Props {
 function OrderSeatsBus({ route, sessionUser, newData }: Props) {
   const { t } = useAppTranslation("seatselection");
 
-  console.log("OrderSeatsBus newData", newData, route, sessionUser);
+  // console.log("OrderSeatsBus newData", newData, route, sessionUser);
   const renderRef = useRef(0);
 
   const {
@@ -46,7 +46,7 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
   });
 
   const userSessionId: number = Number(sessionUser?.id);
-
+  console.log("newData +++++++++++++++ ", newData);
   useMemo(() => {
     runInAction(() => {
       busStore.setDataLayoutBus(newData, RoleEnum.PASSENGER);
@@ -61,7 +61,7 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
     [route, userSessionId]
   );
 
-  console.log("mylistpassengers------", myListPassengers);
+  console.log("mylistpassengers------", myListPassengers, busStore.dataLayoutBus);
 
   return (
     <>
@@ -69,10 +69,10 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
         <LayoutBus
           sessionUser={sessionUser}
           action={RoleEnum.PASSENGER}
-          driverId={route?.driverId}
+          driverId={route?.driverId || 0}
         />
 
-        {busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0 && (
+        {busStore.idOrderSubPassengers && busStore.idOrderSubPassengers.length > 0 && (
           <SubPassengersOrders
             register={register}
             errors={errors}
@@ -89,7 +89,7 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
           variant="contained"
           color="primary"
           type="submit"
-          disabled={!(busStore.idOrderPassengers && busStore.idOrderPassengers.length > 0)} // Вимикає кнопку, якщо форма не валідна
+          disabled={!(busStore.idOrderSubPassengers && busStore.idOrderPassengers.length > 0)} // Вимикає кнопку, якщо форма не валідна
         >
           {t("reserved_seats")}
         </Button>

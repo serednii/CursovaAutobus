@@ -25,7 +25,7 @@
 // GET /api/routes → отримати всі маршрути limit default=100
 // GET /api/routes?limit=10 → отримати всі маршрути
 
-// GET /api/routes/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по id з певними полями
+// GET /api/routes/id/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по id з певними полями
 //Отримати маршрутти по пошуку за параметрами departureSearch, arrivalToSearch, startOfDay, endOfDay, wifi, coffee, power, restRoom, limit, driverId
   departureSearch?: string;
   arrivalToSearch?: string;
@@ -40,8 +40,11 @@
 // GET api/v1/routes?limit=10&departureSearch=Fd&arrivalToSearch=&startOfDay=Invalid+Date&endOfDay=Invalid+Date&wifi=false&coffee=false&power=false&restRoom=false&select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList
 
 // POST /api/v1/routes → створити
-// PATCH /api/v1/routes/:id → оновити дані частково
-// DELETE /api/v1/routes/:id → видалити
+// PATCH /api/v1/routes/id/:id → оновити дані частково
+// DELETE /api/v1/routes/id/:id → видалити
+
+// GET /api/routes/passengerId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
+// GET /api/routes/passengerId/:id → отримати  маршрут по passengerId з усіма полями
 
 //GET api/v1/routes/uniqueCity?select=id,departureFrom,arrivalTo, //Видає комбінацію унікальних міст departureFrom,arrivalTo з вказаними полями
 //GET api/v1/routes/uniqueCity //Видає комбінацію унікальних міст departureFrom,arrivalTo з повними полями

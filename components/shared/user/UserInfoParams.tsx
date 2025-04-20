@@ -13,7 +13,7 @@ export default function UserInfoParams({ user, className }: Props) {
   return (
     <div className={cn(className, "")}>
       <h1>
-        {user?.lastName} {user?.firstName}
+        {user?.lastName} {user?.firstName} {user?.id}
       </h1>
       <p>{user?.email}</p>
       {/* <p className="text-red-600">{user?.role.toUpperCase()}</p> */}

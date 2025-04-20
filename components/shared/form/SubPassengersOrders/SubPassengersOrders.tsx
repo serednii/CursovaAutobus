@@ -44,7 +44,7 @@ function SubPassengersOrders({
   watch,
   action,
 }: Props) {
-  // const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+  // const idOrderPassengers = useStore((state) => state.idOrderSubPassengers);
   const { t: createroute } = useAppTranslation("createroute");
 
   const { subPassengers, setSubPassengers } = useSubPassengers({

@@ -10,12 +10,6 @@ export async function middleware(req: any) {
   // console.log("token", token);
   // console.log("Request URL:", req);
   const { pathname } = req.nextUrl;
-  const apiKey = token?.apiKey;
-  console.log("midlevare pathname apiKey", pathname, token?.apiKey);
-
-  // if (apiKey !== process.env.NEXT_PUBLIC_API_KEY && pathname.includes("/api")) {
-  //   return NextResponse.json({ message: "Невірний API ключ" }, { status: 403 });
-  // }
 
   // Якщо токен відсутній
   if (!token) {

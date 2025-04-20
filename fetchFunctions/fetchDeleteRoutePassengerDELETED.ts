@@ -31,7 +31,6 @@ async function fetchDeleteRoutePassenger(
 
     // Обробка відповіді
     const data: GetRoutesByDriverId[] = await response.json();
-    // console.log("Отримані маршрути fetchDeleteRoutePassenger:", data);
 
     // Повертаємо успішну відповідь
     const successResponse: SuccessResponse = {

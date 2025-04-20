@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
+import getRoutesByPassengerId from "@/fetchFunctions/v1/getRoutesByPassengerId";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";
@@ -7,7 +7,9 @@ import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 export const useFetchPassengerRoutes = (reload: boolean) => {
   const { userSessionId } = useGetSessionParams();
 
-  const [routesPassenger, setRoutesPassenger] = useState<Omit<GetRoutesByPassengerId, "isReservation">[]>([]);
+  const [routesPassenger, setRoutesPassenger] = useState<
+    Omit<GetRoutesByPassengerId, "isReservation">[]
+  >([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -16,7 +18,10 @@ export const useFetchPassengerRoutes = (reload: boolean) => {
     const fetchRoutes = async () => {
       try {
         setLoading(true);
-        const routes = await fetchGetRoutesByPassengerId<typeof selectMyBookings>(userSessionId, selectMyBookings);
+        const routes = await getRoutesByPassengerId<typeof selectMyBookings>(
+          userSessionId,
+          selectMyBookings
+        );
         if (routes !== null) {
           setRoutesPassenger(routes.filter((item) => item.driverId !== userSessionId));
         }

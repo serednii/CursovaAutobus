@@ -80,7 +80,6 @@ class GetRoutesByDriverId {
 
           if (!response.ok)
             throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
-
           const result = await response.json();
           return schema.parse(result); // Перевірка через Zod перед поверненням
         } catch (error) {

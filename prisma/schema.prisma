@@ -19,7 +19,7 @@ model User {
   license             String
   apiKey              String?               @unique // Додайте це поле
   routes              RouteDriver[] // Зв'язок з RouteDriver
-  orders              OrderedRoute[] // Зв'язок із замовленими маршрутами
+  // orders              OrderedRoute[] // Зв'язок із замовленими маршрутами
   passengersSeatsList PassengersSeatsList[]
 }
 
@@ -45,7 +45,7 @@ model RouteDriver {
   modelBus            String // Модель автобуса
   intermediateStops   IntermediateStop[] // Проміжні зупинки
   busSeats            BusSeat[] // Зв'язок з BusSeat
-  orders              OrderedRoute[]
+  // orders              OrderedRoute[]
   passengersSeatsList PassengersSeatsList[]
 }
 
@@ -86,19 +86,19 @@ model IntermediateStop {
   route    RouteDriver? @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }
 
-model OrderedRoute {
-  id            Int         @id @default(autoincrement())
-  passengerId   Int
-  user          User        @relation(fields: [passengerId], references: [id], onDelete: Cascade)
-  routeDriverId Int
-  routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id], onDelete: Cascade)
-  orderDate     DateTime    @default(now())
-  orderSeats    OrderSeat[]
-}
+// model OrderedRoute {
+//   id            Int         @id @default(autoincrement())
+//   passengerId   Int
+//   user          User        @relation(fields: [passengerId], references: [id], onDelete: Cascade)
+//   routeDriverId Int
+//   routeDriver   RouteDriver @relation(fields: [routeDriverId], references: [id], onDelete: Cascade)
+//   orderDate     DateTime    @default(now())
+//   orderSeats    OrderSeat[]
+// }
 
-model OrderSeat {
-  id         Int          @id @default(autoincrement())
-  seatNumber Int
-  orderId    Int
-  order      OrderedRoute @relation(fields: [orderId], references: [id], onDelete: Cascade)
-}
+// model OrderSeat {
+//   id         Int          @id @default(autoincrement())
+//   seatNumber Int
+//   orderId    Int
+//   order      OrderedRoute @relation(fields: [orderId], references: [id], onDelete: Cascade)
+// }

@@ -18,7 +18,7 @@ interface Props {
   // handleDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
   action: RoleEnum;
-  driverId: number | undefined | null;
+  driverId: number;
 }
 
 function LayoutBus({ className, sessionUser, action, driverId }: Props) {

@@ -70,6 +70,7 @@ export interface FormTranslations {
   book_now: string;
   booked_seats: string;
   change_route: string;
+  change_bookings: string;
   new_route: string;
   cancel_route: string;
   activate_again: string;
@@ -131,6 +132,7 @@ export interface MyBookingsTranslations {
   booked_routes: string;
   cancel_booking: string;
   details_route: string;
+  details_bookings: string;
 }
 
 // Інтерфейс для home.json

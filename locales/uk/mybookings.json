@@ -1,1 +1,6 @@
-{ "booked_routes": "Замовлені маршрути", "cancel_booking": "Скасувати замовлення", "details_route": "Деталі маршруту" }
+{
+  "booked_routes": "Замовлені маршрути",
+  "cancel_booking": "Скасувати замовлення",
+  "details_route": "Деталі маршруту",
+  "details_bookings": "Деталі замовлення"
+}

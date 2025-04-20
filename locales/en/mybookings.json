@@ -1,5 +1,6 @@
 {
   "booked_routes": "Booked routes",
   "cancel_booking": "Cancel booking",
-  "details_route": "Details route"
+  "details_route": "Details route",
+  "details_bookings": "Details booking"
 }

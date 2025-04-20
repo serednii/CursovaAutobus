@@ -18,7 +18,7 @@ interface Props {
   // handleDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession;
   action: RoleEnum;
-  driverId: number | null | undefined;
+  driverId: number;
 }
 
 function PassengerSeat({ className, params, sessionUser, action, driverId }: Props) {
@@ -32,7 +32,7 @@ function PassengerSeat({ className, params, sessionUser, action, driverId }: Pro
   const sessionUserId = parseInt(sessionUser.id);
   const userRole = sessionUser?.role;
 
-  // console.log("sessionUserId === driverId", sessionUserId, driverId);
+  // console.log("sessionUserId === driverId", changeStatus.busSeatStatus, changeStatus.passenger);
   //add styles top, bottom, left, right
 
   keys.forEach((key) => {
@@ -43,11 +43,12 @@ function PassengerSeat({ className, params, sessionUser, action, driverId }: Pro
 
   useEffect(() => {
     runInAction(() => {
+      console.log("5555", action);
       params.busSeatStatus = changeStatus.busSeatStatus;
       params.passenger = changeStatus.passenger;
       busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
     });
-  }, [changeStatus.busSeatStatus, changeStatus.passenger, params, busStore, action]);
+  }, [changeStatus.busSeatStatus, changeStatus.passenger, params, action]);
 
   // Змінюємо колір залежно від статусу місця
   const statusColor = {

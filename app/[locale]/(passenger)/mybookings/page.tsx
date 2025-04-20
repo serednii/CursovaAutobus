@@ -1,6 +1,6 @@
 import React from "react";
 
-import fetchGetRoutesByPassengerId from "@/fetchFunctions/fetchGetRoutesByPassengerId";
+import getRoutesByPassengerId from "@/fetchFunctions/v1/getRoutesByPassengerId";
 import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/configs/auth";
@@ -11,11 +11,11 @@ export default async function MyBookings() {
   const userSessionId = Number(session?.user?.id);
 
   // const { routesPassenger, loading, userSessionId } = useFetchPassengerRoutes(reload);
-  const routesPassenger = await fetchGetRoutesByPassengerId<typeof selectMyBookings>(
+  const routesPassenger = await getRoutesByPassengerId<typeof selectMyBookings>(
     userSessionId,
     selectMyBookings
   );
-  // console.log("routesPassenger", routesPassenger);
+  console.log("routesPassenger", routesPassenger);
   // const { removeRoutePassenger } = useDeletePassengerRoute(routesPassenger, userSessionId, setReload);
 
   if (routesPassenger === null) return null;

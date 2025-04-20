@@ -5,12 +5,6 @@ import { prisma } from "@/prisma/prisma-client";
 export async function POST(req: NextRequest) {
   try {
     // Викликаємо middleware для перевірки авторизації
-    const middlewareResponse = await middleware(req);
-
-    // Якщо middleware повернув помилку, повертаємо її
-    if (middlewareResponse.status !== 200) {
-      return middlewareResponse;
-    }
 
     // Отримуємо всіх користувачів з бази даних
     const users = await prisma.user.findMany();

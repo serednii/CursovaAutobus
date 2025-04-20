@@ -13,7 +13,7 @@ export default async function CreateRoutePage({ params }: { params: Params }) {
   const type = (slug && slug[1]) || "";
   const session: UserUserSession | null = await getServerSession(authConfig);
   const route = await getRoute({ id, type });
-  // console.log("route", session);
+  console.log("route ********** *********** ", type, route);
   if (!session) {
     console.error("Route not found");
     return <div>Route not found</div>;

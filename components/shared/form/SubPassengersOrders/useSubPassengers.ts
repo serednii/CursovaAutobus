@@ -8,7 +8,7 @@ import { RoleEnum } from "@/enum/shared.enums";
 import busStore from "@/mobx/busStore";
 
 interface UseSubPassengersProps {
-  // idOrderPassengers: NullableNumber[];
+  // idOrderSubPassengers: NullableNumber[];
   myListPassengers?: ISubPassengersList;
   renderRef: React.RefObject<number>;
   unregister: UseFormUnregister<FormValuesRoute>;
@@ -44,7 +44,7 @@ export function useSubPassengers({
         });
       });
       // Додаємо нові поля, якщо потрібно
-      const delta = busStore.idOrderPassengers.length - updatedPassengers.length;
+      const delta = busStore.idOrderSubPassengers.length - updatedPassengers.length;
       if (delta > 0) {
         for (let i = 0; i < delta; i++) {
           updatedPassengers.push({
@@ -55,7 +55,7 @@ export function useSubPassengers({
           });
         }
       } else {
-        updatedPassengers = updatedPassengers.slice(0, busStore.idOrderPassengers.length);
+        updatedPassengers = updatedPassengers.slice(0, busStore.idOrderSubPassengers.length);
       }
       setSubPassengers(updatedPassengers);
     }
@@ -64,7 +64,7 @@ export function useSubPassengers({
     // }, [idOrderPassengers.length, myListPassengers]);
     // }, [idOrderPassengers.length, myListPassengers, action, renderRef, sessionUser?.phone, subPassengers, unregister]);
   }, [
-    busStore.idOrderPassengers,
+    busStore.idOrderSubPassengers,
     myListPassengers,
     action,
     renderRef,

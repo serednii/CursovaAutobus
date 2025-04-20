@@ -8,26 +8,32 @@ import debounce from "lodash/debounce";
 export interface BearState {
   userSessionId: number | null;
   subPassengers: SubPassengerDetails[];
-  setSubPassengers: (value: SubPassengerDetails[] | ((prev: SubPassengerDetails[]) => SubPassengerDetails[])) => void;
+  setSubPassengers: (
+    value: SubPassengerDetails[] | ((prev: SubPassengerDetails[]) => SubPassengerDetails[])
+  ) => void;
   dataLayoutBus: ILayoutData | null;
   // dataLayoutBusMap: ILayoutData | null;
-  idOrderPassengers: NullableNumber[];
+  idOrderSubPassengers: NullableNumber[];
   // updateIdOrderPassengers: (userId: number, action: RoleEnum) => void;
   setDataLayoutBus: (
-    value: ILayoutData | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined) | null | undefined,
+    value:
+      | ILayoutData
+      | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined)
+      | null
+      | undefined,
     action: RoleEnum
   ) => void;
   setUserIdSession: (value: number | null) => void;
   // setDataLayoutBusMap: (value: ILayoutData | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined) | null | undefined) => void;
 }
-// const debouncedSet = debounce((set, idOrderPassengers) => {
-//   set({ idOrderPassengers });
+// const debouncedSet = debounce((set, idOrderSubPassengers) => {
+//   set({ idOrderSubPassengers });
 // }, 800);
 
 const debouncedSet = debounce(
-  (set, idOrderPassengers) => {
-    // console.log("idOrderPassengers***********", idOrderPassengers);
-    set({ idOrderPassengers });
+  (set, idOrderSubPassengers) => {
+    // console.log("idOrderSubPassengers***********", idOrderSubPassengers);
+    set({ idOrderSubPassengers });
   },
   800,
   { leading: false, trailing: true }
@@ -37,9 +43,12 @@ const useStore = create<BearState>((set, get) => ({
   userSessionId: null,
   dataLayoutBus: null,
   // dataLayoutBusMap: null,
-  idOrderPassengers: [],
+  idOrderSubPassengers: [],
   subPassengers: [],
-  setSubPassengers: (value) => set((state) => ({ subPassengers: typeof value === "function" ? value(state.subPassengers) : value ?? [] })),
+  setSubPassengers: (value) =>
+    set((state) => ({
+      subPassengers: typeof value === "function" ? value(state.subPassengers) : value ?? [],
+    })),
   // updateIdOrderPassengers: (userId: number, action: RoleEnum) => {
 
   // }
@@ -53,7 +62,7 @@ const useStore = create<BearState>((set, get) => ({
   //           e.passenger === userId && e.busSeatStatus === (action === RoleEnum.PASSENGER ? SeatStatusEnum.SELECTED : SeatStatusEnum.RESERVEDEMPTY)
   //       )
   //       .map((e) => e.passenger) ?? [];
-  //   // console.log("idOrderPassengers***********", idOrderPassengers);
+  //   // console.log("idOrderSubPassengers***********", idOrderSubPassengers);
   //   // debounce(() => set({ idOrderPassengers }), 800);
   //   debouncedSet(set, newIdOrderPassengers);
   //   // set(newIdOrderPassengers);
@@ -75,7 +84,7 @@ const useStore = create<BearState>((set, get) => ({
     }));
 
     if (!value || !("passenger" in value)) {
-      state.idOrderPassengers = [];
+      state.idOrderSubPassengers = [];
       return;
     }
     // console.log("XXXXXXXXXxxxxxx");
@@ -83,7 +92,8 @@ const useStore = create<BearState>((set, get) => ({
       .filter(
         (e) =>
           e.passenger === state.userSessionId &&
-          e.busSeatStatus === (action === RoleEnum.PASSENGER ? SeatStatusEnum.SELECTED : SeatStatusEnum.RESERVEDEMPTY)
+          e.busSeatStatus ===
+            (action === RoleEnum.PASSENGER ? SeatStatusEnum.SELECTED : SeatStatusEnum.RESERVEDEMPTY)
       )
       .map((e) => e.passenger);
 

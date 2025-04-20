@@ -83,7 +83,7 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
         ...baseColumns,
         {
           field: "changeRouter",
-          headerName: form("change_route"),
+          headerName: form("change_bookings"),
           minWidth: 180,
           sortable: false,
           renderCell: (params) => (
@@ -93,7 +93,7 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
               size="small"
               onClick={() => handleChangeOrderRoute(params.row)}
             >
-              {form("change_route")}
+              {form("change_bookings")}
             </Button>
           ),
         },
@@ -117,7 +117,7 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
         },
         {
           field: "detailsRoute",
-          headerName: form("details_route"),
+          headerName: form("details_bookings"),
           minWidth: 200,
           sortable: false,
           renderCell: (params) => (
@@ -127,7 +127,7 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
               size="small"
               onClick={() => handleDetailOrderRoute(params.row)}
             >
-              {form("details_route")}
+              {form("details_bookings")}
             </Button>
           ),
         },

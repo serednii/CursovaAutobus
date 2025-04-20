@@ -128,7 +128,7 @@ class GetRoutesById {
       schema,
       search: async (id: number, select: T): Promise<K | null> => {
         const selectString = Object.keys(select).join(",");
-        console.log("data searchRoute", id, select);
+        // console.log("data searchRoute", id, select);
         console.log("API_URL", `${API_URL}/api/v1/routes/id/${id}?select=${selectString}`);
         try {
           const response = await fetch(`${API_URL}/api/v1/routes/id/${id}?select=${selectString}`, {

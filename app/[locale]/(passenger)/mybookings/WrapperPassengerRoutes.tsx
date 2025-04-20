@@ -14,8 +14,10 @@ interface Props {
 }
 
 export default function WrapperPassengerRoutes({ routes, userSessionId }: Props) {
-  const widthOutMyRoute = deleteMyRoute(routes, userSessionId);
-  const newFormatData = newFormatRoutesTable(widthOutMyRoute, userSessionId);
+  console.log("routes", routes);
+  // const widthOutMyRoute = deleteMyRoute(routes, userSessionId);
+  console.log("widthOutMyRoute", routes);
+  const newFormatData = newFormatRoutesTable(routes, userSessionId);
 
   const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(newFormatData);
 

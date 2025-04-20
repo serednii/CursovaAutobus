@@ -8,7 +8,7 @@ interface SeatButtonProps {
   changeStatus: BusSeatInfo;
   action: RoleEnum;
   sessionUserId: number;
-  driverId: number | null | undefined;
+  driverId: number;
   statusColor: string;
   styles?: React.CSSProperties;
   className?: string;
@@ -29,8 +29,10 @@ const SeatButton: React.FC<SeatButtonProps> = ({
   const disabled =
     changeStatus.busSeatStatus === SeatStatusEnum.RESERVED ||
     (action === RoleEnum.PASSENGER && sessionUserId === driverId) ||
-    (changeStatus.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY && sessionUserId !== driverId);
-  // console.log("SeatButton RENDER");
+    (driverId > 0 &&
+      changeStatus.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY &&
+      sessionUserId !== driverId);
+  // console.log("SeatButton RENDER", changeStatus.busSeatStatus, action, sessionUserId, driverId);
   return (
     <button
       disabled={disabled}

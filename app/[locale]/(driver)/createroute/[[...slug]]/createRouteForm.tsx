@@ -50,7 +50,7 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
 // const setUserIdSession = useStore((state) => state.setUserIdSession);
 // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
 // const dataLayoutBus = useStore((state) => state.dataLayoutBus);
-// const idOrderPassengers = useStore((state) => state.idOrderPassengers);
+// const idOrderPassengers = useStore((state) => state.idOrderSubPassengers);
 
 interface Props {
   id: number;
@@ -97,8 +97,9 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
   useMemo(() => {
     runInAction(() => {
       busStore.setUserIdSession(userSessionId);
+      !route && busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
     });
-  }, [userSessionId]);
+  }, [userSessionId, route]);
 
   useUpdateValues({
     id,

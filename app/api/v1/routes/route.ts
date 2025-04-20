@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
   const selectObject = parseStringRoutesToObject(selectParams);
 
   const departureSearch = searchParams.get("departureSearch") || "";
+
   const arrivalToSearch = searchParams.get("arrivalToSearch") || "";
   const startOfDay = searchParams.get("startOfDay") || null;
   const startOfDayDate = startOfDay && startOfDay !== "Invalid Date" ? new Date(startOfDay) : null;
@@ -38,7 +39,6 @@ export async function GET(req: NextRequest) {
   console.log("coffee", coffee);
   console.log("power", power);
   console.log("restRoom", restRoom);
-
   // Фільтр по датах
   const dateFilter =
     startOfDayDate && endOfDayDate
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
   });
 
   const routesCity = await prisma.routeDriver.findMany({
-    where,
+    // where,
     take: 20,
     select: {
       departureFrom: true,

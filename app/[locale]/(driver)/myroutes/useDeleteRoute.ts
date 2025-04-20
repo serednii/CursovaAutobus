@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import fetchDeleteRouteById from "@/fetchFunctions/fetchDeleteRouteById";
+import fetchDeleteRouteById from "@/fetchFunctions/fetchDeleteRouteByIdDELETED";
 import { useRouter } from "next/navigation";
 export const useDeleteRoute = () => {
   const [routeToDelete, setRouteToDelete] = useState<number | null>(null);
