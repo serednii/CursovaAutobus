@@ -5,24 +5,53 @@ import DriverSeat from "./DriverSeat";
 import PassengerSeat from "./PassengerSeat";
 import Stairs from "./Stairs";
 
-import { BusSeatInfo } from "@/types/layoutbus.types";
+import { BusSeatInfo, SeatPositionNumber } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 // import { memo, useEffect } from "react";
 // import useStore from "@/zustand/createStore";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+// import { ZodNumber } from "zod";
 interface Props {
   className?: string;
-  // dataLayoutBus: ILayoutData;
-  // handleDataLayoutBus: (value: ILayoutData) => void;
   sessionUser: UserSession | null;
   action: RoleEnum;
   driverId: number;
 }
 
+type styleKey = "left" | "bottom" | "right" | "top"; // Виправлений тип
+
+export const converterToPx = (
+  changeObject: Record<string, number>,
+  busWidth: number,
+  busHeight: number
+): Record<styleKey, string> => {
+  const keys = Object.keys(changeObject) as styleKey[];
+  const newObject = {} as Record<styleKey, string>;
+
+  if (keys[0] === "left" || keys[0] === "right") {
+    newObject[keys[0]] = `${Math.round(busWidth * changeObject[keys[0]])}px`;
+  } else {
+    newObject[keys[0]] = `${Math.round(busHeight * changeObject[keys[0]])}px`;
+  }
+
+  if (keys[1] === "left" || keys[1] === "right") {
+    newObject[keys[1]] = `${Math.round(busWidth * changeObject[keys[1]])}px`;
+  } else {
+    newObject[keys[1]] = `${Math.round(busHeight * changeObject[keys[1]])}px`;
+  }
+
+  return newObject;
+};
+
 function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   console.log("LayoutBus RENDER");
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const isSmallMobile = useMediaQuery("(max-width: 400px)");
+
   if (
     sessionUser === null ||
     driverId === null ||
@@ -31,6 +60,9 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   ) {
     return null;
   }
+  const scale = isMobile ? (isSmallMobile ? 0.4 : 0.6) : 1;
+  const newBusWidth = busStore.dataLayoutBus.busWidth * scale;
+  const newBusHeight = busStore.dataLayoutBus.busHeight * scale;
 
   const keysDriverSeat = Object.keys(
     busStore.dataLayoutBus.driverSeat
@@ -46,11 +78,9 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
       busStore.dataLayoutBus.stairs[1]
     ) as (keyof (typeof busStore.dataLayoutBus.stairs)[1])[]);
 
-  type styleKey = ("left" | "bottom" | "right" | "top")[]; // Виправлений тип
-
   const getKeysStyles = (
-    nameKeys: styleKey,
-    data: Record<string, string> // Якщо параметри конкретні, можна вказати точний тип
+    nameKeys: styleKey[],
+    data: Record<styleKey, string> // Якщо параметри конкретні, можна вказати точний тип
   ): React.CSSProperties => {
     const styleDriverSeat: React.CSSProperties = {};
     nameKeys.forEach((key) => {
@@ -61,26 +91,38 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
     return styleDriverSeat;
   };
 
-  const styleDriverSeat = getKeysStyles(keysDriverSeat, busStore.dataLayoutBus.driverSeat);
-  const styleStairs_0 = getKeysStyles(keysStairs_0, busStore.dataLayoutBus.stairs[0]);
+  const styleDriverSeat = getKeysStyles(
+    keysDriverSeat,
+    converterToPx(busStore.dataLayoutBus.driverSeat, newBusWidth, newBusHeight)
+  );
+  const styleStairs_0 = getKeysStyles(
+    keysStairs_0,
+    converterToPx(busStore.dataLayoutBus.stairs[0], newBusWidth, newBusHeight)
+  );
+
   const styleStairs_1 =
-    (keysStairs_1 && getKeysStyles(keysStairs_1, busStore.dataLayoutBus.stairs[1])) || null;
+    (keysStairs_1 &&
+      getKeysStyles(
+        keysStairs_1,
+        converterToPx(busStore.dataLayoutBus.stairs[1], newBusWidth, newBusHeight)
+      )) ||
+    null;
 
   const styleBus = {
-    width: busStore.dataLayoutBus.busWidth,
-    height: busStore.dataLayoutBus.busHeight,
-    scale: "0.8",
+    width: newBusWidth,
+    height: newBusHeight,
+    borderTopLeftRadius: 50 * scale + "px",
+    borderBottomLeftRadius: 50 * scale + "px",
+    borderTopRightRadius: 25 * scale + "px",
+    borderBottomRightRadius: 25 * scale + "px",
   };
 
   return (
     <div className={cn("overflow-auto", className)}>
-      <div
-        style={styleBus}
-        className="relative m-auto  rounded-l-[50px] rounded-r-[25px] bg-[#ccd0d7]  border-2 border-[#000000]"
-      >
-        <DriverSeat style={styleDriverSeat} className="left-[80px] bottom-[20px]" />
-        <Stairs style={styleStairs_0} className="right-[100px] top-[0px]" />
-        {styleStairs_1 && <Stairs style={styleStairs_1 || {}} className="left-[50px] top-[0px]" />}
+      <div style={styleBus} className="relative m-auto  bg-[#ccd0d7]  border-2 border-[#000000]">
+        <DriverSeat style={styleDriverSeat} scale={scale} />
+        <Stairs style={styleStairs_0} scale={scale} />
+        {styleStairs_1 && <Stairs style={styleStairs_1 || {}} scale={scale} />}
         {busStore.dataLayoutBus?.passenger.map((item: BusSeatInfo, index: number) => {
           return (
             <div key={index}>
@@ -89,6 +131,9 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
                 sessionUser={sessionUser}
                 action={action}
                 driverId={driverId}
+                scale={scale}
+                newBusWidth={newBusWidth}
+                newBusHeight={newBusHeight}
               />
             </div>
           );

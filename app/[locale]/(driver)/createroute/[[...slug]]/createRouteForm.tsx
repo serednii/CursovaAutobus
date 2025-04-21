@@ -60,7 +60,7 @@ interface Props {
 }
 
 function CreateRouteForm({ id, type, sessionUser, route }: Props) {
-  console.log("session User", sessionUser, route);
+  // console.log("session User", sessionUser, route);
   const userSessionId = Number(sessionUser?.id);
 
   const { t } = useAppTranslation("createroute");
@@ -94,12 +94,12 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
     },
   });
 
-  useMemo(() => {
-    runInAction(() => {
-      busStore.setUserIdSession(userSessionId);
-      !route && busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
-    });
-  }, [userSessionId, route]);
+  // useMemo(() => {
+  //   runInAction(() => {
+  //     busStore.setUserIdSession(userSessionId);
+  //     !route && busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
+  //   });
+  // }, [userSessionId, route]);
 
   useUpdateValues({
     id,

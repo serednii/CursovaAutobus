@@ -28,8 +28,8 @@ class BusStore {
 
   setDataLayoutBus = (value: ILayoutData | null, action: RoleEnum) => {
     this.dataLayoutBus = value;
-    console.log("busStore.ts value", value);
-    console.log("busStore.ts", this.dataLayoutBus, this.userSessionId, action);
+    // console.log("busStore.ts value", value);
+    // console.log("busStore.ts", this.dataLayoutBus, this.userSessionId, action);
 
     if (!value || !("passenger" in value)) {
       this.idOrderSubPassengers = [];

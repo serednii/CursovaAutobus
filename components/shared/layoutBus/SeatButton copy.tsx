@@ -12,7 +12,6 @@ interface SeatButtonProps {
   statusColor: string;
   styles?: React.CSSProperties;
   className?: string;
-  scale: number;
   handleClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -25,7 +24,6 @@ const SeatButton: React.FC<SeatButtonProps> = ({
   statusColor,
   styles,
   className,
-  scale,
   handleClick,
 }) => {
   const disabled =
@@ -34,26 +32,7 @@ const SeatButton: React.FC<SeatButtonProps> = ({
     (driverId > 0 &&
       changeStatus.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY &&
       sessionUserId !== driverId);
-
-  const sizeSeatButton_1 = {
-    width: 60 * scale,
-    height: 40 * scale,
-    border: 4 * scale + "px",
-    borderRadius: 4 * scale + "px",
-  };
-
-  const sizeSeatButton_2 = {
-    width: 15 * scale,
-    height: 40 * scale,
-    border: 4 * scale + "px",
-    right: 2 * scale + "px",
-  };
-
-  const sizeSeatButton_p = {
-    fontSize: 1.5 * scale + "rem",
-    transform: `translateX(-${-5 * scale}px)`,
-    borderRadius: 4 * scale + "px",
-  };
+  // console.log("SeatButton RENDER", changeStatus.busSeatStatus, action, sessionUserId, driverId);
   return (
     <button
       disabled={disabled}
@@ -62,16 +41,13 @@ const SeatButton: React.FC<SeatButtonProps> = ({
       className={cn("absolute disabled:cursor-not-allowed", className)}
     >
       <div
-        style={sizeSeatButton_1}
-        className={cn("relative  flex justify-center items-center", statusColor)}
+        className={cn(
+          "relative w-[60px] h-[40px] rounded-t-lg rounded-b-md flex justify-center items-center",
+          statusColor
+        )}
       >
-        <p style={sizeSeatButton_p} className="text-white ">
-          {number}
-        </p>
-        <div
-          style={sizeSeatButton_2}
-          className="absolute  top-[0px] rounded-t-md rounded-b-xl  bg-[#5a8950]"
-        ></div>
+        <p className="text-white text-[1.5rem] translate-x-[-5px]">{number}</p>
+        <div className="absolute right-[2px] top-[0px] rounded-t-md rounded-b-xl w-[15px] h-[40px] bg-[#5a8950]"></div>
       </div>
     </button>
   );

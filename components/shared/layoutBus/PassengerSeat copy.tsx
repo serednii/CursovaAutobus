@@ -1,7 +1,7 @@
 "use client";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 // import { cn } from "@/lib/utils";
-import { ILayoutData, BusSeatInfo, SeatPositionNumber } from "@/types/layoutbus.types";
+import { ILayoutData, BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 // import useStore from "@/zustand/createStore";
 import { useEffect, useState } from "react";
@@ -10,7 +10,6 @@ import SeatButton from "./SeatButton";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
 import { runInAction } from "mobx";
-import { converterToPx } from "./LayuotBus";
 
 interface Props {
   className?: string;
@@ -20,42 +19,31 @@ interface Props {
   sessionUser: UserSession;
   action: RoleEnum;
   driverId: number;
-  scale: number;
-  newBusWidth: number;
-  newBusHeight: number;
 }
 
-function PassengerSeat({
-  className,
-  params,
-  sessionUser,
-  action,
-  driverId,
-  scale,
-  newBusWidth,
-  newBusHeight,
-}: Props) {
+function PassengerSeat({ className, params, sessionUser, action, driverId }: Props) {
+  // console.log("PassengerSeat RENDER");
+  // const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
+
   const { number } = params;
   const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
   const keys = Object.keys(params) as (keyof typeof params)[];
-  const styles: SeatPositionNumber = {};
+  const styles: React.CSSProperties = {};
   const sessionUserId = parseInt(sessionUser.id);
   const userRole = sessionUser?.role;
 
+  // console.log("sessionUserId === driverId", changeStatus.busSeatStatus, changeStatus.passenger);
+  //add styles top, bottom, left, right
+
   keys.forEach((key) => {
     if (params[key] && key !== "number" && key !== "busSeatStatus" && key !== "passenger") {
-      styles[key] = typeof params[key] === "number" ? params[key] : params[key];
+      styles[key] = typeof params[key] === "number" ? `${params[key]}px` : params[key];
     }
   });
 
-  // console.log("styles", styles);
-
-  const newStyles = converterToPx(styles, newBusWidth, newBusHeight);
-  // console.log("newStyles", newStyles);
-
   useEffect(() => {
     runInAction(() => {
-      // console.log("5555", action);
+      console.log("5555", action);
       params.busSeatStatus = changeStatus.busSeatStatus;
       params.passenger = changeStatus.passenger;
       busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
@@ -113,10 +101,9 @@ function PassengerSeat({
       sessionUserId={sessionUserId}
       driverId={driverId}
       statusColor={statusColor}
-      styles={newStyles}
+      styles={styles}
       className={className}
       handleClick={handleClick}
-      scale={scale}
     />
   );
 }

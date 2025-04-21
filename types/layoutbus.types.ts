@@ -2,10 +2,10 @@ import { SeatStatusEnum } from "@/enum/shared.enums";
 import { NullableNumber } from "./types";
 
 export type SeatPositionString = {
-  left?: string;
-  bottom?: string;
-  top?: string;
-  right?: string;
+  left?: number;
+  bottom?: number;
+  top?: number;
+  right?: number;
 };
 
 export type SeatPositionNumber = {
@@ -23,10 +23,10 @@ export type BusSeatInfo = {
 
 export interface ILayoutData {
   passengerLength: number;
-  busWidth: string;
-  busHeight: string;
+  busWidth: number;
+  busHeight: number;
   passenger: BusSeatInfo[];
   modelBus: string;
-  driverSeat: SeatPositionString;
-  stairs: SeatPositionString[];
+  driverSeat: SeatPositionNumber;
+  stairs: SeatPositionNumber[];
 }
