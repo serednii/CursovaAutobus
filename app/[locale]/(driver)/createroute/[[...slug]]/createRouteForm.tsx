@@ -231,6 +231,7 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
             errors={errors}
             name={"routePrice"}
             title={t("route_price")}
+            limit={9999}
             className="mb-5"
           />
 

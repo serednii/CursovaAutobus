@@ -15,9 +15,20 @@ interface Props {
   className?: string;
   listCity?: string[] | undefined;
   action: "createRoute" | "searchRoute";
+  limit?: number;
 }
 
-export default memo(function CustomTextField({ register, errors, setValue, name, title, className, listCity, action }: Props) {
+export default memo(function CustomTextField({
+  register,
+  errors,
+  setValue,
+  name,
+  title,
+  className,
+  limit,
+  listCity,
+  action,
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [zIndex, setZIndex] = useState<{ zIndex: string }>({ zIndex: "auto" });
 
@@ -58,7 +69,10 @@ export default memo(function CustomTextField({ register, errors, setValue, name,
         </label>
         <TextField
           id={name}
-          {...register(name, isRequired)}
+          {...register(name, {
+            required: true,
+            max: limit, // максимальне значення
+          })}
           variant="outlined"
           fullWidth
           InputProps={{
@@ -81,7 +95,11 @@ export default memo(function CustomTextField({ register, errors, setValue, name,
             <div className="absolute top-[70px] left-0  bg-white h-[162px] w-full z-[150]  overflow-auto  text-[1rem] border-2  border-sky-500 p-3">
               <ul>
                 {listCity.map((city: string) => (
-                  <li key={city} className="h-[1.5rem] leading-[1.5rem] cursor-pointer hover:bg-gray-200 transition-colors px-1" onClick={changeCity}>
+                  <li
+                    key={city}
+                    className="h-[1.5rem] leading-[1.5rem] cursor-pointer hover:bg-gray-200 transition-colors px-1"
+                    onClick={changeCity}
+                  >
                     {city}
                   </li>
                 ))}
