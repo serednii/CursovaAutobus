@@ -2,7 +2,7 @@ import {
   IGetSearchRouteCityOption,
   IGetSearchRouteManyOption,
   IGetSearchRouteOneOption,
-} from "@/fetchFunctions/v1/getRoutes";
+} from "@/api/v1/getRoutes";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 
 const busSeats = {
@@ -69,7 +69,7 @@ import {
   IGetSearchRouteAgainOption,
   IGetSearchRouteSeatSelectionOption,
   IGetSearchRouteUpdateOption,
-} from "@/fetchFunctions/v1/getRoutesById";
+} from "@/api/v1/getRoutesById";
 export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   // export const select = {
   id: true,
@@ -83,8 +83,8 @@ export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   passengersSeatsList,
 };
 
-import { IGetSearchRouteMyRouteOption } from "@/fetchFunctions/v1/getRoutesById";
-import { IGetUsersByIdBySelectOption } from "@/fetchFunctions/fetchUsersDELETE";
+import { IGetSearchRouteMyRouteOption } from "@/api/v1/getRoutesById";
+import { IGetUsersByIdBySelectOption } from "@/api/fetchUsersDELETE";
 
 export const selectRoute: IGetSearchRouteMyRouteOption = {
   ...baseDate,

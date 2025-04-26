@@ -1,7 +1,7 @@
 import { SeatStatusEnum } from "@/enum/shared.enums";
 import { ILayoutData } from "@/types/layoutbus.types";
 
-export const layoutsData: ILayoutData[] = [
+export const layoutsData_0deg: ILayoutData[] = [
   {
     passengerLength: 19,
     busWidth: 570,

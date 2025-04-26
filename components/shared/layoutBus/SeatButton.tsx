@@ -13,6 +13,7 @@ interface SeatButtonProps {
   styles?: React.CSSProperties;
   className?: string;
   scale: number;
+  isMobile: boolean;
   handleClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -26,6 +27,7 @@ const SeatButton: React.FC<SeatButtonProps> = ({
   styles,
   className,
   scale,
+  isMobile,
   handleClick,
 }) => {
   const disabled =
@@ -53,19 +55,20 @@ const SeatButton: React.FC<SeatButtonProps> = ({
     fontSize: 1.5 * scale + "rem",
     transform: `translateX(-${-5 * scale}px)`,
     borderRadius: 4 * scale + "px",
+    rotate: `${isMobile ? -90 : 0}deg`,
   };
   return (
     <button
       disabled={disabled}
       onClick={handleClick}
-      style={styles}
-      className={cn("absolute disabled:cursor-not-allowed", className)}
+      style={{ ...styles, rotate: `${isMobile ? 90 : 0}deg` }}
+      className={cn("absolute disabled:cursor-not-allowed ", className)}
     >
       <div
         style={sizeSeatButton_1}
         className={cn("relative  flex justify-center items-center", statusColor)}
       >
-        <p style={sizeSeatButton_p} className="text-white ">
+        <p style={sizeSeatButton_p} className="text-white rotate-[-90deg]">
           {number}
         </p>
         <div

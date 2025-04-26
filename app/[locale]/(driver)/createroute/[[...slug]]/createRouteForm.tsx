@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 
@@ -9,7 +9,7 @@ import CustomDatePicker from "@/components/shared/form/dataPicker/CustomDatePick
 import IntermediateStops from "@/components/shared/form/IntermediateStops";
 import MaterialUISelect from "@/components/shared/form/MaterialUISelect";
 import CustomTextField from "@/components/shared/form/CustomTextField";
-import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
+import layoutsData from "@/components/shared/layoutBus/LayoutData";
 // import MyScaleLoader from "@/components/ui/MyScaleLoader";
 import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders/SubPassengersOrders";
@@ -36,11 +36,13 @@ import { useGetListBlockedDate } from "./useGetListBlockedDate";
 // import { useTranslation } from "react-i18next";
 import { runInAction } from "mobx";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
-import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/v1/getRoutesById";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/api/v1/getRoutesById";
 import { UserSession } from "@/types/next-auth";
+
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
 }
+
 // export const debouncedSetIdOrderPassengers = debounce((data: ILayoutData, setIdOrderPassengers, userSessionId) => {
 //   const idOrderPassengers = data.passenger
 //     .filter((e) => e.passenger === userSessionId && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
@@ -60,17 +62,16 @@ interface Props {
 }
 
 function CreateRouteForm({ id, type, sessionUser, route }: Props) {
-  // console.log("session User", sessionUser, route);
+  const renderRef = useRef(0);
+  // const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
+  const [startStops, setStartStops] = useState<string[]>([]);
+  console.log("indexSelectVariantBus", busStore.indexSelectVariantBus);
   const userSessionId = Number(sessionUser?.id);
 
   const { t } = useAppTranslation("createroute");
   const { t: form } = useAppTranslation("form");
 
-  const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
-  const [startStops, setStartStops] = useState<string[]>([]);
-
   const router = useRouter();
-  const renderRef = useRef(0);
 
   // namespaces={["createroute", "home", "form"]}
   // const { sessionUser, status } = useGetSessionParams();
@@ -94,12 +95,12 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
     },
   });
 
-  // useMemo(() => {
-  //   runInAction(() => {
-  //     busStore.setUserIdSession(userSessionId);
-  //     !route && busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
-  //   });
-  // }, [userSessionId, route]);
+  useMemo(() => {
+    runInAction(() => {
+      busStore.setUserIdSession(userSessionId);
+      !route && busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
+    });
+  }, [userSessionId, route]);
 
   useUpdateValues({
     id,
@@ -107,7 +108,7 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
     route,
     setValue,
     setStartStops,
-    setIndexSelectVariantBus,
+    // setIndexSelectVariantBus,
   });
 
   const { listBlockedDate } = useGetListBlockedDate({ driverId: userSessionId, id, type });
@@ -115,7 +116,10 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
   const { departureFromCity, arrivalToCity } = useFetchRoutesCity();
 
   //Кількість пасажирів в кожному автобусі
-  const passengersLength: number[] = useMemo(() => layoutsData.map((e) => e.passengerLength), []);
+  const passengersLength: number[] = useMemo(
+    () => layoutsData(false).map((e) => e.passengerLength),
+    []
+  );
 
   // if (status === "loading") return <MyScaleLoader />;
 
@@ -130,11 +134,7 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
       </header>
 
       <main className="px-4 bg-[white] rounded-xl ">
-        <form
-          onSubmit={handleSubmit(
-            handleRouteSubmit(type, id, busStore.dataLayoutBus, sessionUser, router)
-          )}
-        >
+        <form onSubmit={handleSubmit(handleRouteSubmit(type, id, sessionUser, router))}>
           <div className="flex gap-5 mb-5 flex-wrap">
             <CustomDatePicker
               title={form("departure_date")}
@@ -197,12 +197,10 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
             <h2>{t("bus_layout")}</h2>
             <MaterialUISelect
               passengersLength={passengersLength}
-              handleChangeVariantBus={(value) =>
-                handleChangeVariantBus(value, setIndexSelectVariantBus, undefined)
-              }
+              // handleChangeVariantBus={handleChangeVariantBus}
               register={register}
               errors={errors}
-              indexSelectVariantBus={indexSelectVariantBus}
+              // indexSelectVariantBus={indexSelectVariantBus}
               className="mb-5"
             />
 

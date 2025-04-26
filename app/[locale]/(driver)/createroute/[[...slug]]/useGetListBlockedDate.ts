@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import getRoutesByDriverId, {
   IRoutesByIdDriverListBlocked,
   selectRouteListBlocked,
-} from "@/fetchFunctions/v1/gеtRoutesByDriverId";
+} from "@/api/v1/gеtRoutesByDriverId";
 
 interface UseFetchRouteProps {
   driverId: number;

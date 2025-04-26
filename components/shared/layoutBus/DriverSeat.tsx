@@ -5,10 +5,12 @@ export default memo(function DriverSeat({
   className,
   style,
   scale,
+  isMobile,
 }: {
   className?: string;
   style?: React.CSSProperties;
   scale: number;
+  isMobile: boolean;
 }) {
   console.log("DriverSeat RENDER");
   const sizeDriverSeat_1 = {
@@ -16,6 +18,7 @@ export default memo(function DriverSeat({
     height: 40 * scale,
     border: 4 * scale + "px",
     borderRadius: 4 * scale + "px",
+    rotate: `${isMobile ? 90 : 0}deg`,
   };
 
   const sizeDriverSeat_2 = {
@@ -37,7 +40,7 @@ export default memo(function DriverSeat({
   };
   return (
     <div style={style} className={cn("absolute", className)}>
-      <div style={sizeDriverSeat_1} className="relative bg-[#1da04d]">
+      <div style={sizeDriverSeat_1} className="relative bg-[#1da04d] ">
         <div
           style={sizeDriverSeat_2}
           className="absolute right-[2px] top-[0px] rounded-t-md rounded-b-xl w-[15px] h-[40px] bg-[#5a8950]"

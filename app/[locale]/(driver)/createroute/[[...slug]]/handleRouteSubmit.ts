@@ -4,15 +4,14 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 import { FormValuesRoute } from "@/types/form.types";
-import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodBase";
 import { delay } from "@/lib/utils";
 import { transformData } from "./action";
 
-import updateRouteById from "@/fetchFunctions/v1/updateRouteById";
-import createRoute from "@/fetchFunctions/v1/createRoute";
+import updateRouteById from "@/api/v1/updateRouteById";
+import createRoute from "@/api/v1/createRoute";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -24,7 +23,7 @@ export const handleRouteSubmit =
   (
     type: string | string[],
     id: number,
-    dataLayoutBus: ILayoutData | null | undefined,
+    // dataLayoutBus: ILayoutData | null | undefined,
     sessionUser: UserSession,
     router: ReturnType<typeof useRouter>
   ): SubmitHandler<FormValuesRoute> =>
@@ -33,9 +32,11 @@ export const handleRouteSubmit =
       // console.log("Submitting Route Data:", type, dataForm);
       const createRouteDriver: ISendDataBaseRouteDriver = transformData(
         dataForm,
-        dataLayoutBus as ILayoutData,
+        // dataLayoutBus as ILayoutData,
         sessionUser as UserSession
       );
+      console.log("handleRouteSubmit", createRouteDriver, id, type, router);
+
       if (type === "change") {
         await handleUpdateRoute(createRouteDriver, id, router);
       } else {

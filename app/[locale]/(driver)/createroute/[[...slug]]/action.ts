@@ -4,11 +4,13 @@ import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { UseFormSetValue } from "react-hook-form";
-import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchFunctions/v1/getRoutesById";
-import { layoutsData } from "@/components/shared/layoutBus/LayoutData";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/api/v1/getRoutesById";
+import layoutsData from "@/components/shared/layoutBus/LayoutData";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 // import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
+import { layoutsData_90deg } from "@/components/shared/layoutBus/LayoutData_90deg";
+import { layoutsData_0deg } from "@/components/shared/layoutBus/LayoutData_0deg";
 // const exampleRote = {
 //   arrivalDate: " Fri Mar 14 2025 20:00:00 GMT+0100 (Центральная Европа, стандартное время)",
 //   arrivalTo: "Львів",
@@ -28,16 +30,45 @@ import busStore from "@/mobx/busStore";
 //   wifi: false,
 // };
 
+export const getNewDataLayoutBus = (isMobile: boolean): ILayoutData | null => {
+  //select rotate bus or normal bus and select number Seat bus
+  console.log("22222222222222222");
+  if (!busStore.dataLayoutBus) return null;
+  const selectLayoutsData = (isMobile ? layoutsData_90deg : layoutsData_0deg).filter(
+    (item) => item.passengerLength === busStore.dataLayoutBus?.passengerLength
+  )[0];
+  console.log("sselectLayoutsData", selectLayoutsData);
+  console.log("busStore.dataLayoutBus", busStore.dataLayoutBus);
+
+  const newDataLayoutBus = {
+    ...busStore.dataLayoutBus,
+    driverSeat: busStore.dataLayoutBus.driverSeat || {},
+    modelBus: busStore.dataLayoutBus.modelBus || "",
+    passengerLength: selectLayoutsData.passengerLength,
+    busWidth: selectLayoutsData.busWidth,
+    busHeight: selectLayoutsData.busHeight,
+    stairs: selectLayoutsData.stairs,
+    passenger: (busStore.dataLayoutBus?.passenger ?? []).map((item) => ({
+      number: item.number,
+      busSeatStatus: item.busSeatStatus,
+      passenger: item.passenger,
+      ...selectLayoutsData.passenger.find((seat) => seat.number === item.number),
+    })),
+  };
+  console.log("newDataLayoutBus", newDataLayoutBus);
+  return newDataLayoutBus;
+};
+
 export const transformData = (
   data: FormValuesRoute,
-  dataLayoutBus: ILayoutData,
+  // dataLayoutBus: ILayoutData,
   sessionUser: UserSession
 ): ISendDataBaseRouteDriver => {
-  // console.log("data", data);
+  console.log("transformData Render");
   // console.log("dataLayoutBus", dataLayoutBus);
   // console.log("sessionUser", sessionUser);
 
-  const newFormatPassenger = dataLayoutBus.passenger.map(
+  const newFormatPassenger = busStore.dataLayoutBus?.passenger.map(
     ({ number, busSeatStatus, passenger }) => ({
       number,
       busSeatStatus,
@@ -61,56 +92,59 @@ export const transformData = (
       passengersSeatsList.subPassengersList = subPassengersList;
     }
   }
+
   console.log("XXXXXXXXX", sessionUser.id, Number(sessionUser.id));
   return {
     ...data,
     routePrice: Number(data.routePrice),
-    modelBus: dataLayoutBus.modelBus,
-    busSeats: newFormatPassenger,
+    modelBus: busStore.dataLayoutBus?.modelBus || "",
+    busSeats: newFormatPassenger || [],
     driverId: Number(sessionUser.id),
     departureDate: new Date(data.departureDate),
     notate: "This is a comfortable route.",
     selectBusLayout: String(data.selectBusLayout),
     intermediateStops: data.intermediateStops || [],
-    maxSeats: newFormatPassenger.length,
-    bookedSeats: newFormatPassenger.filter((e) => e.busSeatStatus === "reserved").length,
+    maxSeats: newFormatPassenger?.length || 0,
+    bookedSeats: newFormatPassenger?.filter((e) => e.busSeatStatus === "reserved").length || 0,
     passengersSeatsList: [passengersSeatsList],
   };
 };
 
 export const handleChangeVariantBus = (
   number: number,
+  isMobile: boolean,
+  route?: IGetRouteUpdate | IGetRouteAgain | undefined
   // setDataLayoutBus: (
   //   value: ILayoutData | ((prev: ILayoutData | null | undefined) => ILayoutData | null | undefined) | null | undefined,
   //   action: RoleEnum
   // ) => void,
-  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>,
-  dataLayoutBus?: IBusSeats[]
 ) => {
-  console.log("handleChangeVariantBus+++++++++++++++", number);
-  setIndexSelectVariantBus(number);
-  if (dataLayoutBus) {
-    const selectLayoutsData = layoutsData[number].passenger.map((e) => {
-      const findSeats = dataLayoutBus.find((seat) => seat.number === e.number);
+  const busSeats = route && "busSeats" in route ? route.busSeats : null;
+  console.log("handleChangeVariantBus+++++++++++++++", number, busStore.dataLayoutBus);
+  busStore.setIndexSelectVariantBus(number);
+  if (busSeats) {
+    const selectLayoutsData = layoutsData(isMobile)[number].passenger.map((e) => {
+      const findSeats = busSeats.find((seat) => e.number === seat.number);
       return {
         ...e,
         busSeatStatus: findSeats?.busSeatStatus || SeatStatusEnum.AVAILABLE,
         passenger: findSeats?.passenger || null,
       };
     });
+
     busStore.setDataLayoutBus(
-      { ...layoutsData[number], passenger: selectLayoutsData },
+      { ...layoutsData(isMobile)[number], passenger: selectLayoutsData },
       RoleEnum.DRIVER
     );
   } else {
-    busStore.setDataLayoutBus(layoutsData[number], RoleEnum.DRIVER);
+    busStore.setDataLayoutBus(layoutsData(isMobile)[number], RoleEnum.DRIVER);
   }
 };
 
 export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
-  res: T,
+  route: T,
   setValue: UseFormSetValue<FormValuesRoute>,
-  setStartStops: React.Dispatch<React.SetStateAction<string[]>>,
+  setStartStops: React.Dispatch<React.SetStateAction<string[]>>
   // setDataLayoutBus: (
   //   value:
   //     | ILayoutData
@@ -119,24 +153,26 @@ export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
   //     | undefined,
   //   action: RoleEnum
   // ) => void,
-  setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>
+  // setIndexSelectVariantBus: React.Dispatch<React.SetStateAction<number | null>>
 ) => {
-  setValue("routePrice", String(res.routePrice));
-  setValue("departureFrom", res.departureFrom);
+  setValue("routePrice", String(route.routePrice));
+  setValue("departureFrom", route.departureFrom);
 
-  setValue("arrivalTo", res.arrivalTo);
+  setValue("arrivalTo", route.arrivalTo);
 
-  setValue("busNumber", res.modelBus);
+  setValue("busNumber", route.modelBus);
 
-  setValue("selectBusLayout", res.modelBus);
+  setValue("selectBusLayout", route.modelBus);
 
-  setStartStops(res.intermediateStops.map((e) => e.stopName));
+  setStartStops(route.intermediateStops.map((e) => e.stopName));
 
-  const findIndexLayoutsBus = layoutsData.findIndex((e) => e.modelBus === res.modelBus);
+  const findIndexLayoutsBus = layoutsData(false).findIndex((e) => e.modelBus === route.modelBus);
 
   handleChangeVariantBus(
     findIndexLayoutsBus,
-    setIndexSelectVariantBus,
-    "busSeats" in res ? res.busSeats : undefined
+    // setIndexSelectVariantBus,
+    // "busSeats" in res ? res.busSeats : undefined
+    false,
+    route
   );
 };

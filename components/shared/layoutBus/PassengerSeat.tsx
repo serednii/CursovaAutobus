@@ -4,7 +4,7 @@ import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 import { ILayoutData, BusSeatInfo, SeatPositionNumber } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 // import useStore from "@/zustand/createStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SeatButton from "./SeatButton";
 // import SeatButton from "./SeatButton";
 import { observer } from "mobx-react-lite";
@@ -23,6 +23,7 @@ interface Props {
   scale: number;
   newBusWidth: number;
   newBusHeight: number;
+  isMobile: boolean;
 }
 
 function PassengerSeat({
@@ -34,9 +35,11 @@ function PassengerSeat({
   scale,
   newBusWidth,
   newBusHeight,
+  isMobile,
 }: Props) {
   const { number } = params;
   const [changeStatus, setChangeStatus] = useState<BusSeatInfo>(() => params);
+  const counterStart = useRef(0);
   const keys = Object.keys(params) as (keyof typeof params)[];
   const styles: SeatPositionNumber = {};
   const sessionUserId = parseInt(sessionUser.id);
@@ -54,8 +57,12 @@ function PassengerSeat({
   // console.log("newStyles", newStyles);
 
   useEffect(() => {
+    if (counterStart.current < 2) {
+      counterStart.current++;
+      return;
+    }
     runInAction(() => {
-      // console.log("5555", action);
+      console.log("5555", action);
       params.busSeatStatus = changeStatus.busSeatStatus;
       params.passenger = changeStatus.passenger;
       busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
@@ -70,9 +77,11 @@ function PassengerSeat({
     [SeatStatusEnum.SELECTED]: "bg-blue-500",
   }[changeStatus.busSeatStatus];
 
+  console.log("changeStatus111", changeStatus);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-
+    console.log("xxxx");
     setChangeStatus((prevParams: BusSeatInfo) => {
       //Якщо являємося водієм і на своєму маршруті
       let updatedStatus: SeatStatusEnum = SeatStatusEnum.AVAILABLE;
@@ -117,6 +126,7 @@ function PassengerSeat({
       className={className}
       handleClick={handleClick}
       scale={scale}
+      isMobile={isMobile}
     />
   );
 }

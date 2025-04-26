@@ -1,4 +1,4 @@
-import deleteRoutePassenger from "@/fetchFunctions/v1/deleteRoutePassenger";
+import deleteRoutePassenger from "@/api/v1/deleteRoutePassenger";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma-client";
 import { IPassengersSeatsList } from "@/types/interface";

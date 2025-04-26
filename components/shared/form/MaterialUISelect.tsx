@@ -6,14 +6,18 @@ import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
+import busStore from "@/mobx/busStore";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { handleChangeVariantBus } from "@/app/[locale]/(driver)/createroute/[[...slug]]/action";
+// import { handleChangeVariantBus } from "./action";
 
 interface Props {
   register: UseFormRegister<FormValuesRoute>;
   errors: FieldErrors<FormValuesRoute>;
   className?: string;
   passengersLength: number[];
-  handleChangeVariantBus: (value: number) => void;
-  indexSelectVariantBus: number | null;
+  // handleChangeVariantBus: (value: number) => void;
+  // indexSelectVariantBus: number | null;
 }
 
 const MaterialUISelect = ({
@@ -21,17 +25,19 @@ const MaterialUISelect = ({
   register,
   errors,
   passengersLength,
-  handleChangeVariantBus,
-  indexSelectVariantBus,
-}: Props) => {
+}: // handleChangeVariantBus,
+// indexSelectVariantBus,
+Props) => {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const { t: home } = useAppTranslation("home");
   const { t: form } = useAppTranslation("form");
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = Number(event.target.value); // Приводимо значення до числа
     setSelectedValue(event.target.value); // Оновлюємо локальний стан
-    handleChangeVariantBus(value); // Викликаємо зовнішню функцію-обробник
+    // busStore.setIndexSelectVariantBus(value);
+    handleChangeVariantBus(value, isMobile); // Викликаємо зовнішню функцію-обробник
   };
 
   // useEffect(() => {
@@ -39,10 +45,10 @@ const MaterialUISelect = ({
   // }, [indexSelectVariantBus]);
 
   useEffect(() => {
-    if (indexSelectVariantBus !== null) {
-      setSelectedValue(String(indexSelectVariantBus)); // Оновлюємо локальний стан з indexSelectVariantBus
+    if (busStore.indexSelectVariantBus !== null) {
+      setSelectedValue(String(busStore.indexSelectVariantBus)); // Оновлюємо локальний стан з indexSelectVariantBus
     }
-  }, [indexSelectVariantBus]);
+  }, [busStore.indexSelectVariantBus]);
 
   // console.log("indexSelectVariantBus+++++++++++++", indexSelectVariantBus);
 

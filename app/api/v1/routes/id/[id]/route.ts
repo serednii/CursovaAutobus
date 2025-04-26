@@ -35,6 +35,7 @@ export async function GET(req: NextRequest, { params }: { params: { id?: string 
     });
 
     console.log("routes", routes);
+
     // Перевірка на порожній результат
     if (routes.length === 0) {
       return NextResponse.json(

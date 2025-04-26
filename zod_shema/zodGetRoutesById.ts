@@ -3,7 +3,7 @@ import {
   IGetRouteMyRoute,
   IGetRouteSeatSelection,
   IGetRouteUpdate,
-} from "@/fetchFunctions/v1/getRoutesById";
+} from "@/api/v1/getRoutesById";
 import {
   busSeats,
   passengersSeatsList,
@@ -12,7 +12,7 @@ import {
   servicesSchema,
 } from "./zodBase";
 import { z } from "zod";
-import { IGetRouteCity } from "@/fetchFunctions/v1/getRoutes";
+import { IGetRouteCity } from "@/api/v1/getRoutes";
 
 const routeSchemaMyRoute = z.object({
   ...dateAndNameCitySchema,

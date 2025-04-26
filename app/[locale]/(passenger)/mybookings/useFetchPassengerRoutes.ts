@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import getRoutesByPassengerId from "@/fetchFunctions/v1/getRoutesByPassengerId";
+import getRoutesByPassengerId from "@/api/v1/getRoutesByPassengerId";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";

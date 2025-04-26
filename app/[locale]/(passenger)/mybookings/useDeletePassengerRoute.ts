@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import deleteRoutePassenger from "@/fetchFunctions/v1/deleteRoutePassenger";
+import deleteRoutePassenger from "@/api/v1/deleteRoutePassenger";
 
 import { IRoutesTable } from "@/types/route-passenger.types";
 import { getBusSeatsRaw } from "./action";

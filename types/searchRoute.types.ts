@@ -1,4 +1,4 @@
-import { IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchFunctions/v1/getRoutes";
+import { IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/api/v1/getRoutes";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "./generaty.types";
 
 export interface IGetSearchRouteManyOptionData {

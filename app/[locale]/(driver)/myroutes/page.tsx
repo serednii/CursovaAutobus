@@ -7,20 +7,13 @@ import { Container } from "@/components/ui/Container";
 import getRoutesByDriverId, {
   IRoutesByIdDriver,
   selectGetRoutesByDriverId,
-} from "@/fetchFunctions/v1/gеtRoutesByDriverId";
+} from "@/api/v1/gеtRoutesByDriverId";
 
 export default async function MyRoutes() {
   const session = await getServerSession(authConfig);
   const userSessionId = Number(session?.user?.id);
   console.log("userSessuionId", userSessionId);
   if (!userSessionId) return null;
-  // const value = await getRoute.searchRoute(
-  //   {
-  //     driverId: [userSessionId],
-  //     select: selectGetRoutesByDriverId,
-  //   },
-  //   "getDriver"
-  // );
 
   const value = await getRoutesByDriverId.searchRoute(
     [userSessionId],

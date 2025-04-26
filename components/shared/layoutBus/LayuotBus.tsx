@@ -5,7 +5,7 @@ import DriverSeat from "./DriverSeat";
 import PassengerSeat from "./PassengerSeat";
 import Stairs from "./Stairs";
 
-import { BusSeatInfo, SeatPositionNumber } from "@/types/layoutbus.types";
+import { BusSeatInfo, ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 // import { memo, useEffect } from "react";
@@ -13,6 +13,10 @@ import { RoleEnum } from "@/enum/shared.enums";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { layoutsData_90deg } from "./LayoutData_90deg";
+import { layoutsData_0deg } from "./LayoutData_0deg";
+import { getNewDataLayoutBus } from "@/app/[locale]/(driver)/createroute/[[...slug]]/action";
+import { useEffect, useState } from "react";
 // import { ZodNumber } from "zod";
 interface Props {
   className?: string;
@@ -42,7 +46,6 @@ export const converterToPx = (
   } else {
     newObject[keys[1]] = `${Math.round(busHeight * changeObject[keys[1]])}px`;
   }
-
   return newObject;
 };
 
@@ -52,14 +55,30 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
 
   const isSmallMobile = useMediaQuery("(max-width: 400px)");
 
+  // const [newDataLayoutBus, setLayoutData] = useState<ILayoutData | null>(null);
+  const isClient = typeof window !== "undefined";
+  console.log("newDataLayoutBus", busStore.dataLayoutBus, busStore.indexSelectVariantBus);
+
+  useEffect(() => {
+    if (!isClient || sessionUser === null) return;
+    console.log("1111111111111111111111111111");
+
+    const layout = getNewDataLayoutBus(isMobile);
+    busStore.setDataLayoutBus(layout, action); // newDataLayoutBus === busStore.dataLayoutBus
+  }, [isMobile, isClient, sessionUser]);
+
   if (
     sessionUser === null ||
     driverId === null ||
+    busStore.dataLayoutBus === null ||
     busStore.dataLayoutBus === null ||
     busStore.dataLayoutBus?.passenger.length === 0
   ) {
     return null;
   }
+
+  // const newDataLayoutBus = getNewDataLayoutBus(isMobile);
+
   const scale = isMobile ? (isSmallMobile ? 0.4 : 0.6) : 1;
   const newBusWidth = busStore.dataLayoutBus.busWidth * scale;
   const newBusHeight = busStore.dataLayoutBus.busHeight * scale;
@@ -120,24 +139,31 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   return (
     <div className={cn("overflow-auto", className)}>
       <div style={styleBus} className="relative m-auto  bg-[#ccd0d7]  border-2 border-[#000000]">
-        <DriverSeat style={styleDriverSeat} scale={scale} />
-        <Stairs style={styleStairs_0} scale={scale} />
-        {styleStairs_1 && <Stairs style={styleStairs_1 || {}} scale={scale} />}
-        {busStore.dataLayoutBus?.passenger.map((item: BusSeatInfo, index: number) => {
-          return (
-            <div key={index}>
-              <PassengerSeat
-                params={item}
-                sessionUser={sessionUser}
-                action={action}
-                driverId={driverId}
-                scale={scale}
-                newBusWidth={newBusWidth}
-                newBusHeight={newBusHeight}
-              />
-            </div>
-          );
-        })}
+        <DriverSeat style={styleDriverSeat} scale={scale} isMobile={isMobile} />
+        <Stairs style={{ ...styleStairs_0, rotate: `${isMobile ? 90 : 0}deg` }} scale={scale} />
+        {styleStairs_1 && (
+          <Stairs
+            style={{ ...styleStairs_1, rotate: `${isMobile ? 90 : 0}deg` } || {}}
+            scale={scale}
+          />
+        )}
+        {busStore.dataLayoutBus &&
+          busStore.dataLayoutBus.passenger.map((item: BusSeatInfo, index: number) => {
+            return (
+              <div key={index}>
+                <PassengerSeat
+                  params={item}
+                  sessionUser={sessionUser}
+                  action={action}
+                  driverId={driverId}
+                  scale={scale}
+                  newBusWidth={newBusWidth}
+                  newBusHeight={newBusHeight}
+                  isMobile={isMobile}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );

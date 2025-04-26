@@ -9,7 +9,7 @@ import TableRoutesUI from "@/components/ui/TableRoutesUI";
 
 import { useDeleteRoute } from "@/app/[locale]/(driver)/myroutes/useDeleteRoute";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
-import { IRoutesByIdDriver } from "@/fetchFunctions/v1/getRoutes";
+import { IRoutesByIdDriver } from "@/api/v1/getRoutes";
 
 interface Props {
   routes: IRoutesByIdDriver[];

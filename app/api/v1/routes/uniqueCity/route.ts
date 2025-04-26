@@ -1,4 +1,4 @@
-import { IGetSearchRouteCityOption } from "@/fetchFunctions/v1/getRoutes";
+import { IGetSearchRouteCityOption } from "@/api/v1/getRoutes";
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { UserSelect } from "@/types/next-auth";

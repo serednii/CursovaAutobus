@@ -60,30 +60,30 @@ export type IGetRouteCity = GenerateType<IRouteDataBase, selectRouteCityKeys>;
 
 // //********************************************************** */
 
-// type selectRoutesByIdDriverKeys = (
-//   | "id"
-//   | "departureDate"
-//   | "arrivalDate"
-//   | "departureFrom"
-//   | "arrivalTo"
-//   | "routePrice"
-//   | "bookedSeats"
-//   | "maxSeats"
-// ) &
-//   keyof IRouteDataBase;
-// export type IGetRoutesByDriverOption = GenerateBooleanType<selectRoutesByIdDriverKeys>;
-// export type IRoutesByIdDriver = GenerateType<IRouteDataBase, selectRoutesByIdDriverKeys>;
+type selectRoutesByIdDriverKeys = (
+  | "id"
+  | "departureDate"
+  | "arrivalDate"
+  | "departureFrom"
+  | "arrivalTo"
+  | "routePrice"
+  | "bookedSeats"
+  | "maxSeats"
+) &
+  keyof IRouteDataBase;
+export type IGetRoutesByDriverOption = GenerateBooleanType<selectRoutesByIdDriverKeys>;
+export type IRoutesByIdDriver = GenerateType<IRouteDataBase, selectRoutesByIdDriverKeys>;
 
-// export const selectGetRoutesByDriverId: IGetRoutesByDriverOption = {
-//   id: true,
-//   departureDate: true,
-//   arrivalDate: true,
-//   departureFrom: true,
-//   arrivalTo: true,
-//   routePrice: true,
-//   bookedSeats: true,
-//   maxSeats: true,
-// };
+export const selectGetRoutesByDriverId: IGetRoutesByDriverOption = {
+  id: true,
+  departureDate: true,
+  arrivalDate: true,
+  departureFrom: true,
+  arrivalTo: true,
+  routePrice: true,
+  bookedSeats: true,
+  maxSeats: true,
+};
 // //********************************************************** */
 
 type selectRoutesByIdDriverListBlockedKeys = ("id" | "departureDate" | "arrivalDate") &
