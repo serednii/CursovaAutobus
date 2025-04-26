@@ -61,7 +61,24 @@ export async function updateRoute(req: NextRequest, id: number) {
       const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
       return NextResponse.json(errorResponse, { status: 500 });
     }
-
+    console.log(
+      "updateRouteOld.ts",
+      id,
+      busSeats,
+      bookedSeats,
+      passengersSeatsList,
+      departureDate,
+      arrivalDate,
+      departureFrom,
+      arrivalTo,
+      routePrice,
+      modelBus,
+      notate,
+      wifi,
+      coffee,
+      power,
+      restRoom
+    );
     //**************************************************************** */
     // Perform database update using Prisma
     const res = await prisma.routeDriver.update({
@@ -89,56 +106,56 @@ export async function updateRoute(req: NextRequest, id: number) {
       return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
     }
 
-    const updatedBusSeatsResult = await updatedBusSeats(busSeats || [], id);
-    // console.log("ipdatedBusSeatsResult", updatedBusSeatsResult);
-    if (!updatedBusSeatsResult) {
-      console.error("Failed to update route busSeats");
-      //delete route passenger if busSeats not updated
-      const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
-        routeDriverId: id,
-        idPassenger: idPassenger,
-        busSeats,
-      });
+    // const updatedBusSeatsResult = await updatedBusSeats(busSeats || [], id);
+    // // console.log("ipdatedBusSeatsResult", updatedBusSeatsResult);
+    // if (!updatedBusSeatsResult) {
+    //   console.error("Failed to update route busSeats");
+    //   //delete route passenger if busSeats not updated
+    //   const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
+    //     routeDriverId: id,
+    //     idPassenger: idPassenger,
+    //     busSeats,
+    //   });
 
-      if (deletePassengerResult && "error" in deletePassengerResult) {
-        const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
-        return NextResponse.json(errorResponse, { status: 500 });
-      }
-      return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
-    }
+    //   if (deletePassengerResult && "error" in deletePassengerResult) {
+    //     const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
+    //     return NextResponse.json(errorResponse, { status: 500 });
+    //   }
+    //   return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
+    // }
 
-    // console.log("passengersSeatsList - - - - - - - - - - - ", passengersSeatsList);
-    const createPassengersSeatsListResult = (await createPassengersSeatsList(
-      passengersSeatsList,
-      id
-    )) as IPassengersSeatsList[] | null;
-    if (!createPassengersSeatsListResult) {
-      console.error("Failed to update route passengersSeatsList");
+    // // console.log("passengersSeatsList - - - - - - - - - - - ", passengersSeatsList);
+    // const createPassengersSeatsListResult = (await createPassengersSeatsList(
+    //   passengersSeatsList,
+    //   id
+    // )) as IPassengersSeatsList[] | null;
+    // if (!createPassengersSeatsListResult) {
+    //   console.error("Failed to update route passengersSeatsList");
 
-      //delete route passenger if createPassengersSeatsList not created
-      const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
-        routeDriverId: id,
-        idPassenger: idPassenger,
-        busSeats,
-      });
+    //   //delete route passenger if createPassengersSeatsList not created
+    //   const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
+    //     routeDriverId: id,
+    //     idPassenger: idPassenger,
+    //     busSeats,
+    //   });
 
-      if (deletePassengerResult && "error" in deletePassengerResult) {
-        const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
-        return NextResponse.json(errorResponse, { status: 500 });
-      }
+    //   if (deletePassengerResult && "error" in deletePassengerResult) {
+    //     const errorResponse: ErrorResponse = { error: "Невдалося видалити користувача" };
+    //     return NextResponse.json(errorResponse, { status: 500 });
+    //   }
 
-      return NextResponse.json(
-        { error: "Failed to update route passengersSeatsList" },
-        { status: 500 }
-      );
-    }
+    //   return NextResponse.json(
+    //     { error: "Failed to update route passengersSeatsList" },
+    //     { status: 500 }
+    //   );
+    // }
 
     // console.log("Route updated successfully:", res);
 
     return NextResponse.json({
       ...res,
-      passengersSeatsList: createPassengersSeatsListResult,
-      busSeats: updatedBusSeatsResult,
+      // passengersSeatsList: createPassengersSeatsListResult,
+      // busSeats: updatedBusSeatsResult,
     });
   } catch (error) {
     console.error("Error updating route:", error);

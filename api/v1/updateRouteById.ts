@@ -60,8 +60,9 @@ async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TR
     console.log("Отриманий маршрут fetchUpdateRouteById:", data);
 
     try {
-      const parsedData: TRouteUpdateResult = zodSchemaUpdateRouteResData.parse(data);
-      return parsedData;
+      // const parsedData: TRouteUpdateResult = zodSchemaUpdateRouteResData.parse(data);
+      // return parsedData;
+      return data;
     } catch (parseError: unknown) {
       console.error("Помилка парсингу даних:", parseError);
       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
