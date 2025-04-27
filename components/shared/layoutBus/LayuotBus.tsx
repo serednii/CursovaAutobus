@@ -51,21 +51,27 @@ export const converterToPx = (
 
 function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   console.log("LayoutBus RENDER");
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
-  const isSmallMobile = useMediaQuery("(max-width: 400px)");
+  const isTablet = useMediaQuery("(max-width: 1150px)");
+  const isMobile = useMediaQuery("(max-width: 900px)");
+  const isSmallMobile = useMediaQuery("(max-width: 768px)");
 
   // const [newDataLayoutBus, setLayoutData] = useState<ILayoutData | null>(null);
   const isClient = typeof window !== "undefined";
-  console.log("newDataLayoutBus", busStore.dataLayoutBus, busStore.indexSelectVariantBus);
+  // console.log("newDataLayoutBus", busStore.dataLayoutBus, busStore.indexSelectVariantBus);
+  console.log("newDataLayoutBus", busStore.dataLayoutBus?.passenger);
+  console.log("newDataLayoutBus Left", busStore.dataLayoutBus?.driverSeat.left);
+  console.log("newDataLayoutBus Right", busStore.dataLayoutBus?.driverSeat.right);
+  console.log("newDataLayoutBus Top", busStore.dataLayoutBus?.driverSeat.top);
+  console.log("newDataLayoutBus Bottom", busStore.dataLayoutBus?.driverSeat.bottom);
 
   useEffect(() => {
     if (!isClient || sessionUser === null) return;
     console.log("1111111111111111111111111111");
 
-    const layout = getNewDataLayoutBus(isMobile);
+    const layout = getNewDataLayoutBus(isSmallMobile);
+    console.log("HHHHHHHHHHHHHHHHHHHHH", layout);
     busStore.setDataLayoutBus(layout, action); // newDataLayoutBus === busStore.dataLayoutBus
-  }, [isMobile, isClient, sessionUser]);
+  }, [isSmallMobile, isClient, sessionUser]);
 
   if (
     sessionUser === null ||
@@ -79,7 +85,10 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
 
   // const newDataLayoutBus = getNewDataLayoutBus(isMobile);
 
-  const scale = isMobile ? (isSmallMobile ? 0.4 : 0.6) : 1;
+  // const scale = isMobile ? 0.5 : 1;
+  const scale = isTablet ? (isMobile ? 0.5 : 0.7) : 1;
+  // const scale = isMobile ? (isSmallMobile ? 0.4 : 0.5) : 1;
+
   const newBusWidth = busStore.dataLayoutBus.busWidth * scale;
   const newBusHeight = busStore.dataLayoutBus.busHeight * scale;
 
@@ -131,19 +140,24 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
     width: newBusWidth,
     height: newBusHeight,
     borderTopLeftRadius: 50 * scale + "px",
-    borderBottomLeftRadius: 50 * scale + "px",
-    borderTopRightRadius: 25 * scale + "px",
+    borderBottomLeftRadius: (isSmallMobile ? 25 : 50) * scale + "px",
+    borderTopRightRadius: (isSmallMobile ? 50 : 25) * scale + "px",
     borderBottomRightRadius: 25 * scale + "px",
   };
+
+  console.log("DriverSeat.tsx +++++++++++++++ ", styleDriverSeat);
 
   return (
     <div className={cn("overflow-auto", className)}>
       <div style={styleBus} className="relative m-auto  bg-[#ccd0d7]  border-2 border-[#000000]">
-        <DriverSeat style={styleDriverSeat} scale={scale} isMobile={isMobile} />
-        <Stairs style={{ ...styleStairs_0, rotate: `${isMobile ? 90 : 0}deg` }} scale={scale} />
+        <DriverSeat style={styleDriverSeat} scale={scale} isMobile={isSmallMobile} />
+        <Stairs
+          style={{ ...styleStairs_0, rotate: `${isSmallMobile ? 90 : 0}deg` }}
+          scale={scale}
+        />
         {styleStairs_1 && (
           <Stairs
-            style={{ ...styleStairs_1, rotate: `${isMobile ? 90 : 0}deg` } || {}}
+            style={{ ...styleStairs_1, rotate: `${isSmallMobile ? 90 : 0}deg` } || {}}
             scale={scale}
           />
         )}
@@ -159,7 +173,7 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
                   scale={scale}
                   newBusWidth={newBusWidth}
                   newBusHeight={newBusHeight}
-                  isMobile={isMobile}
+                  isMobile={isSmallMobile}
                 />
               </div>
             );

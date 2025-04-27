@@ -42,7 +42,7 @@ export const getNewDataLayoutBus = (isMobile: boolean): ILayoutData | null => {
 
   const newDataLayoutBus = {
     ...busStore.dataLayoutBus,
-    driverSeat: busStore.dataLayoutBus.driverSeat || {},
+    driverSeat: selectLayoutsData.driverSeat || {},
     modelBus: busStore.dataLayoutBus.modelBus || "",
     passengerLength: selectLayoutsData.passengerLength,
     busWidth: selectLayoutsData.busWidth,

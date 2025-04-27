@@ -57,6 +57,7 @@ const SeatButton: React.FC<SeatButtonProps> = ({
     borderRadius: 4 * scale + "px",
     rotate: `${isMobile ? -90 : 0}deg`,
   };
+
   return (
     <button
       disabled={disabled}
@@ -68,7 +69,7 @@ const SeatButton: React.FC<SeatButtonProps> = ({
         style={sizeSeatButton_1}
         className={cn("relative  flex justify-center items-center", statusColor)}
       >
-        <p style={sizeSeatButton_p} className="text-white rotate-[-90deg]">
+        <p style={sizeSeatButton_p} className="text-white ">
           {number}
         </p>
         <div
