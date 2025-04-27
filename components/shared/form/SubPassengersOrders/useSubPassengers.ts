@@ -26,12 +26,18 @@ export function useSubPassengers({
   sessionUser,
 }: UseSubPassengersProps) {
   const [subPassengers, setSubPassengers] = useState<SubPassengerDetails[]>([]);
-  console.log("SubPassengerFields.tsx useSubPassengers myListPassengers", subPassengers);
+  console.log(
+    "SubPassengerFields.tsx useSubPassengers myListPassengers",
+    renderRef.current,
+    subPassengers,
+    myListPassengers?.subPassengersList
+  );
   useEffect(() => {
     if (!myListPassengers) renderRef.current = 4;
 
     if (myListPassengers && renderRef.current === 0) {
       renderRef.current++;
+      console.log("myListPassengers.subPassengersList", myListPassengers.subPassengersList);
       setSubPassengers(myListPassengers.subPassengersList);
     } else if (renderRef.current > 2) {
       if (!subPassengers) return;

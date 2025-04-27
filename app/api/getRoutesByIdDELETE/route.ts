@@ -1,4 +1,4 @@
-import { IGetSearchRouteUpdateOption } from "@/api/v1/getRoutesById";
+import { IGetSearchRouteUpdateOption } from "@/fetchApi/v1/getRoutesById";
 // import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";

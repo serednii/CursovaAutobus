@@ -69,7 +69,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id?: strin
   return await updateRoute(req, numberId);
 }
 
-export async function DELETE(req: NextRequest) {
+export async function DELETE(req: NextRequest, { params }: { params: { id?: string } }) {
   try {
     const isApiKeyValid = checkApiKey(req);
     if (!isApiKeyValid) {
@@ -81,12 +81,14 @@ export async function DELETE(req: NextRequest) {
     //   return middlewareResponse;
     // }
     // Отримуємо дані з тіла запиту
-    const { routeId } = await req.json();
-    // console.log("routeId", routeId);
-    // Перевірка, чи передано routeId
-    if (!routeId) {
-      return NextResponse.json({ error: "Поле 'routeId' є обов'язковим" }, { status: 400 });
+    const { id } = await params;
+
+    if (!id) {
+      return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
     }
+    const routeId = parseInt(id || "0", 10);
+    console.log("delete routeId", routeId);
+    // Перевірка, чи передано routeId
 
     // Видалення маршруту
     const deletedRoute = await prisma.routeDriver.delete({

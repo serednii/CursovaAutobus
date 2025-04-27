@@ -1,6 +1,6 @@
-import  layoutsData  from "@/components/shared/layoutBus/LayoutData";
+import layoutsData from "@/components/shared/layoutBus/LayoutData";
 import { ILayoutData } from "@/types/layoutbus.types";
-import { IGetRouteSeatSelection } from "@/api/v1/getRoutesById";
+import { IGetRouteSeatSelection } from "@/fetchApi/v1/getRoutesById";
 
 const mixedLayoutsSeatsData = (route: IGetRouteSeatSelection): ILayoutData => {
   const filteredData = layoutsData().find((item) => item.modelBus === route.modelBus);

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import fetchDeleteRouteById from "@/api/fetchDeleteRouteByIdDELETED";
 import { useRouter } from "next/navigation";
+import deleteRouteById from "@/fetchApi/v1/deleteRoute";
+
 export const useDeleteRoute = () => {
   const [routeToDelete, setRouteToDelete] = useState<number | null>(null);
   const router = useRouter();
@@ -10,7 +11,7 @@ export const useDeleteRoute = () => {
 
     const deleteRoute = async () => {
       try {
-        const data = await fetchDeleteRouteById(routeToDelete);
+        const data = await deleteRouteById(routeToDelete);
         if ("message" in data) {
           toast.success("Your route has been successfully deleted", { duration: 5000 });
           router.refresh();

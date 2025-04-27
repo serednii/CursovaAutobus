@@ -10,8 +10,8 @@ import { zodCreateRouteAll, zodUpdateRouteAll } from "@/zod_shema/zodBase";
 import { delay } from "@/lib/utils";
 import { transformData } from "./action";
 
-import updateRouteById from "@/api/v1/updateRouteById";
-import createRoute from "@/api/v1/createRoute";
+import createRoute from "@/fetchApi/v1/createRoute";
+import updateRouteById from "@/fetchApi/v1/updateRouteById";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -29,7 +29,7 @@ export const handleRouteSubmit =
   ): SubmitHandler<FormValuesRoute> =>
   async (dataForm) => {
     try {
-      // console.log("Submitting Route Data:", type, dataForm);
+      console.log("Submitting Route Data:", type, dataForm);
       const createRouteDriver: ISendDataBaseRouteDriver = transformData(
         dataForm,
         // dataLayoutBus as ILayoutData,
@@ -56,7 +56,7 @@ const handleUpdateRoute = async (
   router: ReturnType<typeof useRouter>
 ) => {
   console.log("parsedData", id, routeData);
-  const parsedData = z.object(zodUpdateRouteAll).parse({ ...routeData, id: 148 });
+  const parsedData = z.object(zodUpdateRouteAll).parse({ ...routeData, id });
   try {
     // console.log("Updating Route:", { ...parsedData, id });
     const response = await updateRouteById<ISendDataBaseRouteDriverWidthId>(parsedData);

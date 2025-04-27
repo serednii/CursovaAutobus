@@ -8,7 +8,7 @@ import { UserSession } from "@/types/next-auth";
 import { transformData } from "./transformData";
 // import useStore from "@/zustand/createStore";
 import busStore from "@/mobx/busStore";
-import updateRouteById from "@/api/v1/updateRouteById";
+import updateRouteById from "@/fetchApi/v1/updateRouteById";
 
 const timeShowToast = Number(process.env.NEXT_PUBLIC_TIMEOUT_SHOW) || 3000;
 

@@ -7,7 +7,7 @@ import { Container } from "@/components/ui/Container";
 import getRoutesByDriverId, {
   IRoutesByIdDriver,
   selectGetRoutesByDriverId,
-} from "@/api/v1/gеtRoutesByDriverId";
+} from "@/fetchApi/v1/gеtRoutesByDriverId";
 
 export default async function MyRoutes() {
   const session = await getServerSession(authConfig);

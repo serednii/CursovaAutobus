@@ -3,12 +3,12 @@ import { Container } from "@/components/ui/Container";
 import TablePassengerDetails from "@/components/shared/driver/TablePassengerDetails";
 import { getPassengerDetails, getPassengersId } from "./action";
 // import { ISubPassengersList } from "@/types/interface";
-import { getRoutesById } from "@/api/v1/getRoutesById";
+import { getRoutesById } from "@/fetchApi/v1/getRoutesById";
 import { selectRoute, selectUser } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { formatDate } from "@/lib/utils";
 import initTranslations from "@/app/i18n";
 import { PiArrowFatLinesRightDuotone } from "react-icons/pi";
-import { getUsersById } from "@/api/v1/getUsersById";
+import { getUsersById } from "@/fetchApi/v1/getUsersById";
 
 // export default async function MyRoute({ params }: { params: { locale: string; id: string } }) {
 // export type paramsType = Promise<{ id: string }>;

@@ -77,7 +77,7 @@ function PassengerSeat({
     [SeatStatusEnum.SELECTED]: "bg-blue-500",
   }[changeStatus.busSeatStatus];
 
-  console.log("changeStatus111", changeStatus);
+  // console.log("changeStatus111", changeStatus);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();

@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import { MyDialogIsDelete } from "@/components/ui/MyDialogIsDelete/MyDialogIsDelete";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
 
-import { useDeleteRoute } from "@/app/[locale]/(driver)/myroutes/useDeleteRoute";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
-import { IRoutesByIdDriver } from "@/api/v1/getRoutes";
+import { IRoutesByIdDriver } from "@/fetchApi/v1/getRoutes";
+import { useDeleteRoute } from "@/app/[locale]/(driver)/myroutes/useDeleteRoute";
 
 interface Props {
   routes: IRoutesByIdDriver[];

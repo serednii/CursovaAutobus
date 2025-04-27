@@ -1,6 +1,6 @@
 "use client";
 // import { useEffect } from "react";
-import { IGetRouteSeatSelection } from "@/api/v1/getRoutesById";
+import { IGetRouteSeatSelection } from "@/fetchApi/v1/getRoutesById";
 import { SeatStatusEnum } from "@/enum/shared.enums";
 // import { cloneDeep } from "lodash";
 

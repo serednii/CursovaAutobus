@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { debounce } from "lodash";
-import { IGetSearchRouteMany, getRoute } from "@/api/v1/getRoutes";
+import { IGetSearchRouteMany, getRoute } from "@/fetchApi/v1/getRoutes";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";

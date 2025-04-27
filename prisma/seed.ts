@@ -1,4 +1,4 @@
-import createRoute from "@/api/v1/createRoute";
+import createRoute from "@/fetchApi/v1/createRoute";
 import { routerDrivers, users } from "./constants";
 import { prisma } from "./prisma-client";
 

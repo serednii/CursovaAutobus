@@ -6,7 +6,7 @@ import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
 import mixedLayoutsSeatsData from "@/components/shared/passenger/mixedLayoutsSeatsData";
 import { authConfig } from "@/configs/auth";
-import { getRoutesById } from "@/api/v1/getRoutesById";
+import { getRoutesById } from "@/fetchApi/v1/getRoutesById";
 import { selectSeatSelection } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import replaceReservedToSelected from "./replaceReservedToSelected";
 import replaceReservedEmptyToReserved from "./replaceReservedEmptyToReserved";

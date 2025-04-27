@@ -21,6 +21,31 @@ export async function createIntermediateStops(intermediateStops: string[], route
   }
 }
 
+export async function updateIntermediateStops(intermediateStops: string[], routeId: number) {
+  try {
+    // Спочатку видаляємо старі зупинки для цього маршруту
+    await prisma.intermediateStop.deleteMany({
+      where: { routeId },
+    });
+
+    // Потім створюємо нові
+    const results = await Promise.all(
+      intermediateStops.map((stop) =>
+        prisma.intermediateStop.create({
+          data: {
+            stopName: stop,
+            routeId,
+          },
+        })
+      )
+    );
+
+    return results;
+  } catch (error) {
+    handleError(error, "Error updating intermediate stops");
+  }
+}
+
 export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
   try {
     const results = await Promise.all(
@@ -47,11 +72,11 @@ export async function createPassengersSeatsList(
   routeDriverId: number
 ) {
   try {
-    // console.log(
-    //   "createPassengersSeatsList passengersSeatsList",
-    //   passengersSeatsList,
-    //   routeDriverId
-    // );
+    console.log(
+      "createPassengersSeatsList passengersSeatsList",
+      passengersSeatsList,
+      routeDriverId
+    );
 
     const [results] = await Promise.all(
       passengersSeatsList.map(async (seat) => {

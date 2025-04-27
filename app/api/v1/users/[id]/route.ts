@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import { middleware } from "@/middleware";
-import { IGetUsersByIdBySelect } from "@/api/fetchUsersDELETE";
+import { IGetUsersByIdBySelect } from "@/fetchApi/fetchUsersDELETE";
 import { zodSchemaUsers, zodSchemaUsersInApi } from "@/zod_shema/zodUser";
 import { UserSelect } from "@/types/next-auth";
 import { checkApiKey, parseStringUserToObject } from "../../routes/util";

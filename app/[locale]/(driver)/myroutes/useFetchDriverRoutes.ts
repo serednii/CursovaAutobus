@@ -4,7 +4,7 @@ import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 import getRoutesByDriverId, {
   selectGetRoutesByDriverId,
   IRoutesByIdDriver,
-} from "@/api/v1/gеtRoutesByDriverId";
+} from "@/fetchApi/v1/gеtRoutesByDriverId";
 
 export const useFetchDriverRoutes = () => {
   const { session, userSessionId } = useGetSessionParams();

@@ -1,4 +1,4 @@
-import { IRoutesByIdDriver, IRoutesByIdDriverListBlocked } from "@/api/v1/gеtRoutesByDriverId";
+import { IRoutesByIdDriver, IRoutesByIdDriverListBlocked } from "@/fetchApi/v1/gеtRoutesByDriverId";
 import { z } from "zod";
 import { dateAndNameCitySchema, dateSchemaString } from "./zodBase";
 

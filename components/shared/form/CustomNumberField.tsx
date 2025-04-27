@@ -1,5 +1,5 @@
 "use client";
-import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormTrigger } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { cn } from "@/lib/utils";
 import { FormValuesRoute } from "@/types/form.types";
@@ -10,22 +10,26 @@ interface Props {
   errors: FieldErrors<FormValuesRoute>;
   name: keyof FormValuesRoute;
   setValue?: UseFormSetValue<FormValuesRoute>;
+  trigger: UseFormTrigger<FormValuesRoute>;
   title: string;
   // handleSearch?: () => void;
   className?: string;
   listCity?: string[] | undefined;
   action: "createRoute" | "searchRoute";
+  limit?: number;
 }
 
-export default memo(function CustomTextField({
+export default memo(function CustomNumberField({
   register,
   errors,
   setValue,
   name,
   title,
   className,
+  limit,
   listCity,
   action,
+  trigger,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [zIndex, setZIndex] = useState<{ zIndex: string }>({ zIndex: "auto" });
@@ -67,7 +71,22 @@ export default memo(function CustomTextField({
         </label>
         <TextField
           id={name}
-          {...register(name, isRequired)}
+          {...register(name, {
+            required: true,
+            max: limit,
+            valueAsNumber: true,
+            validate: (value) => {
+              if (typeof value !== "number" || isNaN(value)) {
+                return "Тільки числа дозволені";
+              }
+              if (limit !== undefined && value > limit) {
+                return `Максимальне значення ${limit}`;
+              }
+              return true;
+            },
+          })}
+          type={limit ? "number" : "text"}
+          inputMode="numeric"
           variant="outlined"
           fullWidth
           InputProps={{
@@ -76,7 +95,11 @@ export default memo(function CustomTextField({
           error={!!errors?.[name]}
           autoComplete="off"
           onClick={handleOpenList}
-          helperText={errors?.[name] ? String(errors?.[name]?.message) : ""}
+          onChange={(e) => {
+            register(name).onChange(e); // важливо викликати оригінальний onChange
+            trigger(name); // і вручну запустити перевірку
+          }}
+          helperText={errors?.[name]?.message || ""}
         />
         {listCity && isOpen && (
           <>

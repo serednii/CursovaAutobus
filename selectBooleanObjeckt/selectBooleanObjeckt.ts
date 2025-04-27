@@ -2,7 +2,7 @@ import {
   IGetSearchRouteCityOption,
   IGetSearchRouteManyOption,
   IGetSearchRouteOneOption,
-} from "@/api/v1/getRoutes";
+} from "@/fetchApi/v1/getRoutes";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
 
 const busSeats = {
@@ -69,7 +69,7 @@ import {
   IGetSearchRouteAgainOption,
   IGetSearchRouteSeatSelectionOption,
   IGetSearchRouteUpdateOption,
-} from "@/api/v1/getRoutesById";
+} from "@/fetchApi/v1/getRoutesById";
 export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   // export const select = {
   id: true,
@@ -83,8 +83,8 @@ export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   passengersSeatsList,
 };
 
-import { IGetSearchRouteMyRouteOption } from "@/api/v1/getRoutesById";
-import { IGetUsersByIdBySelectOption } from "@/api/fetchUsersDELETE";
+import { IGetSearchRouteMyRouteOption } from "@/fetchApi/v1/getRoutesById";
+import { IGetUsersByIdBySelectOption } from "@/fetchApi/fetchUsersDELETE";
 
 export const selectRoute: IGetSearchRouteMyRouteOption = {
   ...baseDate,
@@ -101,6 +101,7 @@ export const selectRouteUpdate: IGetSearchRouteUpdateOption = {
   coffee: true,
   bookedSeats: true,
   power: true,
+  busNumber: true,
   restRoom: true,
   modelBus: true,
   ...baseDate,
@@ -111,6 +112,7 @@ export const selectRouteUpdate: IGetSearchRouteUpdateOption = {
 
 export const selectRouteAgain: IGetSearchRouteAgainOption = {
   driverId: true,
+  busNumber: true,
   departureFrom: true, // Залишаємо це поле
   arrivalTo: true, // Залишаємо це поле
   routePrice: true, // Залишаємо це поле

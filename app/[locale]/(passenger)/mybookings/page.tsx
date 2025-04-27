@@ -1,6 +1,6 @@
 import React from "react";
 
-import getRoutesByPassengerId from "@/api/v1/getRoutesByPassengerId";
+import getRoutesByPassengerId from "@/fetchApi/v1/getRoutesByPassengerId";
 import { selectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/configs/auth";

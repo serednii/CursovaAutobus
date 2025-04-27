@@ -1,6 +1,6 @@
 import { selectRouteAgain, selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 
-import { getRoutesById, IGetRouteAgain, IGetRouteUpdate } from "@/api/v1/getRoutesById";
+import { getRoutesById, IGetRouteAgain, IGetRouteUpdate } from "@/fetchApi/v1/getRoutesById";
 
 interface Props {
   id: number;

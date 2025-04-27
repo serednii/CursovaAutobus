@@ -76,6 +76,7 @@ type selectRouteSeatUpdateKeys = (
   | "wifi"
   | "coffee"
   | "power"
+  | "busNumber"
   | "restRoom"
   | "bookedSeats"
   | "maxSeats"
@@ -101,6 +102,7 @@ type selectRouteAgainKeys = (
   | "arrivalTo"
   | "routePrice"
   | "modelBus"
+  | "busNumber"
   | "driverId"
   | "intermediateStops"
 ) &

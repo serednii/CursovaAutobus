@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { FormValuesRoute } from "@/types/form.types";
 import { RoleEnum } from "@/enum/shared.enums";
 import { UserSession } from "@/types/next-auth";
-import { IGetRouteSeatSelection } from "@/api/v1/getRoutesById";
+import { IGetRouteSeatSelection } from "@/fetchApi/v1/getRoutesById";
 import useSubmitOrder from "./useSubmitOrder";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";

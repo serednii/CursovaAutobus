@@ -4,7 +4,7 @@ import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { UseFormSetValue } from "react-hook-form";
-import { IGetRouteAgain, IGetRouteUpdate } from "@/api/v1/getRoutesById";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchApi/v1/getRoutesById";
 import layoutsData from "@/components/shared/layoutBus/LayoutData";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
 // import { observer } from "mobx-react-lite";
@@ -64,8 +64,8 @@ export const transformData = (
   // dataLayoutBus: ILayoutData,
   sessionUser: UserSession
 ): ISendDataBaseRouteDriver => {
-  console.log("transformData Render");
-  // console.log("dataLayoutBus", dataLayoutBus);
+  // console.log("transformData Render");
+  console.log("transformData data", data);
   // console.log("sessionUser", sessionUser);
 
   const newFormatPassenger = busStore.dataLayoutBus?.passenger.map(
@@ -93,11 +93,17 @@ export const transformData = (
     }
   }
 
-  console.log("XXXXXXXXX", sessionUser.id, Number(sessionUser.id));
+  console.log(
+    "XXXXXXXXX",
+    sessionUser.id,
+    Number(sessionUser.id),
+    busStore.dataLayoutBus?.modelBus
+  );
   return {
     ...data,
     routePrice: Number(data.routePrice),
     modelBus: busStore.dataLayoutBus?.modelBus || "",
+    busNumber: data.busNumber,
     busSeats: newFormatPassenger || [],
     driverId: Number(sessionUser.id),
     departureDate: new Date(data.departureDate),
@@ -160,7 +166,7 @@ export const updateValues = <T extends IGetRouteUpdate | IGetRouteAgain>(
 
   setValue("arrivalTo", route.arrivalTo);
 
-  setValue("busNumber", route.modelBus);
+  setValue("busNumber", route.busNumber);
 
   setValue("selectBusLayout", route.modelBus);
 

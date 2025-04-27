@@ -63,6 +63,7 @@ export async function createRoute(req: NextRequest) {
         bookedSeats,
       },
     });
+
     if (!routeDriver) {
       return NextResponse.json({ error: "Failed to create route driver" }, { status: 500 });
     }

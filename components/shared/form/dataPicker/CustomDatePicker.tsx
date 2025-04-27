@@ -8,7 +8,7 @@ import "./style.scss";
 import { FieldErrors, UseFormRegister, Controller, Control, UseFormWatch } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import { FormValuesRoute } from "@/types/form.types";
-import { IRoutesByIdDriverListBlocked } from "@/api/v1/gеtRoutesByDriverId";
+import { IRoutesByIdDriverListBlocked } from "@/fetchApi/v1/gеtRoutesByDriverId";
 
 interface Props {
   name: keyof FormValuesRoute;

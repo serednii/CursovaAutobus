@@ -36,8 +36,9 @@ import { useGetListBlockedDate } from "./useGetListBlockedDate";
 // import { useTranslation } from "react-i18next";
 import { runInAction } from "mobx";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
-import { IGetRouteAgain, IGetRouteUpdate } from "@/api/v1/getRoutesById";
+import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchApi/v1/getRoutesById";
 import { UserSession } from "@/types/next-auth";
+import CustomNumberField from "@/components/shared/form/CustomNumberField";
 
 export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDriver {
   id: number;
@@ -85,15 +86,19 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
     watch,
     control,
     setValue,
+    trigger,
   } = useForm<FormValuesRoute>({
     mode: "onChange",
-    defaultValues: {
-      wifi: true, // Початкове значення для чекбокса
-      coffee: true,
-      power: true,
-      restRoom: true,
-    },
+    criteriaMode: "all",
+    // defaultValues: {
+    //   wifi: true, // Початкове значення для чекбокса
+    //   coffee: true,
+    //   power: true,
+    //   restRoom: true,
+    // },
   });
+  console.log("createRouteForm", watch("busNumber"));
+  console.log("createRouteForm", watch());
 
   useMemo(() => {
     runInAction(() => {
@@ -225,13 +230,14 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
             />
           )}
 
-          <CustomTextField
+          <CustomNumberField
             register={register}
             action="createRoute"
             errors={errors}
             name={"routePrice"}
             title={t("route_price")}
-            limit={9999}
+            limit={999999999}
+            trigger={trigger}
             className="mb-5"
           />
 

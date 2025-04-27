@@ -110,6 +110,7 @@ export const zodUpdateRouteAll = {
   arrivalDate: z.date(),
   passengersSeatsList,
   busSeats,
+
   intermediateStops: z.array(z.string()),
 };
 

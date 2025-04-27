@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-async function fetchDeleteRouteById(routeId: number) {
+async function deleteRouteById(routeId: number) {
   try {
     // console.log("fetchDeleteRouteById", routeId);
     // Відправка DELETE-запиту
@@ -48,4 +48,4 @@ async function fetchDeleteRouteById(routeId: number) {
   }
 }
 
-export default fetchDeleteRouteById;
+export default deleteRouteById;
