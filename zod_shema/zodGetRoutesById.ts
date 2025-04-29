@@ -44,7 +44,7 @@ const routeSchemaUpdate = z.object({
   selectBusLayout: z.string(),
   ...servicesSchema,
   modelBus: z.string(),
-
+  busNumber: z.string(),
   driverId: z.number().int(),
 
   intermediateStops: z.array(
@@ -63,6 +63,7 @@ const routeSchemaAgain = z.object({
   routePrice: z.number().positive(),
   modelBus: z.string(),
   driverId: z.number().int(),
+  busNumber: z.string(),
   intermediateStops: z.array(
     z.object({
       id: z.number().int().positive(),
