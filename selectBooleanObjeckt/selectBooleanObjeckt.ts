@@ -57,12 +57,22 @@ export const selectOne: IGetSearchRouteOneOption = {
   driverId: true,
 };
 
-export const selectMyBookings = {
+export interface ISelectMyBookings {
+  id: boolean;
+  driverId: boolean;
+  departureDate: boolean;
+  arrivalDate: boolean;
+  departureFrom: boolean;
+  arrivalTo: boolean;
+  routePrice: boolean;
+}
+
+export const selectMyBookings: ISelectMyBookings = {
   id: true,
   driverId: true,
   ...baseDate,
-  busSeats,
-  passengersSeatsList,
+  ...busSeats,
+  ...passengersSeatsList,
 };
 
 import {
@@ -70,6 +80,7 @@ import {
   IGetSearchRouteSeatSelectionOption,
   IGetSearchRouteUpdateOption,
 } from "@/fetchApi/v1/getRoutesById";
+
 export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   // export const select = {
   id: true,

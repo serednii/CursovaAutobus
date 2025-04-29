@@ -28,7 +28,6 @@ export default memo(function CustomNumberField({
   className,
   limit,
   listCity,
-  action,
   trigger,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,16 +44,16 @@ export default memo(function CustomNumberField({
       }
     });
   };
-  const isRequired =
-    action === "createRoute"
-      ? {
-          required: "This field is required.",
-          minLength: {
-            value: 1,
-            message: `Minimum 1 symbol license`,
-          },
-        }
-      : {};
+  // const isRequired =
+  //   action === "createRoute"
+  //     ? {
+  //         required: "This field is required.",
+  //         minLength: {
+  //           value: 1,
+  //           message: `Minimum 1 symbol license`,
+  //         },
+  //       }
+  //     : {};
   const changeCity = (event: React.MouseEvent<HTMLLIElement>) => {
     const city = event.currentTarget.textContent;
     if (city && setValue) {

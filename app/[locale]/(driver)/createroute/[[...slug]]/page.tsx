@@ -2,7 +2,7 @@ import CreateRouteForm from "./CreateRouteForm";
 import { getRoute } from "./getRoute";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/configs/auth";
-import { UserSession, UserUserSession } from "@/types/next-auth";
+import { UserUserSession } from "@/types/next-auth";
 
 type Params = Promise<{ slug: string[] }>;
 
@@ -13,7 +13,7 @@ export default async function CreateRoutePage({ params }: { params: Params }) {
   const type = (slug && slug[1]) || "";
   const session: UserUserSession | null = await getServerSession(authConfig);
   const route = await getRoute({ id, type });
-  console.log("route ********** *********** ", id, type, route);
+  // console.log("route ********** *********** ", id, type, route);
   if (!session) {
     console.error("Route not found");
     return <div>Route not found</div>;

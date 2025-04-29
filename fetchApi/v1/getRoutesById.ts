@@ -128,7 +128,10 @@ class GetRoutesById {
     this.types.push({
       type,
       schema,
-      search: async (id: number, select: T): Promise<K | null> => {
+      search: async <T extends Record<string, boolean>>(
+        id: number,
+        select: T
+      ): Promise<K | null> => {
         try {
           const selectString = Object.keys(select).join(",");
           // console.log("data searchRoute", id, select);

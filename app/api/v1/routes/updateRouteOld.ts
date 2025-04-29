@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
-import { updatedBusSeats } from "./updatedBusSeats";
-import { createPassengersSeatsList } from "../createroute/createFunctions";
+import { updatedBusSeats } from "@/app/api/v1/routes/updatedBusSeats";
 import { IUpdateRouteAPI } from "@/types/route-passenger.types";
 import { firstLetterUpperCase } from "@/lib/utils";
-import fetchDeleteRoutePassenger from "@/fetchFunctions/fetchDeleteRoutePassenger";
 import { IPassengersSeatsList } from "@/types/interface";
 import { middleware } from "@/middleware";
 import { ApiResponse, ErrorResponse } from "@/types/response.types";
+import { createPassengersSeatsList } from "@/app/api/v1/routes/createFunctions";
+import fetchDeleteRoutePassenger from "@/fetchApi/fetchDeleteRoutePassengerDELETED";
 
 // API route handler for updating a route
 export async function PATCH(req: Request) {

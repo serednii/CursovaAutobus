@@ -29,13 +29,13 @@ export const handleRouteSubmit =
   ): SubmitHandler<FormValuesRoute> =>
   async (dataForm) => {
     try {
-      console.log("Submitting Route Data:", type, dataForm);
+      // console.log("Submitting Route Data:", type, dataForm);
       const createRouteDriver: ISendDataBaseRouteDriver = transformData(
         dataForm,
         // dataLayoutBus as ILayoutData,
         sessionUser as UserSession
       );
-      console.log("handleRouteSubmit", createRouteDriver, id, type, router);
+      // console.log("handleRouteSubmit", createRouteDriver, id, type, router);
 
       if (type === "change") {
         await handleUpdateRoute(createRouteDriver, id, router);
@@ -55,7 +55,7 @@ const handleUpdateRoute = async (
   id: number,
   router: ReturnType<typeof useRouter>
 ) => {
-  console.log("parsedData", id, routeData);
+  // console.log("parsedData", id, routeData);
   const parsedData = z.object(zodUpdateRouteAll).parse({ ...routeData, id });
   try {
     // console.log("Updating Route:", { ...parsedData, id });

@@ -2,43 +2,21 @@ import { FormValuesRoute } from "@/types/form.types";
 import { ILayoutData } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
-import { IBusSeats, ISubPassengersList } from "@/types/interface";
+import {  ISubPassengersList } from "@/types/interface";
 import { UseFormSetValue } from "react-hook-form";
 import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchApi/v1/getRoutesById";
 import layoutsData from "@/components/shared/layoutBus/LayoutData";
 import { RoleEnum, SeatStatusEnum } from "@/enum/shared.enums";
-// import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
 import { layoutsData_90deg } from "@/components/shared/layoutBus/LayoutData_90deg";
 import { layoutsData_0deg } from "@/components/shared/layoutBus/LayoutData_0deg";
-// const exampleRote = {
-//   arrivalDate: " Fri Mar 14 2025 20:00:00 GMT+0100 (Центральная Европа, стандартное время)",
-//   arrivalTo: "Львів",
-//   busNumber: "33456",
-//   coffee: true,
-//   departureDate: "Fri Mar 07 2025 20:15:00 GMT+0100 (Центральная Европа, стандартное время) ",
-//   departureFrom: "New York",
-//   intermediateStops: ["stop1", "stop2"],
-//   power: true,
-//   restRoom: false,
-//   routePrice: "456",
-//   selectBusLayout: 0,
-//   subEmail?: ["RESERVATIONDRIVER@gmail.com", "RESERVATIONDRIVER@gmail.com"],
-//   subFirstName?: ["RESERVATION DRIVER", "RESERVATION DRIVER"],
-//   subLastName?: ["RESERVATION DRIVER", "RESERVATION DRIVER"],
-//   subPhone?: ["476757575700", "476757575700"],
-//   wifi: false,
-// };
 
 export const getNewDataLayoutBus = (isMobile: boolean): ILayoutData | null => {
   //select rotate bus or normal bus and select number Seat bus
-  console.log("22222222222222222");
   if (!busStore.dataLayoutBus) return null;
   const selectLayoutsData = (isMobile ? layoutsData_90deg : layoutsData_0deg).filter(
     (item) => item.passengerLength === busStore.dataLayoutBus?.passengerLength
   )[0];
-  console.log("sselectLayoutsData", selectLayoutsData);
-  console.log("busStore.dataLayoutBus", busStore.dataLayoutBus);
 
   const newDataLayoutBus = {
     ...busStore.dataLayoutBus,
@@ -55,19 +33,13 @@ export const getNewDataLayoutBus = (isMobile: boolean): ILayoutData | null => {
       ...selectLayoutsData.passenger.find((seat) => seat.number === item.number),
     })),
   };
-  console.log("newDataLayoutBus", newDataLayoutBus);
   return newDataLayoutBus;
 };
 
 export const transformData = (
   data: FormValuesRoute,
-  // dataLayoutBus: ILayoutData,
   sessionUser: UserSession
 ): ISendDataBaseRouteDriver => {
-  // console.log("transformData Render");
-  console.log("transformData data", data);
-  // console.log("sessionUser", sessionUser);
-
   const newFormatPassenger = busStore.dataLayoutBus?.passenger.map(
     ({ number, busSeatStatus, passenger }) => ({
       number,
@@ -93,12 +65,6 @@ export const transformData = (
     }
   }
 
-  console.log(
-    "XXXXXXXXX",
-    sessionUser.id,
-    Number(sessionUser.id),
-    busStore.dataLayoutBus?.modelBus
-  );
   return {
     ...data,
     routePrice: Number(data.routePrice),
@@ -126,7 +92,6 @@ export const handleChangeVariantBus = (
   // ) => void,
 ) => {
   const busSeats = route && "busSeats" in route ? route.busSeats : null;
-  console.log("handleChangeVariantBus+++++++++++++++", number, busStore.dataLayoutBus);
   busStore.setIndexSelectVariantBus(number);
   if (busSeats) {
     const selectLayoutsData = layoutsData(isMobile)[number].passenger.map((e) => {

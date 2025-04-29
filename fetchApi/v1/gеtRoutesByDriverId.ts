@@ -65,7 +65,10 @@ class GetRoutesByDriverId {
     this.types.push({
       type,
       schema,
-      search: async (driverId: number[], select: T): Promise<K | null> => {
+      search: async <T extends Record<string, boolean>>(
+        driverId: number[],
+        select: T
+      ): Promise<K | null> => {
         // console.log("data searchRoute", select);
 
         try {

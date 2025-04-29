@@ -5,7 +5,7 @@ import DriverSeat from "./DriverSeat";
 import PassengerSeat from "./PassengerSeat";
 import Stairs from "./Stairs";
 
-import { BusSeatInfo, ILayoutData } from "@/types/layoutbus.types";
+import { BusSeatInfo } from "@/types/layoutbus.types";
 import { UserSession } from "@/types/next-auth";
 import { RoleEnum } from "@/enum/shared.enums";
 // import { memo, useEffect } from "react";
@@ -13,10 +13,10 @@ import { RoleEnum } from "@/enum/shared.enums";
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { layoutsData_90deg } from "./LayoutData_90deg";
-import { layoutsData_0deg } from "./LayoutData_0deg";
+// import { layoutsData_90deg } from "./LayoutData_90deg";
+// import { layoutsData_0deg } from "./LayoutData_0deg";
 import { getNewDataLayoutBus } from "@/app/[locale]/(driver)/createroute/[[...slug]]/action";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 // import { ZodNumber } from "zod";
 interface Props {
   className?: string;
@@ -57,21 +57,12 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
 
   // const [newDataLayoutBus, setLayoutData] = useState<ILayoutData | null>(null);
   const isClient = typeof window !== "undefined";
-  // console.log("newDataLayoutBus", busStore.dataLayoutBus, busStore.indexSelectVariantBus);
-  console.log("newDataLayoutBus", busStore.dataLayoutBus?.passenger);
-  console.log("newDataLayoutBus Left", busStore.dataLayoutBus?.driverSeat.left);
-  console.log("newDataLayoutBus Right", busStore.dataLayoutBus?.driverSeat.right);
-  console.log("newDataLayoutBus Top", busStore.dataLayoutBus?.driverSeat.top);
-  console.log("newDataLayoutBus Bottom", busStore.dataLayoutBus?.driverSeat.bottom);
 
   useEffect(() => {
     if (!isClient || sessionUser === null) return;
-    console.log("1111111111111111111111111111");
-
     const layout = getNewDataLayoutBus(isSmallMobile);
-    console.log("HHHHHHHHHHHHHHHHHHHHH", layout);
     busStore.setDataLayoutBus(layout, action); // newDataLayoutBus === busStore.dataLayoutBus
-  }, [isSmallMobile, isClient, sessionUser]);
+  }, [isSmallMobile, isClient, sessionUser, action]);
 
   if (
     sessionUser === null ||
@@ -82,12 +73,7 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   ) {
     return null;
   }
-
-  // const newDataLayoutBus = getNewDataLayoutBus(isMobile);
-
-  // const scale = isMobile ? 0.5 : 1;
   const scale = isTablet ? (isMobile ? 0.5 : 0.7) : 1;
-  // const scale = isMobile ? (isSmallMobile ? 0.4 : 0.5) : 1;
 
   const newBusWidth = busStore.dataLayoutBus.busWidth * scale;
   const newBusHeight = busStore.dataLayoutBus.busHeight * scale;
@@ -123,6 +109,7 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
     keysDriverSeat,
     converterToPx(busStore.dataLayoutBus.driverSeat, newBusWidth, newBusHeight)
   );
+
   const styleStairs_0 = getKeysStyles(
     keysStairs_0,
     converterToPx(busStore.dataLayoutBus.stairs[0], newBusWidth, newBusHeight)
@@ -145,8 +132,6 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
     borderBottomRightRadius: 25 * scale + "px",
   };
 
-  console.log("DriverSeat.tsx +++++++++++++++ ", styleDriverSeat);
-
   return (
     <div className={cn("overflow-auto", className)}>
       <div style={styleBus} className="relative m-auto  bg-[#ccd0d7]  border-2 border-[#000000]">
@@ -157,7 +142,7 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
         />
         {styleStairs_1 && (
           <Stairs
-            style={{ ...styleStairs_1, rotate: `${isSmallMobile ? 90 : 0}deg` } || {}}
+            style={{ ...styleStairs_1, rotate: `${isSmallMobile ? 90 : 0}deg` }}
             scale={scale}
           />
         )}

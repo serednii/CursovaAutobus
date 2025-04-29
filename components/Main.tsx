@@ -7,9 +7,7 @@ interface Props {
 export default function Main({ className, children }: Props) {
   return (
     <main className={className}>
-      <Container className="bg-[url(/images/img@2x.jpg)] bg-cover w-full flex-grow py-3 rounded-lg">
-        {children}
-      </Container>
+      <Container className=" flex-grow py-3 rounded-lg">{children}</Container>
     </main>
   );
 }

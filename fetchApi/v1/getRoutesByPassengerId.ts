@@ -1,9 +1,10 @@
+import { ISelectMyBookings } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
 import { GetRoutesByPassengerId } from "@/types/route-passenger.types";
 import { zodGetRoutesByPassengerId } from "@/zod_shema/zodGetRoutesByPassengerId";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-async function getRoutesByPassengerId<TSelect>(
+async function getRoutesByPassengerId<TSelect extends ISelectMyBookings>(
   passengerId: number,
   select: TSelect
 ): Promise<Omit<GetRoutesByPassengerId, "isReservation">[] | null> {

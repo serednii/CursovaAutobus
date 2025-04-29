@@ -13,7 +13,7 @@ export const useFetchRoutesCity = () => {
     // console.log("fetch routes byCity************************************");
     fetchGetUniqueRoutes.searchRoute({ select: selectRouteCity }, "byCity").then((value) => {
       const result = value as IGetRouteCity[] | null;
-      console.log("result city", result);
+      // console.log("result city", result);
 
       if (result === null || result.length === 0) return;
       const departureFromCityFull = new Set(result.map((item) => item.departureFrom));

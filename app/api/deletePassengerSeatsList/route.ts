@@ -1,4 +1,4 @@
-import { middleware } from "@/middleware";
+// import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { IBusSeats } from "@/types/interface";
 import { ErrorResponse, SuccessResponse } from "@/types/response.types";

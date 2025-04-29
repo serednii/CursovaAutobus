@@ -51,10 +51,7 @@ function PassengerSeat({
     }
   });
 
-  // console.log("styles", styles);
-
   const newStyles = converterToPx(styles, newBusWidth, newBusHeight);
-  // console.log("newStyles", newStyles);
 
   useEffect(() => {
     if (counterStart.current < 2) {
@@ -62,7 +59,6 @@ function PassengerSeat({
       return;
     }
     runInAction(() => {
-      console.log("5555", action);
       params.busSeatStatus = changeStatus.busSeatStatus;
       params.passenger = changeStatus.passenger;
       busStore.setDataLayoutBus({ ...(busStore.dataLayoutBus as ILayoutData) }, action);
@@ -77,11 +73,8 @@ function PassengerSeat({
     [SeatStatusEnum.SELECTED]: "bg-blue-500",
   }[changeStatus.busSeatStatus];
 
-  // console.log("changeStatus111", changeStatus);
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log("xxxx");
     setChangeStatus((prevParams: BusSeatInfo) => {
       //Якщо являємося водієм і на своєму маршруті
       let updatedStatus: SeatStatusEnum = SeatStatusEnum.AVAILABLE;

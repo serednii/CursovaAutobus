@@ -1,5 +1,5 @@
 "use client";
-import { newFormatRoutesTable, deleteMyRoute } from "@/app/[locale]/(passenger)/mybookings/action";
+import { newFormatRoutesTable } from "@/app/[locale]/(passenger)/mybookings/action";
 import AvailableRoutes from "@/components/AvailableRoutes";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 import PastRoutes from "@/components/PastRoutes";

@@ -1,4 +1,4 @@
-import { middleware } from "@/middleware";
+// import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 

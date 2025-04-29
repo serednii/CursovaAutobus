@@ -1,5 +1,5 @@
 import { selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export function parseStringRoutesToObject(
   selectParam: string

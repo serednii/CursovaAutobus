@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
-import { middleware } from "@/middleware";
-import { IGetUsersByIdBySelect } from "@/fetchApi/fetchUsersDELETE";
-import { zodSchemaUsers, zodSchemaUsersInApi } from "@/zod_shema/zodUser";
+// import { middleware } from "@/middleware";
+// import { IGetUsersByIdBySelect } from "@/fetchApi/fetchUsersDELETE";
+import { zodSchemaUsersInApi } from "@/zod_shema/zodUser";
 import { UserSelect } from "@/types/next-auth";
 import { checkApiKey, parseStringUserToObject } from "../../routes/util";
 
-export async function GET(req: NextRequest, { params }: { params: { id?: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     // Викликаємо middleware для перевірки авторизації
     // const middlewareResponse = await middleware(req);

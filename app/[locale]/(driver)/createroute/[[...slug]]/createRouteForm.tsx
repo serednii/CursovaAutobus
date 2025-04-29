@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 
@@ -10,30 +10,22 @@ import IntermediateStops from "@/components/shared/form/IntermediateStops";
 import MaterialUISelect from "@/components/shared/form/MaterialUISelect";
 import CustomTextField from "@/components/shared/form/CustomTextField";
 import layoutsData from "@/components/shared/layoutBus/LayoutData";
-// import MyScaleLoader from "@/components/ui/MyScaleLoader";
 import CheckboxOptionsDriver from "@/components/shared/form/CheckboxOptionsDriver";
 import SubPassengersOrders from "@/components/shared/form/SubPassengersOrders/SubPassengersOrders";
 
 import { FormValuesRoute } from "@/types/form.types";
-// import { ILayoutData } from "@/types/layoutbus.types";
-// import { UserSession } from "@/types/next-auth";
 import { ISendDataBaseRouteDriver } from "@/types/route-driver.types";
 import { RoleEnum } from "@/enum/shared.enums";
-
-import { handleChangeVariantBus } from "./action";
 import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
 import { useUpdateValues } from "./useUpdateValues";
 import { handleRouteSubmit } from "./handleRouteSubmit";
 import LayoutBus from "@/components/shared/layoutBus/LayuotBus";
 import { useFetchRoutesCity } from "./useFetchRoutesCity";
-// import useStore from "@/zustand/createStore";
 
 import { observer } from "mobx-react-lite";
 import busStore from "@/mobx/busStore";
-// import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 import { useGetListBlockedDate } from "./useGetListBlockedDate";
-// import { useTranslation } from "react-i18next";
 import { runInAction } from "mobx";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 import { IGetRouteAgain, IGetRouteUpdate } from "@/fetchApi/v1/getRoutesById";
@@ -44,17 +36,6 @@ export interface ISendDataBaseRouteDriverWidthId extends ISendDataBaseRouteDrive
   id: number;
 }
 
-// export const debouncedSetIdOrderPassengers = debounce((data: ILayoutData, setIdOrderPassengers, userSessionId) => {
-//   const idOrderPassengers = data.passenger
-//     .filter((e) => e.passenger === userSessionId && e.busSeatStatus === SeatStatusEnum.RESERVEDEMPTY)
-//     .map((e) => e.passenger);
-//   setIdOrderPassengers(idOrderPassengers);
-// }, 800);
-// const setUserIdSession = useStore((state) => state.setUserIdSession);
-// const setDataLayoutBus = useStore((state) => state.setDataLayoutBus);
-// const dataLayoutBus = useStore((state) => state.dataLayoutBus);
-// const idOrderPassengers = useStore((state) => state.idOrderSubPassengers);
-
 interface Props {
   id: number;
   type: string;
@@ -64,19 +45,13 @@ interface Props {
 
 function CreateRouteForm({ id, type, sessionUser, route }: Props) {
   const renderRef = useRef(0);
-  // const [indexSelectVariantBus, setIndexSelectVariantBus] = useState<number | null>(null);
   const [startStops, setStartStops] = useState<string[]>([]);
-  console.log("indexSelectVariantBus", busStore.indexSelectVariantBus);
   const userSessionId = Number(sessionUser?.id);
 
   const { t } = useAppTranslation("createroute");
   const { t: form } = useAppTranslation("form");
 
   const router = useRouter();
-
-  // namespaces={["createroute", "home", "form"]}
-  // const { sessionUser, status } = useGetSessionParams();
-  // console.log("CreateRoute RENDER", bears);
 
   const {
     register,
@@ -97,13 +72,13 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
     //   restRoom: true,
     // },
   });
-  console.log("createRouteForm", watch("busNumber"));
-  console.log("createRouteForm", watch());
 
   useMemo(() => {
     runInAction(() => {
       busStore.setUserIdSession(userSessionId);
-      !route && busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
+      if (!route) {
+        busStore.setDataLayoutBus(null, RoleEnum.DRIVER);
+      }
     });
   }, [userSessionId, route]);
 

@@ -1,8 +1,8 @@
 import { middleware } from "@/middleware";
 import { NextRequest, NextResponse } from "@/node_modules/next/server";
 import { prisma } from "@/prisma/prisma-client";
-import { User } from "@prisma/client";
-import bcrypt from "bcrypt";
+// import { User } from "@prisma/client";
+// import bcrypt from "bcrypt";
 
 // app/api/users/route.ts
 

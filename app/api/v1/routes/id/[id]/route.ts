@@ -5,8 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { updateRoute } from "../../updateRoute";
 import { checkApiKey, parseStringRoutesToObject } from "../../util";
-
-export async function GET(req: NextRequest, { params }: { params: { id?: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const isApiKeyValid = checkApiKey(req);
     if (!isApiKeyValid) {
@@ -52,7 +51,8 @@ export async function GET(req: NextRequest, { params }: { params: { id?: string 
 }
 
 // API route handler for updating a route
-export async function PATCH(req: NextRequest, { params }: { params: { id?: string } }) {
+
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const isApiKeyValid = checkApiKey(req);
   if (!isApiKeyValid) {
     return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
@@ -69,7 +69,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id?: strin
   return await updateRoute(req, numberId);
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id?: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const isApiKeyValid = checkApiKey(req);
     if (!isApiKeyValid) {

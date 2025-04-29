@@ -1,7 +1,7 @@
 import { IGetSearchRouteManyOption, IGetSearchRouteOneOption } from "@/fetchApi/v1/getRoutes";
 import { middleware } from "@/middleware";
 import { prisma } from "@/prisma/prisma-client";
-import { IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
+// import { IGetSearchRouteOneOptionData } from "@/types/searchRoute.types";
 // import { UserSelect } from "@/types/next-auth";
 // import { ca } from "date-fns/locale";
 import { NextRequest, NextResponse } from "next/server";

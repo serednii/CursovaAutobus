@@ -3,7 +3,7 @@ import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 import { checkApiKey, parseStringRoutesToObject } from "../../util";
 
-export async function GET(req: NextRequest, { params }: { params: { id?: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const isApiKeyValid = checkApiKey(req);
     if (!isApiKeyValid) {

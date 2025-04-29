@@ -63,23 +63,23 @@ export async function POST(req: NextRequest) {
     //   };
     // }
 
-    const where: Record<string, unknown> = {
-      // departureFrom: {
-      //   contains: departureSearch ?? "",
-      // },
-      // arrivalTo: {
-      //   contains: arrivalToSearch ?? "",
-      // },
+    // const where: Record<string, unknown> = {
+    //   // departureFrom: {
+    //   //   contains: departureSearch ?? "",
+    //   // },
+    //   // arrivalTo: {
+    //   //   contains: arrivalToSearch ?? "",
+    //   // },
 
-      departureDate: {
-        gt: new Date(),
-      },
-      // ...dateFilter,
-      // ...(wifi ? { wifi: true } : {}),
-      // ...(coffee ? { coffee: true } : {}),
-      // ...(power ? { power: true } : {}),
-      // ...(restRoom ? { restRoom: true } : {}),
-    };
+    //   departureDate: {
+    //     gt: new Date(),
+    //   },
+    //   // ...dateFilter,
+    //   // ...(wifi ? { wifi: true } : {}),
+    //   // ...(coffee ? { coffee: true } : {}),
+    //   // ...(power ? { power: true } : {}),
+    //   // ...(restRoom ? { restRoom: true } : {}),
+    // };
 
     // if (departureSearch) {
     //   where.departureFrom = { contains: departureSearch };

@@ -5,7 +5,7 @@ import { zodSchemaUsersInApi } from "@/zod_shema/zodUser";
 import { UserSelect } from "@/types/next-auth";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { method } from "lodash";
+// import { method } from "lodash";
 import { checkApiKey, parseStringUserToObject } from "../routes/util";
 
 export async function GET(req: NextRequest) {
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
 
     try {
       const parsedData: Partial<UserSelect> | null = zodSchemaUsersInApi.parse(selectObject);
-      // console.log("parsedData", parsedData);
+      console.log("parsedData", parsedData);
 
       // Якщо id не передано, повертаємо всіх користувачів
       const users = await prisma.user.findMany({
