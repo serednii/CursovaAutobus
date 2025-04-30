@@ -65,14 +65,16 @@ export interface ISelectMyBookings {
   departureFrom: boolean;
   arrivalTo: boolean;
   routePrice: boolean;
+  busSeats: boolean;
+  passengersSeatsList: boolean;
 }
 
 export const selectMyBookings: ISelectMyBookings = {
   id: true,
   driverId: true,
   ...baseDate,
-  ...busSeats,
-  ...passengersSeatsList,
+  busSeats: true,
+  passengersSeatsList: true,
 };
 
 import {
@@ -82,7 +84,6 @@ import {
 } from "@/fetchApi/v1/getRoutesById";
 
 export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
-  // export const select = {
   id: true,
   ...baseDate,
   selectBusLayout: true,

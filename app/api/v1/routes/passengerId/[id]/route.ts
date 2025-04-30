@@ -14,12 +14,13 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     if (!id) {
       return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
     }
-
+    // console.log("id GET", id);
     const { searchParams } = new URL(req.url);
     const selectParams = searchParams.get("select") || "";
     // console.log("getUniqueRoutes search select", selectParams);
     const selectObject = parseStringRoutesToObject(selectParams);
     const passengerId = parseInt(id || "0", 10);
+    // console.log("getUniqueRoutes search select", passengerId, selectObject);
 
     // Находимо всіх маршрути які заказав даний пасажир
     const uniqueRouteDriversId: { routeDriverId: number }[] = await prisma.busSeat.findMany({
@@ -29,7 +30,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         routeDriverId: true, // Залишаємо це поле
       },
     });
+
     const routeDriverIds: number[] = uniqueRouteDriversId.map((route) => route.routeDriverId);
+    // console.log("getUniqueRoutes search select 2222", routeDriverIds, passengerId, selectObject);
 
     const routes = await prisma.routeDriver.findMany({
       where: {
@@ -39,7 +42,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       select: selectObject,
     });
 
-    console.log("routeDriversId", routeDriverIds, uniqueRouteDriversId, routes);
+    // console.log("routeDriversId--------------------- ", routes);
     return NextResponse.json([...routes]);
   } catch (error) {
     console.error("Помилка обробки запиту:", error);

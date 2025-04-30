@@ -12,7 +12,7 @@ export default async function MyBookings() {
 
   // const { routesPassenger, loading, userSessionId } = useFetchPassengerRoutes(reload);
   const routesPassenger = await getRoutesByPassengerId(userSessionId, selectMyBookings);
-  console.log("routesPassenger", routesPassenger);
+  // console.log("routesPassenger", routesPassenger);
   // const { removeRoutePassenger } = useDeletePassengerRoute(routesPassenger, userSessionId, setReload);
 
   if (routesPassenger === null) return null;

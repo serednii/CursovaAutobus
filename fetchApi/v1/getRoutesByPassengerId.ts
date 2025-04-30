@@ -10,10 +10,13 @@ async function getRoutesByPassengerId<TSelect extends ISelectMyBookings>(
 ): Promise<Omit<GetRoutesByPassengerId, "isReservation">[] | null> {
   try {
     const selectString = Object.keys(select).join(",");
-    console.log(
-      "getRoutesByPassengerId.ts",
-      `${API_URL}/api/v1/routes/passengerId/${passengerId}?select=${selectString}`
-    );
+
+    // console.log(
+    //   "getRoutesByPassengerId.ts",
+    //   select,
+    //   `${API_URL}/api/v1/routes/passengerId/${passengerId}?select=${selectString}`
+    // );
+
     const response = await fetch(
       `${API_URL}/api/v1/routes/passengerId/${passengerId}?select=${selectString}`,
       {
