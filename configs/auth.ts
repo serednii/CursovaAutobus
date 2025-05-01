@@ -23,7 +23,7 @@ const findOrCreateUser = async (profile: any) => {
         email,
         firstName: profile.name || "",
         lastName: "",
-        role: RoleEnum.PASSENGER,
+        role: RoleEnum.DRIVER,
         license: "no license",
         password: "", // Пароль не потрібен для GitHub авторизації
         // apiKey: uuidv4(),

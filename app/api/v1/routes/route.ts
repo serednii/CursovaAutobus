@@ -10,13 +10,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
   }
   const { searchParams } = new URL(req.url);
-
   const selectParams = searchParams.get("select") || "";
-
   const selectObject = parseStringRoutesToObject(selectParams);
-
   const departureSearch = searchParams.get("departureSearch") || "";
-
   const arrivalToSearch = searchParams.get("arrivalToSearch") || "";
   const startOfDay = searchParams.get("startOfDay") || null;
   const startOfDayDate = startOfDay && startOfDay !== "Invalid Date" ? new Date(startOfDay) : null;
@@ -29,17 +25,6 @@ export async function GET(req: NextRequest) {
   const restRoom = searchParams.get("restRoom") === "true";
   const page = parseInt(searchParams.get("page") || "1", 10);
   const offset = (page - 1) * limit;
-
-  console.log("selectObject", selectObject);
-  console.log("departureSearch", departureSearch);
-  console.log("arrivalToSearch", arrivalToSearch);
-  console.log("startOfDay", startOfDay, startOfDayDate);
-  console.log("endOfDay", endOfDay, endOfDayDate);
-  console.log("limit", limit);
-  console.log("wifi", wifi);
-  console.log("coffee", coffee);
-  console.log("power", power);
-  console.log("restRoom", restRoom);
 
   // Фільтр по датах
   const dateFilter =
@@ -59,7 +44,6 @@ export async function GET(req: NextRequest) {
     arrivalTo: {
       contains: arrivalToSearch ?? "",
     },
-
     departureDate: {
       gt: new Date(),
     },
@@ -68,6 +52,12 @@ export async function GET(req: NextRequest) {
     ...(coffee ? { coffee: true } : {}),
     ...(power ? { power: true } : {}),
     ...(restRoom ? { restRoom: true } : {}),
+  };
+
+  const whereCity = {
+    departureDate: {
+      gt: new Date(),
+    },
   };
 
   const routes = await prisma.routeDriver.findMany({
@@ -79,6 +69,7 @@ export async function GET(req: NextRequest) {
 
   const routesCity = await prisma.routeDriver.findMany({
     take: 20,
+    where: whereCity,
     select: {
       departureFrom: true,
       arrivalTo: true,
