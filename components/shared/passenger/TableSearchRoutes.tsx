@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
-import { createColumnButton } from "../driver/TableRoutes";
 
 interface Props {
   routes: TypeBaseRoute[];
