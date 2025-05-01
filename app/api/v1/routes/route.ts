@@ -28,7 +28,8 @@ export async function GET(req: NextRequest) {
   const coffee = searchParams.get("coffee") === "true";
   const power = searchParams.get("power") === "true";
   const restRoom = searchParams.get("restRoom") === "true";
-
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const offset = (page - 1) * limit;
   console.log("selectObject", selectObject);
   console.log("departureSearch", departureSearch);
   console.log("arrivalToSearch", arrivalToSearch);
@@ -71,6 +72,7 @@ export async function GET(req: NextRequest) {
   const routes = await prisma.routeDriver.findMany({
     where,
     take: limit,
+    skip: offset,
     select: selectObject,
   });
 

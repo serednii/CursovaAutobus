@@ -1,9 +1,9 @@
 import { SubmitHandler } from "react-hook-form";
 import { FormValues } from "./interface";
-import { createUser } from "./utils";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { RoleEnum } from "@/enum/shared.enums";
+import createUser from "@/fetchApi/v1/createUser";
 
 export default function useDriverAuth(reset: () => void, role: RoleEnum) {
   const router = useRouter();

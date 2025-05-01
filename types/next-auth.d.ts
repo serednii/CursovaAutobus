@@ -29,7 +29,7 @@ export interface UserSession {
   isNewUser: boolean;
   avatar_url?: string;
   picture?: string;
-  apiKey?: string | null;
+  // apiKey?: string | null;
 }
 
 export interface UserUserSession {
@@ -94,7 +94,7 @@ declare module "next-auth" {
     iat: number;
     exp: 1741621046;
     jti: string;
-    apiKey: string;
+    // apiKey: string;
   }
 }
 
@@ -114,6 +114,6 @@ declare module "next-auth/jwt" {
     id: string;
     email: string;
     avatar_url: string;
-    apiKey: string;
+    // apiKey: string;
   }
 }

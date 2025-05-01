@@ -40,7 +40,7 @@ export function parseStringRoutesToObject(
 export function parseStringUserToObject(selectParam: string): Record<string, boolean> {
   const selectFields = selectParam ? selectParam.split(",") : [];
   const selectObject: Record<string, boolean> = selectFields.reduce((acc, field) => {
-    acc[field] = true;
+    acc[field.trim()] = true;
     return acc;
   }, {} as Record<string, boolean>);
   return selectObject;

@@ -25,7 +25,6 @@ export const zodSchemaUsersInApi: z.ZodType<UserSelect> = z
     license: z.boolean().optional(),
     isNewUser: z.boolean().optional(),
     avatar_url: z.boolean().optional(),
-    apiKey: z.boolean().optional(),
     createdAt: z.boolean().optional(),
   })
   .partial()

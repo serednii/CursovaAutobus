@@ -8,11 +8,6 @@ import { checkApiKey, parseStringUserToObject } from "../../routes/util";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    // Викликаємо middleware для перевірки авторизації
-    // const middlewareResponse = await middleware(req);
-    // if (middlewareResponse.status !== 200) {
-    //   return middlewareResponse;
-    // }
     const isApiKeyValid = checkApiKey(req);
     if (!isApiKeyValid) {
       return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
@@ -25,7 +20,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     try {
       const parsedData: Partial<UserSelect> | null = zodSchemaUsersInApi.parse(selectObject);
-      console.log("parsedData", parsedData);
       if (!parsedData) {
         return NextResponse.json({ error: "Некоректні дані" }, { status: 400 });
       }
@@ -36,7 +30,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       }
 
       const idNumber = parseInt(id || "0", 10);
-      console.log("ids", id);
+
       const users = await prisma.user.findMany({
         where: {
           id: idNumber, // Пошук користувачів за кількома id
@@ -66,16 +60,36 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 }
 
-// Структура API
-// GET /api/users: Повертає всіх користувачів з усіма полями.
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const isApiKeyValid = checkApiKey(req);
+    if (!isApiKeyValid) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+    }
 
-// GET /api/users?select=name,email: Повертає всіх користувачів з полями name та email.
+    // Отримуємо дані з тіла запиту
+    const { id } = await params;
+    const idNumber = parseInt(id || "0", 10);
+    // Перевірка, чи існує користувач з таким id
+    const existingUser = await prisma.user.findUnique({
+      where: { id: idNumber },
+    });
 
-// GET /api/users/:id: Повертає одного користувача за конкретним id.
+    if (!existingUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
-// GET /api/users/:id/:id2: Повертає кілька користувачів за кількома id (динамічний маршрут).
+    // Видалення користувача
+    const deletedUser = await prisma.user.delete({
+      where: { id: idNumber },
+    });
 
-// POST /api/users: Повертає кілька користувачів за масивом ids з вибраними полями.
-// where: {
-//     id: { in: ids }, // Пошук користувачів за кількома id
-//   },
+    // Повертаємо успішну відповідь з видаленим користувачем
+    return NextResponse.json({ data: deletedUser }, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+
+    // Повертаємо повідомлення про помилку
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

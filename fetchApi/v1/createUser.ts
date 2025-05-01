@@ -1,6 +1,6 @@
 import { ICreateUser } from "@/types/next-auth";
 
-export const createUser = async (data: ICreateUser) => {
+const createUser = async (data: ICreateUser) => {
   // console.log("creayeuser----------------------------", data);
   try {
     const res = await fetch("/api/v1/users", {
@@ -23,3 +23,5 @@ export const createUser = async (data: ICreateUser) => {
     throw error; // Повторне кидання помилки
   }
 };
+
+export default createUser;

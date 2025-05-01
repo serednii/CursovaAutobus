@@ -5,8 +5,8 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { prisma } from "@/prisma/prisma-client";
 import { RoleEnum } from "@/enum/shared.enums";
-import { v4 as uuidv4 } from "uuid"; // Для генерації унікального ключа
-import { url } from "inspector";
+// import { v4 as uuidv4 } from "uuid"; // Для генерації унікального ключа
+// import { url } from "inspector";
 
 const findOrCreateUser = async (profile: any) => {
   const email = profile.email;
@@ -26,7 +26,7 @@ const findOrCreateUser = async (profile: any) => {
         role: RoleEnum.PASSENGER,
         license: "no license",
         password: "", // Пароль не потрібен для GitHub авторизації
-        apiKey: uuidv4(),
+        // apiKey: uuidv4(),
       },
     });
     profile.isNewUser = true;
@@ -94,7 +94,7 @@ export const authConfig: AuthOptions = {
           phone: user.phone ?? "",
           license: user.license,
           isNewUser: false,
-          apiKey: user.apiKey,
+          // apiKey: user.apiKey,
         };
       },
     }),
@@ -118,7 +118,7 @@ export const authConfig: AuthOptions = {
         role: token.role,
         phone: token.phone,
         license: token.license,
-        apiKey: token.apiKey,
+        // apiKey: token.apiKey,
       };
 
       return session;
@@ -141,7 +141,7 @@ export const authConfig: AuthOptions = {
           role: user.role as RoleEnum,
           avatar_url: user.avatar_url ?? "", // Запобігаємо undefined
           isNewUser: user.isNewUser ?? false,
-          apiKey: user.apiKey ?? "",
+          // apiKey: user.apiKey ?? "",
         };
       }
 

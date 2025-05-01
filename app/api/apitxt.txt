@@ -5,8 +5,9 @@
 // GET /api/v1/users/:id/ отримати користувача по  id з усіма полями
 // GET /api/v1/users/:id/?select=firstName,id,phone,email отримати користувача по id з вказаними  полями
 
-// GET /api/v1/users/ отримати всіх користувачів усіма полями
+// GET /api/v1/users/ отримати всіх користувачів усіма полями deafault limit 100
 // GET /api/v1/users/?limit=10 отримати всіх користувачів усіма полями
+// GET /api/v1/users/?limit=10&page=1 отримати всіх користувачів усіма полями
 
 // GET /api/v1/users/?select=firstName,id,phone,email отримати всіх користувачів з вказаними  полями
 // GET /api/v1/users/?select=firstName,id,phone,email&limit=2 отримати всіх користувачів  з вказаними  полями
@@ -17,15 +18,98 @@
 // GET /api/v1/users/?filter[ids]={1,3,5,6,7,8,34} отримати користувача з певним id і з усіма полями
 // GET /api/v1/users/?select=firstName,id,phone,email&filter[ids]={1,3,5,6,7,8,34}отримати користувача з певним id з вказаними  полями
 
+out data
+{
+    "data": [
+        {
+            "id": 3,
+            "createdAt": "2025-02-02T08:42:18.304Z",
+            "firstName": "Petro",
+            "lastName": "Tkachuk",
+            "email": "petro.tkachuk@gmail.com",
+            "phone": "+380987654321",
+            "password": "$2b$10$BqW9wn/NWtuV4uQyeXY13URZlkP1Mn78yXYcHOP0987654321asdfgh",
+            "role": "driver",
+            "license": "B987654321"
+        }
+    ],
+    "meta": {
+        "page": 3,
+        "limit": 1,
+        "total": 34,
+        "totalPages": 34
+    }
+}, {status: 200}
+
+error code
+ return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+ return NextResponse.json({ error: "Invalid select" }, { status: 400 });
+  return NextResponse.json(
+      { error: "Не вдалося отримати користувачів", errorMessage: error },
+      { status: 500 }
+    );
+
 // POST /api/v1/users → створити користувача
+input data
+    password: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: RoleEnum.ADMIN | RoleEnum.GUEST | RoleEnum.DRIVER | RoleEnum.PASSENGER;
+    phone: string;
+
+ out data   
+return NextResponse.json({ user }, { status: 201 });
+
+error code
+return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+return NextResponse.json({ error: "Invalid data: all fields are required" }, { status: 400 });
+return NextResponse.json({ error: "User with this email already exists" }, { status: 409 });
+return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+
 
 // DELETE /api/v1/users/:id видалити користувача по id
 
-////////////////////////////////////////////////////////////////
-// GET /api/routes → отримати всі маршрути limit default=100
-// GET /api/routes?limit=10 → отримати всі маршрути
+out data
+{
+    "data": {
+        "id": 38,
+        "createdAt": "2025-04-13T07:42:53.095Z",
+        "firstName": "Oleg",
+        "lastName": "",
+        "email": "o27911342@gmail.com",
+        "phone": null,
+        "password": "",
+        "role": "passenger",
+        "license": "no license"
+    }
+},  { status: 200 }
 
-// GET /api/routes/id/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по id з певними полями
+error code 
+  return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+  return NextResponse.json({ error: "User not found" }, { status: 404 });
+  return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+// GET /api/v1/routes → отримати всі маршрути limit default=100
+// GET /api/v1/routes?limit=10 → отримати всі маршрути
+// GET /api/v1/routes?limit=10&page=1 → отримати всі маршрути
+
+GET /api/v1/routes/v1/?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по id з певними полями
+GET /api/v1/routes/v1/?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList&limit=10 → отримати  маршрут по id з певними полями
+GET /api/v1/routes/v1/?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList&limit=10&page=1 → отримати  маршрут по id з певними полями
+
+// GET /api/routes/v1/id/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по id з певними полями
+
 //Отримати маршрутти по пошуку за параметрами departureSearch, arrivalToSearch, startOfDay, endOfDay, wifi, coffee, power, restRoom, limit, driverId
   departureSearch?: string;
   arrivalToSearch?: string;
@@ -43,11 +127,15 @@
 // PATCH /api/v1/routes/id/:id → оновити дані частково
 // DELETE /api/v1/routes/id/:id → видалити
 
-// GET /api/routes/passengerId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
-// GET /api/routes/passengerId/:id → отримати  маршрут по passengerId з усіма полями
+// GET /api/v1/routes/passengerId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
+// GET /api/v1/routes/passengerId/:id → отримати  маршрут по passengerId з усіма полями
 
-// GET /api/routes/driverId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
-// GET /api/routes/driverId/:id → отримати  маршрут по passengerId з усіма полями
+// GET /api/v1/routes/driverId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
+// GET /api/v1/routes/driverId/:id → отримати  маршрут по passengerId з усіма полями
 
 // GET api/v1/routes/uniqueCity?select=id,departureFrom,arrivalTo, //Видає комбінацію унікальних міст departureFrom,arrivalTo з вказаними полями
 // GET api/v1/routes/uniqueCity //Видає комбінацію унікальних міст departureFrom,arrivalTo з повними полями
+
+////////////////////////////////////////////////////////////////
+// GET /api/v1/passengerId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
+// GET /api/v1/routes/passengerId/:id → отримати  маршрут по passengerId з усіма полями

@@ -8,29 +8,24 @@ import bcrypt from "bcrypt";
 // import { method } from "lodash";
 import { checkApiKey, parseStringUserToObject } from "../routes/util";
 
+const allowedFields = "id,email,firstName,lastName,phone,role,license";
+
 export async function GET(req: NextRequest) {
   try {
-    // Викликаємо middleware для перевірки авторизації
-    // const middlewareResponse = await middleware(req);
-    // if (middlewareResponse.status !== 200) {
-    //   return middlewareResponse;
-    // }
-
     const { searchParams } = new URL(req.url);
-
     const isApiKeyValid = checkApiKey(req);
     if (!isApiKeyValid) {
       return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
     }
-    const selectParams = searchParams.get("select") || ""; // Наприклад: 'name,email'
+
+    const selectParams = searchParams.get("select") || allowedFields; // Наприклад: 'name,email'
     const selectObject = parseStringUserToObject(selectParams);
     const email = searchParams.get("email");
     const limit = parseInt(searchParams.get("limit") || "100", 10);
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const offset = (page - 1) * limit;
     const idsStr = searchParams.get("filter[ids]");
-    console.log("+++++++++++", req.headers.get("apiKey"));
-
     const ids = idsStr ? idsStr.split(",").map(Number) : [];
-
     const searchParamsObject: { email?: string; id?: { in: number[] } } = {};
 
     if (email) {
@@ -38,23 +33,46 @@ export async function GET(req: NextRequest) {
     } else if (ids && ids.length > 0) {
       searchParamsObject.id = { in: ids };
     }
-    // console.log("searchParamsObject", searchParamsObject, ids, email);
 
     try {
       const parsedData: Partial<UserSelect> | null = zodSchemaUsersInApi.parse(selectObject);
       console.log("parsedData", parsedData);
+    } catch (parseError: unknown) {
+      return NextResponse.json(
+        { error: "Invalid select", errorMessage: parseError },
+        { status: 400 }
+      );
+    }
 
-      // Якщо id не передано, повертаємо всіх користувачів
+    try {
       const users = await prisma.user.findMany({
         where: searchParamsObject,
         take: limit,
+        skip: offset,
         select: Object.keys(selectObject).length > 0 ? selectObject : undefined,
       });
+      const total = await prisma.user.count({ where: searchParamsObject });
 
-      return NextResponse.json({ data: users }, { status: 200 });
-    } catch (parseError: unknown) {
-      console.error("Помилка парсингу даних:", parseError);
-      throw parseError;
+      return NextResponse.json(
+        {
+          data: users,
+          meta:
+            !email && !ids
+              ? {
+                  page,
+                  limit,
+                  total,
+                  totalPages: Math.ceil(total / limit),
+                }
+              : undefined,
+        },
+        { status: 200 }
+      );
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Не вдалося отримати користувачів", errorMessage: error },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error("Помилка при отриманні користувачів:", error);
@@ -67,21 +85,13 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    // Викликаємо middleware для перевірки авторизації
-    const middlewareResponse = await middleware(req);
-
-    // Якщо middleware повернув помилку, повертаємо її
-    if (middlewareResponse.status !== 200) {
-      return middlewareResponse;
+    const isApiKeyValid = checkApiKey(req);
+    if (!isApiKeyValid) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
     }
-
-    // Очікуємо парсинг JSON
     const data: User = await req.json();
-    // console.log("api/users", data);
 
-    // Перевірка на валідність даних
     const { firstName, lastName, email, password, phone, role, license } = data;
-    // console.log("Request data:", data);
 
     if (!firstName || !lastName || !email || !password || !phone) {
       return NextResponse.json({ error: "Invalid data: all fields are required" }, { status: 400 });
@@ -116,56 +126,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ user }, { status: 201 });
   } catch (error) {
     console.error("Error creating user:", error);
-
     // Повертаємо повідомлення про помилку
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
-
-export async function DELETE(req: NextRequest) {
-  try {
-    // Викликаємо middleware для перевірки авторизації
-    const middlewareResponse = await middleware(req); // Викликаємо middleware для перевірки авторизації
-
-    // Якщо middleware повернув помилку, повертаємо її
-    if (middlewareResponse.status !== 200) {
-      return middlewareResponse;
-    }
-
-    // Отримуємо дані з тіла запиту
-    const { id } = await req.json();
-
-    // Перевірка, чи існує користувач з таким id
-    const existingUser = await prisma.user.findUnique({
-      where: { id },
-    });
-
-    if (!existingUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    // Видалення користувача
-    const deletedUser = await prisma.user.delete({
-      where: { id },
-    });
-
-    // Повертаємо успішну відповідь з видаленим користувачем
-    return NextResponse.json({ deletedUser }, { status: 200 });
-  } catch (error) {
-    console.error("Error deleting user:", error);
-
-    // Повертаємо повідомлення про помилку
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  }
-}
-
-// Структура API
-// GET /api/users: Повертає всіх користувачів з усіма полями.
-
-// GET /api/users?select=name,email: Повертає всіх користувачів з полями name та email.
-
-// GET /api/users/:id: Повертає одного користувача за конкретним id.
-
-// GET /api/users/:id/:id2: Повертає кілька користувачів за кількома id (динамічний маршрут).
-
-// POST /api/users: Повертає кілька користувачів за масивом ids з вибраними полями.
