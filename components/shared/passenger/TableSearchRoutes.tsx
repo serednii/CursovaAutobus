@@ -75,7 +75,7 @@ export default function TableSearchRoutes({ routes, status }: Props) {
     {
       field: "viewRouter",
       headerName: form("view_route"),
-      minWidth: { UA: 170, EN: 105, CS: 120 }[lang],
+      minWidth: { UA: 220, EN: 165, CS: 160 }[lang],
       flex: 1,
       sortable: false,
       renderCell: (params) => (
