@@ -6,7 +6,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import initTranslations from "../i18n";
-
 import "./globals.css";
 
 const geistSans = Geist({
@@ -42,7 +41,7 @@ export default async function RootLayout({
     "mybookings",
     "home",
     "createroute",
-    "footer"
+    "footer",
   ]);
 
   return (

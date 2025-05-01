@@ -5,7 +5,6 @@ import PastRoutes from "@/components/PastRoutes";
 import { IRoutesByIdDriver } from "@/fetchApi/v1/getRoutes";
 
 import { getPastRoutesAndAvailableRoutes } from "@/lib/utils";
-// import { useTranslation } from "react-i18next";
 import TableRoutes from "../../../../components/shared/driver/TableRoutes";
 
 interface Props {
@@ -27,9 +26,9 @@ export default function WrapperDriverRoutes({ routes }: Props) {
           <AvailableRoutes className="mb-10">
             <TableRoutes routes={availableRoutes} />
           </AvailableRoutes>
-          {/* <PastRoutes>
+          <PastRoutes>
             <TableRoutes routes={pastRoutes} isRouteAgain={true} />
-          </PastRoutes> */}
+          </PastRoutes>
         </>
       )}
     </div>

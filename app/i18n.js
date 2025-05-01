@@ -33,12 +33,6 @@ export default async function initTranslations(
         preload: resources ? [] : i18nConfig.locales
     });
 
-    // return {
-    //     i18n: i18nInstance,
-    //     resources: { [locale]: i18nInstance.services.resourceStore.data[locale] },
-    //     t: i18nInstance.t
-    // };
-
     return {
         i18n: i18nInstance,
         resources: i18nInstance.services.resourceStore.data, // ✅ Повертаємо всі ресурси
