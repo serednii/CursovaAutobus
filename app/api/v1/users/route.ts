@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
-import { middleware } from "@/middleware";
 import { zodSchemaUsersInApi } from "@/zod_shema/zodUser";
 import { UserSelect } from "@/types/next-auth";
 import { User } from "@prisma/client";
