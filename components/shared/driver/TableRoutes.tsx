@@ -10,6 +10,7 @@ import TableRoutesUI from "@/components/ui/TableRoutesUI";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 import { IRoutesByIdDriver } from "@/fetchApi/v1/getRoutes";
 import { useDeleteRoute } from "@/app/[locale]/(driver)/myroutes/useDeleteRoute";
+import { IRoutesTable, TypeBaseRoute } from "@/types/route-passenger.types";
 
 interface Props {
   routes: IRoutesByIdDriver[];
@@ -17,12 +18,12 @@ interface Props {
 }
 
 // Функція для створення кнопок у таблиці
-const createColumnButton = (
+export const createColumnButton = <T extends IRoutesByIdDriver | IRoutesTable | TypeBaseRoute>(
   field: string,
   headerName: string,
   width: { EN: number; UA: number; CS: number },
   lang: "UA" | "EN" | "CS",
-  handleClick: (route: IRoutesByIdDriver) => void,
+  handleClick: (route: T) => void,
   text: string
 ): GridColDef => ({
   field,

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
@@ -13,11 +13,39 @@ import TableRoutesUI from "@/components/ui/TableRoutesUI";
 import { useDeletePassengerRoute } from "@/app/[locale]/(passenger)/mybookings/useDeletePassengerRoute";
 import { useGetSessionParams } from "@/hooks/useGetSessionParams";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
+import { IRoutesByIdDriver } from "@/fetchApi/fetchGetRoutesByDriverIdDELETED";
+import { createColumnButton } from "../driver/TableRoutes";
 
 interface Props {
   routes: Omit<IRoutesTable, "isReservation">[];
   isRouteAgain?: boolean;
 }
+// Функція для створення кнопок у таблиці
+// const createColumnButton = (
+//   field: string,
+//   headerName: string,
+//   width: { EN: number; UA: number; CS: number },
+//   lang: "UA" | "EN" | "CS",
+//   handleClick: (route: IRoutesTable) => void,
+//   text: string
+// ): GridColDef => ({
+//   field,
+//   headerName,
+//   minWidth: width[lang],
+//   flex: 1,
+//   sortable: false,
+//   renderCell: (params: GridRenderCellParams) => (
+//     <Button
+//       variant="contained"
+//       color="primary"
+//       size="small"
+//       sx={{ fontSize: "10px" }}
+//       onClick={() => handleClick(params.row)}
+//     >
+//       {text}
+//     </Button>
+//   ),
+// });
 
 export default function TableMyBookings({ routes, isRouteAgain }: Props) {
   const router = useRouter();
@@ -34,6 +62,11 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
     setOpen(true);
     setRoute(route);
   };
+
+  let lang: "UA" | "EN" | "CS" = "EN";
+  lang = form("activate_again") === "Активувати ще раз" ? "UA" : lang;
+  lang = form("activate_again") === "Activate Again" ? "EN" : lang;
+  lang = form("activate_again") === "Znovu aktivovat" ? "CS" : lang;
 
   const handleChangeOrderRoute = (route: IRoutesTable) => {
     router.push(`/seatselection/${route.id}`);
@@ -52,11 +85,11 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
     {
       field: "departureDate",
       headerName: form("date_and_time"),
-      minWidth: 180,
+      minWidth: 140,
       flex: 1,
     },
-    { field: "departureFrom", headerName: form("from"), minWidth: 130, flex: 1 },
-    { field: "arrivalTo", headerName: form("to"), minWidth: 130, flex: 1 },
+    { field: "departureFrom", headerName: form("from"), minWidth: 110, flex: 1 },
+    { field: "arrivalTo", headerName: form("to"), minWidth: 110, flex: 1 },
     {
       field: "seatsNumber",
       headerName: form("seats_number"),
@@ -81,56 +114,30 @@ export default function TableMyBookings({ routes, isRouteAgain }: Props) {
   const columns: GridColDef[] = isRouteAgain
     ? [
         ...baseColumns,
-        {
-          field: "changeRouter",
-          headerName: form("change_bookings"),
-          minWidth: 180,
-          sortable: false,
-          renderCell: (params) => (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => handleChangeOrderRoute(params.row)}
-            >
-              {form("change_bookings")}
-            </Button>
-          ),
-        },
-        {
-          field: "againRouter",
-          headerName: form("cancel_booking"),
-          minWidth: 100,
-          maxWidth: 200,
-          width: 200,
-          sortable: false,
-          renderCell: (params) => (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => handleCancelOrderRoute(params.row)}
-            >
-              {form("cancel_booking")}
-            </Button>
-          ),
-        },
-        {
-          field: "detailsRoute",
-          headerName: form("details_bookings"),
-          minWidth: 200,
-          sortable: false,
-          renderCell: (params) => (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => handleDetailOrderRoute(params.row)}
-            >
-              {form("details_bookings")}
-            </Button>
-          ),
-        },
+        createColumnButton(
+          "changeRouter",
+          form("change_bookings"),
+          { UA: 160, EN: 135, CS: 130 },
+          lang,
+          handleChangeOrderRoute,
+          form("change_bookings")
+        ),
+        createColumnButton(
+          "againRouter",
+          form("cancel_booking"),
+          { UA: 130, EN: 125, CS: 120 },
+          lang,
+          handleCancelOrderRoute,
+          form("cancel_booking")
+        ),
+        createColumnButton(
+          "detailsRoute",
+          form("details_bookings"),
+          { UA: 150, EN: 135, CS: 140 },
+          lang,
+          handleDetailOrderRoute,
+          form("details_bookings")
+        ),
       ]
     : baseColumns;
 

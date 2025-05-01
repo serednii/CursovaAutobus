@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { TypeBaseRoute } from "@/types/route-passenger.types";
 import TableRoutesUI from "@/components/ui/TableRoutesUI";
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
+import { createColumnButton } from "../driver/TableRoutes";
 
 interface Props {
   routes: TypeBaseRoute[];
@@ -18,7 +19,10 @@ export default function TableSearchRoutes({ routes, status }: Props) {
   const router = useRouter();
 
   const { t: form } = useAppTranslation("form");
-
+  let lang: "UA" | "EN" | "CS" = "EN";
+  lang = form("activate_again") === "Активувати ще раз" ? "UA" : lang;
+  lang = form("activate_again") === "Activate Again" ? "EN" : lang;
+  lang = form("activate_again") === "Znovu aktivovat" ? "CS" : lang;
   const handleViewRoute = (route: TypeBaseRoute) => {
     if (status !== "authenticated") {
       sessionStorage.setItem("idRoute", String(route.id));
@@ -71,7 +75,7 @@ export default function TableSearchRoutes({ routes, status }: Props) {
     {
       field: "viewRouter",
       headerName: form("view_route"),
-      minWidth: 250,
+      minWidth: { UA: 170, EN: 105, CS: 120 }[lang],
       flex: 1,
       sortable: false,
       renderCell: (params) => (

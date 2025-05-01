@@ -29,9 +29,11 @@ export default function WrapperPassengerRoutes({ routes, userSessionId }: Props)
         <AvailableRoutes className="mb-10">
           <TableMyBookings routes={availableRoutes} isRouteAgain={true} />
         </AvailableRoutes>
-        <PastRoutes>
-          <TableMyBookings routes={pastRoutes} />
-        </PastRoutes>
+        {pastRoutes.length > 0 && (
+          <PastRoutes>
+            <TableMyBookings routes={pastRoutes} />
+          </PastRoutes>
+        )}
       </div>
     </Container>
   );
