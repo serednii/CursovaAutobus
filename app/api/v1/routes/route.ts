@@ -23,13 +23,13 @@ export async function GET(req: NextRequest) {
   const endOfDay = searchParams.get("endOfDay") || null;
   const endOfDayDate = endOfDay && endOfDay !== "Invalid Date" ? new Date(endOfDay) : null;
   const limit = parseInt(searchParams.get("limit") || "100", 10);
-  // const limit = 100;
   const wifi = searchParams.get("wifi") === "true";
   const coffee = searchParams.get("coffee") === "true";
   const power = searchParams.get("power") === "true";
   const restRoom = searchParams.get("restRoom") === "true";
   const page = parseInt(searchParams.get("page") || "1", 10);
   const offset = (page - 1) * limit;
+
   console.log("selectObject", selectObject);
   console.log("departureSearch", departureSearch);
   console.log("arrivalToSearch", arrivalToSearch);
@@ -40,6 +40,7 @@ export async function GET(req: NextRequest) {
   console.log("coffee", coffee);
   console.log("power", power);
   console.log("restRoom", restRoom);
+
   // Фільтр по датах
   const dateFilter =
     startOfDayDate && endOfDayDate
@@ -77,7 +78,6 @@ export async function GET(req: NextRequest) {
   });
 
   const routesCity = await prisma.routeDriver.findMany({
-    // where,
     take: 20,
     select: {
       departureFrom: true,

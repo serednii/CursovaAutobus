@@ -15,7 +15,7 @@ async function deleteRoutePassenger(
     const newDeleteRouteIdData = { ...deleteRouteIdData, busSeats: newBusSeats };
 
     // Відправка DELETE-запиту
-    const response = await fetch(`${API_URL}/api/v1/passenger`, {
+    const response = await fetch(`${API_URL}/api/v1/passengers`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -27,9 +27,9 @@ export default function WrapperDriverRoutes({ routes }: Props) {
           <AvailableRoutes className="mb-10">
             <TableRoutes routes={availableRoutes} />
           </AvailableRoutes>
-          <PastRoutes>
+          {/* <PastRoutes>
             <TableRoutes routes={pastRoutes} isRouteAgain={true} />
-          </PastRoutes>
+          </PastRoutes> */}
         </>
       )}
     </div>
