@@ -1,10 +1,17 @@
 import { isAllowedField } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
-
-import { createRoute } from "./createroute";
 import { checkApiKey, parseStringRoutesToObject } from "./util";
 import { allowedFieldsDriver } from "@/app/api/v1/const";
+import { ICreateRoute } from "../../../../types/interface";
+import {
+  createBusSeats,
+  createIntermediateStops,
+  createPassengersSeatsList,
+} from "./createFunctions";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { zodRouteDriverInputSchema } from "@/zod_shema/zodCreateRoute";
+const limitEnv = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || "100";
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,7 +40,7 @@ export async function GET(req: NextRequest) {
     const coffee = searchParams.get("coffee") === "true";
     const power = searchParams.get("power") === "true";
     const restRoom = searchParams.get("restRoom") === "true";
-    const limit = parseInt(searchParams.get("limit") || "100", 10);
+    const limit = parseInt(searchParams.get("limit") || limitEnv, 10);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const offset = (page - 1) * limit;
 
@@ -122,7 +129,118 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  return await createRoute(req);
+  try {
+    const isApiKeyValid = checkApiKey(req);
+    if (!isApiKeyValid) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+    }
+    const data: ICreateRoute = await req.json();
+
+    const {
+      driverId,
+      departureDate,
+      arrivalDate,
+      departureFrom,
+      arrivalTo,
+      selectBusLayout,
+      busNumber,
+      routePrice,
+      modelBus,
+      wifi,
+      coffee,
+      power,
+      notate,
+      restRoom,
+      maxSeats,
+      bookedSeats,
+      intermediateStops,
+      busSeats,
+      passengersSeatsList,
+    } = data;
+
+    try {
+      zodRouteDriverInputSchema.parse(data);
+    } catch (error) {
+      return NextResponse.json(
+        { error: error instanceof Error ? error.message : "Невідома помилка" },
+        { status: 422 } // або 422 для помилки валідації
+      );
+    }
+
+    const routeDriver = await prisma.routeDriver.create({
+      data: {
+        driverId,
+        departureDate: new Date(departureDate),
+        arrivalDate: new Date(arrivalDate),
+        departureFrom,
+        arrivalTo,
+        busNumber,
+        routePrice,
+        selectBusLayout,
+        notate,
+        wifi,
+        coffee,
+        power,
+        restRoom,
+        modelBus,
+        maxSeats,
+        bookedSeats,
+      },
+    });
+
+    if (!routeDriver) {
+      return NextResponse.json({ error: "Failed to create route driver" }, { status: 500 });
+    }
+
+    // // Створення проміжних зупинок
+    const resultIntermediateStops = await createIntermediateStops(
+      intermediateStops,
+      routeDriver.id
+    );
+    if (!resultIntermediateStops) {
+      return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
+    }
+
+    // Створення місць у автобусі
+    const resultBusSeats = await createBusSeats(busSeats, routeDriver.id);
+    if (!resultBusSeats) {
+      return NextResponse.json({ error: "Failed to create bus seats" }, { status: 500 });
+    }
+
+    // Створення списку пасажирів
+    const resultPassengersSeatsList = await createPassengersSeatsList(
+      passengersSeatsList,
+      routeDriver.id
+    );
+    if (!resultPassengersSeatsList) {
+      return NextResponse.json(
+        { error: "Failed to create passengers seats list" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        data: {
+          ...routeDriver,
+          intermediateStops: resultIntermediateStops,
+          busSeats: resultBusSeats,
+        },
+      },
+      { status: 201 }
+    );
+  } catch (error: unknown) {
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return NextResponse.json(
+        { error: "Маршрут із зазначеним 'routeId' не знайдено", message: error.message },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ error: "Внутрішня помилка сервера" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 //http://localhost:3000/api/v1/routes?

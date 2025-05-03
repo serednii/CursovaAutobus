@@ -4,6 +4,7 @@ import { prisma } from "@/prisma/prisma-client";
 import { IPassengersSeatsList } from "@/types/interface";
 import { ApiResponse, ErrorResponse } from "@/types/response.types";
 import { IUpdateRouteAPI } from "@/types/route-passenger.types";
+import { zodRouteDriverInputSchema } from "@/zod_shema/zodCreateRoute";
 import { NextRequest, NextResponse } from "next/server";
 import { createPassengersSeatsList, updateIntermediateStops } from "./createFunctions";
 import { updatedBusSeats } from "./updatedBusSeats";
@@ -14,7 +15,7 @@ export async function updateRoute(req: NextRequest, id: number) {
     // const id = searchParams.get("id");
     // const numberId = parseInt(id || "0", 10);
 
-    const resData = await req.json();
+    const data = await req.json();
     // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
     // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].seatId);
 
@@ -35,28 +36,16 @@ export async function updateRoute(req: NextRequest, id: number) {
       coffee,
       power,
       restRoom,
-    }: IUpdateRouteAPI = resData;
+    }: IUpdateRouteAPI = data;
 
-    console.log(
-      "updateRouteOld.ts",
-      id,
-      busSeats,
-      bookedSeats,
-      passengersSeatsList,
-      departureDate,
-      arrivalDate,
-      departureFrom,
-      arrivalTo,
-      busNumber,
-      routePrice,
-      intermediateStops,
-      modelBus,
-      notate,
-      wifi,
-      coffee,
-      power,
-      restRoom
-    );
+    try {
+      zodRouteDriverInputSchema.parse(data);
+    } catch (error) {
+      return NextResponse.json(
+        { error: error instanceof Error ? error.message : "Невідома помилка" },
+        { status: 422 }
+      );
+    }
 
     if (
       !(
@@ -68,13 +57,12 @@ export async function updateRoute(req: NextRequest, id: number) {
     ) {
       return NextResponse.json(
         { error: "Поле 'passengersSeatsList' і 'busSeats' є обов'язковим" },
-        { status: 500 }
+        { status: 422 }
       );
     }
 
     //**************************************************************** */
     const idPassenger = passengersSeatsList[0].idPassenger;
-    // console.log("upadetRoute", id, idPassenger);
     const deletePassengerResult: ApiResponse = await updateRoutePassenger({
       routeDriverId: id,
       idPassenger: idPassenger,
@@ -140,21 +128,11 @@ export async function updateRoute(req: NextRequest, id: number) {
       return NextResponse.json({ error: "Failed to update route" }, { status: 500 });
     }
 
-    console.log(
-      "passengersSeatsList - - - - - - - - - - - ",
-      passengersSeatsList[0],
-      passengersSeatsList[1],
-      passengersSeatsList[2],
-      passengersSeatsList[3]
-    );
     const createPassengersSeatsListResult = (await createPassengersSeatsList(
       passengersSeatsList,
       id
     )) as IPassengersSeatsList[] | null;
     if (!createPassengersSeatsListResult) {
-      console.error("Failed to update route passengersSeatsList");
-
-      //delete route passenger if createPassengersSeatsList not created
       const deletePassengerResult: ApiResponse = await updateRoutePassenger({
         routeDriverId: id,
         idPassenger: idPassenger,
@@ -171,20 +149,17 @@ export async function updateRoute(req: NextRequest, id: number) {
         { status: 500 }
       );
     }
-    console.log(
-      "passengersSeatsList - - - - - - - - - - - ",
-      createPassengersSeatsListResult[0],
-      createPassengersSeatsListResult[1],
-      createPassengersSeatsListResult[2],
-      createPassengersSeatsListResult[3]
-    );
-    console.log("Route updated successfully:", res);
 
-    return NextResponse.json({
-      ...res,
-      passengersSeatsList: createPassengersSeatsListResult,
-      busSeats: updatedBusSeatsResult,
-    });
+    return NextResponse.json(
+      {
+        data: {
+          ...res,
+          passengersSeatsList: createPassengersSeatsListResult,
+          busSeats: updatedBusSeatsResult,
+        },
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error updating route:", error);
     return NextResponse.json({ error: "Failed to update route" }, { status: 500 });

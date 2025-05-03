@@ -55,8 +55,6 @@ class FetchGetUniqueRoutes {
       search: async (data: { select: IGetSearchRouteCityOption }): Promise<K | null> => {
         const { select } = data;
         const selectString = Object.keys(select).join(",");
-        // console.log("data searchRoute", data);
-        console.log("fetchGetUniqueRoutes API_URL", `${API_URL}/api/getUniqueRoutes`);
         try {
           const response = await fetch(
             `${API_URL}/api/v1/routes/uniqueCity?select=${selectString}`,
@@ -72,7 +70,7 @@ class FetchGetUniqueRoutes {
             throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
 
           const result = await response.json();
-          return result; // Перевірка через Zod перед поверненням
+          return result.data; // Перевірка через Zod перед поверненням
         } catch (error) {
           console.error("Error fetching data:", (error as Error).message);
           return null;
@@ -93,9 +91,7 @@ class FetchGetUniqueRoutes {
     return foundType.search(data);
   }
 }
-// localhost:3000/api/getUniqueRoutes
-// localhost:3000/api/getUniqueRoutes
-// http: http:
+
 export const fetchGetUniqueRoutes = new FetchGetUniqueRoutes();
 
 fetchGetUniqueRoutes.addType<IGetSearchRouteCityOption, IGetRouteCity[]>(

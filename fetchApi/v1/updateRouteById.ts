@@ -56,13 +56,12 @@ async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TR
       throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
 
-    const data: unknown = await response.json();
-    console.log("Отриманий маршрут fetchUpdateRouteById:", data);
+    const result = await response.json();
+    console.log("Отриманий маршрут fetchUpdateRouteById: XXXXXXXXXXXX", result);
 
     try {
-      // const parsedData: TRouteUpdateResult = zodSchemaUpdateRouteResData.parse(data);
-      // return parsedData;
-      return data;
+      const parsedData: TRouteUpdateResult = zodSchemaUpdateRouteResData.parse(result.data);
+      return parsedData;
     } catch (parseError: unknown) {
       console.error("Помилка парсингу даних:", parseError);
       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");
@@ -75,40 +74,3 @@ async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TR
 }
 
 export default updateRouteById;
-// driverId: number;
-// departureDate: string;
-// arrivalDate: string;
-// busSeats: IBusSeats[];
-// modelBus: string;
-// wifi: boolean;
-// coffee: boolean;
-// power: boolean;
-// restRoom: boolean;
-// routePrice: number;
-// busNumber: string;
-// maxSeats: number;
-// bookedSeats: number;
-// selectBusLayout: string;
-// notate: string;
-// departureFrom: string;
-// arrivalTo: string;
-// id: number;
-
-// id: number;
-// departureDate: string;
-// arrivalDate: string;
-// departureFrom: string;
-// arrivalTo: string;
-// routePrice: number;
-// busSeats: IBusSeats[];
-// driverId: number;
-// busNumber: string;
-// selectBusLayout: string;
-// notate: string;
-// modelBus: string;
-// maxSeats: number;
-// bookedSeats: number;
-// wifi: boolean;
-// coffee: boolean;
-// power: boolean;
-// restRoom: boolean;

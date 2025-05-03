@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { updatedBusSeats } from "@/app/api/v1/routes/updatedBusSeats";
 import { allowedFieldsDriver } from "@/app/api/v1/const";
 import { isAllowedField } from "@/lib/utils";
+const limitEnv = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || "100";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -30,7 +31,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     }
     const selectObject = parseStringRoutesToObject(selectParams);
     const passengerId = parseInt(id || "0", 10);
-    const limit = parseInt(searchParams.get("limit") || "100", 10);
+    const limit = parseInt(searchParams.get("limit") || limitEnv, 10);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const offset = (page - 1) * limit;
     // Находимо всіх маршрути які заказав даний пасажир

@@ -25,7 +25,6 @@ async function deleteRouteById(routeId: number) {
 
     // Обробка відповіді
     const data: unknown = await response.json();
-    // console.log("Отримані маршрути:", data);
     try {
       const res = z.object(allParametersRoute).parse(data);
       const successResponse: SuccessResponse = {

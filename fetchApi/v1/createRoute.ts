@@ -1,4 +1,4 @@
-import { zodSchemaCreateRoute } from "@/zod_shema/zodCreateRoute";
+import { zodRouteDriverSchema } from "@/zod_shema/zodCreateRoute";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 const createRoute = async <T>(data: T): Promise<any> => {
@@ -16,10 +16,9 @@ const createRoute = async <T>(data: T): Promise<any> => {
       throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
 
-    const obj = await response.json();
-    // console.log("obj", obj);
+    const result = await response.json();
     try {
-      const res = zodSchemaCreateRoute.parse(obj);
+      const res = zodRouteDriverSchema.parse(result.data);
       return res;
     } catch (parseError) {
       throw new Error(parseError instanceof Error ? parseError.message : "Помилка парсингу даних");

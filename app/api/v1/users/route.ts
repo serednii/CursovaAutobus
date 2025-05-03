@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import { checkApiKey, parseStringUserToObject } from "../routes/util";
 import { isAllowedField } from "@/lib/utils";
 import { allowedFieldsUser } from "@/app/api/v1/const";
+const limitEnv = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || "100";
 
 export async function GET(req: NextRequest) {
   try {
@@ -16,14 +17,16 @@ export async function GET(req: NextRequest) {
     }
 
     const selectParams = searchParams.get("select") || allowedFieldsUser; // Наприклад: 'name,email'
-    const selectObject = parseStringUserToObject(selectParams);
+    const isAllowedFieldResult = isAllowedField(allowedFieldsUser, selectParams);
+
+    if (!isAllowedFieldResult) {
+      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
+    }
+
     const email = searchParams.get("email");
-    const limit = parseInt(searchParams.get("limit") || "100", 10);
-    const page = parseInt(searchParams.get("page") || "1", 10);
-    const offset = (page - 1) * limit;
+    const searchParamsObject: { email?: string; id?: { in: number[] } } = {};
     const idsStr = searchParams.get("filter[ids]");
     const ids = idsStr ? idsStr.split(",").map(Number) : [];
-    const searchParamsObject: { email?: string; id?: { in: number[] } } = {};
 
     if (email) {
       searchParamsObject.email = email;
@@ -31,11 +34,10 @@ export async function GET(req: NextRequest) {
       searchParamsObject.id = { in: ids };
     }
 
-    const isAllowedFieldResult = isAllowedField(allowedFieldsUser, selectParams);
-    if (!isAllowedFieldResult) {
-      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
-    }
-
+    const selectObject = parseStringUserToObject(selectParams);
+    const limit = parseInt(searchParams.get("limit") || limitEnv, 10);
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const offset = (page - 1) * limit;
     const users = await prisma.user.findMany({
       where: searchParamsObject,
       take: limit,

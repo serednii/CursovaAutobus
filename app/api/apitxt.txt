@@ -330,6 +330,11 @@ out data
 }
 
 
+
+
+
+
+
 // GET /api/v1/routes/drivers/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
 // GET /api/v1/routes/drivers/:id → отримати  маршрут по passengerId з усіма полями
 // GET /api/v1/routes/drivers/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList&limit=2&page=1 → отримати  маршрут по passengerId з певними полями
@@ -559,6 +564,16 @@ out data
     }
 }
 
+
+
+
+
+
+
+
+
+
+
 // GET /api/v1/routes/passengers/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
 // GET /api/v1/routes/passengers/:id → отримати  маршрут по passengerId з усіма полями
 // GET /api/v1/routes/passengers/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList&limit=2&page=1 → отримати  маршрут по passengerId з певними полями
@@ -776,10 +791,353 @@ out data
     }
 }
 
+
+
+
+
+
+
+
+
+
 // GET api/v1/routes/uniqueCity?select=id,departureFrom,arrivalTo, //Видає комбінацію унікальних міст departureFrom,arrivalTo з вказаними полями
 // GET api/v1/routes/uniqueCity?limit=2&page=1 //Видає комбінацію унікальних міст departureFrom,arrivalTo з повними полями
+error code
+return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+return NextResponse.json({ error: "Invalid select" }, { status: 400 });
+ return NextResponse.json(
+        { error: "Не вдалося отримати Маршрути", errorMessage: error },
+        { status: 500 }
+      );
+out data
+{
+    "data": [
+        {
+            "departureFrom": "Houston",
+            "arrivalTo": "San Antonio"
+        },
+        {
+            "departureFrom": "Miami",
+            "arrivalTo": "Orlando"
+        },
+        {
+            "departureFrom": "Chicago",
+            "arrivalTo": "Detroit"
+        },
+        {
+            "departureFrom": "Los Angeles",
+            "arrivalTo": "San Francisco"
+        },
+        {
+            "departureFrom": "Seattle",
+            "arrivalTo": "Portland"
+        },
+        {
+            "departureFrom": "Austin",
+            "arrivalTo": "Dallas"
+        }
+    ],
+    "meta": {
+        "page": 1,
+        "limit": 100,
+        "total": 7,
+        "totalPages": 1
+    }
+}
+
+
+
 
 
 // POST /api/v1/routes → створити
-// PATCH /api/v1/routes/:id → оновити дані частково
+error code
+    return NextResponse.json({ error: "Failed to create route driver" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create bus seats" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create passengers seats list" },{ status: 500 });
+    return NextResponse.json(
+        { error: error instanceof Error ? error.message : "Невідома помилка" },
+        { status: 422 } // або 422 для помилки валідації
+      );
+input data
+{
+  arrivalDate: new Date("2025-05-19T12:45:00+02:00"),
+  arrivalTo: "San Antonio",
+  bookedSeats: 0,
+  busNumber: "Intersity",
+  busSeats: [
+    { number: 1, busSeatStatus: "reservedEmpty", passenger: 1 },
+    { number: 5, busSeatStatus: "available", passenger: null },
+    { number: 8, busSeatStatus: "available", passenger: null },
+    { number: 11, busSeatStatus: "available", passenger: null },
+    { number: 14, busSeatStatus: "available", passenger: null },
+    { number: 2, busSeatStatus: "reservedEmpty", passenger: 1 },
+    { number: 6, busSeatStatus: "available", passenger: null },
+    { number: 9, busSeatStatus: "available", passenger: null },
+    { number: 12, busSeatStatus: "available", passenger: null },
+    { number: 15, busSeatStatus: "available", passenger: null },
+    { number: 3, busSeatStatus: "available", passenger: null },
+    { number: 7, busSeatStatus: "available", passenger: null },
+    { number: 10, busSeatStatus: "available", passenger: null },
+    { number: 13, busSeatStatus: "available", passenger: null },
+    { number: 16, busSeatStatus: "available", passenger: null },
+    { number: 4, busSeatStatus: "available", passenger: null },
+    { number: 19, busSeatStatus: "available", passenger: null },
+    { number: 18, busSeatStatus: "available", passenger: null },
+    { number: 17, busSeatStatus: "available", passenger: null }
+  ],
+  coffee: false,
+  departureDate: new Date("2025-05-19T10:00:00+02:00"),
+  departureFrom: "Houston",
+  driverId: 1,
+  intermediateStops: ["lvov", "stop2"],
+  maxSeats: 19,
+  modelBus: "Bus 1",
+  notate: "This is a comfortable route.",
+  passengersSeatsList: [/* встав сюди обʼєкти, якщо є */],
+  power: false,
+  restRoom: false,
+  routePrice: 234,
+  selectBusLayout: "0",
+  wifi: false,
+};
+ouit data 
+{
+  id: 170,
+  driverId: 1,
+  departureFrom: "Seattle",
+  arrivalTo: "Detroit",
+  departureDate: "2025-05-19T23:30:00.000Z",
+  arrivalDate: "2025-05-20T13:45:00.000Z",
+  busNumber: "kat",
+  modelBus: "Bus 1",
+  maxSeats: 19,
+  bookedSeats: 0,
+  selectBusLayout: "0",
+  routePrice: 12,
+  notate: "This is a comfortable route.",
+  coffee: false,
+  power: true,
+  restRoom: true,
+  wifi: false,
+  createdAt: "2025-05-03T10:34:23.920Z",
+  busSeats: [
+        { id: 6062, passenger: null, number: 3, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6060, passenger: null, number: 7, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6036, passenger: null, number: 11, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6061, passenger: null, number: 15, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6058, passenger: null, number: 19, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6056, passenger: null, number: 4, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6064, passenger: null, number: 8, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6057, passenger: null, number: 12, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6059, passenger: null, number: 16, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6054, passenger: null, number: 20, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6055, passenger: 1, number: 2, busSeatStatus: "reservedEmpty", routeDriverId: 171 },
+    { id: 6063, passenger: null, number: 6, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6037, passenger: null, number: 10, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6039, passenger: null, number: 14, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6041, passenger: null, number: 18, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6038, passenger: null, number: 22, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6040, passenger: null, number: 24, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6042, passenger: 1, number: 1, busSeatStatus: "reservedEmpty", routeDriverId: 171 },
+    { id: 6044, passenger: null, number: 5, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6043, passenger: null, number: 9, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6045, passenger: null, number: 13, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6047, passenger: null, number: 17, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6046, passenger: null, number: 21, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6048, passenger: null, number: 23, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6049, passenger: null, number: 29, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6050, passenger: null, number: 28, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6051, passenger: null, number: 27, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6052, passenger: null, number: 26, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6053, passenger: null, number: 25, busSeatStatus: "available", routeDriverId: 171 }
+  ],
+  passengersSeatsList: [
+    {
+      id: 1856,
+      passengersSeatsListId: 462,
+      subFirstName: "RESERVATION DRIVER",
+      subLastName: "RESERVATION DRIVER",
+      subPhone: "476757575700",
+      // ...
+    },
+    {
+      id: 1855,
+      passengersSeatsListId: 462,
+      subFirstName: "RESERVATION DRIVER",
+      subLastName: "RESERVATION DRIVER",
+      subPhone: "476757575700",
+      // ...
+    }
+  ]
+}, { status: 201 };
+
+
+
+
+
+
+
+
+
+
+// PUT /api/v1/routes/:id → оновити дані повністью
+error code
+    return NextResponse.json({ error: "Failed to create route driver" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create bus seats" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create passengers seats list" },{ status: 500 });
+    return NextResponse.json(
+        { error: error instanceof Error ? error.message : "Невідома помилка" },
+        { status: 422 } // або 422 для помилки валідації
+      );
+input data
+{
+  arrivalDate: new Date("2025-05-19T12:45:00+02:00"),
+  arrivalTo: "San Antonio",
+  bookedSeats: 0,
+  busNumber: "Intersity",
+  busSeats: [
+    { number: 1, busSeatStatus: "reservedEmpty", passenger: 1 },
+    { number: 5, busSeatStatus: "available", passenger: null },
+    { number: 8, busSeatStatus: "available", passenger: null },
+    { number: 11, busSeatStatus: "available", passenger: null },
+    { number: 14, busSeatStatus: "available", passenger: null },
+    { number: 2, busSeatStatus: "reservedEmpty", passenger: 1 },
+    { number: 6, busSeatStatus: "available", passenger: null },
+    { number: 9, busSeatStatus: "available", passenger: null },
+    { number: 12, busSeatStatus: "available", passenger: null },
+    { number: 15, busSeatStatus: "available", passenger: null },
+    { number: 3, busSeatStatus: "available", passenger: null },
+    { number: 7, busSeatStatus: "available", passenger: null },
+    { number: 10, busSeatStatus: "available", passenger: null },
+    { number: 13, busSeatStatus: "available", passenger: null },
+    { number: 16, busSeatStatus: "available", passenger: null },
+    { number: 4, busSeatStatus: "available", passenger: null },
+    { number: 19, busSeatStatus: "available", passenger: null },
+    { number: 18, busSeatStatus: "available", passenger: null },
+    { number: 17, busSeatStatus: "available", passenger: null }
+  ],
+  coffee: false,
+  departureDate: new Date("2025-05-19T10:00:00+02:00"),
+  departureFrom: "Houston",
+  driverId: 1,
+  intermediateStops: ["lvov", "stop2"],
+  maxSeats: 19,
+  modelBus: "Bus 1",
+  notate: "This is a comfortable route.",
+  passengersSeatsList: [/* встав сюди обʼєкти, якщо є */],
+  power: false,
+  restRoom: false,
+  routePrice: 234,
+  selectBusLayout: "0",
+  wifi: false,
+};
+
+out data {
+  id: 170,
+  driverId: 1,
+  departureFrom: "Seattle",
+  arrivalTo: "Detroit",
+  departureDate: "2025-05-19T23:30:00.000Z",
+  arrivalDate: "2025-05-20T13:45:00.000Z",
+  busNumber: "kat",
+  modelBus: "Bus 1",
+  maxSeats: 19,
+  bookedSeats: 0,
+  selectBusLayout: "0",
+  routePrice: 12,
+  notate: "This is a comfortable route.",
+  coffee: false,
+  power: true,
+  restRoom: true,
+  wifi: false,
+  createdAt: "2025-05-03T10:34:23.920Z",
+  busSeats: [
+        { id: 6062, passenger: null, number: 3, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6060, passenger: null, number: 7, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6036, passenger: null, number: 11, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6061, passenger: null, number: 15, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6058, passenger: null, number: 19, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6056, passenger: null, number: 4, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6064, passenger: null, number: 8, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6057, passenger: null, number: 12, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6059, passenger: null, number: 16, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6054, passenger: null, number: 20, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6055, passenger: 1, number: 2, busSeatStatus: "reservedEmpty", routeDriverId: 171 },
+    { id: 6063, passenger: null, number: 6, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6037, passenger: null, number: 10, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6039, passenger: null, number: 14, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6041, passenger: null, number: 18, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6038, passenger: null, number: 22, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6040, passenger: null, number: 24, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6042, passenger: 1, number: 1, busSeatStatus: "reservedEmpty", routeDriverId: 171 },
+    { id: 6044, passenger: null, number: 5, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6043, passenger: null, number: 9, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6045, passenger: null, number: 13, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6047, passenger: null, number: 17, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6046, passenger: null, number: 21, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6048, passenger: null, number: 23, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6049, passenger: null, number: 29, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6050, passenger: null, number: 28, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6051, passenger: null, number: 27, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6052, passenger: null, number: 26, busSeatStatus: "available", routeDriverId: 171 },
+    { id: 6053, passenger: null, number: 25, busSeatStatus: "available", routeDriverId: 171 }
+  ],
+  passengersSeatsList: [
+    {
+      id: 1856,
+      passengersSeatsListId: 462,
+      subFirstName: "RESERVATION DRIVER",
+      subLastName: "RESERVATION DRIVER",
+      subPhone: "476757575700",
+      // ...
+    },
+    {
+      id: 1855,
+      passengersSeatsListId: 462,
+      subFirstName: "RESERVATION DRIVER",
+      subLastName: "RESERVATION DRIVER",
+      subPhone: "476757575700",
+      // ...
+    }
+  ]
+}, { status: 200 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // DELETE /api/v1/routes/:id → видалити
+  return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+   return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
+   out data 
+    {
+  id: 171,
+  createdAt: 2025-05-03T10:36:10.504Z,
+  driverId: 1,
+  departureDate: 2025-05-24T10:45:00.000Z,
+  arrivalDate: 2025-05-25T10:30:00.000Z,
+  departureFrom: 'Miami',
+  arrivalTo: 'Portland',
+  busNumber: 'kkol',
+  maxSeats: 29,
+  bookedSeats: 0,
+  selectBusLayout: '2',
+  routePrice: 34,
+  notate: 'This is a comfortable route.',
+  wifi: true,
+  coffee: false,
+  power: true,
+  restRoom: true,
+  modelBus: 'Bus 3'
+}

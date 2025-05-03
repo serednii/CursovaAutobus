@@ -58,8 +58,6 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
   }
   const { id } = await params;
-  // const { searchParams } = new URL(req.url);
-  // const id = searchParams.get("id");
   const numberId = parseInt(id || "0", 10);
 
   if (!id) {
@@ -75,26 +73,18 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     if (!isApiKeyValid) {
       return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
     }
-    // const middlewareResponse = await middleware(req);
 
-    // if (middlewareResponse.status !== 200) {
-    //   return middlewareResponse;
-    // }
-    // Отримуємо дані з тіла запиту
     const { id } = await params;
 
     if (!id) {
       return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
     }
-    const routeId = parseInt(id || "0", 10);
-    console.log("delete routeId", routeId);
-    // Перевірка, чи передано routeId
 
-    // Видалення маршруту
+    const routeId = parseInt(id || "0", 10);
     const deletedRoute = await prisma.routeDriver.delete({
       where: { id: routeId },
     });
-
+    console.log("deletedRoute ---------------------", deletedRoute);
     return NextResponse.json(deletedRoute, { status: 200 });
   } catch (error: unknown) {
     console.error("Помилка видалення маршруту:", error);

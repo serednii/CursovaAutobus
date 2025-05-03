@@ -22,6 +22,12 @@ export const busSeatSchema = z.object({
   routeDriverId: z.number().int().positive(),
 });
 
+export const busSeatSchema_1 = z.object({
+  passenger: z.number().int().nullable(),
+  number: z.number().int().positive(),
+  busSeatStatus: z.nativeEnum(SeatStatusEnum),
+});
+
 export const routeStopSchema = z.object({
   id: z.number().int().positive(),
   stopName: z.string(),

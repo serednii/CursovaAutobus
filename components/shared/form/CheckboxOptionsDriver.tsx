@@ -83,10 +83,6 @@ interface Props {
 }
 
 export default function CheckboxOptionsDriver({ register, watch }: Props) {
-  console.log(watch("wifi"));
-  console.log(watch("coffee"));
-  console.log(watch("power"));
-  console.log(watch("restRoom"));
   const { t: form } = useAppTranslation("form");
   const options1 = [
     { name: "wifi", label: form("wi_fi"), icon: IoIosWifi },
