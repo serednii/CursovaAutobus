@@ -88,4 +88,5 @@ export const getPastRoutesAndAvailableRoutes = <T extends IRouteWithDate>(routes
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const isAllowedField = (allowedFields: string, field: string) =>
-  allowedFields.includes(field);
+  // allowedFields.includes(field);
+  field.split(",").every((f) => allowedFields.split(",").includes(f));

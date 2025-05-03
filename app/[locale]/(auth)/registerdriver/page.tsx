@@ -8,8 +8,8 @@ import InputText from "@/components/shared/form/InputText";
 import { Overlay } from "@/components/shared/Overlay";
 import { RoleEnum } from "@/enum/shared.enums";
 import { useForm } from "react-hook-form";
-import useDriverAuth from "../actions";
-import { FormValues } from "../interface";
+import useDriverAuth from "@/app/[locale]/(auth)/actions";
+import { FormValues } from "@/app/[locale]/(auth)/interface";
 
 export default function RegisterDriver() {
   const { t } = useAppTranslation("auth");

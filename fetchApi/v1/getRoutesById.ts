@@ -135,8 +135,8 @@ class GetRoutesById {
         try {
           const selectString = Object.keys(select).join(",");
           // console.log("data searchRoute", id, select);
-          console.log("API_URL", `${API_URL}/api/v1/routes/id/${id}?select=${selectString}`);
-          const response = await fetch(`${API_URL}/api/v1/routes/id/${id}?select=${selectString}`, {
+          console.log("API_URL", `${API_URL}/api/v1/routes/${id}?select=${selectString}`);
+          const response = await fetch(`${API_URL}/api/v1/routes/${id}?select=${selectString}`, {
             cache: "no-store",
             headers: {
               apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
@@ -148,7 +148,7 @@ class GetRoutesById {
 
           const result = await response.json();
           console.log("result search route", result);
-          return result; // Перевірка через Zod перед поверненням
+          return result.data; // Перевірка через Zod перед поверненням
         } catch (error) {
           console.error("Error fetching data:", (error as Error).message);
           return null;

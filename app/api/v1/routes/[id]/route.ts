@@ -3,8 +3,8 @@ import { prisma } from "@/prisma/prisma-client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
 
-import { updateRoute } from "../../updateRoute";
-import { checkApiKey, parseStringRoutesToObject } from "../../util";
+import { updateRoute } from "../updateRoute";
+import { checkApiKey, parseStringRoutesToObject } from "../util";
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const isApiKeyValid = checkApiKey(req);
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       );
     }
 
-    return NextResponse.json(routes);
+    return NextResponse.json({ data: routes }, { status: 200 });
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
     return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 // API route handler for updating a route
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const isApiKeyValid = checkApiKey(req);
   if (!isApiKeyValid) {
     return NextResponse.json({ error: "Invalid API key" }, { status: 401 });

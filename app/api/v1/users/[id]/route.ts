@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
-// import { middleware } from "@/middleware";
-// import { IGetUsersByIdBySelect } from "@/fetchApi/fetchUsersDELETE";
-import { zodSchemaUsersInApi } from "@/zod_shema/zodUser";
-import { UserSelect } from "@/types/next-auth";
 import { checkApiKey, parseStringUserToObject } from "../../routes/util";
+import { isAllowedField } from "@/lib/utils";
+import { allowedFieldsUser } from "@/app/api/v1/const";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -18,39 +16,32 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     const selectObject: Record<string, boolean> = parseStringUserToObject(selectParams);
 
-    try {
-      const parsedData: Partial<UserSelect> | null = zodSchemaUsersInApi.parse(selectObject);
-      if (!parsedData) {
-        return NextResponse.json({ error: "Некоректні дані" }, { status: 400 });
-      }
-
-      // Якщо id передано в параметрах запиту, шукаємо за цими id
-      if (!id) {
-        return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
-      }
-
-      const idNumber = parseInt(id || "0", 10);
-
-      const users = await prisma.user.findMany({
-        where: {
-          id: idNumber, // Пошук користувачів за кількома id
-        },
-        select: selectParams ? selectObject : undefined,
-      });
-
-      if (users.length === 0) {
-        return NextResponse.json(
-          { message: "Користувачів із заданими ID не знайдено" },
-          { status: 404 }
-        );
-      }
-      return NextResponse.json(users);
-
-      // Якщо id не передано
-    } catch (parseError: unknown) {
-      console.error("Помилка парсингу даних:", parseError);
-      throw parseError;
+    const isAllowedFieldResult = isAllowedField(allowedFieldsUser, selectParams);
+    if (!isAllowedFieldResult) {
+      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
     }
+
+    // Якщо id передано в параметрах запиту, шукаємо за цими id
+    if (!id) {
+      return NextResponse.json({ error: "Ви непередали ID" }, { status: 400 });
+    }
+
+    const idNumber = parseInt(id || "0", 10);
+
+    const users = await prisma.user.findMany({
+      where: {
+        id: idNumber, // Пошук користувачів за кількома id
+      },
+      select: selectParams ? selectObject : undefined,
+    });
+
+    if (users.length === 0) {
+      return NextResponse.json(
+        { message: "Користувачів із заданими ID не знайдено" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(users);
   } catch (error) {
     console.error("Помилка при отриманні користувачів:", error);
     return NextResponse.json(

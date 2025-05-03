@@ -5,18 +5,20 @@ import { IDeleteRoutePassenger } from "@/types/route-passenger.types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-async function deleteRoutePassenger(
+async function updateRoutePassenger(
   deleteRouteIdData: IDeleteRoutePassenger
 ): Promise<ApiResponse> {
   try {
-    const { busSeats, idPassenger } = deleteRouteIdData;
+    const { busSeats, idPassenger, routeDriverId } = deleteRouteIdData;
     const newBusSeats = getBusSeatsPassenger(busSeats, idPassenger);
 
     const newDeleteRouteIdData = { ...deleteRouteIdData, busSeats: newBusSeats };
 
     // Відправка DELETE-запиту
-    const response = await fetch(`${API_URL}/api/v1/passengers`, {
-      method: "DELETE",
+    const response = await fetch(`${API_URL}/api/v1/routes/passengers/${routeDriverId}`, {
+      // const response = await fetch(`${API_URL}/api/v1/passengers`, {
+
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         apiKey: process.env.NEXT_PUBLIC_API_KEY || "",
@@ -48,4 +50,4 @@ async function deleteRoutePassenger(
   }
 }
 
-export default deleteRoutePassenger;
+export default updateRoutePassenger;

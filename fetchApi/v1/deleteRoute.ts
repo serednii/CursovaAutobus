@@ -10,7 +10,7 @@ async function deleteRouteById(routeId: number) {
   try {
     // console.log("fetchDeleteRouteById", routeId);
     // Відправка DELETE-запиту
-    const response = await fetch(`${API_URL}/api/v1/routes/id/${routeId}`, {
+    const response = await fetch(`${API_URL}/api/v1/routes/${routeId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

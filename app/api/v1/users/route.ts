@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
-import { zodSchemaUsersInApi } from "@/zod_shema/zodUser";
-import { UserSelect } from "@/types/next-auth";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 // import { method } from "lodash";
 import { checkApiKey, parseStringUserToObject } from "../routes/util";
-
-const allowedFields = "id,email,firstName,lastName,phone,role,license";
+import { isAllowedField } from "@/lib/utils";
+import { allowedFieldsUser } from "@/app/api/v1/const";
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,7 +15,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
     }
 
-    const selectParams = searchParams.get("select") || allowedFields; // Наприклад: 'name,email'
+    const selectParams = searchParams.get("select") || allowedFieldsUser; // Наприклад: 'name,email'
     const selectObject = parseStringUserToObject(selectParams);
     const email = searchParams.get("email");
     const limit = parseInt(searchParams.get("limit") || "100", 10);
@@ -33,46 +31,34 @@ export async function GET(req: NextRequest) {
       searchParamsObject.id = { in: ids };
     }
 
-    try {
-      const parsedData: Partial<UserSelect> | null = zodSchemaUsersInApi.parse(selectObject);
-      console.log("parsedData", parsedData);
-    } catch (parseError: unknown) {
-      return NextResponse.json(
-        { error: "Invalid select", errorMessage: parseError },
-        { status: 400 }
-      );
+    const isAllowedFieldResult = isAllowedField(allowedFieldsUser, selectParams);
+    if (!isAllowedFieldResult) {
+      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
     }
 
-    try {
-      const users = await prisma.user.findMany({
-        where: searchParamsObject,
-        take: limit,
-        skip: offset,
-        select: Object.keys(selectObject).length > 0 ? selectObject : undefined,
-      });
-      const total = await prisma.user.count({ where: searchParamsObject });
+    const users = await prisma.user.findMany({
+      where: searchParamsObject,
+      take: limit,
+      skip: offset,
+      select: Object.keys(selectObject).length > 0 ? selectObject : undefined,
+    });
+    const total = await prisma.user.count({ where: searchParamsObject });
 
-      return NextResponse.json(
-        {
-          data: users,
-          meta:
-            !email && !ids
-              ? {
-                  page,
-                  limit,
-                  total,
-                  totalPages: Math.ceil(total / limit),
-                }
-              : undefined,
-        },
-        { status: 200 }
-      );
-    } catch (error) {
-      return NextResponse.json(
-        { error: "Не вдалося отримати користувачів", errorMessage: error },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json(
+      {
+        data: users,
+        meta:
+          !email && !ids
+            ? {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+              }
+            : undefined,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Помилка при отриманні користувачів:", error);
     return NextResponse.json(

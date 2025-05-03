@@ -145,8 +145,9 @@ class SearchRoute {
             throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
 
           const result = await response.json();
-          return result; // Перевірка через Zod перед поверненням
-          // return schema.parse(result); // Перевірка через Zod перед поверненням
+          console.log("createRoute.ts", result);
+          // return result; // Перевірка через Zod перед поверненням
+          return schema.parse(result.data); // Перевірка через Zod перед поверненням
         } catch (error) {
           console.error("Error fetching data:", (error as Error).message);
           return null;
@@ -179,14 +180,3 @@ getRoute.addType<IGetSearchRouteOneOptionData, IGetSearchRouteOne[]>(
   "one",
   ZodSchemaSearchRouteOne.array()
 );
-
-// getRoute.addType<IGetRoutesByDriverOption, IRoutesByIdDriver[]>(
-//   "getDriver",
-//   zodSchemaGetRoutesBuDriverId.array()
-// );
-
-// getRoute.addType<IGetRoutesByDriverListBlockedOption, IRoutesByIdDriverListBlocked[]>(
-//   "listBlocked",
-//   zodSchemaGetRoutesBuDriverIdListBlocked.array()
-// );
-// searchRoute.addType<IGetSearchRouteCityOption, IGetRouteCity[]>("byCity", ZodFetchGetRoutesByICity.array());

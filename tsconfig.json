@@ -40,7 +40,7 @@
     "app/[locale]/(driver)/myroute/[id]/page.jsx",
     "app/[locale]/(passenger)/seatselection/[id]/page.jsx",
     "app/[locale]/page.jsx",
-    "app/api/v1/routes/driverId/[id]/route.ts"
+    "app/api/v1/routes/drivers/[id]/route.ts"
   ],
   "exclude": ["node_modules"]
 }

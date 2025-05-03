@@ -108,7 +108,7 @@ GET /api/v1/routes/v1/?select=id,driverId,departureDate,arrivalDate,departureFro
 GET /api/v1/routes/v1/?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList&limit=10 → отримати  маршрут по id з певними полями
 GET /api/v1/routes/v1/?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList&limit=10&page=1 → отримати  маршрут по id з певними полями
 
-// GET /api/routes/v1/id/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по id з певними полями
+// GET /api/routes/v1/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по id з певними полями
 
 //Отримати маршрутти по пошуку за параметрами departureSearch, arrivalToSearch, startOfDay, endOfDay, wifi, coffee, power, restRoom, limit, driverId
   departureSearch?: string;
@@ -123,19 +123,663 @@ GET /api/v1/routes/v1/?select=id,driverId,departureDate,arrivalDate,departureFro
   driverId?: number;
 // GET api/v1/routes?limit=10&departureSearch=Fd&arrivalToSearch=&startOfDay=Invalid+Date&endOfDay=Invalid+Date&wifi=false&coffee=false&power=false&restRoom=false&select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList
 
-// POST /api/v1/routes → створити
-// PATCH /api/v1/routes/id/:id → оновити дані частково
-// DELETE /api/v1/routes/id/:id → видалити
+error code 
+return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+return NextResponse.json({ error: "Invalid select" }, { status: 400 });
+ return NextResponse.json(
+        { error: "Не вдалося отримати Маршрути", errorMessage: error },
+        { status: 500 }
+      );
+out data
+{
+    "data": [
+        {
+            "id": 1,
+            "driverId": 5,
+            "selectBusLayout": "1",
+            "wifi": true,
+            "maxSeats": 19,
+            "coffee": false,
+            "bookedSeats": 9,
+            "power": true,
+            "busNumber": "Bus 1",
+            "restRoom": false,
+            "modelBus": "Bus 1",
+            "departureDate": "2025-05-11T14:30:00.000Z",
+            "arrivalDate": "2025-05-11T18:30:00.000Z",
+            "departureFrom": "Houston",
+            "arrivalTo": "San Antonio",
+            "routePrice": 25,
+            "busSeats": [
+                {
+                    "id": 1,
+                    "passenger": 1,
+                    "number": 1,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 2,
+                    "passenger": null,
+                    "number": 9,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 3,
+                    "passenger": 4,
+                    "number": 11,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 4,
+                    "passenger": null,
+                    "number": 10,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 5,
+                    "passenger": null,
+                    "number": 12,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 6,
+                    "passenger": 6,
+                    "number": 13,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 7,
+                    "passenger": null,
+                    "number": 14,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 8,
+                    "passenger": 5,
+                    "number": 15,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 9,
+                    "passenger": null,
+                    "number": 16,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 10,
+                    "passenger": 4,
+                    "number": 17,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 11,
+                    "passenger": null,
+                    "number": 18,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 12,
+                    "passenger": 2,
+                    "number": 19,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 13,
+                    "passenger": null,
+                    "number": 7,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 14,
+                    "passenger": null,
+                    "number": 4,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 15,
+                    "passenger": 2,
+                    "number": 8,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 16,
+                    "passenger": 2,
+                    "number": 6,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 17,
+                    "passenger": null,
+                    "number": 5,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 18,
+                    "passenger": 1,
+                    "number": 2,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 19,
+                    "passenger": null,
+                    "number": 3,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                }
+            ],
+            "passengersSeatsList": [
+                {
+                    "idPassenger": 1,
+                    "subPassengersList": [
+                        {
+                            "subFirstName": "BOHDAN",
+                            "subLastName": "ILCHYSHYN",
+                            "subPhone": "778 854 542",
+                            "subEmail": "bohdan261970@gmail.com"
+                        }
+                    ]
+                }
+            ],
+            "intermediateStops": [
+                {
+                    "id": 1,
+                    "stopName": "Sealy",
+                    "routeId": 1
+                },
+                {
+                    "id": 2,
+                    "stopName": "Columbus",
+                    "routeId": 1
+                },
+                {
+                    "id": 3,
+                    "stopName": "Flatonia",
+                    "routeId": 1
+                },
+                {
+                    "id": 4,
+                    "stopName": "Luling",
+                    "routeId": 1
+                },
+                {
+                    "id": 5,
+                    "stopName": "Katy",
+                    "routeId": 1
+                }
+            ]
+        }
+    ]
+}
 
-// GET /api/v1/routes/passengerId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
-// GET /api/v1/routes/passengerId/:id → отримати  маршрут по passengerId з усіма полями
 
-// GET /api/v1/routes/driverId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
-// GET /api/v1/routes/driverId/:id → отримати  маршрут по passengerId з усіма полями
+// GET /api/v1/routes/drivers/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
+// GET /api/v1/routes/drivers/:id → отримати  маршрут по passengerId з усіма полями
+// GET /api/v1/routes/drivers/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList&limit=2&page=1 → отримати  маршрут по passengerId з певними полями
+// GET /api/v1/routes/drivers/:id?limit=2&page=1 → отримати  маршрут по passengerId з усіма полями
+error code
+return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+return NextResponse.json({ error: "Invalid select" }, { status: 400 });
+return NextResponse.json(
+        { error: "Не вдалося отримати Маршрути", errorMessage: error },
+        { status: 500 }
+      );
+out data
+{
+    "data": [
+        {
+            "id": 144,
+            "driverId": 1,
+            "selectBusLayout": "1",
+            "wifi": true,
+            "maxSeats": 24,
+            "coffee": true,
+            "bookedSeats": 0,
+            "power": true,
+            "busNumber": "intersiti Moskva London",
+            "restRoom": true,
+            "modelBus": "Bus 2",
+            "departureDate": "2025-03-12T20:15:00.000Z",
+            "arrivalDate": "2025-03-13T19:45:00.000Z",
+            "departureFrom": "New York",
+            "arrivalTo": "Львів",
+            "routePrice": 456,
+            "busSeats": [
+                {
+                    "id": 3589,
+                    "passenger": null,
+                    "number": 9,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3590,
+                    "passenger": null,
+                    "number": 19,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3591,
+                    "passenger": null,
+                    "number": 8,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3592,
+                    "passenger": null,
+                    "number": 4,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3593,
+                    "passenger": null,
+                    "number": 12,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3594,
+                    "passenger": null,
+                    "number": 16,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3595,
+                    "passenger": null,
+                    "number": 20,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3596,
+                    "passenger": null,
+                    "number": 24,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3597,
+                    "passenger": null,
+                    "number": 23,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3598,
+                    "passenger": null,
+                    "number": 22,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3599,
+                    "passenger": null,
+                    "number": 21,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3600,
+                    "passenger": null,
+                    "number": 14,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3601,
+                    "passenger": null,
+                    "number": 7,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3602,
+                    "passenger": null,
+                    "number": 18,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3603,
+                    "passenger": 1,
+                    "number": 2,
+                    "busSeatStatus": "reservedEmpty",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3604,
+                    "passenger": null,
+                    "number": 17,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3605,
+                    "passenger": null,
+                    "number": 15,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3606,
+                    "passenger": null,
+                    "number": 10,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3607,
+                    "passenger": null,
+                    "number": 11,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3608,
+                    "passenger": null,
+                    "number": 5,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3609,
+                    "passenger": null,
+                    "number": 3,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3610,
+                    "passenger": null,
+                    "number": 6,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3611,
+                    "passenger": 1,
+                    "number": 1,
+                    "busSeatStatus": "reservedEmpty",
+                    "routeDriverId": 144
+                },
+                {
+                    "id": 3612,
+                    "passenger": null,
+                    "number": 13,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 144
+                }
+            ],
+            "passengersSeatsList": [
+                {
+                    "idPassenger": 1,
+                    "subPassengersList": []
+                }
+            ],
+            "intermediateStops": [
+                {
+                    "id": 116,
+                    "stopName": "stop2",
+                    "routeId": 144
+                },
+                {
+                    "id": 117,
+                    "stopName": "lvov",
+                    "routeId": 144
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "page": 2,
+        "limit": 1,
+        "total": 14,
+        "totalPages": 14
+    }
+}
+
+// GET /api/v1/routes/passengers/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
+// GET /api/v1/routes/passengers/:id → отримати  маршрут по passengerId з усіма полями
+// GET /api/v1/routes/passengers/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList&limit=2&page=1 → отримати  маршрут по passengerId з певними полями
+// GET /api/v1/routes/passengers/:id → отримати  маршрут по passengerId з усіма полями
+
+error code
+return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+return NextResponse.json({ error: "Invalid select" }, { status: 400 });
+ return NextResponse.json(
+        { error: "Не вдалося отримати Маршрути", errorMessage: error },
+        { status: 500 }
+      );
+out data
+{
+    "data": [
+        {
+            "id": 1,
+            "driverId": 5,
+            "selectBusLayout": "1",
+            "wifi": true,
+            "maxSeats": 19,
+            "coffee": false,
+            "bookedSeats": 9,
+            "power": true,
+            "busNumber": "Bus 1",
+            "restRoom": false,
+            "modelBus": "Bus 1",
+            "departureDate": "2025-05-11T14:30:00.000Z",
+            "arrivalDate": "2025-05-11T18:30:00.000Z",
+            "departureFrom": "Houston",
+            "arrivalTo": "San Antonio",
+            "routePrice": 25,
+            "busSeats": [
+                {
+                    "id": 1,
+                    "passenger": 1,
+                    "number": 1,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 2,
+                    "passenger": null,
+                    "number": 9,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 3,
+                    "passenger": 4,
+                    "number": 11,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 4,
+                    "passenger": null,
+                    "number": 10,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 5,
+                    "passenger": null,
+                    "number": 12,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 6,
+                    "passenger": 6,
+                    "number": 13,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 7,
+                    "passenger": null,
+                    "number": 14,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 8,
+                    "passenger": 5,
+                    "number": 15,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 9,
+                    "passenger": null,
+                    "number": 16,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 10,
+                    "passenger": 4,
+                    "number": 17,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 11,
+                    "passenger": null,
+                    "number": 18,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 12,
+                    "passenger": 2,
+                    "number": 19,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 13,
+                    "passenger": null,
+                    "number": 7,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 14,
+                    "passenger": null,
+                    "number": 4,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 15,
+                    "passenger": 2,
+                    "number": 8,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 16,
+                    "passenger": 2,
+                    "number": 6,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 17,
+                    "passenger": null,
+                    "number": 5,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 18,
+                    "passenger": 1,
+                    "number": 2,
+                    "busSeatStatus": "reserved",
+                    "routeDriverId": 1
+                },
+                {
+                    "id": 19,
+                    "passenger": null,
+                    "number": 3,
+                    "busSeatStatus": "available",
+                    "routeDriverId": 1
+                }
+            ],
+            "passengersSeatsList": [
+                {
+                    "idPassenger": 1,
+                    "subPassengersList": [
+                        {
+                            "subFirstName": "BOHDAN",
+                            "subLastName": "ILCHYSHYN",
+                            "subPhone": "778 854 542",
+                            "subEmail": "bohdan261970@gmail.com"
+                        }
+                    ]
+                }
+            ],
+            "intermediateStops": [
+                {
+                    "id": 1,
+                    "stopName": "Sealy",
+                    "routeId": 1
+                },
+                {
+                    "id": 2,
+                    "stopName": "Columbus",
+                    "routeId": 1
+                },
+                {
+                    "id": 3,
+                    "stopName": "Flatonia",
+                    "routeId": 1
+                },
+                {
+                    "id": 4,
+                    "stopName": "Luling",
+                    "routeId": 1
+                },
+                {
+                    "id": 5,
+                    "stopName": "Katy",
+                    "routeId": 1
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "page": 1,
+        "limit": 1,
+        "total": 4,
+        "totalPages": 4
+    }
+}
 
 // GET api/v1/routes/uniqueCity?select=id,departureFrom,arrivalTo, //Видає комбінацію унікальних міст departureFrom,arrivalTo з вказаними полями
-// GET api/v1/routes/uniqueCity //Видає комбінацію унікальних міст departureFrom,arrivalTo з повними полями
+// GET api/v1/routes/uniqueCity?limit=2&page=1 //Видає комбінацію унікальних міст departureFrom,arrivalTo з повними полями
 
-////////////////////////////////////////////////////////////////
-// GET /api/v1/passengerId/:id?select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList → отримати  маршрут по passengerId з певними полями
-// GET /api/v1/routes/passengerId/:id → отримати  маршрут по passengerId з усіма полями
+
+// POST /api/v1/routes → створити
+// PATCH /api/v1/routes/:id → оновити дані частково
+// DELETE /api/v1/routes/:id → видалити

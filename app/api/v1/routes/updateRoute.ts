@@ -1,4 +1,4 @@
-import deleteRoutePassenger from "@/fetchApi/v1/deleteRoutePassenger";
+import updateRoutePassenger from "@/fetchApi/v1/updateRoutePassenger";
 import { firstLetterUpperCase } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma-client";
 import { IPassengersSeatsList } from "@/types/interface";
@@ -74,8 +74,8 @@ export async function updateRoute(req: NextRequest, id: number) {
 
     //**************************************************************** */
     const idPassenger = passengersSeatsList[0].idPassenger;
-    console.log("upadetRoute", id, idPassenger);
-    const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
+    // console.log("upadetRoute", id, idPassenger);
+    const deletePassengerResult: ApiResponse = await updateRoutePassenger({
       routeDriverId: id,
       idPassenger: idPassenger,
       busSeats,
@@ -127,7 +127,7 @@ export async function updateRoute(req: NextRequest, id: number) {
     if (!updatedBusSeatsResult) {
       console.error("Failed to update route busSeats");
       //delete route passenger if busSeats not updated
-      const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
+      const deletePassengerResult: ApiResponse = await updateRoutePassenger({
         routeDriverId: id,
         idPassenger: idPassenger,
         busSeats,
@@ -155,7 +155,7 @@ export async function updateRoute(req: NextRequest, id: number) {
       console.error("Failed to update route passengersSeatsList");
 
       //delete route passenger if createPassengersSeatsList not created
-      const deletePassengerResult: ApiResponse = await deleteRoutePassenger({
+      const deletePassengerResult: ApiResponse = await updateRoutePassenger({
         routeDriverId: id,
         idPassenger: idPassenger,
         busSeats,

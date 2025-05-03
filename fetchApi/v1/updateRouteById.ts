@@ -38,12 +38,12 @@ async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TR
     "updateRouteById.ts",
     updateRouteById,
     "============",
-    `${API_URL}/api/v1/routes/id/${id}`
+    `${API_URL}/api/v1/routes/${id}`
   );
   try {
-    const response = await fetch(`${API_URL}/api/v1/routes/id/${id}`, {
+    const response = await fetch(`${API_URL}/api/v1/routes/${id}`, {
       cache: "no-store",
-      method: "PATCH",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         apiKey: process.env.NEXT_PUBLIC_API_KEY || "",

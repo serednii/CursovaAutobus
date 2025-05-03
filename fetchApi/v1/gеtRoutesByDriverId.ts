@@ -69,12 +69,10 @@ class GetRoutesByDriverId {
         driverId: number[],
         select: T
       ): Promise<K | null> => {
-        // console.log("data searchRoute", select);
-
         try {
           const selectString = Object.keys(select).join(",");
           const response = await fetch(
-            `${API_URL}/api/v1/routes/driverId/${driverId[0]}?select=${selectString}`,
+            `${API_URL}/api/v1/routes/drivers/${driverId[0]}?select=${selectString}`,
             {
               cache: "no-store",
               headers: {
@@ -86,7 +84,7 @@ class GetRoutesByDriverId {
           if (!response.ok)
             throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
           const result = await response.json();
-          return schema.parse(result); // Перевірка через Zod перед поверненням
+          return schema.parse(result.data); // Перевірка через Zod перед поверненням
         } catch (error) {
           console.error("Error fetching data:", (error as Error).message);
           return null;
