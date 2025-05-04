@@ -1,25 +1,18 @@
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
-import { checkApiKey, parseStringRoutesToObject } from "@/app/api/v1/routes/util";
-import { isAllowedField } from "@/lib/utils";
-import { allowedFieldsDriver } from "../../const";
+import { validateApiKey, parseStringRoutesToObject } from "@/app/api/v1/routes/util";
+import { validateAllowedFields } from "@/lib/utils";
+import { ALLOWED_FIELDS_DRIVER } from "../../const";
 
 const limitEnv = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || "100";
 
 export async function GET(req: NextRequest) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
 
     const { searchParams } = new URL(req.url);
     const selectParams = searchParams.get("select") || "departureFrom,arrivalTo";
-    const isAllowedFieldResult = isAllowedField(allowedFieldsDriver, selectParams);
-
-    if (!isAllowedFieldResult) {
-      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
-    }
+    validateAllowedFields(selectParams, ALLOWED_FIELDS_DRIVER);
 
     const select = parseStringRoutesToObject(selectParams);
     const limit = parseInt(searchParams.get("limit") || limitEnv, 10);
@@ -61,19 +54,3 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Не вдалося обробити запит" }, { status: 500 });
   }
 }
-//[
-// {departureFrom: 'Houston', arrivalTo: 'San Antonio'}
-// {departureFrom: 'Miami', arrivalTo: 'Orlando'}
-// {departureFrom: 'Chicago', arrivalTo: 'Detroit'}
-// {departureFrom: 'Los Angeles', arrivalTo: 'San Francisco'}
-// {departureFrom: 'Seattle', arrivalTo: 'Portland'}
-// {departureFrom: 'Austin', arrivalTo: 'Dallas'}
-// {departureFrom: 'Houston', arrivalTo: 'San Antonio'}
-// {departureFrom: 'New York', arrivalTo: 'Overland Park'}
-// {departureFrom: 'New York', arrivalTo: 'Memphis'}
-// {departureFrom: 'Paris', arrivalTo: 'London'}
-// {departureFrom: 'New York', arrivalTo: 'Oakland'}
-// {departureFrom: 'New York', arrivalTo: 'Madison'}
-// {departureFrom: 'New York', arrivalTo: 'London'}
-// {departureFrom: 'Macon', arrivalTo: 'Omaha'}
-//]

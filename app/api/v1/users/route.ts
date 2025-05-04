@@ -3,30 +3,24 @@ import { prisma } from "@/prisma/prisma-client";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 // import { method } from "lodash";
-import { checkApiKey, parseStringUserToObject } from "../routes/util";
-import { isAllowedField } from "@/lib/utils";
+import { validateApiKey, parseStringUserToObject } from "../routes/util";
+import { validateAllowedFields } from "@/lib/utils";
 import { allowedFieldsUser } from "@/app/api/v1/const";
+import { ALLOWED_FIELDS_USER } from "@/app/api/v1/const";
+
 const limitEnv = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || "100";
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
-
+    validateApiKey(req);
     const selectParams = searchParams.get("select") || allowedFieldsUser; // Наприклад: 'name,email'
-    const isAllowedFieldResult = isAllowedField(allowedFieldsUser, selectParams);
-
-    if (!isAllowedFieldResult) {
-      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
-    }
+    validateAllowedFields(selectParams, ALLOWED_FIELDS_USER);
 
     const email = searchParams.get("email");
     const searchParamsObject: { email?: string; id?: { in: number[] } } = {};
     const idsStr = searchParams.get("filter[ids]");
-    const ids = idsStr ? idsStr.split(",").map(Number) : [];
+    const ids = idsStr && idsStr.split(",").map(Number);
 
     if (email) {
       searchParamsObject.email = email;
@@ -38,14 +32,15 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || limitEnv, 10);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const offset = (page - 1) * limit;
+
     const users = await prisma.user.findMany({
       where: searchParamsObject,
       take: limit,
       skip: offset,
       select: Object.keys(selectObject).length > 0 ? selectObject : undefined,
     });
-    const total = await prisma.user.count({ where: searchParamsObject });
 
+    const total = await prisma.user.count({ where: searchParamsObject });
     return NextResponse.json(
       {
         data: users,
@@ -72,13 +67,13 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
     const data: User = await req.json();
 
     const { firstName, lastName, email, password, phone, role, license } = data;
+    const selectParams = Object.keys(data).join(",");
+
+    validateAllowedFields(selectParams, ALLOWED_FIELDS_USER);
 
     if (!firstName || !lastName || !email || !password || !phone) {
       return NextResponse.json({ error: "Invalid data: all fields are required" }, { status: 400 });
@@ -97,7 +92,7 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Створення користувача
-    const user = await prisma.user.create({
+    const users = await prisma.user.create({
       data: {
         firstName,
         lastName,
@@ -110,7 +105,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Повертаємо успішну відповідь
-    return NextResponse.json({ user }, { status: 201 });
+    return NextResponse.json({ users }, { status: 201 });
   } catch (error) {
     console.error("Error creating user:", error);
     // Повертаємо повідомлення про помилку

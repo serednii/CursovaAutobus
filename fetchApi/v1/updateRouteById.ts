@@ -27,19 +27,12 @@ type TRouteSeatUpdateKeys = (
   | "notate"
   | "busSeats"
 ) &
-  // | "passengersSeatsList"
   keyof IRouteDataBase;
 
 export type TRouteUpdateResult = GenerateType<IRouteDataBase, TRouteSeatUpdateKeys>;
 
 async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TResult) {
   const id = updateRouteById.id;
-  console.log(
-    "updateRouteById.ts",
-    updateRouteById,
-    "============",
-    `${API_URL}/api/v1/routes/${id}`
-  );
   try {
     const response = await fetch(`${API_URL}/api/v1/routes/${id}`, {
       cache: "no-store",
@@ -55,9 +48,7 @@ async function updateRouteById<TResult extends IUpdateRoute>(updateRouteById: TR
       toast.error("Невждалося зарервувати маршрут");
       throw new Error(`Помилка сервера: ${response.status} ${response.statusText}`);
     }
-
     const result = await response.json();
-    console.log("Отриманий маршрут fetchUpdateRouteById: XXXXXXXXXXXX", result);
 
     try {
       const parsedData: TRouteUpdateResult = zodSchemaUpdateRouteResData.parse(result.data);

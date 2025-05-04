@@ -1,25 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
-import { checkApiKey, parseStringUserToObject } from "../../routes/util";
-import { isAllowedField } from "@/lib/utils";
-import { allowedFieldsUser } from "@/app/api/v1/const";
+import { validateApiKey, parseStringUserToObject } from "../../routes/util";
+import { validateAllowedFields } from "@/lib/utils";
+import { allowedFieldsUser, ALLOWED_FIELDS_USER } from "@/app/api/v1/const";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
     const { id } = await params;
     const { searchParams } = new URL(req.url);
-    const selectParams = searchParams.get("select") || ""; // Наприклад: 'name,email'
+    const selectParams = searchParams.get("select") || allowedFieldsUser; // Наприклад: 'name,email'
+    validateAllowedFields(selectParams, ALLOWED_FIELDS_USER);
 
     const selectObject: Record<string, boolean> = parseStringUserToObject(selectParams);
-
-    const isAllowedFieldResult = isAllowedField(allowedFieldsUser, selectParams);
-    if (!isAllowedFieldResult) {
-      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
-    }
 
     // Якщо id передано в параметрах запиту, шукаємо за цими id
     if (!id) {
@@ -41,7 +34,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         { status: 404 }
       );
     }
-    return NextResponse.json(users);
+    return NextResponse.json({ data: users }, { status: 200 });
   } catch (error) {
     console.error("Помилка при отриманні користувачів:", error);
     return NextResponse.json(
@@ -53,10 +46,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
 
     // Отримуємо дані з тіла запиту
     const { id } = await params;

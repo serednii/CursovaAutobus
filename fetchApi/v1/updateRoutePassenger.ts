@@ -38,6 +38,7 @@ async function updateRoutePassenger(
     const successResponse: SuccessResponse = {
       message: "Пасажир успішно видалений",
     };
+
     return successResponse;
   } catch (error) {
     console.error("Помилка під час виконання запиту:", error);

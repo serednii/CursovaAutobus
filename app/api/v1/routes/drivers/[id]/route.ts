@@ -1,17 +1,14 @@
 // import { middleware } from "@/middleware";
-import { isAllowedField } from "@/lib/utils";
+import { validateAllowedFields } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
-import { checkApiKey, parseStringRoutesToObject } from "../../util";
+import { validateApiKey, parseStringRoutesToObject } from "../../util";
 
-import { allowedFieldsDriver } from "@/app/api/v1/const";
+import { ALLOWED_FIELDS_DRIVER } from "@/app/api/v1/const";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
     const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
@@ -19,11 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     const { searchParams } = new URL(req.url);
     const selectParams = searchParams.get("select") || "";
-    const isAllowedFieldResult = isAllowedField(allowedFieldsDriver, selectParams);
-
-    if (!isAllowedFieldResult) {
-      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
-    }
+    validateAllowedFields(selectParams, ALLOWED_FIELDS_DRIVER);
 
     const limit = parseInt(searchParams.get("limit") || "100", 10);
     const page = parseInt(searchParams.get("page") || "1", 10);

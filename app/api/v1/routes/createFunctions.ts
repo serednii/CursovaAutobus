@@ -1,6 +1,7 @@
 import handleError from "@/lib/handleError";
 import { prisma } from "@/prisma/prisma-client";
 import { IBusSeats, IPassengersSeatsList } from "@/types/interface";
+import { NextResponse } from "next/server";
 
 export async function createIntermediateStops(intermediateStops: string[], routeId: number) {
   try {
@@ -14,7 +15,9 @@ export async function createIntermediateStops(intermediateStops: string[], route
         })
       )
     );
-
+    if (!results) {
+      return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
+    }
     return results;
   } catch (error) {
     handleError(error, "Error creating intermediate stops");
@@ -39,7 +42,9 @@ export async function updateIntermediateStops(intermediateStops: string[], route
         })
       )
     );
-
+    if (!results) {
+      return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
+    }
     return results;
   } catch (error) {
     handleError(error, "Error updating intermediate stops");
@@ -60,7 +65,9 @@ export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
         })
       )
     );
-
+    if (!results) {
+      return NextResponse.json({ error: "Failed to create bus seats" }, { status: 500 });
+    }
     return results;
   } catch (error) {
     handleError(error, "Error creating bus seats");
@@ -131,6 +138,12 @@ export async function createPassengersSeatsList(
         }
       })
     );
+    if (!results) {
+      return NextResponse.json(
+        { error: "Failed to create passengers seats list" },
+        { status: 500 }
+      );
+    }
     return results;
   } catch (error) {
     console.error("Error processing passengersSeatsList", error);

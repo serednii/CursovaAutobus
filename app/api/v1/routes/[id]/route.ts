@@ -4,13 +4,10 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
 
 import { updateRoute } from "../updateRoute";
-import { checkApiKey, parseStringRoutesToObject } from "../util";
+import { validateApiKey, parseStringRoutesToObject } from "../util";
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
     const { id } = await params;
 
     if (!id) {
@@ -33,16 +30,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       select: selectObject,
     });
 
-    console.log("routes", routes);
-
-    // Перевірка на порожній результат
-    if (routes.length === 0) {
-      return NextResponse.json(
-        { message: "Маршрути для вказаного ID не знайдено" },
-        { status: 404 }
-      );
-    }
-
     return NextResponse.json({ data: routes }, { status: 200 });
   } catch (error) {
     console.error("Помилка обробки запиту:", error);
@@ -53,10 +40,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 // API route handler for updating a route
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const isApiKeyValid = checkApiKey(req);
-  if (!isApiKeyValid) {
-    return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-  }
+  validateApiKey(req);
   const { id } = await params;
   const numberId = parseInt(id || "0", 10);
 
@@ -69,10 +53,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
 
     const { id } = await params;
 
@@ -84,11 +65,8 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     const deletedRoute = await prisma.routeDriver.delete({
       where: { id: routeId },
     });
-    console.log("deletedRoute ---------------------", deletedRoute);
     return NextResponse.json(deletedRoute, { status: 200 });
   } catch (error: unknown) {
-    console.error("Помилка видалення маршруту:", error);
-
     if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json(
         { error: "Маршрут із зазначеним 'routeId' не знайдено" },

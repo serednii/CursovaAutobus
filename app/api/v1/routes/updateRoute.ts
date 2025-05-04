@@ -1,11 +1,12 @@
 import updateRoutePassenger from "@/fetchApi/v1/updateRoutePassenger";
-import { firstLetterUpperCase } from "@/lib/utils";
+import { firstLetterUpperCase, validateAllowedFields } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma-client";
 import { IPassengersSeatsList } from "@/types/interface";
 import { ApiResponse, ErrorResponse } from "@/types/response.types";
 import { IUpdateRouteAPI } from "@/types/route-passenger.types";
-import { zodRouteDriverInputSchema } from "@/zod_shema/zodCreateRoute";
+// import { zodRouteDriverInputSchema } from "@/zod_shema/zodCreateRoute";
 import { NextRequest, NextResponse } from "next/server";
+import { ALLOWED_FIELDS_DRIVER } from "../const";
 import { createPassengersSeatsList, updateIntermediateStops } from "./createFunctions";
 import { updatedBusSeats } from "./updatedBusSeats";
 
@@ -37,16 +38,19 @@ export async function updateRoute(req: NextRequest, id: number) {
       power,
       restRoom,
     }: IUpdateRouteAPI = data;
+    console.log("LLLL", data);
 
-    try {
-      zodRouteDriverInputSchema.parse(data);
-    } catch (error) {
-      return NextResponse.json(
-        { error: error instanceof Error ? error.message : "Невідома помилка" },
-        { status: 422 }
-      );
-    }
+    // try {
+    //   zodRouteDriverInputSchema.parse(data);
+    // } catch (error) {
+    //   return NextResponse.json(
+    //     { error: error instanceof Error ? error.message : "Невідома помилка" },
+    //     { status: 422 }
+    //   );
+    // }
+    const selectParams = Object.keys(data).join(",");
 
+    validateAllowedFields(selectParams, ALLOWED_FIELDS_DRIVER);
     if (
       !(
         Array.isArray(passengersSeatsList) &&
@@ -76,10 +80,7 @@ export async function updateRoute(req: NextRequest, id: number) {
 
     // // Створення проміжних зупинок
     if (intermediateStops && intermediateStops.length > 0) {
-      const resultIntermediateStops = await updateIntermediateStops(intermediateStops, id);
-      if (!resultIntermediateStops) {
-        return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
-      }
+      await updateIntermediateStops(intermediateStops, id);
     }
 
     //**************************************************************** */

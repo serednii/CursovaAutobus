@@ -1,0 +1,770 @@
+openapi: 3.0.0
+info:
+  title: Bus Routes Management API
+  version: 1.0.0
+  description: API for managing bus routes, users, and related operations
+
+servers:
+  - url: /api/v1
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      responses:
+        '200':
+          description: Successful login
+        '401':
+          description: Invalid credentials
+      x-code-samples:
+        - lang: JavaScript
+          source: |
+            fetch('/api/v1/auth/login', {
+              method: 'POST',
+              body: JSON.stringify({ email, password })
+            })
+
+  /auth/signup:
+    post:
+      tags:
+        - Authentication
+      summary: User registration
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: Invalid input data
+        '409':
+          description: User already exists
+      x-code-samples:
+        - lang: JavaScript
+          source: |
+            fetch('/api/v1/auth/signup', {
+              method: 'POST',
+              body: JSON.stringify({ email, password, firstName, lastName, phone })
+            })
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/select'
+        - name: email
+          in: query
+          schema:
+            type: string
+          description: Filter by email
+        - name: filter[ids]
+          in: query
+          schema:
+            type: string
+          description: Comma-separated list of user IDs to filter
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+        '400':
+          description: Invalid select parameter
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateInput'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '409':
+          description: User already exists
+        '500':
+          description: Server error
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/select'
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid select parameter
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+        '500':
+          description: Server error
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Missing ID
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+        '500':
+          description: Server error
+
+  /routes:
+    get:
+      tags:
+        - Routes
+      summary: Get all routes
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/select'
+        - name: departureSearch
+          in: query
+          schema:
+            type: string
+        - name: arrivalToSearch
+          in: query
+          schema:
+            type: string
+        - name: startOfDay
+          in: query
+          schema:
+            type: string
+        - name: endOfDay
+          in: query
+          schema:
+            type: string
+        - name: wifi
+          in: query
+          schema:
+            type: boolean
+        - name: coffee
+          in: query
+          schema:
+            type: boolean
+        - name: power
+          in: query
+          schema:
+            type: boolean
+        - name: restRoom
+          in: query
+          schema:
+            type: boolean
+        - name: driverId
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of routes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteListResponse'
+        '400':
+          description: Invalid parameters
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+
+    post:
+      tags:
+        - Routes
+      summary: Create a new route
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteCreateInput'
+      responses:
+        '201':
+          description: Route created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+
+  /routes/v1:
+    get:
+      tags:
+        - Routes
+      summary: Get routes with specific fields
+      parameters:
+        - $ref: '#/components/parameters/select'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: List of routes with selected fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteListResponse'
+        '400':
+          description: Invalid select parameter
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+
+  /routes/v1/{id}:
+    get:
+      tags:
+        - Routes
+      summary: Get route by ID with specific fields
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/select'
+      responses:
+        '200':
+          description: Route details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '400':
+          description: Invalid select parameter
+        '401':
+          description: Unauthorized
+        '404':
+          description: Route not found
+        '500':
+          description: Server error
+
+  /routes/drivers/{id}:
+    get:
+      tags:
+        - Routes
+      summary: Get routes by driver ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/select'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: List of routes for driver
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteListResponse'
+        '400':
+          description: Invalid parameters
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+
+  /routes/passengers/{id}:
+    get:
+      tags:
+        - Routes
+      summary: Get routes by passenger ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/select'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: List of routes for passenger
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteListResponse'
+        '400':
+          description: Invalid parameters
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+
+  /routes/uniqueCity:
+    get:
+      tags:
+        - Routes
+      summary: Get unique city combinations
+      parameters:
+        - $ref: '#/components/parameters/select'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: List of unique city pairs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UniqueCityResponse'
+        '400':
+          description: Invalid parameters
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+
+  /routes/{id}:
+    put:
+      tags:
+        - Routes
+      summary: Update route by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteCreateInput'
+      responses:
+        '200':
+          description: Route updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '404':
+          description: Route not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+
+    delete:
+      tags:
+        - Routes
+      summary: Delete route by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Route deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '400':
+          description: Missing ID
+        '401':
+          description: Unauthorized
+        '404':
+          description: Route not found
+        '500':
+          description: Server error
+
+components:
+  parameters:
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 100
+      description: Number of items to return
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+      description: Page number
+    select:
+      name: select
+      in: query
+      schema:
+        type: string
+      description: Comma-separated list of fields to include
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+          enum: [admin, guest, driver, passenger]
+        license:
+          type: string
+
+    UserListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            limit:
+              type: integer
+            total:
+              type: integer
+            totalPages:
+              type: integer
+
+    UserCreateInput:
+      type: object
+      required:
+        - password
+        - email
+        - firstName
+        - lastName
+        - role
+        - phone
+      properties:
+        password:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+          enum: [admin, guest, driver, passenger]
+        phone:
+          type: string
+
+    Route:
+      type: object
+      properties:
+        id:
+          type: integer
+        driverId:
+          type: integer
+        selectBusLayout:
+          type: string
+        wifi:
+          type: boolean
+        maxSeats:
+          type: integer
+        coffee:
+          type: boolean
+        bookedSeats:
+          type: integer
+        power:
+          type: boolean
+        busNumber:
+          type: string
+        restRoom:
+          type: boolean
+        modelBus:
+          type: string
+        departureDate:
+          type: string
+          format: date-time
+        arrivalDate:
+          type: string
+          format: date-time
+        departureFrom:
+          type: string
+        arrivalTo:
+          type: string
+        routePrice:
+          type: number
+        busSeats:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusSeat'
+        passengersSeatsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PassengerSeat'
+        intermediateStops:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntermediateStop'
+        createdAt:
+          type: string
+          format: date-time
+        notate:
+          type: string
+
+    RouteListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            limit:
+              type: integer
+            total:
+              type: integer
+            totalPages:
+              type: integer
+
+    RouteCreateInput:
+      type: object
+      required:
+        - arrivalDate
+        - arrivalTo
+        - bookedSeats
+        - busNumber
+        - busSeats
+        - departureDate
+        - departureFrom
+        - driverId
+        - maxSeats
+        - modelBus
+        - routePrice
+        - selectBusLayout
+      properties:
+        arrivalDate:
+          type: string
+          format: date-time
+        arrivalTo:
+          type: string
+        bookedSeats:
+          type: integer
+        busNumber:
+          type: string
+        busSeats:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusSeatInput'
+        coffee:
+          type: boolean
+        departureDate:
+          type: string
+          format: date-time
+        departureFrom:
+          type: string
+        driverId:
+          type: integer
+        intermediateStops:
+          type: array
+          items:
+            type: string
+        maxSeats:
+          type: integer
+        modelBus:
+          type: string
+        notate:
+          type: string
+        passengersSeatsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PassengerSeatInput'
+        power:
+          type: boolean
+        restRoom:
+          type: boolean
+        routePrice:
+          type: number
+        selectBusLayout:
+          type: string
+        wifi:
+          type: boolean
+
+    BusSeat:
+      type: object
+      properties:
+        id:
+          type: integer
+        passenger:
+          type: integer
+          nullable: true
+        number:
+          type: integer
+        busSeatStatus:
+          type: string
+          enum: [available, reserved, reservedEmpty]
+        routeDriverId:
+          type: integer
+
+    BusSeatInput:
+      type: object
+      properties:
+        number:
+          type: integer
+        busSeatStatus:
+          type: string
+          enum: [available, reserved, reservedEmpty]
+        passenger:
+          type: integer
+          nullable: true
+
+    PassengerSeat:
+      type: object
+      properties:
+        idPassenger:
+          type: integer
+        subPassengersList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubPassenger'
+
+    PassengerSeatInput:
+      type: object
+      properties:
+        idPassenger:
+          type: integer
+        subPassengersList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubPassengerInput'
+
+    SubPassenger:
+      type: object
+      properties:
+        subFirstName:
+          type: string
+        subLastName:
+          type: string
+        subPhone:
+          type: string
+        subEmail:
+          type: string
+
+    SubPassengerInput:
+      type: object
+      properties:
+        subFirstName:
+          type: string
+        subLastName:
+          type: string
+        subPhone:
+          type: string
+        subEmail:
+          type: string
+
+    IntermediateStop:
+      type: object
+      properties:
+        id:
+          type: integer
+        stopName:
+          type: string
+        routeId:
+          type: integer
+
+    UniqueCityResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              departureFrom:
+                type: string
+              arrivalTo:
+                type: string
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            limit:
+              type: integer
+            total:
+              type: integer
+            totalPages:
+              type: integer

@@ -1,8 +1,8 @@
-import { isAllowedField } from "@/lib/utils";
+import { validateAllowedFields } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
-import { checkApiKey, parseStringRoutesToObject } from "./util";
-import { allowedFieldsDriver } from "@/app/api/v1/const";
+import { validateApiKey, parseStringRoutesToObject } from "./util";
+import { ALLOWED_FIELDS_DRIVER } from "@/app/api/v1/const";
 import { ICreateRoute } from "../../../../types/interface";
 import {
   createBusSeats,
@@ -15,18 +15,11 @@ const limitEnv = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || "100";
 
 export async function GET(req: NextRequest) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
 
     const { searchParams } = new URL(req.url);
     const selectParams = searchParams.get("select") || "";
-    const isAllowedFieldResult = isAllowedField(allowedFieldsDriver, selectParams);
-
-    if (!isAllowedFieldResult) {
-      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
-    }
+    validateAllowedFields(selectParams, ALLOWED_FIELDS_DRIVER);
 
     const selectObject = parseStringRoutesToObject(selectParams);
     const departureSearch = searchParams.get("departureSearch") || "";
@@ -130,10 +123,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
     const data: ICreateRoute = await req.json();
 
     const {
@@ -197,27 +187,15 @@ export async function POST(req: NextRequest) {
       intermediateStops,
       routeDriver.id
     );
-    if (!resultIntermediateStops) {
-      return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
-    }
 
     // Створення місць у автобусі
     const resultBusSeats = await createBusSeats(busSeats, routeDriver.id);
-    if (!resultBusSeats) {
-      return NextResponse.json({ error: "Failed to create bus seats" }, { status: 500 });
-    }
 
     // Створення списку пасажирів
     const resultPassengersSeatsList = await createPassengersSeatsList(
       passengersSeatsList,
       routeDriver.id
     );
-    if (!resultPassengersSeatsList) {
-      return NextResponse.json(
-        { error: "Failed to create passengers seats list" },
-        { status: 500 }
-      );
-    }
 
     return NextResponse.json(
       {
@@ -225,6 +203,7 @@ export async function POST(req: NextRequest) {
           ...routeDriver,
           intermediateStops: resultIntermediateStops,
           busSeats: resultBusSeats,
+          passengersSeatsList: resultPassengersSeatsList,
         },
       },
       { status: 201 }
@@ -242,11 +221,3 @@ export async function POST(req: NextRequest) {
     await prisma.$disconnect();
   }
 }
-
-//http://localhost:3000/api/v1/routes?
-//departureSearch=Fgh
-//&arrivalToSearch=
-//&startOfDay=Thu+Apr+17+2025+00%3A00%3A00+GMT%2B0200+%28Центральная+Европа%2C+летнее+время%29
-//&endOfDay=Thu+Apr+17+2025+23%3A59%3A59+GMT%2B0200+%28Центральная+Европа%2C+летнее+время%29
-//&wifi=false&coffee=false&power=false&restRoom=false
-//&select=id,driverId,departureDate,arrivalDate,departureFrom,arrivalTo,routePrice,busNumber,modelBus,maxSeats,bookedSeats,busSeats,passengersSeatsList

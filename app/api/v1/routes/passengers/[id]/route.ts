@@ -1,20 +1,17 @@
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
-import { checkApiKey, parseStringRoutesToObject } from "@/app/api/v1/routes/util";
+import { validateApiKey, parseStringRoutesToObject } from "@/app/api/v1/routes/util";
 import { IBusSeats } from "@/types/interface";
 import { ErrorResponse, SuccessResponse } from "@/types/response.types";
 import { Prisma } from "@prisma/client";
 import { updatedBusSeats } from "@/app/api/v1/routes/updatedBusSeats";
-import { allowedFieldsDriver } from "@/app/api/v1/const";
-import { isAllowedField } from "@/lib/utils";
+import { ALLOWED_FIELDS_DRIVER } from "@/app/api/v1/const";
+import { validateAllowedFields } from "@/lib/utils";
 const limitEnv = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || "100";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const isApiKeyValid = checkApiKey(req);
-    if (!isApiKeyValid) {
-      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
-    }
+    validateApiKey(req);
 
     const { id } = await params;
 
@@ -24,11 +21,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     const { searchParams } = new URL(req.url);
     const selectParams = searchParams.get("select") || "";
-    const isAllowedFieldResult = isAllowedField(allowedFieldsDriver, selectParams);
+    validateAllowedFields(selectParams, ALLOWED_FIELDS_DRIVER);
 
-    if (!isAllowedFieldResult) {
-      return NextResponse.json({ error: "Invalid select" }, { status: 400 });
-    }
     const selectObject = parseStringRoutesToObject(selectParams);
     const passengerId = parseInt(id || "0", 10);
     const limit = parseInt(searchParams.get("limit") || limitEnv, 10);
@@ -82,6 +76,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    validateApiKey(req);
     // Отримуємо дані з тіла запиту
     const { idPassenger, busSeats }: { idPassenger: number; busSeats: IBusSeats[] } =
       await req.json();
