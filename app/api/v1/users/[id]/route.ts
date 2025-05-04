@@ -4,6 +4,11 @@ import { validateApiKey, parseStringUserToObject } from "../../routes/util";
 import { validateAllowedFields } from "@/lib/utils";
 import { allowedFieldsUser, ALLOWED_FIELDS_USER } from "@/app/api/v1/const";
 
+type CustomError = {
+  message: string;
+  status?: number;
+};
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     validateApiKey(req);
@@ -35,11 +40,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       );
     }
     return NextResponse.json({ data: users }, { status: 200 });
-  } catch (error) {
-    console.error("Помилка при отриманні користувачів:", error);
+  } catch (error: unknown) {
+    // console.error("Помилка при отриманні користувачів:", error);
+    const errorMessage =
+      typeof error === "object" && error !== null && "message" in error
+        ? (error as CustomError).message
+        : "Невідома помилка";
+
     return NextResponse.json(
-      { error: "Не вдалося отримати користувачів", errorMessage: error },
-      { status: 500 }
+      { error: "Не вдалося отримати користувачів", errorMessage },
+      { status: (error as CustomError).status || 500 }
     );
   }
 }

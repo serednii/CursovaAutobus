@@ -2,7 +2,6 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
-import { NextResponse } from "next/server";
 
 interface IRouteWithDate {
   arrivalDate: string; // або Date, залежно від вашого типу даних
@@ -88,12 +87,20 @@ export const getPastRoutesAndAvailableRoutes = <T extends IRouteWithDate>(routes
 
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const isAllowedField = (allowedFields: string, field: string) => {
+export const isAllowedField = (allowedFields: string, field: string): void => {
   const result = field.split(",").every((f) => allowedFields.split(",").includes(f));
   if (!result) {
-    return NextResponse.json({ error: "Invalid select" }, { status: 400 });
+    const error = new Error("Failed select") as { status?: number };
+    error.status = 400;
+    throw error;
   }
 };
-export const validateAllowedFields = (fields: string, allowedFields: Set<string>): boolean => {
-  return fields.split(",").every((field) => allowedFields.has(field));
+
+export const validateAllowedFields = (fields: string, allowedFields: Set<string>): void => {
+  const result = fields.split(",").every((field) => allowedFields.has(field));
+  if (!result) {
+    const error = new Error("Failed select") as { status?: number };
+    error.status = 400;
+    throw error;
+  }
 };

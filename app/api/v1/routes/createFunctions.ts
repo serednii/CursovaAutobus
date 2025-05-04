@@ -43,7 +43,9 @@ export async function updateIntermediateStops(intermediateStops: string[], route
       )
     );
     if (!results) {
-      return NextResponse.json({ error: "Failed to create intermediate stops" }, { status: 500 });
+      const error = new Error("Failed to create intermediate stops") as { status?: number };
+      error.status = 500;
+      throw error;
     }
     return results;
   } catch (error) {
@@ -66,7 +68,9 @@ export async function createBusSeats(busSeats: IBusSeats[], routeId: number) {
       )
     );
     if (!results) {
-      return NextResponse.json({ error: "Failed to create bus seats" }, { status: 500 });
+      const error = new Error("Failed to create bus seats") as { status?: number };
+      error.status = 500;
+      throw error;
     }
     return results;
   } catch (error) {

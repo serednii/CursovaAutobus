@@ -60,7 +60,7 @@ Props) => {
       error={!!errors}
       style={{ borderColor: "black" }}
     >
-      <InputLabel style={{ color: "black", top: "5px" }} id="select-label">
+      <InputLabel style={{ color: "black", top: "-4px" }} id="select-label">
         {home("select_options")}
       </InputLabel>
 
@@ -76,7 +76,7 @@ Props) => {
           "& .MuiOutlinedInput-notchedOutline.MuiOutlinedInput-notchedOutline": {
             borderColor: "gray", // Чорна рамка
             height: "45px",
-            top: "0",
+            top: "0px",
           },
           "&:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: "blue", // Синя рамка при наведенні

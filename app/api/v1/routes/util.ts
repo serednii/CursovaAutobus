@@ -1,5 +1,5 @@
 import { selectRouteUpdate } from "@/selectBooleanObjeckt/selectBooleanObjeckt";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export function parseStringRoutesToObject(
   selectParam: string
@@ -46,11 +46,13 @@ export function parseStringUserToObject(selectParam: string): Record<string, boo
   return selectObject;
 }
 
-export const validateApiKey = (req: NextRequest): NextResponse | void => {
+export const validateApiKey = (req: NextRequest): void => {
   const apiKey = req.headers.get("apiKey");
-  const VALID_API_KEY = process.env.API_KEY; // або інше джерело
-
+  const VALID_API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+  console.log("apiKey", apiKey, VALID_API_KEY);
   if (!apiKey || apiKey !== VALID_API_KEY) {
-    return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+    const error = new Error("Failed select") as { status?: number };
+    error.status = 401;
+    throw error;
   }
 };
