@@ -44,7 +44,7 @@ function PassengerSeat({
   const styles: SeatPositionNumber = {};
   const sessionUserId = parseInt(sessionUser.id);
   const userRole = sessionUser?.role;
-
+  console.log("changeStatus", counterStart.current, changeStatus);
   keys.forEach((key) => {
     if (params[key] && key !== "number" && key !== "busSeatStatus" && key !== "passenger") {
       styles[key] = typeof params[key] === "number" ? params[key] : params[key];
@@ -54,10 +54,14 @@ function PassengerSeat({
   const newStyles = converterToPx(styles, newBusWidth, newBusHeight);
 
   useEffect(() => {
-    if (counterStart.current < 2) {
+    console.log("changeStatus before useeffeck", changeStatus);
+
+    if (counterStart.current < 1) {
       counterStart.current++;
       return;
     }
+    console.log("changeStatus after useeffeck", changeStatus);
+
     runInAction(() => {
       params.busSeatStatus = changeStatus.busSeatStatus;
       params.passenger = changeStatus.passenger;
@@ -74,6 +78,7 @@ function PassengerSeat({
   }[changeStatus.busSeatStatus];
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("PassengerSeat.tsx Handle Click", userRole, sessionUserId, driverId);
     event.preventDefault();
     setChangeStatus((prevParams: BusSeatInfo) => {
       //Якщо являємося водієм і на своєму маршруті

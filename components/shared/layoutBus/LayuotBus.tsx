@@ -54,8 +54,6 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   const isTablet = useMediaQuery("(max-width: 1150px)");
   const isMobile = useMediaQuery("(max-width: 900px)");
   const isSmallMobile = useMediaQuery("(max-width: 768px)");
-
-  // const [newDataLayoutBus, setLayoutData] = useState<ILayoutData | null>(null);
   const isClient = typeof window !== "undefined";
 
   useEffect(() => {
@@ -73,8 +71,8 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
   ) {
     return null;
   }
-  const scale = isTablet ? (isMobile ? 0.5 : 0.7) : 1;
 
+  const scale = isTablet ? (isMobile ? 0.5 : 0.7) : 1;
   const newBusWidth = busStore.dataLayoutBus.busWidth * scale;
   const newBusHeight = busStore.dataLayoutBus.busHeight * scale;
 

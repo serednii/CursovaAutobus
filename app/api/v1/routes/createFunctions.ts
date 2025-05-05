@@ -122,11 +122,9 @@ export async function createPassengersSeatsList(
                   },
                 });
                 //перевірти zod
-
                 // if (!result) {
                 //   return false;
                 // }
-
                 return result;
               } catch (error) {
                 console.error("Error creating subPassenger", error);

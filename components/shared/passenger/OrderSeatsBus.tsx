@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import LayoutBus from "../layoutBus/LayuotBus";
 import { Button } from "@mui/material";
 import SubPassengersOrders from "../form/SubPassengersOrders/SubPassengersOrders";
@@ -24,10 +24,10 @@ interface Props {
 // "seatselection", "form"]);
 function OrderSeatsBus({ route, sessionUser, newData }: Props) {
   const { t } = useAppTranslation("seatselection");
-
-  // console.log("OrderSeatsBus newData", newData, route, sessionUser);
+  const [fixedOnDisable, setFixedOnDisable] = useState(false);
+  console.log("OrderSeatsBus newData", newData, route, sessionUser);
   const renderRef = useRef(0);
-
+  const [isFirstOrder, setIsFirstOrder] = useState(false);
   const {
     register,
     unregister,
@@ -45,8 +45,34 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
     },
   });
 
+  useEffect(() => {
+    if (busStore.idOrderSubPassengers.length > 0 || busStore.idOrderPassengers.length > 0) {
+      setFixedOnDisable(true);
+    }
+  }, [
+    fixedOnDisable,
+    setFixedOnDisable,
+    busStore.idOrderSubPassengers,
+    busStore.idOrderPassengers.length,
+  ]);
+
+  useEffect(() => {
+    const time = setTimeout(() => {
+      if (busStore.idOrderPassengers.length > 0) {
+        setIsFirstOrder(true);
+      }
+    }, 1000);
+    return () => clearTimeout(time);
+  }, []);
+
   const userSessionId: number = Number(sessionUser?.id);
-  console.log("newData +++++++++++++++ ", newData);
+  console.log(
+    "newData +++++++++++++++ ",
+    newData,
+    [...busStore.idOrderSubPassengers],
+    [...busStore.idOrderPassengers]
+  );
+
   useMemo(() => {
     runInAction(() => {
       busStore.setDataLayoutBus(newData, RoleEnum.PASSENGER);
@@ -61,7 +87,7 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
     [route, userSessionId]
   );
 
-  console.log("mylistpassengers------", myListPassengers, busStore.dataLayoutBus);
+  console.log("mylistpassengers------", isFirstOrder, myListPassengers, busStore.dataLayoutBus);
 
   return (
     <>
@@ -89,7 +115,11 @@ function OrderSeatsBus({ route, sessionUser, newData }: Props) {
           variant="contained"
           color="primary"
           type="submit"
-          disabled={!(busStore.idOrderSubPassengers && busStore.idOrderPassengers.length > 0)} // Вимикає кнопку, якщо форма не валідна
+          disabled={
+            isFirstOrder
+              ? !fixedOnDisable
+              : !(busStore.idOrderSubPassengers && busStore.idOrderSubPassengers.length > 0)
+          } // Вимикає кнопку, якщо форма не валідна
         >
           {t("reserved_seats")}
         </Button>

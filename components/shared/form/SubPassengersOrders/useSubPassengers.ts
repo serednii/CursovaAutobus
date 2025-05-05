@@ -8,7 +8,6 @@ import { RoleEnum } from "@/enum/shared.enums";
 import busStore from "@/mobx/busStore";
 
 interface UseSubPassengersProps {
-  // idOrderSubPassengers: NullableNumber[];
   myListPassengers?: ISubPassengersList;
   renderRef: React.RefObject<number>;
   unregister: UseFormUnregister<FormValuesRoute>;
@@ -32,8 +31,9 @@ export function useSubPassengers({
     subPassengers,
     myListPassengers?.subPassengersList
   );
+
   useEffect(() => {
-    if (!myListPassengers) renderRef.current = 4;
+    if (!myListPassengers) renderRef.current = 3;
 
     if (myListPassengers && renderRef.current === 0) {
       renderRef.current++;

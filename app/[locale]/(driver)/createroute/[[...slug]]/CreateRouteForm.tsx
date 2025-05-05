@@ -50,9 +50,9 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
 
   const { t } = useAppTranslation("createroute");
   const { t: form } = useAppTranslation("form");
-
+  const idOrderPassenger = [...busStore.idOrderPassengers];
   const router = useRouter();
-
+  console.log("CreateRouteForm.tsx renderRef.current", renderRef.current, idOrderPassenger);
   const {
     register,
     unregister,
