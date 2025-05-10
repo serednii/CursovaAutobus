@@ -39,7 +39,7 @@ export function useSubPassengers({
       renderRef.current++;
       console.log("myListPassengers.subPassengersList", myListPassengers.subPassengersList);
       setSubPassengers(myListPassengers.subPassengersList);
-    } else if (renderRef.current > 2) {
+    } else if (renderRef.current > 1) {
       if (!subPassengers) return;
       let updatedPassengers = [...subPassengers];
 

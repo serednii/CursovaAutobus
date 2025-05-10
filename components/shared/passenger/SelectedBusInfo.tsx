@@ -1,5 +1,5 @@
 // import { BusInfo } from "@/app/[locale]/(passenger)/seatselection/[id]/page";
-import { timeAmPm, travelTime } from "@/lib/utils";
+import { cn, timeAmPm, travelTime } from "@/lib/utils";
 import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import React from "react";
 import { IoArrowForward } from "react-icons/io5";
@@ -12,19 +12,21 @@ export interface BusInfo {
 interface Props {
   route: Omit<IGetRoutePassengerById, "isReservation"> | undefined | null;
   language: BusInfo;
+  className?: string;
 }
 
-export default function SelectedBusInfo({ route, language }: Props) {
+export default function SelectedBusInfo({ route, language, className }: Props) {
   if (!route) {
     return null;
   }
+
   const departureFrom = route.departureFrom;
   const arrivalTo = route.arrivalTo;
   const price = route.routePrice;
   const availableSeats = route.maxSeats - route.bookedSeats;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,1)]">
+    <div className={cn("bg-white rounded-lg shadow-md p-6 ", className)}>
       <h2 className="text-2xl font-bold mb-6 ">{language.selected_bus}</h2>
       <ul className="flex justify-between p-4 border border-[#E5E7EB] rounded-lg">
         <li>

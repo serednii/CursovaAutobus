@@ -23,7 +23,6 @@ export default async function MyRoutes() {
 
   const routes = value as IRoutesByIdDriver[] | null;
   // console.log("routes", routes);
-  if (routes === null || routes.length === 0) return;
 
   return (
     <Container>

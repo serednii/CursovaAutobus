@@ -18,10 +18,19 @@ export default function WrapperPassengerRoutes({ routes, userSessionId }: Props)
   // const widthOutMyRoute = deleteMyRoute(routes, userSessionId);
   console.log("widthOutMyRoute", routes);
   const newFormatData = newFormatRoutesTable(routes, userSessionId);
+  const { t } = useAppTranslation("mybookings");
+
+  if (routes === null || routes.length === 0) {
+    return (
+      <div className="bg-[#F9FAFB] px-1 sm:px-2 md:px-4">
+        <h1 className="text-2xl font-bold mb-10">{t("my_bookings")}</h1>
+        <p className="text-2xl font-bold mb-10">{t("there_are_no_available_bookings")}</p>
+      </div>
+    );
+  }
 
   const { pastRoutes, availableRoutes } = getPastRoutesAndAvailableRoutes(newFormatData);
 
-  const { t } = useAppTranslation("mybookings");
   return (
     <Container>
       <div className="bg-[#F9FAFB] px-1 sm:px-2 md:px-4">

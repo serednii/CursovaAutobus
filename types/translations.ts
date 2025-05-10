@@ -133,6 +133,8 @@ export interface MyBookingsTranslations {
   cancel_booking: string;
   details_route: string;
   details_bookings: string;
+  my_bookings: string;
+  there_are_no_available_bookings: string;
 }
 
 // Інтерфейс для home.json

@@ -2,5 +2,7 @@
   "booked_routes": "Замовлені маршрути",
   "cancel_booking": "Скасувати замовлення",
   "details_route": "Деталі маршруту",
-  "details_bookings": "Деталі замовлення"
+  "details_bookings": "Деталі замовлення",
+  "my_bookings": "Мої замовлення",
+  "there_are_no_available_bookings": "Немає доступних замовлень"
 }

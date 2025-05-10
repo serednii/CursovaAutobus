@@ -12,13 +12,7 @@ import { updatedBusSeats } from "./updatedBusSeats";
 
 export async function updateRoute(req: NextRequest, id: number) {
   try {
-    // const { searchParams } = new URL(req.url);
-    // const id = searchParams.get("id");
-    // const numberId = parseInt(id || "0", 10);
-
     const data = await req.json();
-    // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].passengerId);
-    // console.log("req>>>>>>>><<<<<<<<<<<<<<<<<<<", resData.passengersSeatsList[0].seatId);
 
     const {
       busSeats,
@@ -40,14 +34,6 @@ export async function updateRoute(req: NextRequest, id: number) {
     }: IUpdateRouteAPI = data;
     console.log("LLLL", data);
 
-    // try {
-    //   zodRouteDriverInputSchema.parse(data);
-    // } catch (error) {
-    //   return NextResponse.json(
-    //     { error: error instanceof Error ? error.message : "Невідома помилка" },
-    //     { status: 422 }
-    //   );
-    // }
     const selectParams = Object.keys(data).join(",");
 
     validateAllowedFields(selectParams, ALLOWED_FIELDS_DRIVER);

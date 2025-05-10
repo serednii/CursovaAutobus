@@ -1,7 +1,7 @@
 import React from "react";
 import { getServerSession } from "next-auth";
 import initTranslations from "@/app/i18n";
-import OrderSeatsBus from "@/components/shared/passenger/OrderSeatsBus";
+import OrderSeatsBus from "@/app/[locale]/(passenger)/seatselection/[id]/OrderSeatsBus";
 import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
 import mixedLayoutsSeatsData from "@/components/shared/passenger/mixedLayoutsSeatsData";
@@ -59,8 +59,8 @@ async function SeatSelection({ params }) {
   };
 
   return (
-    <Container className="pt-4">
-      <SelectedBusInfo route={fetchedRoute} language={language} />
+    <Container className="bg-[#F9FAFB]">
+      <SelectedBusInfo route={fetchedRoute} language={language} className="mb-3" />
       <OrderSeatsBus route={fetchedRoute} sessionUser={session.user} newData={newData} />
       MyBookings Driver Id {fetchedRoute?.driverId} Session user.id {session?.user?.id}
     </Container>

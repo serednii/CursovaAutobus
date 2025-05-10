@@ -14,8 +14,16 @@ export const ALLOWED_FIELDS_DRIVER = new Set([
   "modelBus",
   "maxSeats",
   "bookedSeats",
+  "selectBusLayout",
   "busSeats",
   "passengersSeatsList",
+  "intermediateStops",
+  "notate",
+  "wifi",
+  "coffee",
+  "power",
+  "restRoom",
+  "driverId",
 ]);
 
 export const ALLOWED_FIELDS_USER = new Set([

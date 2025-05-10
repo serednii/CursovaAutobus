@@ -2,5 +2,7 @@
   "booked_routes": "Booked routes",
   "cancel_booking": "Cancel booking",
   "details_route": "Details route",
-  "details_bookings": "Details booking"
+  "details_bookings": "Details booking",
+  "my_bookings": "My bookings",
+  "there_are_no_available_bookings": "There are no available bookings"
 }

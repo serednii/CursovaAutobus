@@ -1,5 +1,7 @@
 {
   "booked_routes": "Zakazane routy",
   "cancel_booking": "Zrusit zakazku",
-  "details_bookings": "Podrobnosti zakazky"
+  "details_bookings": "Podrobnosti zakazky",
+  "my_bookings": "Moje zakazky",
+  "there_are_no_available_bookings": "Žádné dostupné zakazky"
 }

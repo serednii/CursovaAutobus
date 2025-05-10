@@ -72,7 +72,7 @@ function LayoutBus({ className, sessionUser, action, driverId }: Props) {
     return null;
   }
 
-  const scale = isTablet ? (isMobile ? 0.5 : 0.7) : 1;
+  const scale = isTablet ? (isMobile ? 0.8 : 0.7) : 1;
   const newBusWidth = busStore.dataLayoutBus.busWidth * scale;
   const newBusHeight = busStore.dataLayoutBus.busHeight * scale;
 
