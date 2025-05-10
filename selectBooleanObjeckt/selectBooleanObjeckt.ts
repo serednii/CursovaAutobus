@@ -4,6 +4,8 @@ import {
   IGetSearchRouteOneOption,
 } from "@/fetchApi/v1/getRoutes";
 import { IGetBusSeatsBoolean, IGetPassengersSeatsList } from "@/types/generaty.types";
+import { IGetSearchRouteMyRouteOption } from "@/fetchApi/v1/getRoutesById";
+import { IGetUsersByIdBySelectOption } from "@/fetchApi/v1/getUsersById";
 
 const busSeats = {
   select: {
@@ -94,9 +96,6 @@ export const selectSeatSelection: IGetSearchRouteSeatSelectionOption = {
   busSeats,
   passengersSeatsList,
 };
-
-import { IGetSearchRouteMyRouteOption } from "@/fetchApi/v1/getRoutesById";
-import { IGetUsersByIdBySelectOption } from "@/fetchApi/fetchUsersDELETE";
 
 export const selectRoute: IGetSearchRouteMyRouteOption = {
   ...baseDate,

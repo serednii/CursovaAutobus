@@ -1,5 +1,5 @@
 import { IGetRouteMyRoute } from "@/fetchApi/v1/getRoutesById";
-import { IGetUsersByIdBySelect } from "@/fetchApi/fetchUsersDELETE";
+import { IGetUsersByIdBySelect } from "@/fetchApi/v1/getUsersById";
 import { SubPassengerDetails } from "@/types/form.types";
 import { IBusSeats, ISubPassengersList } from "@/types/interface";
 import { PassengerDetails } from "@/types/route-driver.types";
