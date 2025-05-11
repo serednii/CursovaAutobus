@@ -2,7 +2,7 @@ import React from "react";
 import { getServerSession } from "next-auth";
 import initTranslations from "@/app/i18n";
 import OrderSeatsBus from "@/app/[locale]/(passenger)/seatselection/[id]/OrderSeatsBus";
-import SelectedBusInfo from "@/components/shared/passenger/SelectedBusInfo";
+import SelectedBusInfo from "@/app/[locale]/(passenger)/seatselection/[id]/SelectedBusInfo";
 import { Container } from "@/components/ui/Container";
 import mixedLayoutsSeatsData from "@/components/shared/passenger/mixedLayoutsSeatsData";
 import { authConfig } from "@/configs/auth";
@@ -26,7 +26,6 @@ async function SeatSelection({ params }) {
   );
 
   console.log("idNumber seatselection", idNumber, routesArrayUnknown);
-  // const routesArray = routesArrayUnknown as IGetRouteSeatSelection[] | null;
 
   const routesArray = routesArrayUnknown;
   const route = routesArray?.[0] || null;
@@ -37,19 +36,9 @@ async function SeatSelection({ params }) {
   }
 
   const fetchedRouteEmpty = replaceReservedEmptyToReserved({ route });
-  // change SeatStatusEnum.RESERVED  to SeatStatusEnum.SELECTED
   const fetchedRoute = replaceReservedToSelected({ userSessionId, route: fetchedRouteEmpty });
-  //mixed layouts to seats
-  // const newData: ILayoutData = mixedLayoutsSeatsData(route);
 
   const newData = mixedLayoutsSeatsData(route);
-  //*************************************** */
-  // const language: BusInfo = {
-  //   selected_bus: t("selected_bus"),
-  //   departure: t("departure"),
-  //   arrival: t("arrival"),
-  //   seats_available: t("seats_available"),
-  // };
 
   const language = {
     selected_bus: t("selected_bus"),

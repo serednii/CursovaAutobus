@@ -101,10 +101,7 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
     []
   );
 
-  // if (status === "loading") return <MyScaleLoader />;
-
   return (
-    // <CreateRouteContext.Provider value={{ isLoadingOne: false, setIsLoadingOne: () => {} }}>
     <Container className=" bg-[#F9FAFB]">
       <header className=" px-4 pt-4 mb-6">
         <div>
@@ -237,9 +234,9 @@ function CreateRouteForm({ id, type, sessionUser, route }: Props) {
           </div>
         </form>
       </main>
-      <p>
+      {/* <p>
         RouteDriverId {route?.driverId} UserId-- {sessionUser?.id}
-      </p>
+      </p> */}
       <div className="footer"></div>
     </Container>
     // </CreateRouteContext.Provider>

@@ -1,4 +1,3 @@
-// import { BusInfo } from "@/app/[locale]/(passenger)/seatselection/[id]/page";
 import { cn, timeAmPm, travelTime } from "@/lib/utils";
 import { IGetRoutePassengerById } from "@/types/route-driver.types";
 import React from "react";
@@ -26,25 +25,25 @@ export default function SelectedBusInfo({ route, language, className }: Props) {
   const availableSeats = route.maxSeats - route.bookedSeats;
 
   return (
-    <div className={cn("bg-white rounded-lg shadow-md p-6 ", className)}>
+    <div className={cn("bg-white rounded-lg shadow-md p-1 md:p-4 ", className)}>
       <h2 className="text-2xl font-bold mb-6 ">{language.selected_bus}</h2>
-      <ul className="flex justify-between p-4 border border-[#E5E7EB] rounded-lg">
-        <li>
+      <ul className="flex-column md:flex justify-between px-1 md:px-4 rounded-lg">
+        <li className="border border-[#A6E7EB] rounded-lg px-1 md:px-2 text-center md:text-left flex md:inline-block justify-around ">
           <p>{language.departure}</p>
           <p>{timeAmPm(route.departureDate)}</p>
           <p>{departureFrom}</p>
         </li>
-        <li>
+        <li className="border border-[#A6E7EB] rounded-lg md:px-2 ">
           <IoArrowForward className="w-full" style={{ color: "gray", fontSize: "20px" }} />
           <p>{travelTime(route.departureDate, route.arrivalDate)}</p>
         </li>
-        <li>
+        <li className="border border-[#A6E7EB] rounded-lg md:px-2 text-center md:text-left flex md:inline-block justify-around ">
           <p>{language.arrival}</p>
           <p>{timeAmPm(route.arrivalDate)}</p>
           <p>{arrivalTo}</p>
         </li>
-        <li>
-          <p className="text-right text-xl text-blue-600 font-bold">${price}</p>
+        <li className=" border border-[#A6E7EB] rounded-lg md:px-2 text-center md:text-left flex md:inline-block justify-around ">
+          <p className=" text-xl text-blue-600 font-bold">${price}</p>
           <p>
             {availableSeats} {language.seats_available}
           </p>

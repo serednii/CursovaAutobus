@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 
 import CustomTextField from "@/components/shared/form/CustomTextField";
 
@@ -14,14 +14,12 @@ import { TypeBaseRoute } from "@/types/route-passenger.types";
 import { cn } from "@/lib/utils";
 
 import CheckboxOptionsMain from "../form/CheckboxOptionsMain";
-import MyScaleLoader from "@/components/ui/MyScaleLoader";
-// import { FindRouteContext } from "./findRouteContext";
 import { useClickToDate } from "./useClickToDate";
 import { useSearchRouteMany } from "./useSearchRouteMany";
 import { useGetSessionParams } from "../../../hooks/useGetSessionParams";
 import { useFetchRoutesCity } from "@/app/[locale]/(driver)/createroute/[[...slug]]/useFetchRoutesCity";
 import { useLocalStorageId } from "./useLocalStorageId";
-// import { useTranslation } from "react-i18next";
+
 import { useAppTranslation } from "@/components/CustomTranslationsProvider";
 
 export default function FindRoute({ className }: { className?: string }) {
@@ -97,13 +95,10 @@ export default function FindRoute({ className }: { className?: string }) {
     userSessionId,
   });
 
-  // if (status === "loading") return <MyScaleLoader />;
-  // if (status === "loading") return <h1>Loading...</h1>;
-
   return (
     <div className={cn(className, "relative px-4 bg-[white] rounded-xl min-h-[530px]")}>
       {isLoadingOne && (
-        <MyScaleLoader className="absolute top-0 left-1/2" settings={{ height: 30, width: 5 }} />
+        <CircularProgress className="absolute top-5 left-1/2 color-[#94f07c] z-10" size={30} />
       )}
       <form className="mb-10">
         <div className="flex gap-5 mb-5 flex-wrap">
@@ -148,9 +143,11 @@ export default function FindRoute({ className }: { className?: string }) {
           </div>
         </div>
       </form>
-      <h2>{t("available_routes")}</h2>
       {Array.isArray(searchDates) && searchDates.length > 0 && (
-        <TableSearchRoutes routes={searchDates} status={status} />
+        <>
+          <h2>{t("available_routes")}</h2>
+          <TableSearchRoutes routes={searchDates} status={status} />
+        </>
       )}
       <div className="footer"></div>
     </div>

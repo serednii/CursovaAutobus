@@ -28,7 +28,8 @@ export default function TableSearchRoutes({ routes, status }: Props) {
       sessionStorage.setItem("transition", "seatselection");
     }
 
-    const newRoute = route.isReservation ? "mybookings" : `/seatselection/${route.id}`;
+    const newRoute = `/seatselection/${route.id}`;
+    // const newRoute = route.isReservation ? "mybookings" : `/seatselection/${route.id}`;
 
     router.push(newRoute);
   };

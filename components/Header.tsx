@@ -57,7 +57,7 @@ export default function Header() {
       <Container className="header-gradient  gap-1 sm:gap-3 relative  flex-wrap z-[100]  rounded-lg py-2 pe-2  w-full">
         <div className="flex justify-between items-center w-full">
           {status === "loading" && (
-            <CircularProgress className="absolute top-2 left-1/2 color-[#94f07c] z-10" size={30} />
+            <CircularProgress className="absolute top-5 left-1/2 color-[#94f07c] z-10" size={30} />
           )}
           <div className="flex gap-4 items-center relative">
             <LogoComponent className="hidden md:flex" />
@@ -68,15 +68,6 @@ export default function Header() {
 
           <UserInfo />
         </div>
-        {/* <Breadcrumbs>
-          <a href="#" className="opacity-60">
-            Docs
-          </a>
-          <a href="#" className="opacity-60">
-            Components
-          </a>
-          <a href="#">Breadcrumbs</a>
-        </Breadcrumbs> */}
       </Container>
     </header>
   );
